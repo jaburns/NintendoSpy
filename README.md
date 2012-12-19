@@ -26,10 +26,10 @@ USB to serial COM port interface to a PC for display.
 
 ### Configuring the Arduino
 
-First you'll need to load <a>this sketch</a> on to your Arduino.  If you're not familiar with how to do this then check out the
-[Getting Started](http://arduino.cc/en/Guide/HomePage) guide over at Arduino.  Once you've got the N64Spy sketch uploaded to the
-board, attach the controller cable to the Arduino as follows.  (If you're using a different Arduino, just make sure that N64 GND is connected
-to any Arduino GND and that N64 Signal is connected to digital pin 2)
+First you'll need to load [this sketch](https://raw.github.com/jeremyaburns/N64Spy/master/N64Spy-v1.0.pde) on to your Arduino. 
+If you're not familiar with how to do this then check out the [Getting Started](http://arduino.cc/en/Guide/HomePage) guide over at Arduino.
+Once you've got the N64Spy sketch uploaded to the board, attach the controller cable to the Arduino as follows.  (If you're using a different
+Arduino, just make sure that N64 GND is connected to any Arduino GND and that N64 Signal is connected to digital pin 2)
 
 ![alt text](https://github.com/jeremyaburns/N64Spy/raw/master/tutorial-images/wiring.jpg "")
 
