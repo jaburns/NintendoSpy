@@ -18,7 +18,6 @@ USB to serial COM port interface to a PC for display.
 
 ### Splicing the Extension Cable
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
 ![alt text](https://github.com/jeremyaburns/N64Spy/raw/master/tutorial-images/cut.jpg "")
 ![alt text](https://github.com/jeremyaburns/N64Spy/raw/master/tutorial-images/stripped.jpg "")
 ![alt text](https://github.com/jeremyaburns/N64Spy/raw/master/tutorial-images/solder.jpg "")
