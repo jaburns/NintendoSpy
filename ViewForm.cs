@@ -5,7 +5,7 @@ using System.IO.Ports;
 
 namespace N64Spy
 {
-    public partial class frmView : Form
+    public partial class ViewForm : Form
     {
         // Serial communication.
         private SerialPort datPort;
@@ -14,7 +14,7 @@ namespace N64Spy
         private const int BUTTON_COUNT = 16;
 
         // Display state.
-        private const float STICK_MOVE_RADIUS = 15;
+        private const float STICK_MOVE_RADIUS = 12;
         private PictureBox[] buttonDisplays;
         private int StickOriginX;
         private int StickOriginY;
@@ -31,7 +31,7 @@ namespace N64Spy
 
     #region Initialization and clean up.
 
-        public frmView( string comPort )
+        public ViewForm( string comPort )
         {
             InitializeComponent();
 

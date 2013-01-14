@@ -1,6 +1,6 @@
 ﻿namespace N64Spy
 {
-    partial class frmSetup
+    partial class SetupForm
     {
         /// <summary>
         /// Required designer variable.

@@ -61,25 +61,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmSetup.cs">
+    <Compile Include="SetupForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmSetup.designer.cs">
-      <DependentUpon>frmSetup.cs</DependentUpon>
+    <Compile Include="SetupForm.designer.cs">
+      <DependentUpon>SetupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmView.cs">
+    <Compile Include="ViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmView.Designer.cs">
-      <DependentUpon>frmView.cs</DependentUpon>
+    <Compile Include="ViewForm.Designer.cs">
+      <DependentUpon>ViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="frmSetup.resx">
-      <DependentUpon>frmSetup.cs</DependentUpon>
+    <EmbeddedResource Include="SetupForm.resx">
+      <DependentUpon>SetupForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmView.resx">
-      <DependentUpon>frmView.cs</DependentUpon>
+    <EmbeddedResource Include="ViewForm.resx">
+      <DependentUpon>ViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

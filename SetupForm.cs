@@ -6,9 +6,9 @@ namespace N64Spy
 {
     // This simple form allows the user to select a COM port to open the N64 spy on.
     // It is the starting GUI of the application.
-    public partial class frmSetup : Form
+    public partial class SetupForm : Form
     {
-        public frmSetup()
+        public SetupForm()
         {
             InitializeComponent();
             populatePortList();
@@ -26,7 +26,7 @@ namespace N64Spy
         private void btnGo_Click(object sender, EventArgs e)
         {
             if( ctlPorts.SelectedItem == null ) return;
-            (new frmView( ctlPorts.SelectedItem.ToString() )).Show();
+            (new ViewForm( ctlPorts.SelectedItem.ToString() )).Show();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
