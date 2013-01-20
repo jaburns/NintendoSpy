@@ -26,7 +26,7 @@ namespace N64Spy
         private void btnGo_Click(object sender, EventArgs e)
         {
             if( ctlPorts.SelectedItem == null ) return;
-            (new ViewForm( ctlPorts.SelectedItem.ToString() )).Show();
+            (new ViewSnes( ctlPorts.SelectedItem.ToString() )).Show();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)

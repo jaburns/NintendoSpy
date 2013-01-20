@@ -1,6 +1,6 @@
 ﻿namespace N64Spy
 {
-    partial class ViewForm
+    partial class ViewN64
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.stick = new System.Windows.Forms.PictureBox();
             this.btn_R = new System.Windows.Forms.PictureBox();
             this.btn_Z = new System.Windows.Forms.PictureBox();
@@ -45,7 +44,6 @@
             this.btn_Dup = new System.Windows.Forms.PictureBox();
             this.btn_L = new System.Windows.Forms.PictureBox();
             this.calibrateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.socketReadTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.stick)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_R)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Z)).BeginInit();
@@ -233,15 +231,9 @@
             this.calibrateToolStripMenuItem.Name = "calibrateToolStripMenuItem";
             this.calibrateToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
             // 
-            // socketReadTimer
+            // ViewN64
             // 
-            this.socketReadTimer.Interval = 30;
-            this.socketReadTimer.Tick += new System.EventHandler(this.socketReadTimer_Tick);
-            // 
-            // frmView
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImage = global::N64Spy.Properties.Resources.pad1;
             this.ClientSize = new System.Drawing.Size(176, 174);
@@ -263,8 +255,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "frmView";
-            this.Text = "N64Spy Viewer";
+            this.Name = "ViewN64";
+            this.Text = "N64 View";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmView_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.stick)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_R)).EndInit();
@@ -303,7 +295,6 @@
         private System.Windows.Forms.PictureBox btn_Dup;
         private System.Windows.Forms.PictureBox btn_L;
         private System.Windows.Forms.ToolStripMenuItem calibrateToolStripMenuItem;
-        private System.Windows.Forms.Timer socketReadTimer;
     }
 }
 
