@@ -61,7 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControllerStates.cs" />
+    <Compile Include="ControllerReaders.cs" />
+    <Compile Include="ViewManager.cs" />
     <Compile Include="SerialMonitor.cs" />
     <Compile Include="SetupForm.cs">
       <SubType>Form</SubType>

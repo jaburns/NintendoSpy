@@ -257,7 +257,7 @@
             this.MinimizeBox = false;
             this.Name = "ViewN64";
             this.Text = "N64 View";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmView_FormClosed);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ViewN64_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.stick)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_R)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Z)).EndInit();

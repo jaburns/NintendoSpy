@@ -25,15 +25,18 @@ namespace N64Spy
         public int baseTop  { get; private set; }
     }
 
-    // This class controls the visibility and position of visualization form controls for buttons and sticks in a ControllerState.
-    public class DisplayManager
+    public class ViewManager
     {
+        private Form parent;
         private IControllerReader reader;
         private Control[] buttons;
         private DisplayStick[] sticks;
 
-        public DisplayManager( IControllerReader reader, Control[] buttons, DisplayStick[] sticks )
+        private SerialMonitor serialMonitor;
+
+        public ViewManager( Form parent, string comPort, IControllerReader reader, Control[] buttons, DisplayStick[] sticks )
         {
+            this.parent = parent;
             this.reader = reader;
             this.buttons = buttons;
             this.sticks = sticks;
@@ -42,9 +45,26 @@ namespace N64Spy
                 if( p == null ) continue;
                 p.Visible = false;
             }
+
+            serialMonitor = new SerialMonitor( comPort, reader is ControllerReader_N64 ); // SECOND PARAMETER IS HACK
+            serialMonitor.PacketReceived += serialMonitor_PacketReceived;
+            serialMonitor.Start();
         }
 
-        public void Update( byte[] packet )
+        public void Close()
+        {
+            if( serialMonitor != null ) {
+                serialMonitor.Stop();
+                serialMonitor = null;
+            }
+        }
+
+        private void serialMonitor_PacketReceived(object sender, byte[] packet)
+        {
+            parent.BeginInvoke( new Action( () => { update( packet ); } ) );
+        }
+
+        private void update( byte[] packet )
         {
             reader.ReadFromPacket( packet );
 
@@ -56,7 +76,7 @@ namespace N64Spy
 
             if( sticks == null ) return;
 
-            // Update sticks, if there are any.
+            // Update sticks, if we have any.
             for( int i = 0, max = reader.GetStickCount() ; i < max && i < sticks.Length ; ++i ) {
                 ControllerStickState state = reader.GetStickState( i );
                 sticks[i].display.Left = sticks[i].baseLeft + (int)( sticks[i].movementRadius * state.X );

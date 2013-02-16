@@ -203,8 +203,12 @@
             this.Controls.Add(this.btn_B);
             this.Controls.Add(this.btn_X);
             this.Controls.Add(this.btn_A);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ViewSnes";
             this.Text = "SNES View";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ViewSnes_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.btn_A)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_X)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_B)).EndInit();

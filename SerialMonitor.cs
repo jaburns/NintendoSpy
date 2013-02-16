@@ -11,6 +11,8 @@ namespace N64Spy
 
     public class SerialMonitor
     {
+        private const int BaudRate = 115200;
+
         public event PacketEventHandler PacketReceived;
 
         private SerialPort datPort;
@@ -19,11 +21,11 @@ namespace N64Spy
         private Timer timer;
         private int packetSize;
 
-        public SerialMonitor( string portName, int baudRate, int packetSize )
+        public SerialMonitor( string portName, bool n64mode ) // second parameter packetsize hack for now
         {
-            this.packetSize = packetSize;
+            this.packetSize = n64mode ? 34 : 18 ;
             this.localBuffer = new List<byte>();
-            this.datPort = new SerialPort( portName, baudRate );
+            this.datPort = new SerialPort( portName, BaudRate );
         }
 
         public void Start()
