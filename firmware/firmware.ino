@@ -4,9 +4,9 @@
 
 
 // ---------- Uncomment one of these options to select operation mode --------------
-#define MODE_GC
+//#define MODE_GC
 //#define MODE_N64
-//#define MODE_SNES
+#define MODE_SNES
 // ---------------------------------------------------------------------------------
 
 
@@ -90,15 +90,15 @@ void read_shiftRegister( unsigned char bits )
 read_loop:
     
     // Read the data from the line and store in "rawData"
-    *rawDataPtr = PIN_READ(data);
+    *rawDataPtr = !PIN_READ(data);
     ++rawDataPtr;
     if( --bits == 0 ) return; 
     
-    // Wait until the next button value is on the data line. ~12us between each.
+    // Wait until the next button value is on the data line.
     asm volatile(
         MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
         MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-        MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+        MICROSECOND_NOPS MICROSECOND_NOPS
     );
     goto read_loop;
 }

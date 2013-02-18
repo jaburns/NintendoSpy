@@ -5,6 +5,7 @@ using System.Text;
 using System.IO.Ports;
 using System.Timers;
 using System.Diagnostics;
+using System.IO;
 
 namespace NintendoSpy
 {
@@ -16,6 +17,7 @@ namespace NintendoSpy
         private const int TIMER_MS  = 30;
 
         public event PacketEventHandler PacketReceived;
+        public event EventHandler Disconnected;
 
         private SerialPort _datPort;
         private List<byte> _localBuffer;
@@ -41,20 +43,38 @@ namespace NintendoSpy
 
         public void Stop()
         {
-            _timer.Stop();
-            _timer = null;
-            _datPort.Close();
+            if( _datPort != null ) {
+                try { // If the device has been unplugged, Close with throw an IOException.  This is fine, we'll just keep cleaning up.
+                    _datPort.Close();
+                }
+                catch( IOException ) {}
+                _datPort = null;
+            }
+            if( _timer != null ) {
+                _timer.Stop();
+                _timer = null;
+            }
         }
 
         private void tick( object sender, ElapsedEventArgs e )
         {
-            // Read some data from the COM port and append it to our localBuffer.
-            int readCount = _datPort.BytesToRead;
-            if( readCount < 1 ) return;
-            byte[] readBuffer = new byte[ readCount ];
-            _datPort.Read( readBuffer, 0, readCount );
-            _datPort.DiscardInBuffer();
-            _localBuffer.AddRange( readBuffer );
+            if( _datPort == null || !_datPort.IsOpen ) return;
+
+            // Try to read some data from the COM port and append it to our localBuffer.
+            // If there's an IOException then the device has been disconnected.
+            try {
+                int readCount = _datPort.BytesToRead;
+                if( readCount < 1 ) return;
+                byte[] readBuffer = new byte[ readCount ];
+                _datPort.Read( readBuffer, 0, readCount );
+                _datPort.DiscardInBuffer();
+                _localBuffer.AddRange( readBuffer );
+            }
+            catch( IOException ) {
+                Stop();
+                Disconnected( this, null );
+                return;
+            }
 
             // Try and find 2 splitting characters in our buffer.
             int lastSplitIndex = _localBuffer.LastIndexOf( 0x0A );

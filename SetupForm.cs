@@ -16,10 +16,19 @@ namespace NintendoSpy
 
         private void populatePortList()
         {
+            string lastValue = ctlPorts.Text;
+
             ctlPorts.Items.Clear();
+            ctlPorts.Text = "";
+            ctlPorts.SelectedIndex = -1;
+
             string[] ports = SerialPort.GetPortNames();
             for( int i = 0; i < ports.Length; ++i ) {
-                ctlPorts.Items.Add(ports[i]);
+                ctlPorts.Items.Add( ports[i] );
+                if( lastValue == ports[i] ) {
+                    ctlPorts.Text = lastValue;
+                    ctlPorts.SelectedIndex = i;
+                }
             }
         }
 
@@ -36,8 +45,17 @@ namespace NintendoSpy
             }
 
             if( view != null ) {
+                btnGo.Enabled = false;
                 view.Show();
+                view.FormClosing += view_FormClosing;
             }
+        }
+
+        void view_FormClosing( object sender, FormClosingEventArgs e )
+        {
+            populatePortList();
+            btnGo.Enabled = true;
+            ((Form)sender).FormClosing -= view_FormClosing;
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)

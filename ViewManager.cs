@@ -48,6 +48,7 @@ namespace NintendoSpy
 
             _serialMonitor = new SerialMonitor( comPort );
             _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
+            _serialMonitor.Disconnected += _serialMonitor_Disconnected;
             _serialMonitor.Start();
         }
 
@@ -57,6 +58,11 @@ namespace NintendoSpy
                 _serialMonitor.Stop();
                 _serialMonitor = null;
             }
+        }
+
+        private void _serialMonitor_Disconnected(object sender, EventArgs e)
+        {
+            _parent.BeginInvoke( new Action( () => { _parent.Close(); } ) );
         }
 
         private void serialMonitor_PacketReceived( object sender, byte[] packet )
