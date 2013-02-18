@@ -73,9 +73,39 @@ namespace N64Spy.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap circle_magenta {
+            get {
+                object obj = ResourceManager.GetObject("circle-magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap circle_white {
             get {
                 object obj = ResourceManager.GetObject("circle-white", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cstick_gc {
+            get {
+                object obj = ResourceManager.GetObject("cstick-gc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pad_gc {
+            get {
+                object obj = ResourceManager.GetObject("pad-gc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -106,6 +136,16 @@ namespace N64Spy.Properties {
         internal static System.Drawing.Bitmap stick {
             get {
                 object obj = ResourceManager.GetObject("stick", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap stick_gc {
+            get {
+                object obj = ResourceManager.GetObject("stick-gc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

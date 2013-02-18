@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO.Ports;
 using System.Timers;
+using System.Diagnostics;
 
 namespace N64Spy
 {
@@ -11,75 +12,66 @@ namespace N64Spy
 
     public class SerialMonitor
     {
-        private const int BaudRate = 115200;
+        private const int BAUD_RATE = 115200;
+        private const int TIMER_MS  = 30;
 
         public event PacketEventHandler PacketReceived;
 
-        private SerialPort datPort;
-        private List<byte> localBuffer;
+        private SerialPort _datPort;
+        private List<byte> _localBuffer;
 
-        private Timer timer;
-        private int packetSize;
+        private Timer _timer;
 
-        public SerialMonitor( string portName, bool n64mode ) // second parameter packetsize hack for now
+        public SerialMonitor( string portName ) // second parameter packetsize hack for now
         {
-            this.packetSize = n64mode ? 34 : 18 ;
-            this.localBuffer = new List<byte>();
-            this.datPort = new SerialPort( portName, BaudRate );
+            _localBuffer = new List<byte>();
+            _datPort = new SerialPort( portName, BAUD_RATE );
         }
 
         public void Start()
         {
-            if( timer != null ) return;
+            if( _timer != null ) return;
 
-            localBuffer.Clear();
-            datPort.Open();
-            timer = new Timer( 30 );
-            timer.Elapsed += new ElapsedEventHandler( tick );
-            timer.Start();
+            _localBuffer.Clear();
+            _datPort.Open();
+            _timer = new Timer( TIMER_MS );
+            _timer.Elapsed += new ElapsedEventHandler( tick );
+            _timer.Start();
         }
 
         public void Stop()
         {
-            timer.Stop();
-            timer = null;
-            datPort.Close();
+            _timer.Stop();
+            _timer = null;
+            _datPort.Close();
         }
 
         private void tick( object sender, ElapsedEventArgs e )
         {
             // Read some data from the COM port and append it to our localBuffer.
-            int readCount = datPort.BytesToRead;
+            int readCount = _datPort.BytesToRead;
             if( readCount < 1 ) return;
             byte[] readBuffer = new byte[ readCount ];
-            datPort.Read( readBuffer, 0, readCount );
-            datPort.DiscardInBuffer();
-            localBuffer.AddRange( readBuffer );
+            _datPort.Read( readBuffer, 0, readCount );
+            _datPort.DiscardInBuffer();
+            _localBuffer.AddRange( readBuffer );
 
-            int lastSentinelIndex = localBuffer.LastIndexOf( 0x0A );
-            int tailSize = localBuffer.Count - lastSentinelIndex;
+            // Try and find 2 splitting characters in our buffer.
+            int lastSplitIndex = _localBuffer.LastIndexOf( 0x0A );
+            if( lastSplitIndex <= 1 ) return;
+            int sndLastSplitIndex = _localBuffer.LastIndexOf( 0x0A, lastSplitIndex - 1 );
+            if( lastSplitIndex == -1 ) return;
 
-            // If we have enough data on the tail for a full read, process the end as current packet and wipe the local buffer.
-            if( tailSize == packetSize ) { 
-                PacketReceived(
-                    this,
-                    localBuffer.GetRange(
-                        lastSentinelIndex, packetSize
-                    ).ToArray()
-                );
-                localBuffer.Clear();
-            }
-            // Otherwise, if we have enough buffer built up to do a read then do it and clear up to the last 
-            else if( localBuffer.Count >= tailSize + packetSize ) {
-                PacketReceived(
-                    this,
-                    localBuffer.GetRange(
-                        lastSentinelIndex - packetSize, packetSize
-                    ).ToArray()
-                );
-                localBuffer.RemoveRange( 0, lastSentinelIndex ); // Remove up to the last sentinel in the buffer.
-            }
+            int packetStart = sndLastSplitIndex + 1;
+            int packetSize  = lastSplitIndex - packetStart;
+
+            Debug.WriteLine( packetSize );
+
+            // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
+            PacketReceived( this, _localBuffer.GetRange( packetStart, packetSize ).ToArray() );
+
+            // Clear our buffer up until the last split character.
+            _localBuffer.RemoveRange( 0, lastSplitIndex );
         }
-
     }
 }

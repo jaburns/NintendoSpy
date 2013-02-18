@@ -27,61 +27,63 @@ namespace N64Spy
 
     public class ViewManager
     {
-        private Form parent;
-        private IControllerReader reader;
-        private Control[] buttons;
-        private DisplayStick[] sticks;
+        private Form _parent;
+        private IControllerReader _reader;
+        private Control[] _buttons;
+        private DisplayStick[] _sticks;
 
-        private SerialMonitor serialMonitor;
+        private SerialMonitor _serialMonitor;
 
         public ViewManager( Form parent, string comPort, IControllerReader reader, Control[] buttons, DisplayStick[] sticks )
         {
-            this.parent = parent;
-            this.reader = reader;
-            this.buttons = buttons;
-            this.sticks = sticks;
+            _parent  = parent;
+            _reader  = reader;
+            _buttons = buttons;
+            _sticks  = sticks;
 
-            foreach( Control p in buttons ) {
+            foreach( Control p in _buttons ) {
                 if( p == null ) continue;
                 p.Visible = false;
             }
 
-            serialMonitor = new SerialMonitor( comPort, reader is ControllerReader_N64 ); // SECOND PARAMETER IS HACK
-            serialMonitor.PacketReceived += serialMonitor_PacketReceived;
-            serialMonitor.Start();
+            _serialMonitor = new SerialMonitor( comPort );
+            _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
+            _serialMonitor.Start();
         }
 
         public void Close()
         {
-            if( serialMonitor != null ) {
-                serialMonitor.Stop();
-                serialMonitor = null;
+            if( _serialMonitor != null ) {
+                _serialMonitor.Stop();
+                _serialMonitor = null;
             }
         }
 
-        private void serialMonitor_PacketReceived(object sender, byte[] packet)
+        private void serialMonitor_PacketReceived( object sender, byte[] packet )
         {
-            parent.BeginInvoke( new Action( () => { update( packet ); } ) );
+            _parent.BeginInvoke( new Action( () => { update( packet ); } ) );
         }
 
         private void update( byte[] packet )
         {
-            reader.ReadFromPacket( packet );
+            _reader.ReadFromPacket( packet );
 
             // Update buttons.
-            for( int i = 0, max = reader.GetButtonCount() ; i < max && i < buttons.Length ; ++i ) {
-                if( buttons[i] == null ) continue;
-                buttons[i].Visible = reader.GetButtonState(i);
+            bool[] buttonStates = _reader.GetButtonStates();
+            for( int i = 0 ; i < _buttons.Length && i < buttonStates.Length ; ++i ) {
+                if( _buttons[i] == null ) continue;
+                _buttons[i].Visible = buttonStates[i];
             }
 
-            if( sticks == null ) return;
-
-            // Update sticks, if we have any.
-            for( int i = 0, max = reader.GetStickCount() ; i < max && i < sticks.Length ; ++i ) {
-                ControllerStickState state = reader.GetStickState( i );
-                sticks[i].display.Left = sticks[i].baseLeft + (int)( sticks[i].movementRadius * state.X );
-                sticks[i].display.Top  = sticks[i].baseTop  - (int)( sticks[i].movementRadius * state.Y );
+            ControllerStickState[] stickStates = _reader.GetStickStates();
+            if( stickStates != null ) {
+                for( int i = 0 ; i < _sticks.Length && i < stickStates.Length ; ++i ) {
+                    _sticks[i].display.Left = _sticks[i].baseLeft + (int)( _sticks[i].movementRadius * stickStates[i].X );
+                    _sticks[i].display.Top  = _sticks[i].baseTop  - (int)( _sticks[i].movementRadius * stickStates[i].Y );
+                }
             }
+
+
         }
     }
 }

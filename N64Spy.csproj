@@ -62,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControllerReaders.cs" />
+    <Compile Include="ViewGC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewGC.Designer.cs">
+      <DependentUpon>ViewGC.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewManager.cs" />
     <Compile Include="SerialMonitor.cs" />
     <Compile Include="SetupForm.cs">
@@ -84,6 +90,9 @@
     <Compile Include="ViewSnes.Designer.cs">
       <DependentUpon>ViewSnes.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ViewGC.resx">
+      <DependentUpon>ViewGC.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SetupForm.resx">
       <DependentUpon>SetupForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -148,7 +157,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\circle-magenta.png" />
     <Content Include="res\circle-white.png" />
+    <None Include="res\stick-gc.png" />
+    <None Include="res\pad-gc.png" />
+    <None Include="res\cstick-gc.png" />
     <Content Include="res\snes.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -5,51 +5,24 @@ using System.Text;
 
 namespace N64Spy
 {
-    public struct ControllerStickState {
+    public struct ControllerStickState
+    {
         public float X, Y;
     }
 
     public interface IControllerReader
     {
-        bool GetButtonState( int button );
-        int GetButtonCount();
-        ControllerStickState GetStickState( int stick );
-        int GetStickCount();
+        bool[] GetButtonStates();
+        ControllerStickState[] GetStickStates();
+        float[] GetTriggerStates();
 
         void ReadFromPacket( byte[] packet );
     }
 
-
-    public class ControllerReader_N64 : IControllerReader
+    public static class SignalTools
     {
-        private const int ButtonCount = 16;
-        private bool[] buttons;
-        private ControllerStickState stick;
-
-        public bool GetButtonState( int button )
-        {
-            if( button < 0 || button >= ButtonCount ) return false;
-            return buttons[button];
-        }
-        public int GetButtonCount() { return ButtonCount; }
-        public ControllerStickState GetStickState( int stickId ) { return stick; }
-        public int GetStickCount() { return 1; }
-
-        public void ReadFromPacket( byte[] packet )
-        {
-            // Read the button states.
-            buttons = new bool[ ButtonCount ];
-            for( int i = 0 ; i < ButtonCount ; ++i ) {
-                buttons[i] = (packet[i+1] & 0x0F) != 0;
-            }
-            
-            // Read the analog stick state.
-            stick.X = readAnalogValue( packet, 1 + ButtonCount     );
-            stick.Y = readAnalogValue( packet, 1 + ButtonCount + 8 );
-        }
-
-        // Reads an analog value from the raw N64 data packet and returns a value in [ -1.0 , 1.0 ]
-        private float readAnalogValue( byte[] packet, int offset )
+        // Reads a byte of data from a string of 8 bits in a controller data packet.
+        public static byte readByte( byte[] packet, int offset )
         {
             byte val = 0;
             for( int i = 0 ; i < 8 ; ++i ) {
@@ -57,31 +30,105 @@ namespace N64Spy
                     val |= (byte)(1<<(7-i));
                 }
             }
-            return (float)((sbyte)val) / 128;
+            return val;
         }
     }
 
-
-    public class ControllerReader_SNES : IControllerReader
+    public class ControllerReader_GC : IControllerReader
     {
-        private const int ButtonCount = 16;
-        private bool[] buttons;
+        private const int PACKET_SIZE = 64;
+        private const int BUTTONS = 16;
 
-        public bool GetButtonState( int button )
+        private bool[] _buttons;
+        private ControllerStickState[] _sticks;
+        private float[] _triggers;
+
+        public bool[] GetButtonStates() { return _buttons; }
+        public ControllerStickState[] GetStickStates() { return _sticks; }
+        public float[] GetTriggerStates() { return _triggers; }
+
+        public ControllerReader_GC()
         {
-            if( button < 0 || button >= ButtonCount ) return false;
-            return buttons[button];
+            _buttons = new bool[ BUTTONS ];
+            _sticks = new ControllerStickState[2];
+            _triggers = new float[2];
         }
-        public int GetButtonCount() { return ButtonCount; }
-        public ControllerStickState GetStickState( int stickId ) { throw new NotSupportedException(); }
-        public int GetStickCount() { return 0; }
 
         public void ReadFromPacket( byte[] packet )
         {
-            // Read the button states.
-            buttons = new bool[ ButtonCount ];
-            for( int i = 0 ; i < ButtonCount ; ++i ) {
-                buttons[i] = packet[i+1] == '0';
+            if( packet.Length < PACKET_SIZE ) return;
+
+            for( int i = 0 ; i < BUTTONS ; ++i ) {
+                _buttons[i] = packet[i] != 0x00;
+            }
+
+            Func<byte,float> readStick   = (input) => (float)(input - 128) / 128;
+            Func<byte,float> readTrigger = (input) => (float)(input)       / 256;
+
+            _sticks[0].X = readStick( SignalTools.readByte( packet, BUTTONS      ) );
+            _sticks[0].Y = readStick( SignalTools.readByte( packet, BUTTONS +  8 ) );
+            _sticks[1].X = readStick( SignalTools.readByte( packet, BUTTONS + 16 ) );
+            _sticks[1].Y = readStick( SignalTools.readByte( packet, BUTTONS + 24 ) );
+            _triggers[0] = readStick( SignalTools.readByte( packet, BUTTONS + 32 ) );
+            _triggers[1] = readStick( SignalTools.readByte( packet, BUTTONS + 40 ) );
+        }
+    }
+
+    public class ControllerReader_N64 : IControllerReader
+    {
+        private const int PACKET_SIZE = 32;
+        private const int BUTTONS = 16;
+
+        private bool[] _buttons;
+        private ControllerStickState[] _sticks;
+
+        public bool[] GetButtonStates() { return _buttons; }
+        public ControllerStickState[] GetStickStates() { return _sticks; }
+        public float[] GetTriggerStates() { return null; }
+
+        public ControllerReader_N64()
+        {
+            _buttons = new bool[ BUTTONS ];
+            _sticks = new ControllerStickState[1];
+        }
+
+        public void ReadFromPacket( byte[] packet )
+        {
+            if( packet.Length < PACKET_SIZE ) return;
+
+            for( int i = 0 ; i < BUTTONS ; ++i ) {
+                _buttons[i] = packet[i] != 0x00;
+            }
+
+            Func<byte,float> readStick = (input) => (float)((sbyte)input) / 128;
+
+            _sticks[0].X = readStick( SignalTools.readByte( packet, BUTTONS      ) );
+            _sticks[0].Y = readStick( SignalTools.readByte( packet, BUTTONS +  8 ) );
+        }
+    }
+
+    public class ControllerReader_SNES : IControllerReader
+    {
+        private const int PACKET_SIZE = 16;
+        private const int BUTTONS = 16;
+
+        private bool[] _buttons;
+
+        public bool[] GetButtonStates() { return _buttons; }
+        public ControllerStickState[] GetStickStates() { return null; }
+        public float[] GetTriggerStates() { return null; }
+
+        public ControllerReader_SNES()
+        {
+            _buttons = new bool[ BUTTONS ];
+        }
+
+        public void ReadFromPacket( byte[] packet )
+        {
+            if( packet.Length < PACKET_SIZE ) return;
+
+            for( int i = 0 ; i < BUTTONS ; ++i ) {
+                _buttons[i] = packet[i] != 0x00;
             }
         }
     }

@@ -32,6 +32,7 @@ namespace N64Spy
             switch( ctlConsole.SelectedIndex ) {
                 case 0: view = new ViewSnes( port ); break;
                 case 1: view = new ViewN64 ( port ); break;
+                case 2: view = new ViewGC  ( port ); break;
             }
 
             if( view != null ) {
