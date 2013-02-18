@@ -6,7 +6,7 @@ using System.IO.Ports;
 using System.Timers;
 using System.Diagnostics;
 
-namespace N64Spy
+namespace NintendoSpy
 {
     public delegate void PacketEventHandler( object sender, byte[] packet );
 
@@ -62,12 +62,9 @@ namespace N64Spy
             int sndLastSplitIndex = _localBuffer.LastIndexOf( 0x0A, lastSplitIndex - 1 );
             if( lastSplitIndex == -1 ) return;
 
+            // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             int packetStart = sndLastSplitIndex + 1;
             int packetSize  = lastSplitIndex - packetStart;
-
-            Debug.WriteLine( packetSize );
-
-            // Grab the latest packet out of the buffer and fire it off to the receive event listeners.
             PacketReceived( this, _localBuffer.GetRange( packetStart, packetSize ).ToArray() );
 
             // Clear our buffer up until the last split character.

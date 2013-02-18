@@ -1,4 +1,4 @@
-﻿namespace N64Spy
+﻿namespace NintendoSpy
 {
     partial class ViewN64
     {
@@ -64,7 +64,7 @@
             // stick
             // 
             this.stick.BackColor = System.Drawing.Color.Transparent;
-            this.stick.BackgroundImage = global::N64Spy.Properties.Resources.stick;
+            this.stick.BackgroundImage = global::NintendoSpy.Properties.Resources.stick;
             this.stick.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.stick.Location = new System.Drawing.Point(81, 85);
             this.stick.Name = "stick";
@@ -75,7 +75,7 @@
             // btn_R
             // 
             this.btn_R.BackColor = System.Drawing.Color.Transparent;
-            this.btn_R.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_R.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_R.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_R.Location = new System.Drawing.Point(128, 15);
             this.btn_R.Name = "btn_R";
@@ -86,7 +86,7 @@
             // btn_Z
             // 
             this.btn_Z.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Z.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Z.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Z.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Z.Location = new System.Drawing.Point(56, 95);
             this.btn_Z.Name = "btn_Z";
@@ -97,7 +97,7 @@
             // btn_Cleft
             // 
             this.btn_Cleft.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Cleft.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Cleft.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Cleft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Cleft.Location = new System.Drawing.Point(129, 44);
             this.btn_Cleft.Name = "btn_Cleft";
@@ -108,7 +108,7 @@
             // btn_Cright
             // 
             this.btn_Cright.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Cright.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Cright.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Cright.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Cright.Location = new System.Drawing.Point(146, 44);
             this.btn_Cright.Name = "btn_Cright";
@@ -119,7 +119,7 @@
             // btn_Cdown
             // 
             this.btn_Cdown.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Cdown.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Cdown.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Cdown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Cdown.Location = new System.Drawing.Point(137, 52);
             this.btn_Cdown.Name = "btn_Cdown";
@@ -130,7 +130,7 @@
             // btn_Cup
             // 
             this.btn_Cup.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Cup.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Cup.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Cup.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Cup.Location = new System.Drawing.Point(137, 36);
             this.btn_Cup.Name = "btn_Cup";
@@ -141,7 +141,7 @@
             // btn_A
             // 
             this.btn_A.BackColor = System.Drawing.Color.Transparent;
-            this.btn_A.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_A.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_A.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_A.Location = new System.Drawing.Point(123, 63);
             this.btn_A.Name = "btn_A";
@@ -152,7 +152,7 @@
             // btn_B
             // 
             this.btn_B.BackColor = System.Drawing.Color.Transparent;
-            this.btn_B.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_B.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_B.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_B.Location = new System.Drawing.Point(110, 50);
             this.btn_B.Name = "btn_B";
@@ -163,7 +163,7 @@
             // btn_Start
             // 
             this.btn_Start.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Start.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Start.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Start.Location = new System.Drawing.Point(79, 52);
             this.btn_Start.Name = "btn_Start";
@@ -174,7 +174,7 @@
             // btn_Dleft
             // 
             this.btn_Dleft.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Dleft.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Dleft.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Dleft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Dleft.Location = new System.Drawing.Point(24, 51);
             this.btn_Dleft.Name = "btn_Dleft";
@@ -185,7 +185,7 @@
             // btn_Dright
             // 
             this.btn_Dright.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Dright.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Dright.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Dright.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Dright.Location = new System.Drawing.Point(41, 51);
             this.btn_Dright.Name = "btn_Dright";
@@ -196,7 +196,7 @@
             // btn_Ddown
             // 
             this.btn_Ddown.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Ddown.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Ddown.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Ddown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Ddown.Location = new System.Drawing.Point(32, 59);
             this.btn_Ddown.Name = "btn_Ddown";
@@ -207,7 +207,7 @@
             // btn_Dup
             // 
             this.btn_Dup.BackColor = System.Drawing.Color.Transparent;
-            this.btn_Dup.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_Dup.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_Dup.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_Dup.Location = new System.Drawing.Point(32, 43);
             this.btn_Dup.Name = "btn_Dup";
@@ -218,7 +218,7 @@
             // btn_L
             // 
             this.btn_L.BackColor = System.Drawing.Color.Transparent;
-            this.btn_L.BackgroundImage = global::N64Spy.Properties.Resources.circle;
+            this.btn_L.BackgroundImage = global::NintendoSpy.Properties.Resources.circle;
             this.btn_L.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btn_L.Location = new System.Drawing.Point(24, 15);
             this.btn_L.Name = "btn_L";
@@ -235,7 +235,7 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Black;
-            this.BackgroundImage = global::N64Spy.Properties.Resources.pad1;
+            this.BackgroundImage = global::NintendoSpy.Properties.Resources.pad1;
             this.ClientSize = new System.Drawing.Size(176, 174);
             this.Controls.Add(this.btn_L);
             this.Controls.Add(this.btn_Dleft);

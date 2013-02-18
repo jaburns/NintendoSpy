@@ -1,4 +1,4 @@
-﻿namespace N64Spy
+﻿namespace NintendoSpy
 {
     partial class SetupForm
     {

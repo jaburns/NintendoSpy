@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace N64Spy
+namespace NintendoSpy
 {
     public partial class ViewSnes : Form
     {

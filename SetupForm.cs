@@ -2,7 +2,7 @@
 using System.IO.Ports;
 using System.Windows.Forms;
 
-namespace N64Spy
+namespace NintendoSpy
 {
     // This simple form allows the user to select a COM port to open the N64 spy on.
     // It is the starting GUI of the application.

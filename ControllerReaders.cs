@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace N64Spy
+namespace NintendoSpy
 {
     public struct ControllerStickState
     {
