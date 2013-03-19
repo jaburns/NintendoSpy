@@ -42,6 +42,10 @@
             this.btn_X = new System.Windows.Forms.PictureBox();
             this.btn_Y = new System.Windows.Forms.PictureBox();
             this.btn_Z = new System.Windows.Forms.PictureBox();
+            this.triggerL = new System.Windows.Forms.PictureBox();
+            this.triggerR = new System.Windows.Forms.PictureBox();
+            this.btn_L = new System.Windows.Forms.PictureBox();
+            this.btn_R = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.stick)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_A)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_B)).BeginInit();
@@ -54,6 +58,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.btn_X)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Z)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.triggerL)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.triggerR)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btn_L)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btn_R)).BeginInit();
             this.SuspendLayout();
             // 
             // stick
@@ -195,12 +203,58 @@
             this.btn_Z.TabIndex = 19;
             this.btn_Z.TabStop = false;
             // 
+            // triggerL
+            // 
+            this.triggerL.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(0)))), ((int)(((byte)(238)))));
+            this.triggerL.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.triggerL.Location = new System.Drawing.Point(37, 7);
+            this.triggerL.Name = "triggerL";
+            this.triggerL.Size = new System.Drawing.Size(40, 10);
+            this.triggerL.TabIndex = 20;
+            this.triggerL.TabStop = false;
+            // 
+            // triggerR
+            // 
+            this.triggerR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(0)))), ((int)(((byte)(238)))));
+            this.triggerR.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.triggerR.Location = new System.Drawing.Point(156, 7);
+            this.triggerR.Name = "triggerR";
+            this.triggerR.Size = new System.Drawing.Size(40, 10);
+            this.triggerR.TabIndex = 21;
+            this.triggerR.TabStop = false;
+            // 
+            // btn_L
+            // 
+            this.btn_L.BackColor = System.Drawing.Color.Transparent;
+            this.btn_L.BackgroundImage = global::NintendoSpy.Properties.Resources.circle_magenta;
+            this.btn_L.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_L.Location = new System.Drawing.Point(84, 31);
+            this.btn_L.Name = "btn_L";
+            this.btn_L.Size = new System.Drawing.Size(12, 12);
+            this.btn_L.TabIndex = 22;
+            this.btn_L.TabStop = false;
+            // 
+            // btn_R
+            // 
+            this.btn_R.BackColor = System.Drawing.Color.Transparent;
+            this.btn_R.BackgroundImage = global::NintendoSpy.Properties.Resources.circle_magenta;
+            this.btn_R.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_R.Location = new System.Drawing.Point(93, 31);
+            this.btn_R.Name = "btn_R";
+            this.btn_R.Size = new System.Drawing.Size(12, 12);
+            this.btn_R.TabIndex = 23;
+            this.btn_R.TabStop = false;
+            // 
             // ViewGC
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImage = global::NintendoSpy.Properties.Resources.pad_gc;
             this.ClientSize = new System.Drawing.Size(233, 174);
+            this.Controls.Add(this.btn_R);
+            this.Controls.Add(this.btn_L);
+            this.Controls.Add(this.triggerR);
+            this.Controls.Add(this.triggerL);
             this.Controls.Add(this.btn_Z);
             this.Controls.Add(this.btn_Y);
             this.Controls.Add(this.btn_X);
@@ -231,6 +285,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.btn_X)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Y)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_Z)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.triggerL)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.triggerR)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btn_L)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btn_R)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -250,6 +308,10 @@
         private System.Windows.Forms.PictureBox btn_X;
         private System.Windows.Forms.PictureBox btn_Y;
         private System.Windows.Forms.PictureBox btn_Z;
+        private System.Windows.Forms.PictureBox triggerL;
+        private System.Windows.Forms.PictureBox triggerR;
+        private System.Windows.Forms.PictureBox btn_L;
+        private System.Windows.Forms.PictureBox btn_R;
     }
 }
 

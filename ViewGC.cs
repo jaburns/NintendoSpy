@@ -15,8 +15,7 @@ namespace NintendoSpy
                 this, comPort, new ControllerReader_GC(),
 
                 new Control[] {
-                    //                                                        -      L     R    
-                    null, null, null, btn_Start, btn_Y, btn_X, btn_B, btn_A, null, null, null, btn_Z, btn_Dup, btn_Ddown, btn_Dright, btn_Dleft
+                    null, null, null, btn_Start, btn_Y, btn_X, btn_B, btn_A, null, btn_L, btn_R, btn_Z, btn_Dup, btn_Ddown, btn_Dright, btn_Dleft
                 },
 
                 new DisplayStick[] {
@@ -28,6 +27,17 @@ namespace NintendoSpy
                         display = cstick,
                         movementRadius = 13
                     }
+                },
+
+                new DisplayTrigger[] {
+                    new DisplayTrigger() {
+                        display = triggerL,
+                        mirror = true
+                    },
+                    new DisplayTrigger() {
+                        display = triggerR,
+                        mirror = false
+                    },
                 }
             );
         }

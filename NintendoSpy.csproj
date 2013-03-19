@@ -62,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControllerReaders.cs" />
+    <Compile Include="ViewNES.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewNES.Designer.cs">
+      <DependentUpon>ViewNES.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewGC.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     <Compile Include="ViewSnes.Designer.cs">
       <DependentUpon>ViewSnes.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ViewNES.resx">
+      <DependentUpon>ViewNES.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ViewGC.resx">
       <DependentUpon>ViewGC.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,10 +167,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\circle-magenta.png" />
+    <None Include="res\circle-nes.png" />
     <Content Include="res\circle-white.png" />
     <None Include="res\stick-gc.png" />
     <None Include="res\pad-gc.png" />
     <None Include="res\cstick-gc.png" />
+    <None Include="res\nes.png" />
     <Content Include="res\snes.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -83,6 +83,16 @@ namespace NintendoSpy.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap circle_nes {
+            get {
+                object obj = ResourceManager.GetObject("circle-nes", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap circle_white {
             get {
                 object obj = ResourceManager.GetObject("circle-white", resourceCulture);
@@ -96,6 +106,16 @@ namespace NintendoSpy.Properties {
         internal static System.Drawing.Bitmap cstick_gc {
             get {
                 object obj = ResourceManager.GetObject("cstick-gc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap nes {
+            get {
+                object obj = ResourceManager.GetObject("nes", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

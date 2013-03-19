@@ -7,8 +7,7 @@
 //#define MODE_GC
 //#define MODE_N64
 //#define MODE_SNES
-#define MODE_NES
-//#define MODE_SWITCH_SNES_GC // Siglemic mode
+#define MODE_SWITCH_SNES_GC
 // ---------------------------------------------------------------------------------
 
 
@@ -23,7 +22,6 @@
 #define SNES_LATCH      3
 #define SNES_DATA       4
 #define SNES_BITCOUNT  16
-#define  NES_BITCOUNT   8
 
 #define GC_PIN        5
 #define GC_PREFIX    25
@@ -81,8 +79,7 @@ read_loop:
 //     latch = Pin index on Port D where the latch wire is attached.
 //     data  = Pin index on Port D where the output data wire is attached.
 //     bits  = Number of bits to read from the controller.
-//  longWait = The NES takes a bit longer between reads to get valid results back.
-template< unsigned char latch, unsigned char data, unsigned char longWait >
+template< unsigned char latch, unsigned char data >
 void read_shiftRegister( unsigned char bits )
 { 
     unsigned char *rawDataPtr = rawData;
@@ -104,14 +101,6 @@ read_loop:
         MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
         MICROSECOND_NOPS MICROSECOND_NOPS
     );
-    if( longWait ) {
-        asm volatile(
-            MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-            MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-            MICROSECOND_NOPS MICROSECOND_NOPS
-        );
-    }
-
     goto read_loop;
 }
 
@@ -147,17 +136,9 @@ inline void loop_N64()
 inline void loop_SNES()
 {
     noInterrupts();
-    read_shiftRegister< SNES_LATCH , SNES_DATA , false >( SNES_BITCOUNT );
+    read_shiftRegister< SNES_LATCH , SNES_DATA >( SNES_BITCOUNT );
     interrupts();
     sendRawData( 0 , SNES_BITCOUNT );
-}
-
-inline void loop_NES()
-{
-    noInterrupts();
-    read_shiftRegister< SNES_LATCH , SNES_DATA , true >( NES_BITCOUNT );
-    interrupts();
-    sendRawData( 0 , NES_BITCOUNT );  
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,10 +151,8 @@ void loop()
     loop_N64();
 #elif defined MODE_SNES
     loop_SNES();
-#elif defined MODE_NES
-    loop_NES();
 #elif defined MODE_SWITCH_SNES_GC
-    if( PIN_READ(7) ) { 
+    if( PIN_READ(7) ) {
         loop_SNES();
     } else {
         loop_GC();

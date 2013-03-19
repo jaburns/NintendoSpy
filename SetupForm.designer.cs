@@ -90,7 +90,8 @@
             this.ctlConsole.Items.AddRange(new object[] {
             "SNES",
             "N64",
-            "GC"});
+            "GameCube",
+            "NES"});
             this.ctlConsole.Location = new System.Drawing.Point(73, 43);
             this.ctlConsole.Name = "ctlConsole";
             this.ctlConsole.Size = new System.Drawing.Size(105, 21);

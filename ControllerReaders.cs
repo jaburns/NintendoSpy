@@ -69,8 +69,8 @@ namespace NintendoSpy
             _sticks[0].Y = readStick( SignalTools.readByte( packet, BUTTONS +  8 ) );
             _sticks[1].X = readStick( SignalTools.readByte( packet, BUTTONS + 16 ) );
             _sticks[1].Y = readStick( SignalTools.readByte( packet, BUTTONS + 24 ) );
-            _triggers[0] = readStick( SignalTools.readByte( packet, BUTTONS + 32 ) );
-            _triggers[1] = readStick( SignalTools.readByte( packet, BUTTONS + 40 ) );
+            _triggers[0] = readTrigger( SignalTools.readByte( packet, BUTTONS + 32 ) );
+            _triggers[1] = readTrigger( SignalTools.readByte( packet, BUTTONS + 40 ) );
         }
     }
 
@@ -107,27 +107,24 @@ namespace NintendoSpy
         }
     }
 
-    public class ControllerReader_SNES : IControllerReader
+    public class ControllerReader_ButtonsOnly : IControllerReader // Used for NES and SNES, no analog values
     {
-        private const int PACKET_SIZE = 16;
-        private const int BUTTONS = 16;
-
         private bool[] _buttons;
 
         public bool[] GetButtonStates() { return _buttons; }
         public ControllerStickState[] GetStickStates() { return null; }
         public float[] GetTriggerStates() { return null; }
 
-        public ControllerReader_SNES()
+        public ControllerReader_ButtonsOnly( int buttonCount )
         {
-            _buttons = new bool[ BUTTONS ];
+            _buttons = new bool[ buttonCount ];
         }
 
         public void ReadFromPacket( byte[] packet )
         {
-            if( packet.Length < PACKET_SIZE ) return;
+            if( packet.Length < _buttons.Length ) return;
 
-            for( int i = 0 ; i < BUTTONS ; ++i ) {
+            for( int i = 0 ; i < _buttons.Length ; ++i ) {
                 _buttons[i] = packet[i] != 0x00;
             }
         }
