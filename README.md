@@ -1,4 +1,11 @@
-NintendoSpy DIY Tutorial
+NintendoSpy
+======
+
+Live console controller viewer for NES, SNES, N64, and Gamecube controllers.  
+[Download the latest desktop viewer software here.](https://github.com/jeremyaburns/NintendoSpy/blob/master/NintendoSpy.exe?raw=true)
+
+
+DIY Tutorial for N64 Viewer Hardware
 ======
 
 ### Things you'll need
@@ -35,8 +42,4 @@ Arduino, just make sure that N64 GND is connected to any Arduino GND and that N6
 
 With the program loaded and the wires connected, you can close the Arduino environment. The Arduino is now programmed to act as an NintendoSpy
 until another program is loaded on to it.  You can disconnect/reconnect the device from USB at will since the program is loaded in to non-volatile
-memory.
-
-### Setting up the Display Software
-
-Under construction...
+memory.  Simply run the display software linked at the top of the page while the Arduino's plugged in, and you should be good to go.
