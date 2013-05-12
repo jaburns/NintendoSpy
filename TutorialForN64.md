@@ -26,8 +26,8 @@ USB to serial COM port interface to a PC for display.
 
 ### Configuring the Arduino
 
-First you'll need to load [this sketch](https://raw.github.com/jeremyaburns/NintendoSpy/master/NintendoSpy-v1.0.pde) on to your Arduino. 
-If you're not familiar with how to do this then check out the [Getting Started](http://arduino.cc/en/Guide/HomePage) guide over at Arduino.
+First you'll need to load the firmware sketch on to your Arduino.  When you open the sketch in the IDE uncomment the line that says "#define MODE_N64" by
+removing the two slashes at the beginning. If you're not familiar with how to do this then check out the [Getting Started](http://arduino.cc/en/Guide/HomePage) guide over at Arduino.
 Once you've got the NintendoSpy sketch uploaded to the board, attach the controller cable to the Arduino as follows.  (If you're using a different
 Arduino, just make sure that N64 GND is connected to any Arduino GND and that N64 Signal is connected to digital pin 2)
 

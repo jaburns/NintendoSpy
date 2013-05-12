@@ -7,8 +7,8 @@
 //#define MODE_GC
 //#define MODE_N64
 //#define MODE_SNES
-#define MODE_NES
-//#define MODE_SWITCH_SNES_GC // Siglemic mode
+//#define MODE_NES
+//#define MODE_SWITCH_SNES_GC
 // ---------------------------------------------------------------------------------
 
 
