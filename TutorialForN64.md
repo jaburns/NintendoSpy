@@ -31,7 +31,7 @@ If you're not familiar with how to do this then check out the [Getting Started](
 Once you've got the NintendoSpy sketch uploaded to the board, attach the controller cable to the Arduino as follows.  (If you're using a different
 Arduino, just make sure that N64 GND is connected to any Arduino GND and that N64 Signal is connected to digital pin 2)
 
-![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/tutorial-images/wiring.jpg "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/tutorial-images/wiring-n64.jpg "")
 
 With the program loaded and the wires connected, you can close the Arduino environment. The Arduino is now programmed to act as an NintendoSpy
 until another program is loaded on to it.  You can disconnect/reconnect the device from USB at will since the program is loaded in to non-volatile
