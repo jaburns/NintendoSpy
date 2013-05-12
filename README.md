@@ -10,4 +10,6 @@ Don't forget to set the operation mode by uncommenting the appropriate line near
 
 [View the DIY tutorial for N64 viewer hardware here.](https://github.com/jeremyaburns/NintendoSpy/blob/master/TutorialForN64.md)
 
+### Wiring setup for controller connections
+
 ![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/tutorial-images/wiring-all.jpg "")
