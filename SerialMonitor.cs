@@ -44,7 +44,7 @@ namespace NintendoSpy
         public void Stop()
         {
             if( _datPort != null ) {
-                try { // If the device has been unplugged, Close with throw an IOException.  This is fine, we'll just keep cleaning up.
+                try { // If the device has been unplugged, Close will throw an IOException.  This is fine, we'll just keep cleaning up.
                     _datPort.Close();
                 }
                 catch( IOException ) {}

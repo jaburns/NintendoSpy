@@ -115,7 +115,7 @@ namespace NintendoSpy
             if( _triggers != null && triggerStates != null ) {
                 for( int i = 0 ; i < _triggers.Length && i < triggerStates.Length ; ++i )
                 {
-                    int newWidth = (int)( _triggers[i].baseWidth * (1 - triggerStates[i]) );
+                    int newWidth = (int)( _triggers[i].baseWidth * triggerStates[i] );
                     _triggers[i].display.Width = newWidth;
 
                     if( _triggers[i].mirror ) {
