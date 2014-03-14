@@ -18,11 +18,11 @@ USB to serial COM port interface to a PC for display.
 
 ### Splicing the Extension Cable
 
-![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/tutorial-images/cut.jpg "")
-![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/tutorial-images/stripped.jpg "")
-![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/tutorial-images/solder.jpg "")
-![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/tutorial-images/spliced.jpg "")
-![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/tutorial-images/tapedup.jpg "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/cut.jpg "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/stripped.jpg "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/solder.jpg "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/spliced.jpg "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/tapedup.jpg "")
 
 ### Configuring the Arduino
 
@@ -31,7 +31,7 @@ removing the two slashes at the beginning. If you're not familiar with how to do
 Once you've got the NintendoSpy sketch uploaded to the board, attach the controller cable to the Arduino as follows.  (If you're using a different
 Arduino, just make sure that N64 GND is connected to any Arduino GND and that N64 Signal is connected to digital pin 2)
 
-![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/tutorial-images/wiring-n64.jpg "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/wiring-n64.jpg "")
 
 With the program loaded and the wires connected, you can close the Arduino environment. The Arduino is now programmed to act as an NintendoSpy
 until another program is loaded on to it.  You can disconnect/reconnect the device from USB at will since the program is loaded in to non-volatile
