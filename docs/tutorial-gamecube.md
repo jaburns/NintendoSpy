@@ -24,7 +24,6 @@ A Gamecube controller cable is made up of 6 wires:
 We only need the Bi-Directional Data Line to read the GameCube inputs and a ground for safety. You may use any number of grounds if you wish.
 
 (!) Note: Not all extension cables use the same colour schematic. This may lead to improperly spliced lines. You may refer to this [Google Doc](https://docs.google.com/spreadsheet/ccc?key=0AiANfINZ0c74dEZpc2RETjVoUG5iVEVQRHFWYkx6c2c&usp=drive_web#gid=0) for more info on known colour schemes. If you happen to find a new scheme, please email the details to thestarknebula@gmail.com. We will cover how to find the pinouts for any unknown extensions.
-Modding the Extension
 
 ### Modding the Extension
 
