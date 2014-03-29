@@ -1,5 +1,6 @@
 GameCube Tutorial
 ======
+[Google Docs version](https://docs.google.com/document/d/1ey-dRKVuAoKPt6--xVhUP7oPxb-2LLty6hI0Fe16Piw/edit#) of this tutorial.
 
 ### Things You’ll Need
 * An [Arduino Uno](http://arduino.cc/en/Main/ArduinoBoardUno) or any ATMega328-based Arduino at 16 MHz.
@@ -10,7 +11,8 @@ GameCube Tutorial
   * Solder (60/40, 63/37; very thin gauge)
   * Thin gauge wire, bought or salvaged.
   * Optional: Pin Headers
-  * Electrical tape (!) Don’t skimp on this! Regular tape will burn if a circuit shorts out on you. Use electrical tape only!
+  * Electrical tape
+      (!) *Don’t skimp on this! Regular tape will burn if a circuit shorts out on you. Use electrical tape only!*
 
 ### Controller Basics
 A Gamecube controller cable is made up of 6 wires:
@@ -26,53 +28,53 @@ Modding the Extension
 
 ### Modding the Extension
 
-![alt text]( "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/1-Extension.jpg "")
 We are going to splice (join at the ends) the wires near the female end of cable. This will allow for the most flexibility when using NintendoSpy. If you don’t understand why, it’s okay. Just follow along. For a GameCube controller, we’d advise cutting near the Male end, with a 6-12 feet of wire available.
 
 ### Cut the Extension
 
-![alt text]( "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/2-Cut_Extension.jpg "")
 It should look something like this. You may cut the extension closer or farther to the end if you wish. Again, for splicing GameCube Controllers, cut near the Male end.
 
 ### Unsheathe the Cables
 
-![alt text]( "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/3-Spliced.jpg "")
 Carefully cut open the black sheathing to reveal the inner wires. Un-sheath the ends of the wires as well. The colour scheme you see is that of a knock-off brand from Hong Kong. In this case, white is our Data and black is the shielding Ground. 
 Refer to this Google Doc to identify your colour scheme.
 Report new/unknown schemes to thestarknebula@gmail.com.
 
 ### Identifying the Pinouts
 
-![alt text]( "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/3.5-Find_Pinouts.jpg "")
 If you open up the cover over the female end, you can inspect the pinouts from behind. The casing can be taped or glued back afterwards. The pinout diagram is available in the [Google Doc](https://docs.google.com/spreadsheet/ccc?key=0AiANfINZ0c74dEZpc2RETjVoUG5iVEVQRHFWYkx6c2c&usp=drive_web#gid=0) or at [int03](http://www.int03.co.uk/crema/hardware/gamecube/gc-control.html).
 
 ### Reconnect the Unused Lines
 
-![alt text]( "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/4-Solder_Nulls_Back.jpg "")
 Reconnect the unused lines back together. You won’t need to connect any other wire to these.
 
 ### Solder the Data and Ground to the Wires
 
-![alt text]( "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/5-Twist.jpg "")
 Connect your Data and Ground to a wire. A good length for it is 6 to 12 feet (2 to 4 meters.) Tip: Solder both original ends back together, then twist the new wire around the tined ending. This will make it easy to solder on the wire.
 
 ### Optional: Tin or Connect a Pin Header
 
-![alt text]( "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/6-Pin_Header.jpg "")
 If you bought a good gauge wire, you may not need to do either. However, if you salvaged wire from something else, you may need to. This end must make proper contact with the Arduino if it is to work. Two options you may do are either tin the ends (left) so that it is sturdy enough to be pushed into the socket, or attach a pin header to it (right.)
 
 ### Tape the Solder Joints
 
-![alt text]( "")
-![alt text]( "")
-Tape the joint with electrical tape to prevent any damage, shock, interference, etc. Use only electrical tape; anything else may not withstand the electricity and burn up.
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/7-Tape_Up_Joints.jpg "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/8-Tape_Up_Joints2.jpg "")
+Tape the joint *with electrical tape* to prevent any damage, shock, interference, etc. Use only electrical tape; anything else may not withstand the electricity and burn up.
 
 ### Connect Your Setup
 
-![alt text]( "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/9-Setup.jpg "")
 Your setup should then look something like this. The male end goes to the GameCube, the Female end attaches to your GameCube controller, and the spliced wire connects to the Arduino.
 (!) Make sure that your Arduino’s firmware is loaded and the GameCube line uncommented!
 
-![alt text]( "")
+![alt text](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/gamecube_images/10-Arduino.jpg "")
 Happy Streaming! :)
 
