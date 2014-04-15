@@ -30,7 +30,7 @@ namespace NintendoSpy
         }
 
         void portListUpdateTimer_Tick (object sender, EventArgs e) {
-            _vm.UpdatePortList ();
+            _vm.UpdatePortList (SerialPort.GetPortNames ());
         }
 
         void goButton_Click (object sender, RoutedEventArgs e) {
@@ -62,9 +62,9 @@ namespace NintendoSpy
             _skinsView = new CollectionView (_skins);
         }
 
-        public void UpdatePortList () {
+        public void UpdatePortList (IEnumerable <string> ports) {
             _ports.Clear ();
-            _ports.AddRange (SerialPort.GetPortNames ());
+            _ports.AddRange (ports);
             _portsView.Refresh ();
         }
 
