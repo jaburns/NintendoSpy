@@ -19,9 +19,10 @@ namespace NintendoSpy
     /// </summary>
     public partial class ViewWindow : Window
     {
-        public ViewWindow()
+        public ViewWindow (BitmapImage datImage)
         {
-            InitializeComponent();
+            InitializeComponent ();
+            this.Background = new ImageBrush (datImage);
         }
     }
 }

@@ -34,7 +34,8 @@ namespace NintendoSpy
         }
 
         void goButton_Click (object sender, RoutedEventArgs e) {
-            var view = new ViewWindow ();
+            var s = Skin.LoadAllSkinsFromParentFolder ("skins") [0];
+            var view = new ViewWindow (s.BackgroundImage);
             view.Show ();
         }
     }
