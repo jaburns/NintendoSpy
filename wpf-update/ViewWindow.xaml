@@ -1,0 +1,8 @@
+﻿<Window x:Class="NintendoSpy.ViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ViewWindow" Height="300" Width="300">
+    <Grid Background="Black">
+        
+    </Grid>
+</Window>

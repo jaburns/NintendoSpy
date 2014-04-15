@@ -34,7 +34,8 @@ namespace NintendoSpy
         }
 
         void goButton_Click (object sender, RoutedEventArgs e) {
-
+            var view = new ViewWindow ();
+            view.Show ();
         }
     }
 

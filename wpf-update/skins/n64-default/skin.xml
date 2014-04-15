@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Default N64" author="jaburns" version="1.0">
+    <background image="pad.png" color="#000000" />
+    <button name="a" image="circle.png" x="15" y="25" w="20" h="30" />
+</skin>
