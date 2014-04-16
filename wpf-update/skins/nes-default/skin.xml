@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Default NES" author="jaburns" version="1.0">
+    <background image="nes.png" color="#FF000000" />
+    <button name="a" image="circle.png" x="190" y="63" width="20" height="20" />
+    <!--
+    <button name="b" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="start" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="select" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="up" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="down" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="left" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="right" image="circle.png" x="15" y="25" width="20" height="30" />
+    -->
+</skin>

@@ -20,11 +20,29 @@ namespace NintendoSpy
         {
             InitializeComponent ();
 
+            ControllerGrid.Width = skin.BackgroundImage.PixelWidth;
+            ControllerGrid.Height = skin.BackgroundImage.PixelHeight;
+
+            this.Background = new SolidColorBrush (skin.BackgroundColor);
+
             var brush = new ImageBrush (skin.BackgroundImage);
             brush.Stretch = Stretch.Uniform;
             ControllerGrid.Background = brush;
 
-            this.Background = new SolidColorBrush (skin.BackgroundColor);
+            ControllerGrid.Children.Add (getImageForElement (skin.Buttons[0].Config));
+        }
+
+        static Image getImageForElement (Skin.ElementConfig config)
+        {
+            var img = new Image ();
+            img.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            img.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            img.Source = config.Image;
+            img.Stretch = Stretch.Fill;
+            img.Margin = new Thickness (config.X, config.Y, 0, 0);
+            img.Width = config.Width;
+            img.Height = config.Height;
+            return img;
         }
     }
 }
