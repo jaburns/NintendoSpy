@@ -29,7 +29,7 @@ namespace NintendoSpy
             brush.Stretch = Stretch.Uniform;
             ControllerGrid.Background = brush;
 
-            ControllerGrid.Children.Add (getImageForElement (skin.Buttons[0].Config));
+            ControllerGrid.Children.Add (getImageForElement (skin.Buttons["a"].Config));
         }
 
         static Image getImageForElement (Skin.ElementConfig config)

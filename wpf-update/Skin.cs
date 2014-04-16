@@ -14,9 +14,8 @@ namespace NintendoSpy
     public class Skin
     {
         public struct ElementConfig {
-            public string Name;
             public BitmapImage Image;
-            public int X, Y, Width, Height;
+            public uint X, Y, Width, Height;
         }
 
         public struct Button {
@@ -43,14 +42,14 @@ namespace NintendoSpy
         public Color BackgroundColor { get; private set; }
 
 
-        List <Button> _buttons = new List <Button> ();
-        public IReadOnlyList <Button> Buttons { get { return _buttons.AsReadOnly (); } }
+        Dictionary <string,Button> _buttons = new Dictionary <string,Button> ();
+        public IReadOnlyDictionary <string,Button> Buttons { get { return _buttons; } }
 
-        List <AnalogStick> _analogSticks = new List <AnalogStick> ();
-        public IReadOnlyList <AnalogStick> AnalogSticks { get { return _analogSticks.AsReadOnly (); } }
+        Dictionary <string,AnalogStick> _analogSticks = new Dictionary <string,AnalogStick> ();
+        public IReadOnlyDictionary <string,AnalogStick> AnalogSticks { get { return _analogSticks; } }
 
-        List <AnalogTrigger> _analogTriggers = new List <AnalogTrigger> ();
-        public IReadOnlyList <AnalogTrigger> AnalogTriggers { get { return _analogTriggers.AsReadOnly (); } }
+        Dictionary <string,AnalogTrigger> _analogTriggers = new Dictionary <string,AnalogTrigger> ();
+        public IReadOnlyDictionary <string,AnalogTrigger> AnalogTriggers { get { return _analogTriggers; } }
 
 
         public Skin (string folder)
@@ -71,15 +70,27 @@ namespace NintendoSpy
             BackgroundImage = loadImage (bgElem.Attributes("image").First().Value);
             BackgroundColor = (Color)ColorConverter.ConvertFromString (bgElem.Attributes("color").First().Value);
 
-            foreach (var button in doc.Root.Elements ("button")) {
-                _buttons.Add (new Button {
+            foreach (var button in doc.Root.Elements ("button"))
+            {
+                string name = button.Attributes("name").First().Value;
+
+                var image = loadImage (button.Attributes("image").First().Value);
+
+                uint width = (uint)image.PixelWidth;
+                var widthAttr = button.Attributes("width");
+                if (widthAttr.Count() > 0) width = uint.Parse (widthAttr.First().Value);
+
+                uint height = (uint)image.PixelHeight;
+                var heightAttr = button.Attributes("height");
+                if (heightAttr.Count() > 0) height = uint.Parse (heightAttr.First().Value);
+
+                _buttons.Add (name, new Button {
                     Config = new ElementConfig {
-                        Name = button.Attributes("name").First().Value,
-                        Image = loadImage (button.Attributes("image").First().Value),
-                        X = Int32.Parse (button.Attributes("x").First().Value),
-                        Y = Int32.Parse (button.Attributes("y").First().Value),
-                        Width = Int32.Parse (button.Attributes("width").First().Value),
-                        Height = Int32.Parse (button.Attributes("height").First().Value),
+                        X = uint.Parse (button.Attributes("x").First().Value),
+                        Y = uint.Parse (button.Attributes("y").First().Value),
+                        Image = image,
+                        Width = width,
+                        Height = height
                     }
                 });
             }
