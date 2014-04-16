@@ -14,15 +14,17 @@ using System.Windows.Shapes;
 
 namespace NintendoSpy
 {
-    /// <summary>
-    /// Interaction logic for ViewWindow.xaml
-    /// </summary>
     public partial class ViewWindow : Window
     {
-        public ViewWindow (BitmapImage datImage)
+        public ViewWindow (Skin skin)
         {
             InitializeComponent ();
-            this.Background = new ImageBrush (datImage);
+
+            var brush = new ImageBrush (skin.BackgroundImage);
+            brush.Stretch = Stretch.Uniform;
+            ControllerGrid.Background = brush;
+
+            this.Background = new SolidColorBrush (skin.BackgroundColor);
         }
     }
 }

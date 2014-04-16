@@ -20,8 +20,7 @@ namespace NintendoSpy
             _vm = new SetupWindowViewModel ();
             DataContext = _vm;
 
-            _vm.AddSkin (new SetupWindowViewModel.SkinEntry { Name = "Default N64" });
-            _vm.AddSkin (new SetupWindowViewModel.SkinEntry { Name = "Default GameCube" });
+            _vm.Skins.UpdateContents (Skin.LoadAllSkinsFromParentFolder ("skins"));
 
             _portListUpdateTimer = new DispatcherTimer ();
             _portListUpdateTimer.Interval = TimeSpan.FromSeconds (1);
@@ -30,49 +29,41 @@ namespace NintendoSpy
         }
 
         void portListUpdateTimer_Tick (object sender, EventArgs e) {
-            _vm.UpdatePortList (SerialPort.GetPortNames ());
+            _vm.Ports.UpdateContents (SerialPort.GetPortNames ());
         }
 
         void goButton_Click (object sender, RoutedEventArgs e) {
-            var s = Skin.LoadAllSkinsFromParentFolder ("skins") [0];
-            var view = new ViewWindow (s.BackgroundImage);
-            view.Show ();
+            new ViewWindow (_vm.Skins.SelectedItem) .Show ();
         }
     }
 
     public class SetupWindowViewModel 
     {
-        public struct SkinEntry {
-            public string Name { get; set; }
-            public string Path { get; set; }
+        public class ListView <T>
+        {
+            List <T> _items;
+
+            public CollectionView Items { get; private set; }
+            public T SelectedItem { get; set; }
+
+            public ListView () {
+                _items = new List <T> ();
+                Items = new CollectionView (_items);
+            }
+
+            public void UpdateContents (IEnumerable <T> items) {
+                _items.Clear ();
+                _items.AddRange (items);
+                Items.Refresh ();
+            }
         }
 
-        List <string> _ports = new List <String> ();
-        List <SkinEntry> _skins = new List <SkinEntry> ();
-
-        CollectionView _portsView;
-        CollectionView _skinsView;
-
-        public CollectionView Ports { get { return _portsView; } }
-        public CollectionView Skins { get { return _skinsView; } }
-
-        public string SelectedPort { get; set; }
-        public string SelectedSkinPath { get; set; }
+        public ListView <string> Ports { get; set; }
+        public ListView <Skin>   Skins { get; set; }
 
         public SetupWindowViewModel () {
-            _portsView = new CollectionView (_ports);
-            _skinsView = new CollectionView (_skins);
-        }
-
-        public void UpdatePortList (IEnumerable <string> ports) {
-            _ports.Clear ();
-            _ports.AddRange (ports);
-            _portsView.Refresh ();
-        }
-
-        public void AddSkin (SkinEntry skin) {
-            _skins.Add (skin);
-            _skinsView.Refresh ();
+            Ports = new ListView <string> ();
+            Skins = new ListView <Skin> ();
         }
     }
 }
