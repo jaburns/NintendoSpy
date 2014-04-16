@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="Default NES" author="jaburns" version="1.0">
     <background image="nes.png" color="#FF000000" />
-    <button name="a" image="circle.png" x="190" y="63" width="20" height="20" />
+    <button name="a" image="circle.png" x="190" y="63" />
     <!--
     <button name="b" image="circle.png" x="15" y="25" width="20" height="30" />
     <button name="start" image="circle.png" x="15" y="25" width="20" height="30" />
