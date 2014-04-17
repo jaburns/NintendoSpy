@@ -9,7 +9,7 @@ using System.Windows.Threading;
 
 namespace NintendoSpy.Readers
 {
-    sealed public class SlimDXReader : IControllerReader, IControllerState
+    sealed public class GamepadReader : IControllerReader, IControllerState
     {
     // ----- Interface implementations with backing state -------------------------------------------------------------
 
@@ -35,7 +35,7 @@ namespace NintendoSpy.Readers
         DispatcherTimer _timer;
         Joystick _joystick;
 
-        public SlimDXReader ()
+        public GamepadReader ()
         {
             _dinput = new DirectInput();
  

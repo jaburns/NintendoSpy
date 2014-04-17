@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="InputSource.cs" />
     <Compile Include="Readers\Interface.cs" />
     <Compile Include="Readers\GameCube.cs" />
     <Compile Include="Readers\Nintendo64.cs" />
