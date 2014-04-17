@@ -62,7 +62,7 @@
     <Compile Include="Readers\GameCube.cs" />
     <Compile Include="Readers\Nintendo64.cs" />
     <Compile Include="Readers\SerialControllerReader.cs" />
-    <Compile Include="Readers\SlimDXReader.cs" />
+    <Compile Include="Readers\GamepadReader.cs" />
     <Compile Include="Readers\SuperNESandNES.cs" />
     <Compile Include="Readers\XInputReader.cs" />
     <Compile Include="SerialMonitor.cs" />
