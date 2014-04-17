@@ -1,5 +1,9 @@
-!wpf-update/*
-!wpf-update/**/*
+
+# Include everything in slimdx
+!wpf-update/slimdx
+!wpf-update/slimdx/
+!wpf-update/slimdx/*
+!wpf-update/slimdx/**/*
 
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 [Bb]in/
