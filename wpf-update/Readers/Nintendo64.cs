@@ -22,6 +22,11 @@ namespace NintendoSpy.Readers
 
         public IReadOnlyDictionary <string, float> Analogs { get { return null; } }
 
+        public Nintendo64 () {
+            Buttons = _buttons;
+            Sticks = _sticks;
+        }
+
         public void ReadFromPacket (byte[] packet)
         {
             if (packet.Length < PACKET_SIZE) return;

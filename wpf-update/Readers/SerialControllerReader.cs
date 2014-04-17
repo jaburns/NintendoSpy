@@ -22,8 +22,6 @@ namespace NintendoSpy.Readers
             _serialMonitor = new SerialMonitor (portName);
             _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
             _serialMonitor.Start ();
-
-            new SerialControllerReader ("COM2", new Nintendo64 ());
         }
 
         void serialMonitor_PacketReceived (object sender, byte[] packet)

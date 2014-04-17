@@ -23,6 +23,12 @@ namespace NintendoSpy.Readers
         Dictionary <string, float> _analogs = new Dictionary <string, float> ();
         public IReadOnlyDictionary <string, float> Analogs { get; private set; }
 
+        public GameCube () {
+            Buttons = _buttons;
+            Sticks = _sticks;
+            Analogs = _analogs;
+        }
+
         public void ReadFromPacket (byte[] packet)
         {
             if (packet.Length < PACKET_SIZE) return;

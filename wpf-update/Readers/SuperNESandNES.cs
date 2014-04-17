@@ -19,6 +19,7 @@ namespace NintendoSpy.Readers
 
         public ButtonsOnlyState (string[] buttonNames) {
             _buttonNames = buttonNames;
+            Buttons = _buttons;
         }
 
         public void ReadFromPacket (byte[] packet)
