@@ -16,9 +16,6 @@ namespace NintendoSpy.Readers
         Dictionary <string, bool> _buttons = new Dictionary <string, bool> ();
         public IReadOnlyDictionary <string, bool> Buttons { get; private set; }
 
-        Dictionary <string, ControlStickState> _sticks = new Dictionary <string, ControlStickState> ();
-        public IReadOnlyDictionary <string, ControlStickState> Sticks { get; private set; }
-
         Dictionary <string, float> _analogs = new Dictionary <string, float> ();
         public IReadOnlyDictionary <string, float> Analogs { get; private set; }
 

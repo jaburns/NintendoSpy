@@ -15,9 +15,6 @@ namespace NintendoSpy.Readers
         Dictionary <string, bool> _buttons = new Dictionary <string, bool> ();
         public IReadOnlyDictionary <string, bool> Buttons { get; private set; }
 
-        Dictionary <string, ControlStickState> _sticks = new Dictionary <string, ControlStickState> ();
-        public IReadOnlyDictionary <string, ControlStickState> Sticks { get; private set; }
-
         Dictionary <string, float> _analogs = new Dictionary <string, float> ();
         public IReadOnlyDictionary <string, float> Analogs { get; private set; }
 
@@ -55,7 +52,6 @@ namespace NintendoSpy.Readers
         public XInputReader ()
         {
             Buttons = _buttons;
-            Sticks = _sticks;
             Analogs = _analogs;
 
             _timer = new DispatcherTimer ();
@@ -84,17 +80,12 @@ namespace NintendoSpy.Readers
             _buttons ["l"]     = (state.wButtons & 0x0100) != 0;
             _buttons ["r"]     = (state.wButtons & 0x0200) != 0;
 
-            _sticks ["left"] = new ControlStickState {
-                X = (float)state.sThumbLX / 32768,
-                Y = (float)state.sThumbLY / 32768
-            };
-            _sticks ["right"] = new ControlStickState {
-                X = (float)state.sThumbRX / 32768,
-                Y = (float)state.sThumbRY / 32768
-            };
-
-            _analogs ["l"] = (float)state.bLeftTrigger / 255;
-            _analogs ["r"] = (float)state.bRightTrigger / 255;
+            _analogs ["lstick_x"] = (float)state.sThumbLX / 32768;
+            _analogs ["lstick_y"] = (float)state.sThumbLY / 32768;
+            _analogs ["rstick_x"] = (float)state.sThumbRX / 32768;
+            _analogs ["rstick_y"] = (float)state.sThumbRY / 32768;
+            _analogs ["trig_l"]   = (float)state.bLeftTrigger / 255;
+            _analogs ["trig_r"]   = (float)state.bRightTrigger / 255;
 
             if (ControllerStateChanged != null) ControllerStateChanged (this, null);
         }

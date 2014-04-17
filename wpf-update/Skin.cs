@@ -20,15 +20,18 @@ namespace NintendoSpy
 
         public struct Button {
             public ElementConfig Config;
+            public string Name;
         }
 
         public struct AnalogStick {
             public ElementConfig Config;
-            public float XRange, YRange;
+            public string XName, YName;
+            public int XRange, YRange;
         }
 
         public struct AnalogTrigger {
             public ElementConfig Config;
+            public string Name;
             public bool IsHorizontal;
             public float Range;
         }
@@ -42,14 +45,14 @@ namespace NintendoSpy
         public Color BackgroundColor { get; private set; }
 
 
-        Dictionary <string,Button> _buttons = new Dictionary <string,Button> ();
-        public IReadOnlyDictionary <string,Button> Buttons { get { return _buttons; } }
+        List <Button> _buttons = new List <Button> ();
+        public IReadOnlyList <Button> Buttons { get { return _buttons; } }
 
-        Dictionary <string,AnalogStick> _analogSticks = new Dictionary <string,AnalogStick> ();
-        public IReadOnlyDictionary <string,AnalogStick> AnalogSticks { get { return _analogSticks; } }
+        List <AnalogStick> _analogSticks = new List <AnalogStick> ();
+        public IReadOnlyList <AnalogStick> AnalogSticks { get { return _analogSticks; } }
 
-        Dictionary <string,AnalogTrigger> _analogTriggers = new Dictionary <string,AnalogTrigger> ();
-        public IReadOnlyDictionary <string,AnalogTrigger> AnalogTriggers { get { return _analogTriggers; } }
+        List <AnalogTrigger> _analogTriggers = new List <AnalogTrigger> ();
+        public IReadOnlyList <AnalogTrigger> AnalogTriggers { get { return _analogTriggers; } }
 
 
         public Skin (string folder)
@@ -84,7 +87,8 @@ namespace NintendoSpy
                 var heightAttr = button.Attributes("height");
                 if (heightAttr.Count() > 0) height = uint.Parse (heightAttr.First().Value);
 
-                _buttons.Add (name, new Button {
+                _buttons.Add (new Button {
+                    Name = name,
                     Config = new ElementConfig {
                         X = uint.Parse (button.Attributes("x").First().Value),
                         Y = uint.Parse (button.Attributes("y").First().Value),
@@ -93,6 +97,8 @@ namespace NintendoSpy
                         Height = height
                     }
                 });
+
+                // TODO Get sticks and triggers
             }
         }
 

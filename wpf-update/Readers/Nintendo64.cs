@@ -17,14 +17,12 @@ namespace NintendoSpy.Readers
         Dictionary <string, bool> _buttons = new Dictionary <string, bool> ();
         public IReadOnlyDictionary <string, bool> Buttons { get; private set; }
 
-        Dictionary <string, ControlStickState> _sticks = new Dictionary <string, ControlStickState> ();
-        public IReadOnlyDictionary <string, ControlStickState> Sticks { get; private set; }
-
-        public IReadOnlyDictionary <string, float> Analogs { get { return null; } }
+        Dictionary <string, float> _analogs = new Dictionary <string, float> ();
+        public IReadOnlyDictionary <string, float> Analogs { get; private set; }
 
         public Nintendo64 () {
             Buttons = _buttons;
-            Sticks = _sticks;
+            Analogs = _analogs;
         }
 
         public void ReadFromPacket (byte[] packet)
@@ -38,10 +36,8 @@ namespace NintendoSpy.Readers
 
             Func <byte, float> readStick = input => (float)((sbyte)input) / 128;
 
-            _sticks ["main"] = new ControlStickState {
-                X = readStick (SignalTool.readByte (packet, BUTTONS.Length     )),
-                Y = readStick (SignalTool.readByte (packet, BUTTONS.Length +  8))
-            };
+            _analogs ["stick_x"] = readStick (SignalTool.readByte (packet, BUTTONS.Length     ));
+            _analogs ["stick_y"] = readStick (SignalTool.readByte (packet, BUTTONS.Length +  8));
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NintendoSpy
+namespace NintendoSpy.Readers
 {
-    static public class SignalTool
+    static internal class SignalTool
     {
         /// <summary>
         /// Reads a byte of data from a string of 8 bits in a controller data packet.

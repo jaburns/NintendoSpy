@@ -21,7 +21,8 @@ namespace NintendoSpy
         Skin _skin;
         IControllerReader _reader;
 
-        Dictionary <string,Image> _buttonImages = new Dictionary <string,Image> ();
+        List <Tuple <Skin.Button,Image>> _buttonsWithImages = new List <Tuple <Skin.Button,Image>> ();
+        List <Tuple <Skin.AnalogStick,Image>> _sticksWithImages = new List <Tuple <Skin.AnalogStick,Image>> ();
 
         public ViewWindow (Skin skin, IControllerReader reader)
         {
@@ -40,18 +41,31 @@ namespace NintendoSpy
             ControllerGrid.Background = brush;
 
             foreach (var button in _skin.Buttons) {
-                var newImage = getImageForElement (button.Value.Config);
-                _buttonImages [button.Key] = newImage;
-                ControllerGrid.Children.Add (newImage);
+                var image = getImageForElement (button.Config);
+                _buttonsWithImages.Add (new Tuple <Skin.Button,Image> (button, image));
+                ControllerGrid.Children.Add (image);
             }
+
+            // TODO populate _sticksWithImages
 
             _reader.ControllerStateChanged += reader_ControllerStateChanged;
         }
 
         void reader_ControllerStateChanged (object sender, EventArgs e)
         {
-            foreach (var button in _buttonImages) {
-                button.Value.Visibility = _reader.State.Buttons [button.Key] ? Visibility.Visible : Visibility.Hidden ;
+            foreach (var button in _buttonsWithImages) {
+                button.Item2.Visibility = _reader.State.Buttons [button.Item1.Name] ? Visibility.Visible : Visibility.Hidden ;
+            }
+
+            foreach (var stick in _sticksWithImages)
+            {
+                var skin = stick.Item1;
+                var image = stick.Item2;
+
+                var x = skin.Config.X + skin.XRange * _reader.State.Analogs [skin.XName];
+                var y = skin.Config.Y + skin.YRange * _reader.State.Analogs [skin.YName];
+                
+                image.Margin = new Thickness (x,y,0,0);
             }
         }
 
