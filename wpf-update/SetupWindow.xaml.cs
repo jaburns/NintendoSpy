@@ -14,9 +14,9 @@ namespace NintendoSpy
         SetupWindowViewModel _vm;
         DispatcherTimer _portListUpdateTimer;
 
-        public SetupWindow()
+        public SetupWindow ()
         {
-            InitializeComponent();
+            InitializeComponent ();
             _vm = new SetupWindowViewModel ();
             DataContext = _vm;
 
