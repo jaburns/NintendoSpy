@@ -25,5 +25,7 @@ namespace NintendoSpy.Readers
     {
         IControllerState State { get; }
         event EventHandler ControllerStateChanged;
+        event EventHandler ControllerDisconnected;
+        void Finish ();
     }
 }

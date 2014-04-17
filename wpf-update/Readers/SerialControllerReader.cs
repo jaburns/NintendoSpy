@@ -9,6 +9,7 @@ namespace NintendoSpy.Readers
     sealed public class SerialControllerReader : IControllerReader 
     {
         public event EventHandler ControllerStateChanged;
+        public event EventHandler ControllerDisconnected;
 
         ISerialControllerState _controller;
         public IControllerState State { get { return _controller; } } 
@@ -28,6 +29,11 @@ namespace NintendoSpy.Readers
         {
             _controller.ReadFromPacket (packet);
             if (ControllerStateChanged != null) ControllerStateChanged (this, null);
+        }
+
+        public void Finish ()
+        {
+
         }
     }
 }

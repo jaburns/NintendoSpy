@@ -24,6 +24,7 @@ namespace NintendoSpy.Readers
         public IControllerState State { get { return this; } }
 
         public event EventHandler ControllerStateChanged;
+        public event EventHandler ControllerDisconnected;
 
     // ----- Interop with XInput DLL ----------------------------------------------------------------------------------
 
@@ -96,6 +97,11 @@ namespace NintendoSpy.Readers
             _analogs ["r"] = (float)state.bRightTrigger / 255;
 
             if (ControllerStateChanged != null) ControllerStateChanged (this, null);
+        }
+
+        public void Finish ()
+        {
+
         }
     }
 }
