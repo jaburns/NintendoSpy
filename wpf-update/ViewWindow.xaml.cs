@@ -12,24 +12,47 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using NintendoSpy.Readers;
+
 namespace NintendoSpy
 {
     public partial class ViewWindow : Window
     {
-        public ViewWindow (Skin skin)
+        Skin _skin;
+        IControllerReader _reader;
+
+        Dictionary <string,Image> _buttonImages = new Dictionary <string,Image> ();
+
+        public ViewWindow (Skin skin, IControllerReader reader)
         {
             InitializeComponent ();
 
-            ControllerGrid.Width = skin.BackgroundImage.PixelWidth;
-            ControllerGrid.Height = skin.BackgroundImage.PixelHeight;
+            _skin = skin;
+            _reader = reader;
 
-            this.Background = new SolidColorBrush (skin.BackgroundColor);
+            ControllerGrid.Width = _skin.BackgroundImage.PixelWidth;
+            ControllerGrid.Height = _skin.BackgroundImage.PixelHeight;
 
-            var brush = new ImageBrush (skin.BackgroundImage);
+            this.Background = new SolidColorBrush (_skin.BackgroundColor);
+
+            var brush = new ImageBrush (_skin.BackgroundImage);
             brush.Stretch = Stretch.Uniform;
             ControllerGrid.Background = brush;
 
-            ControllerGrid.Children.Add (getImageForElement (skin.Buttons["a"].Config));
+            foreach (var button in _skin.Buttons) {
+                var newImage = getImageForElement (button.Value.Config);
+                _buttonImages [button.Key] = newImage;
+                ControllerGrid.Children.Add (newImage);
+            }
+
+            _reader.ControllerStateChanged += reader_ControllerStateChanged;
+        }
+
+        void reader_ControllerStateChanged (object sender, EventArgs e)
+        {
+            foreach (var button in _buttonImages) {
+                button.Value.Visibility = _reader.State.Buttons [button.Key] ? Visibility.Visible : Visibility.Hidden ;
+            }
         }
 
         static Image getImageForElement (Skin.ElementConfig config)

@@ -53,6 +53,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Readers\Interface.cs" />
+    <Compile Include="Readers\GameCube.cs" />
+    <Compile Include="Readers\Nintendo64.cs" />
+    <Compile Include="Readers\SerialControllerReader.cs" />
+    <Compile Include="Readers\SuperNESandNES.cs" />
+    <Compile Include="Readers\XInputReader.cs" />
+    <Compile Include="SerialMonitor.cs" />
+    <Compile Include="SignalTool.cs" />
     <Compile Include="Skin.cs" />
     <Compile Include="ViewWindow.xaml.cs">
       <DependentUpon>ViewWindow.xaml</DependentUpon>
