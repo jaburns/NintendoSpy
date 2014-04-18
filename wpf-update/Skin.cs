@@ -26,7 +26,7 @@ namespace NintendoSpy
         public struct AnalogStick {
             public ElementConfig Config;
             public string XName, YName;
-            public int XRange, YRange;
+            public uint XRange, YRange;
         }
 
         public struct AnalogTrigger {
@@ -97,9 +97,39 @@ namespace NintendoSpy
                         Height = height
                     }
                 });
-
-                // TODO Get sticks and triggers
             }
+
+            foreach (var button in doc.Root.Elements ("stick"))
+            {
+                string xname = button.Attributes("xname").First().Value;
+                string yname = button.Attributes("yname").First().Value;
+
+                var image = loadImage (button.Attributes("image").First().Value);
+
+                uint width = (uint)image.PixelWidth;
+                var widthAttr = button.Attributes("width");
+                if (widthAttr.Count() > 0) width = uint.Parse (widthAttr.First().Value);
+
+                uint height = (uint)image.PixelHeight;
+                var heightAttr = button.Attributes("height");
+                if (heightAttr.Count() > 0) height = uint.Parse (heightAttr.First().Value);
+
+                _analogSticks.Add (new AnalogStick {
+                    XName = xname,
+                    YName = yname,
+                    XRange = uint.Parse (button.Attributes("xrange").First().Value),
+                    YRange = uint.Parse (button.Attributes("yrange").First().Value),
+                    Config = new ElementConfig {
+                        X = uint.Parse (button.Attributes("x").First().Value),
+                        Y = uint.Parse (button.Attributes("y").First().Value),
+                        Image = image,
+                        Width = width,
+                        Height = height
+                    }
+                });
+            }
+
+            // TODO Get triggers
         }
 
         static public List<Skin> LoadAllSkinsFromParentFolder (string path)

@@ -80,12 +80,12 @@ namespace NintendoSpy.Readers
             _buttons ["l"]     = (state.wButtons & 0x0100) != 0;
             _buttons ["r"]     = (state.wButtons & 0x0200) != 0;
 
-            _analogs ["lstick_x"] = (float)state.sThumbLX / 32768;
-            _analogs ["lstick_y"] = (float)state.sThumbLY / 32768;
-            _analogs ["rstick_x"] = (float)state.sThumbRX / 32768;
-            _analogs ["rstick_y"] = (float)state.sThumbRY / 32768;
-            _analogs ["trig_l"]   = (float)state.bLeftTrigger / 255;
-            _analogs ["trig_r"]   = (float)state.bRightTrigger / 255;
+            _analogs ["lstick_x"] =  (float)state.sThumbLX / 32768;
+            _analogs ["lstick_y"] = -(float)state.sThumbLY / 32768;
+            _analogs ["rstick_x"] =  (float)state.sThumbRX / 32768;
+            _analogs ["rstick_y"] = -(float)state.sThumbRY / 32768;
+            _analogs ["trig_l"]   =  (float)state.bLeftTrigger / 255;
+            _analogs ["trig_r"]   =  (float)state.bRightTrigger / 255;
 
             if (ControllerStateChanged != null) ControllerStateChanged (this, null);
         }

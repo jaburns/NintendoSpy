@@ -43,6 +43,12 @@ namespace NintendoSpy
             foreach (var button in _skin.Buttons) {
                 var image = getImageForElement (button.Config);
                 _buttonsWithImages.Add (new Tuple <Skin.Button,Image> (button, image));
+                image.Visibility = Visibility.Hidden;
+                ControllerGrid.Children.Add (image);
+            }
+            foreach (var stick in _skin.AnalogSticks) {
+                var image = getImageForElement (stick.Config);
+                _sticksWithImages.Add (new Tuple <Skin.AnalogStick,Image> (stick, image));
                 ControllerGrid.Children.Add (image);
             }
 
@@ -54,6 +60,7 @@ namespace NintendoSpy
         void reader_ControllerStateChanged (object sender, EventArgs e)
         {
             foreach (var button in _buttonsWithImages) {
+                if (!_reader.State.Buttons.ContainsKey (button.Item1.Name)) continue;
                 button.Item2.Visibility = _reader.State.Buttons [button.Item1.Name] ? Visibility.Visible : Visibility.Hidden ;
             }
 
