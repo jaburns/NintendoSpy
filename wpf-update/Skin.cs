@@ -40,6 +40,7 @@ namespace NintendoSpy
         public string Name { get; private set; }
         public string Author { get; private set; }
         public string Version { get; private set; }
+        public InputSource Type { get; private set; }
 
         public BitmapImage BackgroundImage { get; private set; }
         public Color BackgroundColor { get; private set; }
@@ -68,6 +69,7 @@ namespace NintendoSpy
             Name = doc.Root.Attributes("name").First().Value;
             Author = doc.Root.Attributes("author").First().Value;
             Version = doc.Root.Attributes("version").First().Value;
+            Type = InputSource.ALL.First (x => x.TypeTag == doc.Root.Attributes("type").First().Value);
 
             var bgElem = doc.Root.Elements ("background").First();
             BackgroundImage = loadImage (bgElem.Attributes("image").First().Value);

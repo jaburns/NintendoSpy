@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Default GameCube" author="jaburns" version="1.0" type="gcn">
+
+    <background image="pad.png" color="#FFFF0000" />
+
+    <!-- Primary buttons -->
+    <button name="a" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="b" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="z" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="start" image="circle.png" x="15" y="25" width="20" height="30" />
+
+    <!-- Camera buttons -->
+    <button name="cup" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="cdown" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="cleft" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="cright" image="circle.png" x="15" y="25" width="20" height="30" />
+
+    <!-- Shoulder buttons -->
+    <button name="r" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="l" image="circle.png" x="15" y="25" width="20" height="30" />
+
+    <!-- D-Pad -->
+    <button name="up" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="down" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="left" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="right" image="circle.png" x="15" y="25" width="20" height="30" />
+
+    <stick xname="lstick_x" yname="rstick_y" image="circle.png"
+           x="45" y="25" width="20" height="30" xrange="20" yrange="30"/>
+
+</skin>

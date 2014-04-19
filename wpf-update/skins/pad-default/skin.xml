@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Default PC 360" author="jaburns" version="1.0" type="pc360">
+
+    <background image="pad.png" color="#FFFF0000" />
+
+    <button name="a" image="circle.png" x="221" y="61" width="23" height="23" />
+    <button name="b" image="circle.png" x="241" y="41" width="23" height="23" />
+    <button name="x" image="circle.png" x="199" y="41" width="23" height="23" />
+    <button name="y" image="circle.png" x="220" y="22" width="23" height="23" />
+
+    <button name="l" image="circle.png" x="61" y="2" width="30" height="14" />
+    <button name="r" image="circle.png" x="213" y="2" width="30" height="14" />
+
+    <button name="start" image="circle.png" x="172" y="45" width="22" height="16" />
+    <button name="back" image="circle.png" x="108" y="45" width="22" height="16" />
+
+    <button name="up"    image="circle.png" x="101" y="71" width="16" height="16" />
+    <button name="down"  image="circle.png" x="101" y="105" width="16" height="16" />
+    <button name="left"  image="circle.png" x="84" y="89" width="16" height="16" />
+    <button name="right" image="circle.png" x="117" y="88" width="16" height="16" />
+
+    <stick xname="lstick_x" yname="lstick_y" image="stick.png"
+           x="53" y="31" width="34" height="35" xrange="9" yrange="9"/>
+    <stick xname="rstick_x" yname="rstick_y" image="stick.png"
+           x="174" y="78" width="34" height="35" xrange="9" yrange="9"/>
+
+</skin>

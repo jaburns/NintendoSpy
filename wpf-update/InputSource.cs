@@ -22,14 +22,14 @@ namespace NintendoSpy
 
         static public readonly InputSource DEFAULT = NES;
 
-        public string FolderPrefix { get; private set; }
+        public string TypeTag { get; private set; }
         public string Name { get; private set; }
         public bool RequiresComPort { get; private set; }
 
         public Func <string, IControllerReader> BuildReader { get; private set; }
 
-        InputSource (string folderPrefix, string name, bool requiresComPort, Func <string, IControllerReader> buildReader) {
-            FolderPrefix = folderPrefix;
+        InputSource (string typeTag, string name, bool requiresComPort, Func <string, IControllerReader> buildReader) {
+            TypeTag = typeTag;
             Name = name;
             RequiresComPort = requiresComPort;
             BuildReader = buildReader;
