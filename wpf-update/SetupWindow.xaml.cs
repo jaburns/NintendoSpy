@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows;
@@ -16,6 +17,7 @@ namespace NintendoSpy
     {
         SetupWindowViewModel _vm;
         DispatcherTimer _portListUpdateTimer;
+        List <Skin> _skins;
 
         public SetupWindow ()
         {
@@ -23,7 +25,8 @@ namespace NintendoSpy
             _vm = new SetupWindowViewModel ();
             DataContext = _vm;
 
-            _vm.Skins.UpdateContents (Skin.LoadAllSkinsFromParentFolder ("skins"));
+            _skins = Skin.LoadAllSkinsFromParentFolder("skins");
+            _vm.Skins.UpdateContents (_skins.Where (x => x.Type == InputSource.DEFAULT));
 
             _vm.Sources.UpdateContents (InputSource.ALL);
             _vm.Sources.SelectedItem = InputSource.DEFAULT;
@@ -49,6 +52,7 @@ namespace NintendoSpy
         {
             if (_vm.Sources.SelectedItem == null) return;
             _vm.ComPortOptionVisibility = _vm.Sources.SelectedItem.RequiresComPort ? Visibility.Visible : Visibility.Hidden;
+            _vm.Skins.UpdateContents (_skins.Where (x => x.Type == _vm.Sources.SelectedItem));
         }
     }
 
@@ -76,8 +80,6 @@ namespace NintendoSpy
         public ListView <string> Ports { get; set; }
         public ListView <Skin> Skins { get; set; }
         public ListView <InputSource> Sources { get; set; }
-
-        public bool ShowAllSkins { get; set; }
 
         Visibility _comPortOptionVisibility;
         public Visibility ComPortOptionVisibility {
