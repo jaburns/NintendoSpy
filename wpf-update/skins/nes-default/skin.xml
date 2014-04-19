@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Default NES" author="jaburns" version="1.0">
+<skin name="Default NES" author="jaburns" version="1.0" type="nes">
     <background image="nes.png" color="#FF000000" />
     <button name="a" image="circle.png" x="190" y="63" />
     <!--

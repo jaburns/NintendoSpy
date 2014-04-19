@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Default N64" author="jaburns" version="1.0">
+<skin name="Default N64" author="jaburns" version="1.0" type="n64">
 
     <background image="pad.png" color="#FFFF0000" />
 
