@@ -26,6 +26,7 @@ namespace NintendoSpy
             _vm.Skins.UpdateContents (Skin.LoadAllSkinsFromParentFolder ("skins"));
 
             _vm.Sources.UpdateContents (InputSource.ALL);
+            _vm.Sources.SelectedItem = InputSource.DEFAULT;
 
             _portListUpdateTimer = new DispatcherTimer ();
             _portListUpdateTimer.Interval = TimeSpan.FromSeconds (1);

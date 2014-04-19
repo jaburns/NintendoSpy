@@ -18,6 +18,8 @@ namespace NintendoSpy
             new InputSource ("pad", "Other Gamepad", false, _ => new GamepadReader ())
         };
 
+        static public readonly InputSource DEFAULT = ALL [0];
+
         public string FolderPrefix { get; private set; }
         public string Name { get; private set; }
         public bool RequiresComPort { get; private set; }
