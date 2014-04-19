@@ -75,7 +75,9 @@ namespace NintendoSpy
 
         public ListView <string> Ports { get; set; }
         public ListView <Skin> Skins { get; set; }
-        public ListView <InputSource> Sources { get; set; } 
+        public ListView <InputSource> Sources { get; set; }
+
+        public bool ShowAllSkins { get; set; }
 
         Visibility _comPortOptionVisibility;
         public Visibility ComPortOptionVisibility {

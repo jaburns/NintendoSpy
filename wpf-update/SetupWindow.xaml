@@ -23,5 +23,8 @@
                  DisplayMemberPath="Name"
                  SelectedValue="{Binding Path=Skins.SelectedItem}" />
         <Button Name="goButton" Content="Go!" Margin="10,0,10,10" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="goButton_Click" />
+        <Label Content="Show all skins" HorizontalAlignment="Right" Margin="0,80,10,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
+        <CheckBox Content="" Margin="0,88,111,0" VerticalAlignment="Top" HorizontalAlignment="Right"
+                  IsChecked="{Binding Path=ShowAllSkins}" />
     </Grid>
 </Window>

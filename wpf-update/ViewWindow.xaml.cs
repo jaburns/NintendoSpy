@@ -52,8 +52,6 @@ namespace NintendoSpy
                 ControllerGrid.Children.Add (image);
             }
 
-            // TODO populate _sticksWithImages
-
             _reader.ControllerStateChanged += reader_ControllerStateChanged;
         }
 
