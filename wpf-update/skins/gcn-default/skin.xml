@@ -3,25 +3,29 @@
 
     <background image="pad.png" color="#FFFF0000" />
 
-    <button name="a" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="b" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="z" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="start" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="a" image="circle.png" x="167" y="44" width="29" height="29" />
+    <button name="b" image="circle.png" x="146" y="60" width="22" height="22" />
+    <button name="x" image="circle.png" x="199" y="41" width="12" height="27" />
+    <button name="y" image="circle.png" x="161" y="31" width="27" height="12" />
+    <button name="z" image="circle.png" x="196" y="21" width="12" height="12" />
+    <button name="start" image="circle.png" x="108" y="52" width="16" height="16" />
 
-    <button name="cup" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="cdown" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="cleft" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="cright" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="r" image="circle.png" x="199" y="3" width="12" height="12" />
+    <analog name="trig_r" />
 
-    <button name="r" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="l" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="l" image="circle.png" x="21" y="3" width="12" height="12" />
+    <analog name="trig_l" />
 
-    <button name="up" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="down" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="left" image="circle.png" x="15" y="25" width="20" height="30" />
-    <button name="right" image="circle.png" x="15" y="25" width="20" height="30" />
+    <button name="up" image="circle.png" x="75" y="94" width="10" height="10" />
+    <button name="down" image="circle.png" x="75" y="111" width="10" height="10" />
+    <button name="left" image="circle.png" x="66" y="103" width="10" height="10" />
+    <button name="right" image="circle.png" x="84" y="103" width="10" height="10" />
 
-    <stick xname="lstick_x" yname="rstick_y" image="circle.png"
-           x="45" y="25" width="20" height="30" xrange="20" yrange="30"/>
+    <stick xname="lstick_x" yname="lstick_y" image="stick.png"
+           x="37" y="46" width="26" height="26" xrange="16" yrange="16"/>
+
+    <stick xname="cstick_x" yname="cstick_y" image="cstick.png"
+           x="141" y="98" width="19" height="19" xrange="13" yrange="13"/>
+
 
 </skin>
