@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="High-Res N64" author="Forstride" version="1.0" type="n64">
+
+    <background image="pad.png" color="#FF000000" />
+
+    <button name="a" image="button-face.png" x="831" y="423" width="106" height="107" />
+    <button name="b" image="button-face.png" x="751" y="345" width="106" height="107" />
+    <button name="z" image="button-z.png" x="372" y="614" width="91" height="187" />
+    <button name="start" image="button-face.png" x="542" y="357" width="106" height="107" />
+
+    <button name="cup" image="button-c.png" x="918" y="231" width="87" height="88" />
+    <button name="cdown" image="button-c.png" x="925" y="353" width="87" height="88" />
+    <button name="cleft" image="button-c.png" x="855" y="289" width="87" height="88" />
+    <button name="cright" image="button-c.png" x="987" y="294" width="87" height="88" />
+
+    <button name="r" image="button-r.png" x="801" y="110" width="269" height="114" />
+    <button name="l" image="button-l.png" x="125" y="114" width="262" height="117" />
+
+    <button name="up" image="button-dpad.png" x="212" y="292" width="75" height="75" />
+    <button name="down" image="button-dpad.png" x="210" y="408" width="75" height="75" />
+    <button name="left" image="button-dpad.png" x="156" y="353" width="75" height="75" />
+    <button name="right" image="button-dpad.png" x="268" y="345" width="75" height="75" />
+
+    <stick xname="stick_x" yname="stick_y" image="stick.png"
+           x="540" y="572" width="107" height="107" xrange="80" yrange="80" />
+
+</skin>
