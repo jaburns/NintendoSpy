@@ -74,7 +74,7 @@ namespace NintendoSpy
             }
             catch (IOException) {
                 Stop ();
-                if (Disconnected != null) Disconnected (this, null);
+                if (Disconnected != null) Disconnected (this, EventArgs.Empty);
                 return;
             }
 
