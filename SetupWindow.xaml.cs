@@ -10,6 +10,8 @@ using System.Windows.Threading;
 
 using NintendoSpy.Readers;
 using System.ComponentModel;
+using System.IO;
+using System.Text;
 
 namespace NintendoSpy
 {
@@ -25,7 +27,19 @@ namespace NintendoSpy
             _vm = new SetupWindowViewModel ();
             DataContext = _vm;
 
-            _skins = Skin.LoadAllSkinsFromParentFolder("skins");
+            if (! Directory.Exists ("skins")) {
+                MessageBox.Show ("Could not find skins folder!", "NintendoSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close ();
+                return;
+            }
+
+            var results = Skin.LoadAllSkinsFromParentFolder ("skins");
+            _skins = results.SkinsLoaded;
+
+            if (results.ParseErrors.Count > 0) {
+                showSkinParseErrors (results.ParseErrors);
+            }
+
             _vm.Skins.UpdateContents (_skins.Where (x => x.Type == InputSource.DEFAULT));
 
             _vm.Sources.UpdateContents (InputSource.ALL);
@@ -35,6 +49,13 @@ namespace NintendoSpy
             _portListUpdateTimer.Interval = TimeSpan.FromSeconds (1);
             _portListUpdateTimer.Tick += portListUpdateTimer_Tick;
             _portListUpdateTimer.Start ();
+        }
+
+        void showSkinParseErrors (List <string> errs) {
+            StringBuilder msg = new StringBuilder ();
+            msg.AppendLine ("Some skins were unable to be parsed:");
+            foreach (var err in errs) msg.AppendLine (err);
+            MessageBox.Show (msg.ToString (), "NintendoSpy", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         void portListUpdateTimer_Tick (object sender, EventArgs e) {

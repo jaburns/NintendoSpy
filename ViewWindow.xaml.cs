@@ -34,8 +34,6 @@ namespace NintendoSpy
             ControllerGrid.Width = _skin.BackgroundImage.PixelWidth;
             ControllerGrid.Height = _skin.BackgroundImage.PixelHeight;
 
-            this.Background = new SolidColorBrush (_skin.BackgroundColor);
-
             var brush = new ImageBrush (_skin.BackgroundImage);
             brush.Stretch = Stretch.Uniform;
             ControllerGrid.Background = brush;
