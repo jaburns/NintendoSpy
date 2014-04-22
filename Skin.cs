@@ -48,7 +48,6 @@ namespace NintendoSpy
 
         public string Name { get; private set; }
         public string Author { get; private set; }
-        public string Version { get; private set; }
         public InputSource Type { get; private set; }
 
 
@@ -66,7 +65,7 @@ namespace NintendoSpy
 
 
     // ----------------------------------------------------------------------------------------------------------------
-        
+
         Skin (string folder)
         {
             var skinPath = Path.Combine (Environment.CurrentDirectory, folder);
@@ -78,7 +77,6 @@ namespace NintendoSpy
 
             Name = readStringAttr (doc.Root, "name");
             Author = readStringAttr (doc.Root, "author");
-            Version = readStringAttr (doc.Root, "version");
             Type = InputSource.ALL.First (x => x.TypeTag == readStringAttr (doc.Root, ("type")));
 
             if (Type == null) {
@@ -117,7 +115,7 @@ namespace NintendoSpy
                 });
             }
 
-            foreach (var elem in doc.Root.Elements ("analog")) 
+            foreach (var elem in doc.Root.Elements ("analog"))
             {
                 var directionAttrs = elem.Attributes ("direction");
                 if (directionAttrs.Count() < 1) throw new SkinParseException ("Element 'analog' needs attribute 'direction'.");
@@ -158,7 +156,7 @@ namespace NintendoSpy
             return ret;
         }
 
-        static BitmapImage loadImage (string skinPath, string fileName) 
+        static BitmapImage loadImage (string skinPath, string fileName)
         {
             try {
                 return new BitmapImage (new Uri (Path.Combine (skinPath, fileName)));
