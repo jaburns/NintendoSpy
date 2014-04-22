@@ -8,11 +8,11 @@
     <button name="b2" image="circle.png" x="199" y="41" width="23" height="23" />
     <button name="b3" image="circle.png" x="220" y="22" width="23" height="23" />
 
-    <button name="l" image="circle.png" x="61" y="2" width="30" height="14" />
+    <button name="b4" image="circle.png" x="61" y="2" width="30" height="14" />
     <analog name="z" image="trig-r.png" x="261" y="18"
             direction="up" reverse="true" />
 
-    <button name="r" image="circle.png" x="213" y="2" width="30" height="14" />
+    <button name="b5" image="circle.png" x="213" y="2" width="30" height="14" />
     <analog name="rz" image="trig-l.png" x="15" y="18"
             direction="up" reverse="true" />
 
@@ -25,8 +25,8 @@
     <button name="right" image="circle.png" x="117" y="88" width="16" height="16" />
 
     <stick xname="x" yname="y" image="stick.png"
-           x="53" y="31" width="34" height="35" xrange="9" yrange="9"/>
+           x="53" y="31" width="34" height="35" xrange="9" yrange="9" />
     <stick xname="rx" yname="ry" image="stick.png"
-           x="174" y="78" width="34" height="35" xrange="9" yrange="9"/>
+           x="174" y="78" width="34" height="35" xrange="9" yrange="9" yreverse="true" />
 
 </skin>

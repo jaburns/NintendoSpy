@@ -140,12 +140,15 @@ namespace NintendoSpy
                 var skin = stick.Item1;
                 var image = stick.Item2;
 
+                float xrange = (skin.XReverse ? -1 :  1) * skin.XRange;
+                float yrange = (skin.YReverse ?  1 : -1) * skin.YRange;
+
                 var x = _reader.State.Analogs.ContainsKey (skin.XName)
-                      ? skin.Config.X + skin.XRange * _reader.State.Analogs [skin.XName]
+                      ? skin.Config.X + xrange * _reader.State.Analogs [skin.XName]
                       : skin.Config.X ;
 
                 var y = _reader.State.Analogs.ContainsKey (skin.YName)
-                      ? skin.Config.Y - skin.YRange * _reader.State.Analogs [skin.YName]
+                      ? skin.Config.Y + yrange * _reader.State.Analogs [skin.YName]
                       : skin.Config.Y ;
                 
                 image.Margin = new Thickness (x,y,0,0);

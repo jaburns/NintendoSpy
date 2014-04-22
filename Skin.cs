@@ -33,6 +33,7 @@ namespace NintendoSpy
             public ElementConfig Config;
             public string XName, YName;
             public uint XRange, YRange;
+            public bool XReverse, YReverse;
         }
 
         public struct AnalogTrigger {
@@ -109,7 +110,9 @@ namespace NintendoSpy
                     XName = readStringAttr (elem, "xname"),
                     YName = readStringAttr (elem, "yname"),
                     XRange = readUintAttr (elem, "xrange"),
-                    YRange = readUintAttr (elem, "yrange")
+                    YRange = readUintAttr (elem, "yrange"),
+                    XReverse = readBoolAttr (elem, "xreverse"),
+                    YReverse = readBoolAttr (elem, "yreverse")
                 });
             }
 
@@ -132,7 +135,7 @@ namespace NintendoSpy
                     Config = parseStandardConfig (skinPath, elem),
                     Name = readStringAttr (elem, "name"),
                     Direction = dir,
-                    IsReversed = boolAttrWithDefault (elem.Attributes ("reverse"), false)
+                    IsReversed = readBoolAttr (elem, "reverse")
                 });
             }
         }
@@ -185,10 +188,11 @@ namespace NintendoSpy
             };
         }
 
-        static bool boolAttrWithDefault (IEnumerable <XAttribute> attr, bool dfault) {
-            if (attr.Count() == 0) return dfault;
-            if (attr.First().Value == "true") return true;
-            if (attr.First().Value == "false") return false;
+        static bool readBoolAttr (XElement elem, string attrName, bool dfault = false) {
+            var attrs = elem.Attributes (attrName);
+            if (attrs.Count() == 0) return dfault;
+            if (attrs.First().Value == "true") return true;
+            if (attrs.First().Value == "false") return false;
             return dfault;
         }
 
