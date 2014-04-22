@@ -19,6 +19,9 @@
     <button name="start" image="circle.png" x="172" y="45" width="22" height="16" />
     <button name="back" image="circle.png" x="108" y="45" width="22" height="16" />
 
+    <button name="l3" image="circle.png" x="49" y="28" width="42" height="42" />
+    <button name="r3" image="circle.png" x="170" y="75" width="42" height="42" />
+
     <button name="up"    image="circle.png" x="101" y="71" width="16" height="16" />
     <button name="down"  image="circle.png" x="101" y="105" width="16" height="16" />
     <button name="left"  image="circle.png" x="84" y="89" width="16" height="16" />
