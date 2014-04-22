@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Default GameCube" author="Starknebula" version="1.0" type="gamecube">
+<skin name="Default GameCube" author="Starknebula" type="gamecube">
 
     <background name="Blue" image="GCN_Controller_Blue.png" />
     <background name="Black" image="GCN_Controller_Black.png" />

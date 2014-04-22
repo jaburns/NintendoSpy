@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Default SNES" author="jaburns" version="1.0" type="snes">
+<skin name="Default SNES" author="jaburns" type="snes">
 
     <background name="Default" image="snes.png" />
 
