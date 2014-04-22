@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Skin Helper" author="jaburns" version="1.0" type="pad">
+
+    <background name="Default" image="bg.png" />
+
+    <button name="b0"  image="button.png" x="20"  y="43" />
+    <button name="b1"  image="button.png" x="60"  y="43" />
+    <button name="b2"  image="button.png" x="100" y="43" />
+    <button name="b3"  image="button.png" x="140" y="43" />
+    <button name="b4"  image="button.png" x="180" y="43" />
+    <button name="b5"  image="button.png" x="220" y="43" />
+    <button name="b6"  image="button.png" x="260" y="43" />
+    <button name="b7"  image="button.png" x="300" y="43" />
+    <button name="b8"  image="button.png" x="340" y="43" />
+    <button name="b9"  image="button.png" x="380" y="43" />
+    <button name="b10" image="button.png" x="420" y="43" />
+    <button name="b11" image="button.png" x="460" y="43" />
+    <button name="b12" image="button.png" x="500" y="43" />
+    <button name="b13" image="button.png" x="540" y="43" />
+    <button name="b14" image="button.png" x="580" y="43" />
+    <button name="b15" image="button.png" x="620" y="43" />
+
+    <button name="up"    image="up.png"    x="86"  y="146" />
+    <button name="down"  image="down.png"  x="86"  y="219" />
+    <button name="left"  image="left.png"  x="33"  y="199" />
+    <button name="right" image="right.png" x="106" y="199" />
+
+    <stick xname="x"  yname="null" image="slider.png" x="450" y="91"  xrange="170" yrange="0" />
+    <stick xname="y"  yname="null" image="slider.png" x="450" y="128" xrange="170" yrange="0" />
+    <stick xname="z"  yname="null" image="slider.png" x="450" y="165" xrange="170" yrange="0" />
+    <stick xname="rx" yname="null" image="slider.png" x="450" y="202" xrange="170" yrange="0" />
+    <stick xname="ry" yname="null" image="slider.png" x="450" y="239" xrange="170" yrange="0" />
+    <stick xname="rz" yname="null" image="slider.png" x="450" y="276" xrange="170" yrange="0" />
+    <stick xname="s0" yname="null" image="slider.png" x="450" y="313" xrange="170" yrange="0" />
+    <stick xname="s1" yname="null" image="slider.png" x="450" y="350" xrange="170" yrange="0" />
+
+</skin>
