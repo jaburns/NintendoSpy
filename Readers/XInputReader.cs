@@ -63,7 +63,12 @@ namespace NintendoSpy.Readers
         void tick (object sender, EventArgs e)
         {
             XInputState state = new XInputState ();
-            XInputDLL.XInputGetState (0, ref state);
+
+            if (XInputDLL.XInputGetState (0, ref state) > 0) {
+                if (ControllerDisconnected != null) ControllerDisconnected (this, EventArgs.Empty);
+                Finish ();
+                return;
+            }
 
             _buttons ["a"]     = (state.wButtons & 0x1000) != 0;
             _buttons ["b"]     = (state.wButtons & 0x2000) != 0;
@@ -92,7 +97,10 @@ namespace NintendoSpy.Readers
 
         public void Finish ()
         {
-
+            if (_timer != null) {
+                _timer.Stop ();
+                _timer = null;
+            }
         }
     }
 }

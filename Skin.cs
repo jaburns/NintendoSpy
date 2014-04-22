@@ -31,9 +31,10 @@ namespace NintendoSpy
         }
 
         public struct AnalogTrigger {
+            public enum DirectionValue { Up, Down, Left, Right }
             public ElementConfig Config;
             public string Name;
-            public bool IsHorizontal;
+            public DirectionValue Direction;
             public bool IsReversed;
         }
 
@@ -104,22 +105,24 @@ namespace NintendoSpy
 
             foreach (var elem in doc.Root.Elements ("analog")) 
             {
-                bool horizontal;
-
                 var directionAttrs = elem.Attributes ("direction");
                 if (directionAttrs.Count() < 1) throw new XmlException ("Element 'analog' needs attribute 'direction'.");
 
+                AnalogTrigger.DirectionValue dir;
+
                 switch (directionAttrs.First().Value) {
-                    case "horizontal": horizontal = true; break;
-                    case "vertical": horizontal = false; break;
-                    default: throw new XmlException ("Element 'analog' attribute 'direction' has illegal value. Valid values are 'vertical' and 'horizontal'.");
+                    case "up": dir = AnalogTrigger.DirectionValue.Up; break;
+                    case "down": dir = AnalogTrigger.DirectionValue.Down; break;
+                    case "left": dir = AnalogTrigger.DirectionValue.Left; break;
+                    case "right": dir = AnalogTrigger.DirectionValue.Right; break;
+                    default: throw new XmlException ("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right'.");
                 }
 
                 _analogTriggers.Add (new AnalogTrigger {
                     Config = parseStandardConfig (elem),
                     Name = readStringAttr (elem, "name"),
-                    IsReversed = boolAttrWithDefault (elem.Attributes ("reversed"), false),
-                    IsHorizontal = horizontal
+                    Direction = dir,
+                    IsReversed = boolAttrWithDefault (elem.Attributes ("reverse"), false)
                 });
             }
         }

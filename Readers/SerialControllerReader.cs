@@ -22,7 +22,14 @@ namespace NintendoSpy.Readers
 
             _serialMonitor = new SerialMonitor (portName);
             _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
+            _serialMonitor.Disconnected += serialMonitor_Disconnected;
             _serialMonitor.Start ();
+        }
+
+        void serialMonitor_Disconnected(object sender, EventArgs e)
+        {
+            Finish ();
+            if (ControllerDisconnected != null) ControllerDisconnected (this, EventArgs.Empty);
         }
 
         void serialMonitor_PacketReceived (object sender, byte[] packet)
@@ -33,7 +40,10 @@ namespace NintendoSpy.Readers
 
         public void Finish ()
         {
-
+            if (_serialMonitor != null) {
+                _serialMonitor.Stop ();
+                _serialMonitor = null;
+            }
         }
     }
 }

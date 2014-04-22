@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace NintendoSpy
 {
-    class SkinParseException : Exception
+    public class SkinParseException : Exception
     {
         public SkinParseException()
-            : base() { }
+            : base () {}
 
-        public SkinParseException(string message)
-            : base(message) { }
+        public SkinParseException (string message)
+            : base (message) {}
 
-        public SkinParseException(string format, params object[] args)
-            : base(string.Format(format, args)) { }
+        public SkinParseException (string format, params object[] args)
+            : base (string.Format (format, args)) {}
 
-        public SkinParseException(string message, Exception innerException)
-            : base(message, innerException) { }
+        public SkinParseException (string message, Exception innerException)
+            : base (message, innerException) {}
 
-        public SkinParseException(string format, Exception innerException, params object[] args)
-            : base(string.Format(format, args), innerException) { }
+        public SkinParseException (string format, Exception innerException, params object[] args)
+            : base (string.Format (format, args), innerException) {}
     }
 }
