@@ -42,6 +42,7 @@ namespace NintendoSpy
             public string Name;
             public DirectionValue Direction;
             public bool IsReversed;
+            public bool UseNegative;
         }
 
 
@@ -135,7 +136,8 @@ namespace NintendoSpy
                     Config = parseStandardConfig (skinPath, elem),
                     Name = readStringAttr (elem, "name"),
                     Direction = dir,
-                    IsReversed = readBoolAttr (elem, "reverse")
+                    IsReversed = readBoolAttr (elem, "reverse"),
+                    UseNegative = readBoolAttr (elem, "usenegative")
                 });
             }
         }

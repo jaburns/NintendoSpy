@@ -162,7 +162,9 @@ namespace NintendoSpy
                 if (!_reader.State.Analogs.ContainsKey (skin.Name)) continue;
 
                 var val = _reader.State.Analogs [skin.Name];
+                if (skin.UseNegative) val *= -1;
                 if (skin.IsReversed) val = 1 - val;
+                if (val < 0) val = 0;
 
                 switch (skin.Direction) 
                 {
