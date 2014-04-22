@@ -14,7 +14,7 @@ namespace NintendoSpy
         static public readonly InputSource N64 = new InputSource ("n64", "Nintendo 64", true, port => new SerialControllerReader (port, new Nintendo64 ()));
         static public readonly InputSource GAMECUBE = new InputSource ("gamecube", "GameCube", true, port => new SerialControllerReader (port, new GameCube ()));
         static public readonly InputSource PC360 = new InputSource ("pc360", "PC 360", false, _ => new XInputReader ());
-        static public readonly InputSource PAD = new InputSource ("pad", "Other Gamepad", false, _ => new GamepadReader ());
+        static public readonly InputSource PAD = new InputSource ("generic", "Generic PC Gamepad", false, _ => new GamepadReader ());
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
             NES, SNES, N64, GAMECUBE, PC360, PAD

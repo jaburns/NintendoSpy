@@ -8,10 +8,15 @@ goto end
 
 :buildOK
 del release\NintendoSpy.zip
+
 cd bin\Release
-"C:\Program Files\7-Zip\7z.exe" a ..\..\release\NintendoSpy.zip SlimDX.dll
 "C:\Program Files\7-Zip\7z.exe" a ..\..\release\NintendoSpy.zip NintendoSpy.exe
 cd ..\..
+
+cd slimdx\x64
+"C:\Program Files\7-Zip\7z.exe" a ..\..\release\NintendoSpy.zip SlimDX.dll
+cd ..\..
+
 "C:\Program Files\7-Zip\7z.exe" a release\NintendoSpy.zip skins
 
 :end
