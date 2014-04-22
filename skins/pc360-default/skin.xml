@@ -9,7 +9,12 @@
     <button name="y" image="circle.png" x="220" y="22" width="23" height="23" />
 
     <button name="l" image="circle.png" x="61" y="2" width="30" height="14" />
+    <analog name="trig_r" image="trig-r.png" x="261" y="18"
+            direction="up" reverse="true" />
+
     <button name="r" image="circle.png" x="213" y="2" width="30" height="14" />
+    <analog name="trig_l" image="trig-l.png" x="15" y="18"
+            direction="up" reverse="true" />
 
     <button name="start" image="circle.png" x="172" y="45" width="22" height="16" />
     <button name="back" image="circle.png" x="108" y="45" width="22" height="16" />
