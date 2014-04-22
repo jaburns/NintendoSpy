@@ -10,11 +10,11 @@
 
     <button name="b4" image="circle.png" x="61" y="2" width="30" height="14" />
     <analog name="z" image="trig-r.png" x="261" y="18"
-            direction="up" reverse="true" />
+            direction="up" reverse="true" usenegative="true" />
 
     <button name="b5" image="circle.png" x="213" y="2" width="30" height="14" />
     <analog name="z" image="trig-l.png" x="15" y="18"
-            direction="up" reverse="true" usenegative="true" />
+            direction="up" reverse="true" />
 
     <button name="b7" image="circle.png" x="172" y="45" width="22" height="16" />
     <button name="b6" image="circle.png" x="108" y="45" width="22" height="16" />
