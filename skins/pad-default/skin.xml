@@ -28,7 +28,7 @@
     <button name="right" image="circle.png" x="117" y="88" width="16" height="16" />
 
     <stick xname="x" yname="y" image="stick.png"
-           x="53" y="31" width="34" height="35" xrange="9" yrange="9" />
+           x="53" y="31" width="34" height="35" xrange="9" yrange="9" yreverse="true" />
     <stick xname="rx" yname="ry" image="stick.png"
            x="174" y="78" width="34" height="35" xrange="9" yrange="9" yreverse="true" />
 
