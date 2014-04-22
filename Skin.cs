@@ -14,29 +14,29 @@ namespace NintendoSpy
 {
     public class Skin
     {
-        public struct ElementConfig {
+        public class ElementConfig {
             public BitmapImage Image;
             public uint X, Y, Width, Height;
         }
 
-        public struct Background {
+        public class Background {
             public string Name { get; set; }
-            public BitmapImage Image;
+            public BitmapImage Image { get; set; }
         }
 
-        public struct Button {
+        public class Button {
             public ElementConfig Config;
             public string Name;
         }
 
-        public struct AnalogStick {
+        public class AnalogStick {
             public ElementConfig Config;
             public string XName, YName;
             public uint XRange, YRange;
             public bool XReverse, YReverse;
         }
 
-        public struct AnalogTrigger {
+        public class AnalogTrigger {
             public enum DirectionValue { Up, Down, Left, Right }
             public ElementConfig Config;
             public string Name;
