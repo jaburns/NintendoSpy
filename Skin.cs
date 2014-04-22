@@ -116,7 +116,7 @@ namespace NintendoSpy
             foreach (var elem in doc.Root.Elements ("analog")) 
             {
                 var directionAttrs = elem.Attributes ("direction");
-                if (directionAttrs.Count() < 1) throw new XmlException ("Element 'analog' needs attribute 'direction'.");
+                if (directionAttrs.Count() < 1) throw new SkinParseException ("Element 'analog' needs attribute 'direction'.");
 
                 AnalogTrigger.DirectionValue dir;
 
@@ -125,7 +125,7 @@ namespace NintendoSpy
                     case "down": dir = AnalogTrigger.DirectionValue.Down; break;
                     case "left": dir = AnalogTrigger.DirectionValue.Left; break;
                     case "right": dir = AnalogTrigger.DirectionValue.Right; break;
-                    default: throw new XmlException ("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right'.");
+                    default: throw new SkinParseException ("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right'.");
                 }
 
                 _analogTriggers.Add (new AnalogTrigger {
@@ -140,7 +140,7 @@ namespace NintendoSpy
         static string readStringAttr (XElement elem, string attrName)
         {
             var attrs = elem.Attributes (attrName);
-            if (attrs.Count() == 0) throw new XmlException ("Required attribute '"+attrName+"' not found on element '"+elem.Name+"'.");
+            if (attrs.Count() == 0) throw new SkinParseException ("Required attribute '"+attrName+"' not found on element '"+elem.Name+"'.");
             return attrs.First().Value;
         }
 
@@ -165,7 +165,7 @@ namespace NintendoSpy
         static ElementConfig parseStandardConfig (string skinPath, XElement elem)
         {
             var imageAttr = elem.Attributes ("image");
-            if (imageAttr.Count() == 0) throw new XmlException ("Attribute 'image' missing for element '"+elem.Name+"'.");
+            if (imageAttr.Count() == 0) throw new SkinParseException ("Attribute 'image' missing for element '"+elem.Name+"'.");
 
             var image = loadImage (skinPath, imageAttr.First().Value);
 
@@ -209,10 +209,7 @@ namespace NintendoSpy
                     var skin = new Skin (skinDir);
                     skins.Add (skin);
                 }
-                catch (FileNotFoundException e) {
-                    errs.Add (skinDir + " :: " + e.Message);
-                }
-                catch (XmlException e) {
+                catch (SkinParseException e) {
                     errs.Add (skinDir + " :: " + e.Message);
                 }
             }
