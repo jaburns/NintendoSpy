@@ -3,25 +3,25 @@
 
     <background name="Default" image="pad.png" />
 
-    <button name="a" image="button-face.png" x="831" y="423" width="106" height="107" />
-    <button name="b" image="button-face.png" x="751" y="345" width="106" height="107" />
-    <button name="z" image="button-z.png" x="372" y="614" width="91" height="187" />
-    <button name="start" image="button-face.png" x="542" y="357" width="106" height="107" />
+    <button name="a" image="button-face.png" x="624" y="318" width="80" height="80" />
+    <button name="b" image="button-face.png" x="563" y="259" width="80" height="80" />
+    <button name="z" image="button-z.png" x="278" y="461" width="68" height="140" />
+    <button name="start" image="button-face.png" x="395" y="256" width="103" height="102" />
 
-    <button name="cup" image="button-c.png" x="918" y="231" width="87" height="88" />
-    <button name="cdown" image="button-c.png" x="925" y="353" width="87" height="88" />
-    <button name="cleft" image="button-c.png" x="855" y="289" width="87" height="88" />
-    <button name="cright" image="button-c.png" x="987" y="294" width="87" height="88" />
+    <button name="cup" image="button-c.png" x="689" y="172" width="65" height="66" />
+    <button name="cdown" image="button-c.png" x="693" y="264" width="65" height="66" />
+    <button name="cleft" image="button-c.png" x="642" y="216" width="65" height="66" />
+    <button name="cright" image="button-c.png" x="740" y="220" width="65" height="66" />
 
-    <button name="r" image="button-r.png" x="801" y="110" width="269" height="114" />
-    <button name="l" image="button-l.png" x="125" y="114" width="262" height="117" />
+    <button name="r" image="button-r.png" x="602" y="80" width="202" height="86" />
+    <button name="l" image="button-l.png" x="92" y="84" width="197" height="88" />
 
-    <button name="up" image="button-dpad.png" x="212" y="292" width="75" height="75" />
-    <button name="down" image="button-dpad.png" x="210" y="408" width="75" height="75" />
-    <button name="left" image="button-dpad.png" x="156" y="353" width="75" height="75" />
-    <button name="right" image="button-dpad.png" x="268" y="345" width="75" height="75" />
+    <button name="up" image="button-dpad.png" x="159" y="219" width="56" height="56" />
+    <button name="down" image="button-dpad.png" x="158" y="306" width="56" height="56" />
+    <button name="left" image="button-dpad.png" x="118" y="266" width="56" height="56" />
+    <button name="right" image="button-dpad.png" x="200" y="261" width="56" height="56" />
 
     <stick xname="stick_x" yname="stick_y" image="stick.png"
-           x="540" y="572" width="107" height="107" xrange="80" yrange="80" />
+           x="406" y="429" width="80" height="80" xrange="60" yrange="60" />
 
 </skin>
