@@ -29,17 +29,17 @@ namespace NintendoSpy
         List <Tuple <Skin.AnalogTrigger,Grid>> _triggersWithGridImages = new List <Tuple <Skin.AnalogTrigger,Grid>> ();
 
 
-        public ViewWindow (Skin skin, IControllerReader reader)
+        public ViewWindow (Skin skin, Skin.Background skinBackground, IControllerReader reader)
         {
             InitializeComponent ();
 
             _skin = skin;
             _reader = reader;
 
-            ControllerGrid.Width = _skin.BackgroundImage.PixelWidth;
-            ControllerGrid.Height = _skin.BackgroundImage.PixelHeight;
+            ControllerGrid.Width = skinBackground.Image.PixelWidth;
+            ControllerGrid.Height = skinBackground.Image.PixelHeight;
 
-            var brush = new ImageBrush (_skin.BackgroundImage);
+            var brush = new ImageBrush (skinBackground.Image);
             brush.Stretch = Stretch.Uniform;
             ControllerGrid.Background = brush;
 

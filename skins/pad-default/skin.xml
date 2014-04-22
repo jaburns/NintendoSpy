@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="Default GamePad" author="jaburns" version="1.0" type="pad">
 
-    <background image="pad.png" color="#FFFF0000" />
+    <background name="Default" image="pad.png" />
 
     <button name="b0" image="circle.png" x="221" y="61" width="23" height="23" />
     <button name="b1" image="circle.png" x="241" y="41" width="23" height="23" />

@@ -19,6 +19,11 @@ namespace NintendoSpy
             public uint X, Y, Width, Height;
         }
 
+        public struct Background {
+            public string Name { get; set; }
+            public BitmapImage Image;
+        }
+
         public struct Button {
             public ElementConfig Config;
             public string Name;
@@ -44,8 +49,9 @@ namespace NintendoSpy
         public string Version { get; private set; }
         public InputSource Type { get; private set; }
 
-        public BitmapImage BackgroundImage { get; private set; }
 
+        List <Background> _backgrounds = new List <Background> ();
+        public IReadOnlyList <Background> Backgrounds { get { return _backgrounds; } }
 
         List <Button> _buttons = new List <Button> ();
         public IReadOnlyList <Button> Buttons { get { return _buttons; } }
@@ -57,22 +63,16 @@ namespace NintendoSpy
         public IReadOnlyList <AnalogTrigger> AnalogTriggers { get { return _analogTriggers; } }
 
 
-        string _skinPath;
-
-        string fullPath (string fileName) {
-            return Path.Combine (_skinPath, fileName);
-        }
-
     // ----------------------------------------------------------------------------------------------------------------
         
-        public Skin (string folder)
+        Skin (string folder)
         {
-            _skinPath = Path.Combine (Environment.CurrentDirectory, folder);
+            var skinPath = Path.Combine (Environment.CurrentDirectory, folder);
 
-            if (! File.Exists (fullPath ("skin.xml"))) {
+            if (! File.Exists (Path.Combine (skinPath, "skin.xml"))) {
                 throw new SkinParseException ("Could not find skin.xml for skin at '"+folder+"'.");
             }
-            var doc = XDocument.Load (fullPath ("skin.xml"));
+            var doc = XDocument.Load (Path.Combine (skinPath, "skin.xml"));
 
             Name = readStringAttr (doc.Root, "name");
             Author = readStringAttr (doc.Root, "author");
@@ -83,19 +83,29 @@ namespace NintendoSpy
                 throw new SkinParseException ("Illegal value specified for skin attribute 'type'.");
             }
 
-            var bgElem = doc.Root.Elements ("background").First();
-            BackgroundImage = loadImage (readStringAttr (bgElem, "image"));
+            var bgElems = doc.Root.Elements ("background");
+
+            if (bgElems.Count() < 1) {
+                throw new SkinParseException ("Skin must contain at least one background.");
+            }
+
+            foreach (var elem in bgElems) {
+                _backgrounds.Add (new Background {
+                    Name = readStringAttr (elem, "name"),
+                    Image = loadImage (skinPath, readStringAttr (elem, "image"))
+                });
+            }
 
             foreach (var elem in doc.Root.Elements ("button")) {
                 _buttons.Add (new Button {
-                    Config = parseStandardConfig (elem),
+                    Config = parseStandardConfig (skinPath, elem),
                     Name = readStringAttr (elem, "name")
                 });
             }
 
             foreach (var elem in doc.Root.Elements ("stick")) {
                 _analogSticks.Add (new AnalogStick {
-                    Config = parseStandardConfig (elem),
+                    Config = parseStandardConfig (skinPath, elem),
                     XName = readStringAttr (elem, "xname"),
                     YName = readStringAttr (elem, "yname"),
                     XRange = readUintAttr (elem, "xrange"),
@@ -119,7 +129,7 @@ namespace NintendoSpy
                 }
 
                 _analogTriggers.Add (new AnalogTrigger {
-                    Config = parseStandardConfig (elem),
+                    Config = parseStandardConfig (skinPath, elem),
                     Name = readStringAttr (elem, "name"),
                     Direction = dir,
                     IsReversed = boolAttrWithDefault (elem.Attributes ("reverse"), false)
@@ -143,21 +153,21 @@ namespace NintendoSpy
             return ret;
         }
 
-        BitmapImage loadImage (string fileName) 
+        static BitmapImage loadImage (string skinPath, string fileName) 
         {
             try {
-                return new BitmapImage (new Uri (fullPath (fileName)));
+                return new BitmapImage (new Uri (Path.Combine (skinPath, fileName)));
             } catch (Exception e) {
                 throw new SkinParseException ("Could not load image '"+fileName+"'.", e);
             }
         }
 
-        ElementConfig parseStandardConfig (XElement elem)
+        static ElementConfig parseStandardConfig (string skinPath, XElement elem)
         {
             var imageAttr = elem.Attributes ("image");
             if (imageAttr.Count() == 0) throw new XmlException ("Attribute 'image' missing for element '"+elem.Name+"'.");
 
-            var image = loadImage (imageAttr.First().Value);
+            var image = loadImage (skinPath, imageAttr.First().Value);
 
             uint width = (uint)image.PixelWidth;
             var widthAttr = elem.Attributes("width");

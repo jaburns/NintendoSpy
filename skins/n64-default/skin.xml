@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="Default N64" author="jaburns" version="1.0" type="n64">
 
-    <background image="pad.png" color="#FF000000" />
+    <background name="Default" image="pad.png" />
 
     <button name="a" image="circle.png" x="123" y="63" width="17" height="17" />
     <button name="b" image="circle.png" x="110" y="50" width="17" height="17" />

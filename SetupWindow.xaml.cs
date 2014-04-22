@@ -47,8 +47,11 @@ namespace NintendoSpy
 
             _portListUpdateTimer = new DispatcherTimer ();
             _portListUpdateTimer.Interval = TimeSpan.FromSeconds (1);
-            _portListUpdateTimer.Tick += portListUpdateTimer_Tick;
+            _portListUpdateTimer.Tick += (sender, e) => updatePortList ();
             _portListUpdateTimer.Start ();
+
+            updatePortList ();
+            _vm.Ports.SelectFirst ();
         }
 
         void showSkinParseErrors (List <string> errs) {
@@ -58,14 +61,24 @@ namespace NintendoSpy
             MessageBox.Show (msg.ToString (), "NintendoSpy", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        void portListUpdateTimer_Tick (object sender, EventArgs e) {
+        void updatePortList () {
             _vm.Ports.UpdateContents (SerialPort.GetPortNames ());
         }
 
         void goButton_Click (object sender, RoutedEventArgs e) 
         {
             this.Hide ();
-            new ViewWindow (_vm.Skins.SelectedItem, _vm.Sources.SelectedItem.BuildReader (_vm.Ports.SelectedItem)) .ShowDialog ();
+
+            try {
+                new ViewWindow (_vm.Skins.SelectedItem,
+                                _vm.Backgrounds.SelectedItem, 
+                                _vm.Sources.SelectedItem.BuildReader (_vm.Ports.SelectedItem))
+                    .ShowDialog ();
+            }
+            catch (ArgumentNullException ex) {
+                MessageBox.Show (ex.Message, "NintendoSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             this.Show ();
         }
 
@@ -74,6 +87,14 @@ namespace NintendoSpy
             if (_vm.Sources.SelectedItem == null) return;
             _vm.ComPortOptionVisibility = _vm.Sources.SelectedItem.RequiresComPort ? Visibility.Visible : Visibility.Hidden;
             _vm.Skins.UpdateContents (_skins.Where (x => x.Type == _vm.Sources.SelectedItem));
+            _vm.Skins.SelectFirst ();
+        }
+
+        private void Skin_SelectionChanged (object sender, SelectionChangedEventArgs e)
+        {
+            if (_vm.Skins.SelectedItem == null) return;
+            _vm.Backgrounds.UpdateContents (_vm.Skins.SelectedItem.Backgrounds);
+            _vm.Backgrounds.SelectFirst ();
         }
     }
 
@@ -96,10 +117,15 @@ namespace NintendoSpy
                 _items.AddRange (items);
                 Items.Refresh ();
             }
+            
+            public void SelectFirst () {
+                if (_items.Count > 0) SelectedItem = _items [0];
+            }
         }
 
         public ListView <string> Ports { get; set; }
         public ListView <Skin> Skins { get; set; }
+        public ListView <Skin.Background> Backgrounds { get; set; }
         public ListView <InputSource> Sources { get; set; }
 
         Visibility _comPortOptionVisibility;
@@ -115,6 +141,7 @@ namespace NintendoSpy
             Ports   = new ListView <string> ();
             Skins   = new ListView <Skin> ();
             Sources = new ListView <InputSource> ();
+            Backgrounds = new ListView <Skin.Background> ();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

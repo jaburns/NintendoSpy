@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="Default SNES" author="jaburns" version="1.0" type="snes">
 
-    <background image="snes.png" color="#FF000000" />
+    <background name="Default" image="snes.png" />
 
     <button name="a" image="circle.png" x="196" y="50" width="24" height="24" />
     <button name="b" image="circle.png" x="175" y="69" width="24" height="24" />

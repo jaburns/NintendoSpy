@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="High-Res N64" author="Forstride" version="1.0" type="n64">
 
-    <background image="pad.png" color="#FF000000" />
+    <background name="Default" image="pad.png" />
 
     <button name="a" image="button-face.png" x="831" y="423" width="106" height="107" />
     <button name="b" image="button-face.png" x="751" y="345" width="106" height="107" />
