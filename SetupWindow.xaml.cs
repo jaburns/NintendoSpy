@@ -75,7 +75,7 @@ namespace NintendoSpy
                                 _vm.Sources.SelectedItem.BuildReader (_vm.Ports.SelectedItem))
                     .ShowDialog ();
             }
-            catch (ArgumentNullException ex) {
+            catch (Exception ex) {
                 MessageBox.Show (ex.Message, "NintendoSpy", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
