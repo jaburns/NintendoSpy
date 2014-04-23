@@ -13,16 +13,16 @@ namespace NintendoSpy
 
     public class SerialMonitor
     {
-        private const int BAUD_RATE = 115200;
-        private const int TIMER_MS  = 30;
+        const int BAUD_RATE = 115200;
+        const int TIMER_MS  = 30;
 
         public event PacketEventHandler PacketReceived;
         public event EventHandler Disconnected;
 
-        private SerialPort _datPort;
-        private List <byte> _localBuffer;
+        SerialPort _datPort;
+        List <byte> _localBuffer;
 
-        private DispatcherTimer _timer;
+        DispatcherTimer _timer;
 
         public SerialMonitor (string portName)
         {
@@ -58,7 +58,7 @@ namespace NintendoSpy
             }
         }
 
-        private void tick (object sender, EventArgs e)
+        void tick (object sender, EventArgs e)
         {
             if (_datPort == null || !_datPort.IsOpen || PacketReceived == null) return;
 
