@@ -12,8 +12,8 @@
 	<background name="Donkey Kong 64" image="pad-dk.png" />
 	<background name="Pokemon" image="pad-pokemon.png" />
 	<background name="Banjo-Kazooie (Custom)" image="pad-banjo.png" />
-	<background name="The Legend of Zelda: Ocarina of Time (Custom)" image="pad-zelda.png" />
-	<background name="Super Mario 64 (Custom)" image="pad-mario.png" />
+	<background name="Chameleon Twist (Custom)" image="pad-twist.png" />
+	<background name="The Legend of Zelda (Custom)" image="pad-zelda.png" />
 
     <button name="a" image="button-face.png" x="624" y="318" width="80" height="80" />
     <button name="b" image="button-face.png" x="563" y="259" width="80" height="80" />
