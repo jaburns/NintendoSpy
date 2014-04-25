@@ -4,9 +4,15 @@
     <background name="Grey" image="pad-grey.png" />
 	<background name="Black" image="pad-black.png" />
 	<background name="Red" image="pad-red.png" />
+	<background name="Orange" image="pad-orange.png" />
 	<background name="Yellow" image="pad-yellow.png" />
+	<background name="Lime Green" image="pad-lime.png" />
 	<background name="Green" image="pad-green.png" />
+	<background name="Aqua" image="pad-aqua.png" />
+	<background name="Light Blue" image="pad-lightblue.png" />
 	<background name="Blue" image="pad-blue.png" />
+	<background name="Purple" image="pad-purple.png" />
+	<background name="Pink" image="pad-pink.png" />
 	<background name="Gold" image="pad-gold.png" />
 	<background name="Millennium 2000" image="pad-2000.png" />
 	<background name="Donkey Kong 64" image="pad-dk.png" />
