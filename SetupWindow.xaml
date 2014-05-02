@@ -6,22 +6,22 @@
     <Grid>
         <ComboBox Margin="145,17,10,0" SelectedIndex="0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
                   SelectionChanged="SourceSelectComboBox_SelectionChanged"
-                  ItemsSource="{Binding Path=Sources.Items}"
+                  ItemsSource="{Binding Sources.Items}"
                   DisplayMemberPath="Name"
-                  SelectedValue="{Binding Path=Sources.SelectedItem}" />
+                  SelectedValue="{Binding Sources.SelectedItem}" />
         <Label Content="Controller Source:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"/>
         <Label Name="ComPortLabel" Content="COM Port:" HorizontalAlignment="Left" Margin="59,45,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
-               Visibility="{Binding Path=ComPortOptionVisibility}" />
+               Visibility="{Binding ComPortOptionVisibility}" />
         <ComboBox Name="ComPortCombo" Margin="145,51,10,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
-                  ItemsSource="{Binding Path=Ports.Items}"
-                  SelectedValue="{Binding Path=Ports.SelectedItem}" 
-                  Visibility="{Binding Path=ComPortOptionVisibility}" />
+                  ItemsSource="{Binding Ports.Items}"
+                  SelectedValue="{Binding Ports.SelectedItem}" 
+                  Visibility="{Binding ComPortOptionVisibility}" />
         <Label Content="Viewer Skin:" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
         <ListBox Margin="10,115,188,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"
                  SelectedIndex="0"
-                 ItemsSource="{Binding Path=Skins.Items}"
+                 ItemsSource="{Binding Skins.Items}"
                  DisplayMemberPath="Name"
-                 SelectedValue="{Binding Path=Skins.SelectedItem}" SelectionChanged="Skin_SelectionChanged" />
+                 SelectedValue="{Binding Skins.SelectedItem}" SelectionChanged="Skin_SelectionChanged" />
         <Button Name="goButton" Content="Go!" Margin="10,0,10,10" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="goButton_Click" />
         <ListBox Margin="0,115,10,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"
         	SelectedIndex="0"
