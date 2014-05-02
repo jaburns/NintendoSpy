@@ -65,6 +65,7 @@
     <Compile Include="Readers\GamepadReader.cs" />
     <Compile Include="Readers\SuperNESandNES.cs" />
     <Compile Include="Readers\XInputReader.cs" />
+    <Compile Include="SendKeys.cs" />
     <Compile Include="SerialMonitor.cs" />
     <Compile Include="Readers\SignalTool.cs" />
     <Compile Include="Skin.cs" />
