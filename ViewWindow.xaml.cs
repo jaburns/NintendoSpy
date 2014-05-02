@@ -32,6 +32,7 @@ namespace NintendoSpy
         public ViewWindow (Skin skin, Skin.Background skinBackground, IControllerReader reader)
         {
             InitializeComponent ();
+            DataContext = this;
 
             _skin = skin;
             _reader = reader;
@@ -115,6 +116,10 @@ namespace NintendoSpy
             return grid;
         }
 
+        private void AlwaysOnTop_Click (object sender, RoutedEventArgs e)
+        {
+            this.Topmost = !this.Topmost;
+        }
 
         void reader_ControllerDisconnected (object sender, EventArgs e)
         {
