@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace NintendoSpy
 {
+    // Keycodes: http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+    // Letter keys map to 0x41.. etc. (i.e. capital ASCII letters)
+
     public class SendKeys
     {
         const int INPUT_MOUSE = 0;
@@ -69,36 +72,42 @@ namespace NintendoSpy
         [DllImport("user32.dll", SetLastError = true)]
         static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
-        // Keycodes: http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-        // Letter keys map to 0x41.. etc. (i.e. capital ASCII letters)
-        static public void SendKey (ushort key)
+        static INPUT inputForKey (ushort key, bool releasing)
         {
-            INPUT[] inputs = new INPUT[] {
-                new INPUT {
-                    type = INPUT_KEYBOARD,
-                    u = new InputUnion {
-                        ki = new KEYBDINPUT {
-                            wVk = key,
-                            wScan = 0,
-                            dwFlags = 0,
-                            dwExtraInfo = GetMessageExtraInfo(),
-                        }
-                    }
-                },
-                new INPUT {
-                    type = INPUT_KEYBOARD,
-                    u = new InputUnion {
-                        ki = new KEYBDINPUT {
-                            wVk = key,
-                            wScan = 0,
-                            dwFlags = KEYEVENTF_KEYUP,
-                            dwExtraInfo = GetMessageExtraInfo(),
-                        }
+            return new INPUT {
+                type = INPUT_KEYBOARD,
+                u = new InputUnion {
+                    ki = new KEYBDINPUT {
+                        wVk = key,
+                        wScan = 0,
+                        dwFlags = releasing ? KEYEVENTF_KEYUP : 0,
+                        dwExtraInfo = GetMessageExtraInfo(),
                     }
                 }
             };
+        }
 
+        static void sendInputs (params INPUT[] inputs)
+        {
             SendInput ((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
+        }
+
+        static public void PressKey (ushort key)
+        {
+            sendInputs (inputForKey (key, false));
+        }
+
+        static public void ReleaseKey(ushort key)
+        {
+            sendInputs (inputForKey (key, true));
+        }
+
+        static public void PressAndReleaseKey (ushort key)
+        {
+            sendInputs (
+                inputForKey (key, false),
+                inputForKey (key, true)
+            );
         }
     }
 }

@@ -69,7 +69,7 @@ namespace NintendoSpy.Readers
                 Finish ();
                 return;
             }
-
+            
             _buttons ["a"]     = (state.wButtons & 0x1000) != 0;
             _buttons ["b"]     = (state.wButtons & 0x2000) != 0;
             _buttons ["x"]     = (state.wButtons & 0x4000) != 0;

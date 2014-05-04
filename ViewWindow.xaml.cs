@@ -133,6 +133,11 @@ namespace NintendoSpy
 
         void reader_ControllerStateChanged (object sender, EventArgs e)
         {
+            foreach (var button in _reader.State.Buttons)
+            {
+                Keybindings.Instance.NotifyButtonState (button.Key, button.Value);
+            }
+
             foreach (var button in _buttonsWithImages) 
             {
                 if (!_reader.State.Buttons.ContainsKey (button.Item1.Name)) continue;
