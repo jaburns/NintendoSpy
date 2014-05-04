@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <keybindings>
+
+    <!-- Proposed binding syntax for binding gamepad combos to keys -->
+    <!--
+    <binding output-key="a">
+        <input button="r" />
+        <input button="l" />
+    </binding>
+    -->
+
+    <!-- Current binding syntax, one-to-one only -->
     <!--
     <binding gamepad-input="a" keyboard-key="a" />
     -->
+
 </keybindings>
