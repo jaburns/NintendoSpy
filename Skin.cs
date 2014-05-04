@@ -29,6 +29,12 @@ namespace NintendoSpy
             public string Name;
         }
 
+        public class RangeButton {
+            public ElementConfig Config;
+            public string Name;
+            public float From, To;
+        }
+
         public class AnalogStick {
             public ElementConfig Config;
             public string XName, YName;
@@ -56,6 +62,9 @@ namespace NintendoSpy
 
         List <Button> _buttons = new List <Button> ();
         public IReadOnlyList <Button> Buttons { get { return _buttons; } }
+
+        List <RangeButton> _rangeButtons = new List <RangeButton> ();
+        public IReadOnlyList <RangeButton> RangeButtons { get { return _rangeButtons; } }
 
         List <AnalogStick> _analogSticks = new List <AnalogStick> ();
         public IReadOnlyList <AnalogStick> AnalogSticks { get { return _analogSticks; } }
@@ -103,6 +112,21 @@ namespace NintendoSpy
                 });
             }
 
+            foreach (var elem in doc.Root.Elements ("rangebutton"))
+            {
+                var from = readFloatConfig (elem, "from");
+                var to = readFloatConfig (elem, "to");
+
+                if (from > to) throw new SkinParseException ("Rangebutton 'from' field cannot be greater than 'to' field.");
+
+                _rangeButtons.Add (new RangeButton {
+                    Config = parseStandardConfig (skinPath, elem),
+                    Name = readStringAttr (elem, "name"),
+                    From = from,
+                    To = to
+                });
+            }
+
             foreach (var elem in doc.Root.Elements ("stick")) {
                 _analogSticks.Add (new AnalogStick {
                     Config = parseStandardConfig (skinPath, elem),
@@ -145,6 +169,15 @@ namespace NintendoSpy
             var attrs = elem.Attributes (attrName);
             if (attrs.Count() == 0) throw new SkinParseException ("Required attribute '"+attrName+"' not found on element '"+elem.Name+"'.");
             return attrs.First().Value;
+        }
+
+        static float readFloatConfig (XElement elem, string attrName)
+        {
+            float ret;
+            if (! float.TryParse (readStringAttr (elem, attrName), out ret)) {
+                throw new SkinParseException ("Failed to parse number for property '"+attrName+"' in element '"+elem.Name+"'.");
+            }
+            return ret;
         }
 
         static uint readUintAttr (XElement elem, string attrName)

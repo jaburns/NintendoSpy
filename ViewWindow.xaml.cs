@@ -22,6 +22,7 @@ namespace NintendoSpy
         IControllerReader _reader;
 
         List <Tuple <Skin.Button,Image>> _buttonsWithImages = new List <Tuple <Skin.Button,Image>> ();
+        List <Tuple <Skin.RangeButton,Image>> _rangeButtonsWithImages = new List <Tuple <Skin.RangeButton,Image>> ();
         List <Tuple <Skin.AnalogStick,Image>> _sticksWithImages = new List <Tuple <Skin.AnalogStick,Image>> ();
 
         // The triggers images are embedded inside of a Grid element so that we can properly mask leftwards and upwards
@@ -53,6 +54,13 @@ namespace NintendoSpy
             foreach (var button in _skin.Buttons) {
                 var image = getImageForElement (button.Config);
                 _buttonsWithImages.Add (new Tuple <Skin.Button,Image> (button, image));
+                image.Visibility = Visibility.Hidden;
+                ControllerGrid.Children.Add (image);
+            }
+
+            foreach (var button in _skin.RangeButtons) {
+                var image = getImageForElement (button.Config);
+                _rangeButtonsWithImages.Add (new Tuple <Skin.RangeButton,Image> (button, image));
                 image.Visibility = Visibility.Hidden;
                 ControllerGrid.Children.Add (image);
             }
@@ -143,6 +151,16 @@ namespace NintendoSpy
                 if (!_reader.State.Buttons.ContainsKey (button.Item1.Name)) continue;
 
                 button.Item2.Visibility = _reader.State.Buttons [button.Item1.Name] ? Visibility.Visible : Visibility.Hidden ;
+            }
+
+            foreach (var button in _rangeButtonsWithImages) 
+            {
+                if (!_reader.State.Analogs.ContainsKey (button.Item1.Name)) continue;
+
+                var value = _reader.State.Analogs [button.Item1.Name];
+                var visible = button.Item1.From <= value && value <= button.Item1.To;
+
+                button.Item2.Visibility = visible ? Visibility.Visible : Visibility.Hidden ;
             }
 
             foreach (var stick in _sticksWithImages)
