@@ -80,7 +80,7 @@ namespace NintendoSpy
             var skinPath = Path.Combine (Environment.CurrentDirectory, folder);
 
             if (! File.Exists (Path.Combine (skinPath, "skin.xml"))) {
-                throw new SkinParseException ("Could not find skin.xml for skin at '"+folder+"'.");
+                throw new ConfigParseException ("Could not find skin.xml for skin at '"+folder+"'.");
             }
             var doc = XDocument.Load (Path.Combine (skinPath, "skin.xml"));
 
@@ -89,13 +89,13 @@ namespace NintendoSpy
             Type = InputSource.ALL.First (x => x.TypeTag == readStringAttr (doc.Root, ("type")));
 
             if (Type == null) {
-                throw new SkinParseException ("Illegal value specified for skin attribute 'type'.");
+                throw new ConfigParseException ("Illegal value specified for skin attribute 'type'.");
             }
 
             var bgElems = doc.Root.Elements ("background");
 
             if (bgElems.Count() < 1) {
-                throw new SkinParseException ("Skin must contain at least one background.");
+                throw new ConfigParseException ("Skin must contain at least one background.");
             }
 
             foreach (var elem in bgElems) {
@@ -117,7 +117,7 @@ namespace NintendoSpy
                 var from = readFloatConfig (elem, "from");
                 var to = readFloatConfig (elem, "to");
 
-                if (from > to) throw new SkinParseException ("Rangebutton 'from' field cannot be greater than 'to' field.");
+                if (from > to) throw new ConfigParseException ("Rangebutton 'from' field cannot be greater than 'to' field.");
 
                 _rangeButtons.Add (new RangeButton {
                     Config = parseStandardConfig (skinPath, elem),
@@ -142,7 +142,7 @@ namespace NintendoSpy
             foreach (var elem in doc.Root.Elements ("analog"))
             {
                 var directionAttrs = elem.Attributes ("direction");
-                if (directionAttrs.Count() < 1) throw new SkinParseException ("Element 'analog' needs attribute 'direction'.");
+                if (directionAttrs.Count() < 1) throw new ConfigParseException ("Element 'analog' needs attribute 'direction'.");
 
                 AnalogTrigger.DirectionValue dir;
 
@@ -151,7 +151,7 @@ namespace NintendoSpy
                     case "down": dir = AnalogTrigger.DirectionValue.Down; break;
                     case "left": dir = AnalogTrigger.DirectionValue.Left; break;
                     case "right": dir = AnalogTrigger.DirectionValue.Right; break;
-                    default: throw new SkinParseException ("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right'.");
+                    default: throw new ConfigParseException ("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right'.");
                 }
 
                 _analogTriggers.Add (new AnalogTrigger {
@@ -167,7 +167,7 @@ namespace NintendoSpy
         static string readStringAttr (XElement elem, string attrName)
         {
             var attrs = elem.Attributes (attrName);
-            if (attrs.Count() == 0) throw new SkinParseException ("Required attribute '"+attrName+"' not found on element '"+elem.Name+"'.");
+            if (attrs.Count() == 0) throw new ConfigParseException ("Required attribute '"+attrName+"' not found on element '"+elem.Name+"'.");
             return attrs.First().Value;
         }
 
@@ -175,7 +175,7 @@ namespace NintendoSpy
         {
             float ret;
             if (! float.TryParse (readStringAttr (elem, attrName), out ret)) {
-                throw new SkinParseException ("Failed to parse number for property '"+attrName+"' in element '"+elem.Name+"'.");
+                throw new ConfigParseException ("Failed to parse number for property '"+attrName+"' in element '"+elem.Name+"'.");
             }
             return ret;
         }
@@ -184,7 +184,7 @@ namespace NintendoSpy
         {
             uint ret;
             if (! uint.TryParse (readStringAttr (elem, attrName), out ret)) {
-                throw new SkinParseException ("Failed to parse number for property '"+attrName+"' in element '"+elem.Name+"'.");
+                throw new ConfigParseException ("Failed to parse number for property '"+attrName+"' in element '"+elem.Name+"'.");
             }
             return ret;
         }
@@ -194,14 +194,14 @@ namespace NintendoSpy
             try {
                 return new BitmapImage (new Uri (Path.Combine (skinPath, fileName)));
             } catch (Exception e) {
-                throw new SkinParseException ("Could not load image '"+fileName+"'.", e);
+                throw new ConfigParseException ("Could not load image '"+fileName+"'.", e);
             }
         }
 
         static ElementConfig parseStandardConfig (string skinPath, XElement elem)
         {
             var imageAttr = elem.Attributes ("image");
-            if (imageAttr.Count() == 0) throw new SkinParseException ("Attribute 'image' missing for element '"+elem.Name+"'.");
+            if (imageAttr.Count() == 0) throw new ConfigParseException ("Attribute 'image' missing for element '"+elem.Name+"'.");
 
             var image = loadImage (skinPath, imageAttr.First().Value);
 
@@ -246,7 +246,7 @@ namespace NintendoSpy
                     var skin = new Skin (skinDir);
                     skins.Add (skin);
                 }
-                catch (SkinParseException e) {
+                catch (ConfigParseException e) {
                     errs.Add (skinDir + " :: " + e.Message);
                 }
             }

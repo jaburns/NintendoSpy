@@ -20,6 +20,7 @@ namespace NintendoSpy
     {
         Skin _skin;
         IControllerReader _reader;
+        Keybindings _keybindings;
 
         List <Tuple <Skin.Button,Image>> _buttonsWithImages = new List <Tuple <Skin.Button,Image>> ();
         List <Tuple <Skin.RangeButton,Image>> _rangeButtonsWithImages = new List <Tuple <Skin.RangeButton,Image>> ();
@@ -73,6 +74,12 @@ namespace NintendoSpy
 
             _reader.ControllerStateChanged += reader_ControllerStateChanged;
             _reader.ControllerDisconnected += reader_ControllerDisconnected;
+
+            try {
+                _keybindings = new Keybindings (Keybindings.XML_FILE_PATH, _reader);
+            } catch (ConfigParseException e) {
+                MessageBox.Show ("Error parsing keybindings.xml. Not binding any keys to gamepad inputs");
+            }
         }
 
 
@@ -136,16 +143,14 @@ namespace NintendoSpy
 
         void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (_keybindings != null) {
+                _keybindings.Finish ();
+            }
             _reader.Finish ();
         }
 
         void reader_ControllerStateChanged (object sender, EventArgs e)
         {
-            foreach (var button in _reader.State.Buttons)
-            {
-                Keybindings.Instance.NotifyButtonState (button.Key, button.Value);
-            }
-
             foreach (var button in _buttonsWithImages) 
             {
                 if (!_reader.State.Buttons.ContainsKey (button.Item1.Name)) continue;

@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <keybindings>
 
-    <!-- Proposed binding syntax for binding gamepad combos to keys -->
     <!--
-    <binding output-key="a">
+    The following example binding requires that both "r" and "l"
+    be pressed at the same time on the monitored gamepad in order to
+    send a HOME keypress to the OS.
+
+    <binding output-key="home">
         <input button="r" />
         <input button="l" />
     </binding>
     -->
-
-    <!-- Current binding syntax, one-to-one only -->
-    <!--
-    <binding gamepad-input="a" keyboard-key="a" />
-    -->
-
-    <binding gamepad-input="left" keyboard-key="home" />
 
 </keybindings>
