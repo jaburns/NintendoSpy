@@ -41,6 +41,8 @@ namespace NintendoSpy
 
             var doc = XDocument.Load (xmlPath);
 
+            _vkKeywords = initVkKeywords ();
+
             foreach (var binding in doc.Root.Elements ("binding")) {
                 ushort keyboardKey = readKeybinding (binding.Attribute ("keyboard-key").Value);
                 if (keyboardKey != 0) {
@@ -50,8 +52,6 @@ namespace NintendoSpy
                     );
                 }
             }
-
-            _vkKeywords = initVkKeywords ();
         }
 
         public void NotifyButtonState (string buttonName, bool pressed)
