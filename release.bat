@@ -18,6 +18,7 @@ cd slimdx\x64
 cd ..\..
 
 "C:\Program Files\7-Zip\7z.exe" a release\NintendoSpy.zip skins
+"C:\Program Files\7-Zip\7z.exe" a release\NintendoSpy.zip keybindings.xml
 
 :end
 pause
