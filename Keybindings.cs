@@ -15,8 +15,6 @@ namespace NintendoSpy
     {
         public const string XML_FILE_PATH = "keybindings.xml";
 
-        static Dictionary<String, ushort> VkKeywords;
-
         static Keybindings s_instance;
         static public Keybindings Instance {
             get {
@@ -27,120 +25,120 @@ namespace NintendoSpy
             }
         }
 
-        HashSet <string> _pressedButtons = new HashSet <string> ();
-
-        Dictionary <string, ushort> _bindings;
+        Dictionary <string, ushort> _bindings = new Dictionary <string,ushort> ();
         public IReadOnlyDictionary <string, ushort> Bindings { get { return _bindings; } }
+
+        IReadOnlyDictionary <String, ushort> _vkKeywords;
+        HashSet <string> _pressedButtons = new HashSet <string> ();
 
         public Keybindings (string xmlFilePath)
         {
-            initVkKeywords();
             var xmlPath = Path.Combine (Environment.CurrentDirectory, xmlFilePath);
 
             if (! File.Exists (xmlPath)) {
                 throw new FileNotFoundException ("Could not find "+XML_FILE_PATH);
             }
 
-             var doc = XDocument.Load (xmlPath);
+            var doc = XDocument.Load (xmlPath);
 
-            _bindings = new Dictionary <string, ushort> ();
+            foreach (var binding in doc.Root.Elements ("binding")) {
+                ushort keyboardKey = readKeybinding (binding.Attribute ("keyboard-key").Value);
+                if (keyboardKey != 0) {
+                    _bindings.Add (
+                        binding.Attribute ("gamepad-input").Value,
+                        keyboardKey
+                    );
+                }
+            }
 
-             foreach (var binding in doc.Root.Elements ("binding")) {
-                 ushort keyboardKey = readKeybinding(binding.Attribute("keyboard-key").Value);
-                 if(keyboardKey!=(ushort)0){
-                     _bindings.Add (
-                         binding.Attribute ("gamepad-input").Value,
-                         keyboardKey
-                     );
-                 }
-             }
+            _vkKeywords = initVkKeywords ();
         }
 
         public void NotifyButtonState (string buttonName, bool pressed)
         {
             if (_pressedButtons.Contains (buttonName) && !pressed && _bindings.ContainsKey(buttonName)) {
-                SendKeys.PressKey (getKeybinding (buttonName));
+                SendKeys.PressKey (_bindings [buttonName]);
                 _pressedButtons.Remove (buttonName);
             }
             else if (!_pressedButtons.Contains(buttonName) && pressed && _bindings.ContainsKey(buttonName))
             {
-                SendKeys.ReleaseKey (getKeybinding (buttonName));
+                SendKeys.ReleaseKey (_bindings [buttonName]);
                 _pressedButtons.Add (buttonName);
             }
         }
 
-        ushort readKeybinding (string name) {
-            if (Regex.Match(name, "^[A-Za-z0-9]$").Success){
+        ushort readKeybinding (string name) 
+        {
+            var upperName = name.ToUpperInvariant ();
+
+            if (Regex.Match(upperName, "^[A-Z0-9]$").Success) {
                 return (ushort)name.ToUpper().ToCharArray()[0];
             }
-            else{
-                if(VkKeywords.ContainsKey(name)){
-                    return VkKeywords[name];
-                }else{
-                    return (ushort)0;
+            else {
+                if (_vkKeywords.ContainsKey (upperName)) {
+                    return _vkKeywords [upperName];
+                } else {
+                    return 0;
                 }
             }
         }
 
-        ushort getKeybinding(string name){
-            return _bindings[name];
-        }
-
-        //There is probably a better way of doing this (Reflection?).
-        private void initVkKeywords()
+        static Dictionary <string, ushort> initVkKeywords()
         {
-            VkKeywords = new Dictionary<String, ushort>();
+            Func <Key, ushort> vk = x => (ushort) KeyInterop.VirtualKeyFromKey (x);
 
-            VkKeywords.Add("ENTER", (ushort)KeyInterop.VirtualKeyFromKey(Key.Return));
-            VkKeywords.Add("TAB", (ushort)KeyInterop.VirtualKeyFromKey(Key.Tab));
-            VkKeywords.Add("ESC", (ushort)KeyInterop.VirtualKeyFromKey(Key.Escape));
-            VkKeywords.Add("ESCAPE", (ushort)KeyInterop.VirtualKeyFromKey(Key.Escape));
-            VkKeywords.Add("HOME", (ushort)KeyInterop.VirtualKeyFromKey(Key.Home));
-            VkKeywords.Add("END", (ushort)KeyInterop.VirtualKeyFromKey(Key.End));
-            VkKeywords.Add("LEFT", (ushort)KeyInterop.VirtualKeyFromKey(Key.Left));
-            VkKeywords.Add("RIGHT", (ushort)KeyInterop.VirtualKeyFromKey(Key.Right));
-            VkKeywords.Add("UP", (ushort)KeyInterop.VirtualKeyFromKey(Key.Up));
-            VkKeywords.Add("DOWN", (ushort)KeyInterop.VirtualKeyFromKey(Key.Down));
-            VkKeywords.Add("PGUP", (ushort)KeyInterop.VirtualKeyFromKey(Key.Prior));
-            VkKeywords.Add("PGDN", (ushort)KeyInterop.VirtualKeyFromKey(Key.Next));
-            VkKeywords.Add("NUMLOCK", (ushort)KeyInterop.VirtualKeyFromKey(Key.NumLock));
-            VkKeywords.Add("SCROLLLOCK", (ushort)KeyInterop.VirtualKeyFromKey(Key.Scroll));
-            VkKeywords.Add("PRTSC", (ushort)KeyInterop.VirtualKeyFromKey(Key.PrintScreen));
-            VkKeywords.Add("BREAK", (ushort)KeyInterop.VirtualKeyFromKey(Key.Cancel));
-            VkKeywords.Add("BACKSPACE", (ushort)KeyInterop.VirtualKeyFromKey(Key.Back));
-            VkKeywords.Add("BKSP", (ushort)KeyInterop.VirtualKeyFromKey(Key.Back));
-            VkKeywords.Add("BS", (ushort)KeyInterop.VirtualKeyFromKey(Key.Back));
-            VkKeywords.Add("CLEAR", (ushort)KeyInterop.VirtualKeyFromKey(Key.Clear));
-            VkKeywords.Add("CAPSLOCK", (ushort)KeyInterop.VirtualKeyFromKey(Key.Capital));
-            VkKeywords.Add("INS", (ushort)KeyInterop.VirtualKeyFromKey(Key.Insert));
-            VkKeywords.Add("INSERT", (ushort)KeyInterop.VirtualKeyFromKey(Key.Insert));
-            VkKeywords.Add("DEL", (ushort)KeyInterop.VirtualKeyFromKey(Key.Delete));
-            VkKeywords.Add("DELETE", (ushort)KeyInterop.VirtualKeyFromKey(Key.Delete));
-            VkKeywords.Add("HELP", (ushort)KeyInterop.VirtualKeyFromKey(Key.Help));
-            VkKeywords.Add("F1", (ushort)KeyInterop.VirtualKeyFromKey(Key.F1));
-            VkKeywords.Add("F2", (ushort)KeyInterop.VirtualKeyFromKey(Key.F2));
-            VkKeywords.Add("F3", (ushort)KeyInterop.VirtualKeyFromKey(Key.F3));
-            VkKeywords.Add("F4", (ushort)KeyInterop.VirtualKeyFromKey(Key.F4));
-            VkKeywords.Add("F5", (ushort)KeyInterop.VirtualKeyFromKey(Key.F5));
-            VkKeywords.Add("F6", (ushort)KeyInterop.VirtualKeyFromKey(Key.F6));
-            VkKeywords.Add("F7", (ushort)KeyInterop.VirtualKeyFromKey(Key.F7));
-            VkKeywords.Add("F8", (ushort)KeyInterop.VirtualKeyFromKey(Key.F8));
-            VkKeywords.Add("F9", (ushort)KeyInterop.VirtualKeyFromKey(Key.F9));
-            VkKeywords.Add("F10", (ushort)KeyInterop.VirtualKeyFromKey(Key.F10));
-            VkKeywords.Add("F11", (ushort)KeyInterop.VirtualKeyFromKey(Key.F11));
-            VkKeywords.Add("F12", (ushort)KeyInterop.VirtualKeyFromKey(Key.F12));
-            VkKeywords.Add("F13", (ushort)KeyInterop.VirtualKeyFromKey(Key.F13));
-            VkKeywords.Add("F14", (ushort)KeyInterop.VirtualKeyFromKey(Key.F14));
-            VkKeywords.Add("F15", (ushort)KeyInterop.VirtualKeyFromKey(Key.F15));
-            VkKeywords.Add("F16", (ushort)KeyInterop.VirtualKeyFromKey(Key.F16));
-            VkKeywords.Add("MULTIPLY", (ushort)KeyInterop.VirtualKeyFromKey(Key.Multiply));
-            VkKeywords.Add("*", (ushort)KeyInterop.VirtualKeyFromKey(Key.Multiply));
-            VkKeywords.Add("ADD", (ushort)KeyInterop.VirtualKeyFromKey(Key.Add));
-            VkKeywords.Add("+", (ushort)KeyInterop.VirtualKeyFromKey(Key.Add));
-            VkKeywords.Add("SUBTRACT", (ushort)KeyInterop.VirtualKeyFromKey(Key.Subtract));
-            VkKeywords.Add("-", (ushort)KeyInterop.VirtualKeyFromKey(Key.Subtract));
-            VkKeywords.Add("DIVIDE", (ushort)KeyInterop.VirtualKeyFromKey(Key.Divide));
-            VkKeywords.Add("/", (ushort)KeyInterop.VirtualKeyFromKey(Key.Divide));
+            return new Dictionary <string, ushort> {
+                { "ENTER", vk(Key.Enter) },
+                { "TAB", vk(Key.Tab) },
+                { "ESC", vk(Key.Escape) },
+                { "ESCAPE", vk(Key.Escape) },
+                { "HOME", vk(Key.Home) },
+                { "END", vk(Key.End) },
+                { "LEFT", vk(Key.Left) },
+                { "RIGHT", vk(Key.Right) },
+                { "UP", vk(Key.Up) },
+                { "DOWN", vk(Key.Down) },
+                { "PGUP", vk(Key.Prior) },
+                { "PGDN", vk(Key.Next) },
+                { "NUMLOCK", vk(Key.NumLock) },
+                { "SCROLLLOCK", vk(Key.Scroll) },
+                { "PRTSC", vk(Key.PrintScreen) },
+                { "BREAK", vk(Key.Cancel) },
+                { "BACKSPACE", vk(Key.Back) },
+                { "BKSP", vk(Key.Back) },
+                { "BS", vk(Key.Back) },
+                { "CLEAR", vk(Key.Clear) },
+                { "CAPSLOCK", vk(Key.Capital) },
+                { "INS", vk(Key.Insert) },
+                { "INSERT", vk(Key.Insert) },
+                { "DEL", vk(Key.Delete) },
+                { "DELETE", vk(Key.Delete) },
+                { "HELP", vk(Key.Help) },
+                { "F1", vk(Key.F1) },
+                { "F2", vk(Key.F2) },
+                { "F3", vk(Key.F3) },
+                { "F4", vk(Key.F4) },
+                { "F5", vk(Key.F5) },
+                { "F6", vk(Key.F6) },
+                { "F7", vk(Key.F7) },
+                { "F8", vk(Key.F8) },
+                { "F9", vk(Key.F9) },
+                { "F10", vk(Key.F10) },
+                { "F11", vk(Key.F11) },
+                { "F12", vk(Key.F12) },
+                { "F13", vk(Key.F13) },
+                { "F14", vk(Key.F14) },
+                { "F15", vk(Key.F15) },
+                { "F16", vk(Key.F16) },
+                { "MULTIPLY", vk(Key.Multiply) },
+                { "*", vk(Key.Multiply) },
+                { "ADD", vk(Key.Add) },
+                { "+", vk(Key.Add) },
+                { "SUBTRACT", vk(Key.Subtract) },
+                { "-", vk(Key.Subtract) },
+                { "DIVIDE", vk(Key.Divide) },
+                { "/", vk(Key.Divide) }
+            };
         }
     }
 }
