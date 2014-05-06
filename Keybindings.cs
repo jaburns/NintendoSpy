@@ -31,7 +31,6 @@ namespace NintendoSpy
 
         IControllerReader _reader;
         List <Binding> _bindings = new List <Binding> ();
-        IReadOnlyDictionary <String, ushort> _vkKeywords;
         HashSet <string> _pressedButtons = new HashSet <string> ();
 
         public Keybindings (string xmlFilePath, IControllerReader reader)
@@ -108,7 +107,7 @@ namespace NintendoSpy
             return (ushort) KeyInterop.VirtualKeyFromKey (key);
         }
 
-        static readonly Dictionary <string, ushort> VK_KEYWORDS = new Dictionary <string, ushort> {
+        static readonly IReadOnlyDictionary <string, ushort> VK_KEYWORDS = new Dictionary <string, ushort> {
             { "ENTER", vkConvert (Key.Enter) },
             { "TAB", vkConvert (Key.Tab) },
             { "ESC", vkConvert (Key.Escape) },
