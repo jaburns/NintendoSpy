@@ -43,6 +43,8 @@
 #define SPLIT '\n'  // Use a new-line character to split up the controller state packets.
 
 
+
+
 // Declare some space to store the bits we read from a controller.
 unsigned char rawData[ 128 ];
 
@@ -141,6 +143,20 @@ void read_shiftRegister( unsigned char bits )
 }
 
 
+
+inline bool checkPrefixN64 ()
+{
+    if( rawData[0] != 0 ) return false; // 0
+    if( rawData[1] != 0 ) return false; // 0
+    if( rawData[2] != 0 ) return false; // 0
+    if( rawData[3] != 0 ) return false; // 0
+    if( rawData[4] != 0 ) return false; // 0
+    if( rawData[5] != 0 ) return false; // 0
+    if( rawData[6] != 0 ) return false; // 0
+    if( rawData[7] == 0 ) return false; // 1
+    if( rawData[8] == 0 ) return false; // 1
+    return true;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sends a packet of controller data over the Arduino serial interface.
