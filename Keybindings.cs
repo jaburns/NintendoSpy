@@ -31,7 +31,6 @@ namespace NintendoSpy
 
         IControllerReader _reader;
         List <Binding> _bindings = new List <Binding> ();
-        HashSet <string> _pressedButtons = new HashSet <string> ();
 
         public Keybindings (string xmlFilePath, IControllerReader reader)
         {
