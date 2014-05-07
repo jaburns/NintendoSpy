@@ -5,7 +5,7 @@ Live console controller viewer for NES, SNES, N64, and Gamecube controllers.
 
 #### Downloads
 
-[Download the latest desktop viewer software here.](https://github.com/jaburns/NintendoSpy/blob/master/release/NintendoSpy.zip?raw=true)
+[Download the latest desktop viewer software here.](https://github.com/jaburns/NintendoSpy/releases)
 
 [Download the latest Arduino sketch here.](https://raw.github.com/jaburns/NintendoSpy/master/firmware/firmware.ino)
 
