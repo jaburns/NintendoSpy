@@ -1,5 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NintendoSpy Firmware for Arduino
+// v1.0.1
 // Written by jaburns
 
 
@@ -8,7 +9,7 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
-#define MODE_DETECT
+//#define MODE_DETECT
 // ---------------------------------------------------------------------------------
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
@@ -86,6 +87,22 @@ read_loop:
     goto read_loop;
 }
 
+// Verifies that the 9 bits prefixing N64 controller data in 'rawData'
+// are actually indicative of a controller state signal.
+inline bool checkPrefixN64 ()
+{
+    if( rawData[0] != 0 ) return false; // 0
+    if( rawData[1] != 0 ) return false; // 0
+    if( rawData[2] != 0 ) return false; // 0
+    if( rawData[3] != 0 ) return false; // 0
+    if( rawData[4] != 0 ) return false; // 0
+    if( rawData[5] != 0 ) return false; // 0
+    if( rawData[6] != 0 ) return false; // 0
+    if( rawData[7] == 0 ) return false; // 1
+    if( rawData[8] == 0 ) return false; // 1
+    return true;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Performs a read cycle from a shift register based controller (SNES + NES) using only the data and latch
 // wires, and waiting a fixed time between reads.  This read method is deprecated due to being finicky,
@@ -142,22 +159,6 @@ void read_shiftRegister( unsigned char bits )
     while( --bits > 0 );
 }
 
-
-
-inline bool checkPrefixN64 ()
-{
-    if( rawData[0] != 0 ) return false; // 0
-    if( rawData[1] != 0 ) return false; // 0
-    if( rawData[2] != 0 ) return false; // 0
-    if( rawData[3] != 0 ) return false; // 0
-    if( rawData[4] != 0 ) return false; // 0
-    if( rawData[5] != 0 ) return false; // 0
-    if( rawData[6] != 0 ) return false; // 0
-    if( rawData[7] == 0 ) return false; // 1
-    if( rawData[8] == 0 ) return false; // 1
-    return true;
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sends a packet of controller data over the Arduino serial interface.
 inline void sendRawData( unsigned char first, unsigned char count )
@@ -185,7 +186,9 @@ inline void loop_N64()
     noInterrupts();
     read_oneWire< N64_PIN >( N64_PREFIX + N64_BITCOUNT );
     interrupts();
-    sendRawData( N64_PREFIX , N64_BITCOUNT );
+    if( checkPrefixN64() ) {
+        sendRawData( N64_PREFIX , N64_BITCOUNT );
+    }
 }
 
 inline void loop_SNES()
