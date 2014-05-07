@@ -17,7 +17,9 @@ Live console controller viewer for NES, SNES, N64, and Gamecube controllers.
 
 [EvilAsh25's hardware building guide (slightly dated)](https://raw.githubusercontent.com/jaburns/NintendoSpy/master/docs/guide-evilash25.txt)
 
-[Skin format](https://github.com/jaburns/NintendoSpy/blob/master/docs/skins.md)
+[Skin format documentation](https://github.com/jaburns/NintendoSpy/blob/master/docs/skins.md)
+
+[Keyboard binding documentation](https://github.com/jaburns/NintendoSpy/blob/master/docs/keybindings.md)
 
 ### Wiring setup for controller connections
 
