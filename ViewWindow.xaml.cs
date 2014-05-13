@@ -10,17 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.ComponentModel;
 using System.Windows.Shapes;
 
 using NintendoSpy.Readers;
 
 namespace NintendoSpy
 {
-    public partial class ViewWindow : Window
+    public partial class ViewWindow : Window, INotifyPropertyChanged
     {
         Skin _skin;
         IControllerReader _reader;
         Keybindings _keybindings;
+        LowPassFilter _lowPassFilter = new LowPassFilter ();
 
         List <Tuple <Skin.Button,Image>> _buttonsWithImages = new List <Tuple <Skin.Button,Image>> ();
         List <Tuple <Skin.RangeButton,Image>> _rangeButtonsWithImages = new List <Tuple <Skin.RangeButton,Image>> ();
@@ -29,6 +31,14 @@ namespace NintendoSpy
         // The triggers images are embedded inside of a Grid element so that we can properly mask leftwards and upwards
         // without the image aligning to the top left of its element.
         List <Tuple <Skin.AnalogTrigger,Grid>> _triggersWithGridImages = new List <Tuple <Skin.AnalogTrigger,Grid>> ();
+
+
+        /// Expose the enabled status of the low-pass filter for data binding.
+        public bool LowPassFilterEnabled {
+            get { return _lowPassFilter.Enabled; }
+            set { _lowPassFilter.Enabled = value;  OnPropertyChanged ("LowPassFilterEnabled"); }
+        }
+
 
 
         public ViewWindow (Skin skin, Skin.Background skinBackground, IControllerReader reader)
@@ -77,17 +87,18 @@ namespace NintendoSpy
 
             try {
                 _keybindings = new Keybindings (Keybindings.XML_FILE_PATH, _reader);
-            } catch (ConfigParseException e) {
+            } catch (ConfigParseException) {
                 MessageBox.Show ("Error parsing keybindings.xml. Not binding any keys to gamepad inputs");
             }
         }
 
 
+
         static Image getImageForElement (Skin.ElementConfig config)
         {
             var img = new Image ();
-            img.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            img.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            img.VerticalAlignment = VerticalAlignment.Top;
+            img.HorizontalAlignment = HorizontalAlignment.Left;
             img.Source = config.Image;
             img.Stretch = Stretch.Fill;
             img.Margin = new Thickness (config.X, config.Y, 0, 0);
@@ -100,17 +111,17 @@ namespace NintendoSpy
         {
             var img = new Image ();
 
-            img.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            img.VerticalAlignment = VerticalAlignment.Top;
 
             img.HorizontalAlignment = 
                   trigger.Direction == Skin.AnalogTrigger.DirectionValue.Left
-                ? System.Windows.HorizontalAlignment.Right
-                : System.Windows.HorizontalAlignment.Left;
+                ? HorizontalAlignment.Right
+                : HorizontalAlignment.Left;
 
             img.VerticalAlignment = 
                   trigger.Direction == Skin.AnalogTrigger.DirectionValue.Up
-                ? System.Windows.VerticalAlignment.Bottom
-                : System.Windows.VerticalAlignment.Top;
+                ? VerticalAlignment.Bottom
+                : VerticalAlignment.Top;
 
             img.Source = trigger.Config.Image;
             img.Stretch = Stretch.None;
@@ -120,8 +131,8 @@ namespace NintendoSpy
 
             var grid = new Grid ();
 
-            grid.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-            grid.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            grid.HorizontalAlignment = HorizontalAlignment.Left;
+            grid.VerticalAlignment = VerticalAlignment.Top;
             grid.Margin = new Thickness (trigger.Config.X, trigger.Config.Y, 0, 0);
             grid.Width = trigger.Config.Width;
             grid.Height = trigger.Config.Height;
@@ -131,10 +142,14 @@ namespace NintendoSpy
             return grid;
         }
 
-        private void AlwaysOnTop_Click (object sender, RoutedEventArgs e)
-        {
+        void AlwaysOnTop_Click (object sender, RoutedEventArgs e) {
             this.Topmost = !this.Topmost;
         }
+
+        void LowPassFilterEnabled_Click (object sender, RoutedEventArgs e) {
+            this.LowPassFilterEnabled = !this.LowPassFilterEnabled;
+        }
+
 
         void reader_ControllerDisconnected (object sender, EventArgs e)
         {
@@ -151,18 +166,24 @@ namespace NintendoSpy
 
         void reader_ControllerStateChanged (object sender, EventArgs e)
         {
+            var newState = _reader.State;
+
+            if (_lowPassFilter.Enabled) {
+                newState = _lowPassFilter.Process (newState);
+            }
+
             foreach (var button in _buttonsWithImages) 
             {
-                if (!_reader.State.Buttons.ContainsKey (button.Item1.Name)) continue;
+                if (!newState.Buttons.ContainsKey (button.Item1.Name)) continue;
 
-                button.Item2.Visibility = _reader.State.Buttons [button.Item1.Name] ? Visibility.Visible : Visibility.Hidden ;
+                button.Item2.Visibility = newState.Buttons [button.Item1.Name] ? Visibility.Visible : Visibility.Hidden ;
             }
 
             foreach (var button in _rangeButtonsWithImages) 
             {
-                if (!_reader.State.Analogs.ContainsKey (button.Item1.Name)) continue;
+                if (!newState.Analogs.ContainsKey (button.Item1.Name)) continue;
 
-                var value = _reader.State.Analogs [button.Item1.Name];
+                var value = newState.Analogs [button.Item1.Name];
                 var visible = button.Item1.From <= value && value <= button.Item1.To;
 
                 button.Item2.Visibility = visible ? Visibility.Visible : Visibility.Hidden ;
@@ -176,12 +197,12 @@ namespace NintendoSpy
                 float xrange = (skin.XReverse ? -1 :  1) * skin.XRange;
                 float yrange = (skin.YReverse ?  1 : -1) * skin.YRange;
 
-                var x = _reader.State.Analogs.ContainsKey (skin.XName)
-                      ? skin.Config.X + xrange * _reader.State.Analogs [skin.XName]
+                var x = newState.Analogs.ContainsKey (skin.XName)
+                      ? skin.Config.X + xrange * newState.Analogs [skin.XName]
                       : skin.Config.X ;
 
-                var y = _reader.State.Analogs.ContainsKey (skin.YName)
-                      ? skin.Config.Y + yrange * _reader.State.Analogs [skin.YName]
+                var y = newState.Analogs.ContainsKey (skin.YName)
+                      ? skin.Config.Y + yrange * newState.Analogs [skin.YName]
                       : skin.Config.Y ;
                 
                 image.Margin = new Thickness (x,y,0,0);
@@ -192,9 +213,9 @@ namespace NintendoSpy
                 var skin = trigger.Item1;
                 var grid = trigger.Item2;
 
-                if (!_reader.State.Analogs.ContainsKey (skin.Name)) continue;
+                if (!newState.Analogs.ContainsKey (skin.Name)) continue;
 
-                var val = _reader.State.Analogs [skin.Name];
+                var val = newState.Analogs [skin.Name];
                 if (skin.UseNegative) val *= -1;
                 if (skin.IsReversed) val = 1 - val;
                 if (val < 0) val = 0;
@@ -224,6 +245,12 @@ namespace NintendoSpy
                         break;
                 }
             }
+        }
+
+        // INotifyPropertyChanged interface implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged (string propertyName) {
+            if (PropertyChanged != null) PropertyChanged (this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

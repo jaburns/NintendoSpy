@@ -6,6 +6,7 @@
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Always On Top" Click="AlwaysOnTop_Click" IsChecked="{Binding Topmost}" />
+                <MenuItem Header="Blink Reduction" Click="LowPassFilterEnabled_Click" IsChecked="{Binding LowPassFilterEnabled}" />
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>
