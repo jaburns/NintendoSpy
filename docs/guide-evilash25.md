@@ -1,26 +1,27 @@
-**IMPORTANT** - If you have read or used this guide before a few things have changed, so be sure to read the Change Log at the bottom of the page.
+I wrote this guide to give step by step instructions on how to make your own controller input display (currently the same setup as siglemic). This setup currently works with NES, SNES, N64, and GCN controllers. You can check out what the final product looks like in some of [cylon13](http://www.twitch.tv/cylon13/profile)'s or [my video history](http://www.twitch.tv/evilash25/profile).
 
-I wrote this guide to give step by step instructions on how to make your own controller input display (currently the same setup as siglemic). This setup currently works with NES, SNES, N64, and GCN controllers. First I wanted to give a big thanks to cylon13 for writing the original software for both the Arduino and PC controller display and providing some basic instructions (https://github.com/jeremyaburns/NintendoSpy). You can check out what the final product looks like in some of cylon13's or my video history: (http://www.twitch.tv/cylon13/profile, http://www.twitch.tv/evilash25/profile)
+#### Components and Equipment needed
 
-Components and Equipment needed
-
-1) Arduino Uno (http://www.amazon.com/Arduino-UNO-board-DIP-ATmega328P/dp/B006H06TVG) you might be able to find this cheaper elsewhere
-2) USB cable to connect the Arduino to your computer (http://www.amazon.com/AmazonBasics-Hi-Speed-A-Male-B-Male-Meters/dp/B001TH7GUA/)
-3) controller extension cable (NES, SNES, N64, or GCN)
-4) (optional) male/female connectors with 5 pins minimum for easy controller switching
-5) wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
-6) wire cutters/strippers
-7) exacto knife or box cutters
-8) soldering iron and solder
-9) electrical tape
-10) digital multimeter or a cheap continuity tester
+1. [Arduino Uno](http://www.amazon.com/Arduino-UNO-board-DIP-ATmega328P/dp/B006H06TVG). You might be able to find this cheaper elsewhere.  A clone such as [Funduino](https://www.foxytronics.com/products/265-funduino-uno-r3) works just as well.
+2. [USB cable to connect the Arduino to your computer]((http://www.amazon.com/AmazonBasics-Hi-Speed-A-Male-B-Male-Meters/dp/B001TH7GUA/)
+3. controller extension cable (NES, SNES, N64, or GCN)
+4. (optional) male/female connectors with 5 pins minimum for easy controller switching
+5. wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
+6. wire cutters/strippers
+7. exacto knife or box cutters
+8. soldering iron and solder
+9. electrical tape
+10. digital multimeter or a cheap continuity tester
 
 
-Software
+#### Software
 
-1) the latest Arduino software (http://arduino.cc/en/Main/Software)
-2) software to program into the Arduino (https://www.dropbox.com/s/qvu87zou1iqriaa/firmware_new.ino)
-3) PC software to connect to the Arduino and display the controller (https://github.com/jeremyaburns/NintendoSpy/blob/master/NintendoSpy.exe?raw=true)
+1. [the latest Arduino software](http://arduino.cc/en/Main/Software)
+2. firmware to program into the Arduino with
+3. PC software to connect to the Arduino and display the controller
+
+
+\#2 and #3 above are included in the release package of NintendoSpy.  The firmware is located in the firmware folder and is called ``firmware.ino``.   Just run ``NintendoSpy.exe`` to launch the display software.
 
 
 Instructions
