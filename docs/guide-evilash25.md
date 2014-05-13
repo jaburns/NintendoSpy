@@ -4,7 +4,7 @@ I wrote this guide to give step by step instructions on how to make your own con
 ## Components and Equipment needed
 
 1. [Arduino Uno](http://www.amazon.com/Arduino-UNO-board-DIP-ATmega328P/dp/B006H06TVG). You might be able to find this cheaper elsewhere.  A clone such as [Funduino](https://www.foxytronics.com/products/265-funduino-uno-r3) works just as well.
-2. [USB cable to connect the Arduino to your computer]((http://www.amazon.com/AmazonBasics-Hi-Speed-A-Male-B-Male-Meters/dp/B001TH7GUA/)
+2. [USB cable to connect the Arduino to your computer](http://www.amazon.com/AmazonBasics-Hi-Speed-A-Male-B-Male-Meters/dp/B001TH7GUA/)
 3. controller extension cable (NES, SNES, N64, or GCN)
 4. (optional) male/female connectors with 5 pins minimum for easy controller switching
 5. wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
