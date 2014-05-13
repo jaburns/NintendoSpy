@@ -21,36 +21,70 @@ I wrote this guide to give step by step instructions on how to make your own con
 3. PC software to connect to the Arduino and display the controller
 
 
-\#2 and #3 above are included in the release package of NintendoSpy.  The firmware is located in the firmware folder and is called ``firmware.ino``.   Just run ``NintendoSpy.exe`` to launch the display software.
+\#2 and #3 above are included in the release package of NintendoSpy.  The firmware is located in the ``firmware`` folder and is called ``firmware.ino``.   Just run ``NintendoSpy.exe`` to launch the display software.
 
 
-Instructions
+#### Instructions
 
-Wiring
-(this is the most time consuming piece, especially if you have never done any wiring/soldering before)
+##### Wiring
 
-1) First you will need to cut your controller extension cable so you can splice into the wires (consider which spot in the extension cable to cut, game system side, controller side, middle) (https://raw.githubusercontent.com/jaburns/NintendoSpy/master/docs/tutorial-images/cut.jpg)
-2) Use your exacto knife or box cutters to very carefully cut away and peel back the plastic covering on both halves, about 2-3 inches should be good enough
-3) Use wire strippers to strip back about 1/2 an inch of the plastic covering on each wire (https://raw.githubusercontent.com/jaburns/NintendoSpy/master/docs/tutorial-images/stripped.jpg) In my case I had to carefully use my exacto knife because the wires were too small for the stripper, I rotated the wire against the blade until I could pull the plastic off the end.
-4) Next you will need to use a digital multimeter or continuity tester to figure out which pin on your controller plugin goes to which wire in the extension cable, make sure to write down your findings. A quick google search of "<system> + controller pinout" should give you the information you need.
-5) Here are the minimum pins we are interested in for each system (I actually spliced/wired them all in case I needed them, which I found out that I did not)
-        NES - Latch, Data, and Clock
-        SNES - Latch, Data, and Clock
-        N64 - Data and Ground (there are only 3 wires, so it's pretty obvious here)
-        GCN - Data and (any non-shield)Ground
-6) Figure out the length you need between your controller extension cable/Arduino and cut and strip a wire for each wire you are going to splice into.
-7) Solder each wire back together with your spliced wires, here's what mine looked like when finished (http://imgur.com/a/oeUNp#0) I soldered them this way (instead of end-to-end) because this will provide more strain relief against the small controller extension wires possibly breaking with use.
-8) After soldering everything back together, test out your extension cable with your game system to see that it still works before proceeding.
-9) Use electrical tape to tape up each wire separately (http://imgur.com/a/oeUNp#1).
-10) Again use electrical tape to tape all the wires back together, make sure to tape all the way back up to where the extension cable covering starts (http://imgur.com/a/oeUNp#2).
-11) (optional) Wire the spliced cables to a connector (http://imgur.com/a/oeUNp#2) to make easy swapping between controllers, you will need the opposite gender connector, pins, and more wires to go to the Arduino.
-12) Hook up the newly spliced extension cable to your Arduino according to this pinout (http://imgur.com/a/oeUNp#3). Note: I added the requirement of the Clock pin for NES and SNES controllers because using it is much more reliable.  I have a separate firmware release that uses this Clock pin.
+This is the most time consuming piece, especially if you have never done any wiring/soldering before.
 
-Here is what mine looks like all hooked up (http://imgur.com/a/oeUNp#4, http://imgur.com/a/oeUNp#5) note I am using a breadboard here to just jumper the wires over to the Arduino, it is not needed.
+1. First you will need to cut your controller extension cable so you can splice into the wires (consider which spot in the extension cable to cut, game system side, controller side, middle)
 
+![](https://raw.githubusercontent.com/jaburns/NintendoSpy/master/docs/tutorial-images/cut.jpg)
 
-Software and Setup
-(once the wiring is done, hook everything up to your game system and computer, now for the easy part)
+2. Use your exacto knife or box cutters to very carefully cut away and peel back the plastic covering on both halves, about 2-3 inches should be good enough.
+
+3. Use wire strippers to strip back about 1/2 an inch of the plastic covering on each wire. In my case I had to carefully use my exacto knife because the wires were too small for the stripper, I rotated the wire against the blade until I could pull the plastic off the end.
+
+![](https://raw.githubusercontent.com/jaburns/NintendoSpy/master/docs/tutorial-images/stripped.jpg) 
+
+4. Next you will need to use a digital multimeter or continuity tester to figure out which pin on your controller plugin goes to which wire in the extension cable, make sure to write down your findings. A quick google search of "<system> + controller pinout" should give you the information you need.
+
+5. Here are the minimum pins we are interested in for each system:
+ - NES - Latch, Data, and Clock
+ - SNES - Latch, Data, and Clock
+ - N64 - Data and Ground (there are only 3 wires, so it's pretty obvious here)
+ - GCN - Data and (any non-shield)Ground
+
+6. Figure out the length you need between your controller extension cable/Arduino and cut and strip a wire for each wire you are going to splice into.
+
+7. Solder each wire back together with your spliced wires, here's what mine looked like when finished I soldered them this way (instead of end-to-end) because this will provide more strain relief against the small controller extension wires possibly breaking with use.
+
+![](http://i.imgur.com/heGzrDes.jpg) 
+
+8. After soldering everything back together, test out your extension cable with your game system to see that it still works before proceeding.
+
+9. Use electrical tape to tape up each wire separately.
+
+![](http://i.imgur.com/dOF7cG4s.jpg)
+
+10. Again use electrical tape to tape all the wires back together, make sure to tape all the way back up to where the extension cable covering starts
+
+![](http://i.imgur.com/U3MjsdAs.jpg).
+
+11. (optional) Wire the spliced cables to a connector to make easy swapping between controllers, you will need the opposite gender connector, pins, and more wires to go to the Arduino.
+
+12. Hook up the newly spliced extension cable to your Arduino according to this pinout.
+
+![]()
+
+##### Here is what mine looks like all hooked up
+
+Note I am using a breadboard here to just jumper the wires over to the Arduino, it is not needed.
+
+![](http://i.imgur.com/4Ew6CjMs.jpg)
+![](http://i.imgur.com/vimMORKs.jpg)
+
+/// http://i.imgur.com/KpmJnVXs.jpg
+/// http://i.imgur.com/RIUqaEps.jpg
+/// http://i.imgur.com/54HtRdBs.jpg
+/// http://i.imgur.com/iYBCDOts.jpg
+
+#### Software and Setup
+
+Once the wiring is done, hook everything up to your game system and computer, now for the easy part.
 
 1) Plug in the USB connector to your Arduino and PC.
 2) Install the latest Arduino software (http://arduino.cc/en/Main/Software), download the Windows Installer option.
