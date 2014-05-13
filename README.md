@@ -15,7 +15,7 @@ Live console controller viewer for NES, SNES, N64, and Gamecube controllers.
 
 [Gamecube hardware tutorial](https://github.com/jaburns/NintendoSpy/blob/master/docs/tutorial-gamecube.md)
 
-[EvilAsh25's hardware building guide (slightly dated)](https://raw.githubusercontent.com/jaburns/NintendoSpy/master/docs/guide-evilash25.txt)
+[EvilAsh25's hardware building guide (slightly dated)](https://raw.githubusercontent.com/jaburns/NintendoSpy/master/docs/guide-evilash25.md)
 
 [Skin format documentation](https://github.com/jaburns/NintendoSpy/blob/master/docs/skins.md)
 
