@@ -119,7 +119,7 @@ I found that the N64 display will not work correctly if you have a memory pack p
         b) The correct pins are wired between your extension harness to the correct pins on your Arduino.
         c) Your PC can see your Arduino on a COM port (you are able to upload the firmware.ino to your Arduino)
 
-2. If you are having trouble getting the Arduino programming software working or getting it to see your Auduino on a COM port, [try this guide](file:///C:/Program%20Files%20\(x86\)/Arduino/reference/Guide_Windows.html).
+2. If you are having trouble getting the Arduino programming software working or getting it to see your Auduino on a COM port, try the guide located at ``C:/Program Files (x86)/Arduino/reference/Guide_Windows.html``.
 
 ## FAQ
 
