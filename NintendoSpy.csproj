@@ -59,8 +59,10 @@
     </ApplicationDefinition>
     <Compile Include="InputSource.cs" />
     <Compile Include="Keybindings.cs" />
-    <Compile Include="Readers\Interface.cs" />
+    <Compile Include="Readers\ControllerStateBuilder.cs" />
+    <Compile Include="Readers\ControllerState.cs" />
     <Compile Include="Readers\GameCube.cs" />
+    <Compile Include="Readers\IControllerReader.cs" />
     <Compile Include="Readers\LowPassFilter.cs" />
     <Compile Include="Readers\Nintendo64.cs" />
     <Compile Include="Readers\SerialControllerReader.cs" />
