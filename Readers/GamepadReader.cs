@@ -10,22 +10,10 @@ using System.IO;
 
 namespace NintendoSpy.Readers
 {
-    sealed public class GamepadReader : IControllerReader, IControllerState
+    sealed public class GamepadReader : IControllerReader
     {
-    // ----- Interface implementations with backing state -------------------------------------------------------------
-
-        Dictionary <string, bool> _buttons = new Dictionary <string, bool> ();
-        public IReadOnlyDictionary <string, bool> Buttons { get; private set; }
-
-        Dictionary <string, float> _analogs = new Dictionary <string, float> ();
-        public IReadOnlyDictionary <string, float> Analogs { get; private set; }
-
-        public IControllerState State { get { return this; } }
-
-        public event EventHandler ControllerStateChanged;
+        public event StateEventHandler ControllerStateChanged;
         public event EventHandler ControllerDisconnected;
-
-    // ----------------------------------------------------------------------------------------------------------------
 
         const double TIMER_MS = 30;
         const int RANGE = 1000;
@@ -36,9 +24,6 @@ namespace NintendoSpy.Readers
 
         public GamepadReader ()
         {
-            Buttons = _buttons;
-            Analogs = _analogs;
-
             _dinput = new DirectInput();
  
             var devices = _dinput.GetDevices (DeviceClass.GameController, DeviceEnumerationFlags.AttachedOnly);
@@ -74,35 +59,36 @@ namespace NintendoSpy.Readers
                 if (ControllerDisconnected != null) ControllerDisconnected (this, EventArgs.Empty);
                 return;
             }
-            
+
+            var outState = new ControllerStateBuilder ();            
             var state = _joystick.GetCurrentState ();
 
             for (int i = 0; i < _joystick.Capabilities.ButtonCount; ++i) {
-                _buttons ["b"+i.ToString()] = state.IsPressed(i);
+                outState.SetButton ("b"+i.ToString(), state.IsPressed(i));
             }
 
             int[] pov = state.GetPointOfViewControllers ();
 
-            _buttons ["up"] = false;
-            _buttons ["right"] = false;
-            _buttons ["down"] = false;
-            _buttons ["left"] = false;
+            outState.SetButton ("up", false);
+            outState.SetButton ("right", false);
+            outState.SetButton ("down", false);
+            outState.SetButton ("left", false);
 
             if (pov != null && pov.Length > 0 && pov[0] >= 0) {
-                _buttons ["up"] = pov[0] > octantAngle (6) || pov[0] < octantAngle (1);
-                _buttons ["right"] = pov[0] > octantAngle (0) && pov[0] < octantAngle (3);
-                _buttons ["down"] = pov[0] > octantAngle (2) && pov[0] < octantAngle (5);
-                _buttons ["left"] = pov[0] > octantAngle (4) && pov[0] < octantAngle (7);
+                outState.SetButton ("up", pov[0] > octantAngle (6) || pov[0] < octantAngle (1));
+                outState.SetButton ("right", pov[0] > octantAngle (0) && pov[0] < octantAngle (3));
+                outState.SetButton ("down", pov[0] > octantAngle (2) && pov[0] < octantAngle (5));
+                outState.SetButton ("left", pov[0] > octantAngle (4) && pov[0] < octantAngle (7));
             }    
 
-            _analogs ["x"] = (float)state.X / RANGE;
-            _analogs ["y"] = (float)state.Y / RANGE;
-            _analogs ["z"] = (float)state.Z / RANGE;
-            _analogs ["rx"] = (float)state.RotationX / RANGE;
-            _analogs ["ry"] = (float)state.RotationY / RANGE;
-            _analogs ["rz"] = (float)state.RotationZ / RANGE;
+            outState.SetAnalog ("x", (float)state.X / RANGE);
+            outState.SetAnalog ("y", (float)state.Y / RANGE);
+            outState.SetAnalog ("z", (float)state.Z / RANGE);
+            outState.SetAnalog ("rx", (float)state.RotationX / RANGE);
+            outState.SetAnalog ("ry", (float)state.RotationY / RANGE);
+            outState.SetAnalog ("rz", (float)state.RotationZ / RANGE);
 
-            if (ControllerStateChanged != null) ControllerStateChanged (this, EventArgs.Empty);
+            if (ControllerStateChanged != null) ControllerStateChanged (this, outState.Build ());
         }
 
         public void Finish ()

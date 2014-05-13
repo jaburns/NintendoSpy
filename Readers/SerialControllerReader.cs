@@ -8,17 +8,15 @@ namespace NintendoSpy.Readers
 {
     sealed public class SerialControllerReader : IControllerReader 
     {
-        public event EventHandler ControllerStateChanged;
+        public event StateEventHandler ControllerStateChanged;
         public event EventHandler ControllerDisconnected;
 
-        ISerialControllerState _controller;
-        public IControllerState State { get { return _controller; } } 
-
+        Func <byte[], ControllerState> _packetParser;
         SerialMonitor _serialMonitor;
 
-        public SerialControllerReader (string portName, ISerialControllerState controller) 
+        public SerialControllerReader (string portName, Func <byte[], ControllerState> packetParser) 
         {
-            _controller = controller;
+            _packetParser = packetParser;
 
             _serialMonitor = new SerialMonitor (portName);
             _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
@@ -34,8 +32,9 @@ namespace NintendoSpy.Readers
 
         void serialMonitor_PacketReceived (object sender, byte[] packet)
         {
-            _controller.ReadFromPacket (packet);
-            if (ControllerStateChanged != null) ControllerStateChanged (this, EventArgs.Empty);
+            if (ControllerStateChanged != null) {
+                ControllerStateChanged (this, _packetParser (packet));
+            }
         }
 
         public void Finish ()

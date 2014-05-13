@@ -5,22 +5,43 @@ using System.Text;
 
 namespace NintendoSpy.Readers
 {
-    public interface IControllerState 
+    public class ControllerState
     {
-        IReadOnlyDictionary <string, bool> Buttons { get; }
-        IReadOnlyDictionary <string, float> Analogs { get; }
+        public IReadOnlyDictionary <string, bool> Buttons { get; private set; }
+        public IReadOnlyDictionary <string, float> Analogs { get; private set;  }
+
+        public ControllerState (IReadOnlyDictionary <string, bool> buttons, IReadOnlyDictionary <string, float> analogs)
+        {
+            Buttons = buttons;
+            Analogs = analogs;
+        }
     }
 
-    public interface ISerialControllerState : IControllerState
+    public class ControllerStateBuilder
     {
-        void ReadFromPacket (byte[] packet);
+        Dictionary <string, bool> _buttons = new Dictionary <string, bool> ();
+        Dictionary <string, float> _analogs = new Dictionary <string, float> ();
+
+        public void SetButton (string name, bool value) {
+            _buttons [name] = value;
+        }
+
+        public void SetAnalog (string name, float value) {
+            _analogs [name] = value;
+        }
+
+        public ControllerState Build () {
+            return new ControllerState (_buttons, _analogs);
+        }
     }
+
+    public delegate void StateEventHandler (IControllerReader sender, ControllerState state);
 
     public interface IControllerReader
     {
-        IControllerState State { get; }
-        event EventHandler ControllerStateChanged;
+        event StateEventHandler ControllerStateChanged;
         event EventHandler ControllerDisconnected;
+
         void Finish ();
     }
 }

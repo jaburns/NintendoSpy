@@ -164,10 +164,8 @@ namespace NintendoSpy
             _reader.Finish ();
         }
 
-        void reader_ControllerStateChanged (object sender, EventArgs e)
+        void reader_ControllerStateChanged (IControllerReader reader, ControllerState newState)
         {
-            var newState = _reader.State;
-
             if (_lowPassFilter.Enabled) {
                 newState = _lowPassFilter.Process (newState);
             }

@@ -6,44 +6,36 @@ using System.Threading.Tasks;
 
 namespace NintendoSpy.Readers
 {
-    abstract public class ButtonsOnlyState : ISerialControllerState
+    static public class SuperNESandNES
     {
-        Dictionary <string, bool> _buttons = new Dictionary <string, bool> ();
-        public IReadOnlyDictionary <string, bool> Buttons { get; private set; }
-
-        public IReadOnlyDictionary <string, float> Analogs { get { return null; } }
-
-        string[] _buttonNames;
-
-        public ButtonsOnlyState (string[] buttonNames) {
-            _buttonNames = buttonNames;
-            Buttons = _buttons;
-        }
-
-        public void ReadFromPacket (byte[] packet)
+        static ControllerState readPacketButtons (byte[] packet, string[] buttons)
         {
-            if (packet.Length < _buttonNames.Length) return;
+            if (packet.Length < buttons.Length) return null;
 
-            for (int i = 0 ; i < _buttonNames.Length ; ++i) {
-                if (string.IsNullOrEmpty (_buttonNames [i])) continue;
-                _buttons [_buttonNames [i]] = packet[i] != 0x00;
+            var state = new ControllerStateBuilder ();
+
+            for (int i = 0 ; i < buttons.Length ; ++i) {
+                if (string.IsNullOrEmpty (buttons [i])) continue;
+                state.SetButton (buttons[i], packet[i] != 0x00);
             }
-        }
-    }
 
-    sealed public class NES : ButtonsOnlyState
-    {
-        static readonly string[] BUTTONS = {
+            return state.Build ();
+        }
+
+        static readonly string[] BUTTONS_NES = {
             "a", "b", "select", "start", "up", "down", "left", "right"
         };
-        public NES () : base (BUTTONS) {}
-    }
 
-    sealed public class SuperNES : ButtonsOnlyState
-    {
-        static readonly string[] BUTTONS = {
+        static readonly string[] BUTTONS_SNES = {
             "b", "y", "select", "start", "up", "down", "left", "right", "a", "x", "l", "r", null, null, null, null
         };
-        public SuperNES () : base (BUTTONS) {}
+
+        static public ControllerState ReadFromPacket_NES (byte[] packet) {
+            return readPacketButtons (packet, BUTTONS_NES);
+        }
+
+        static public ControllerState ReadFromPacket_SNES (byte[] packet) {
+            return readPacketButtons (packet, BUTTONS_SNES);
+        }
     }
 }

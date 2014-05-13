@@ -66,14 +66,14 @@ namespace NintendoSpy
             _reader.ControllerStateChanged -= reader_ControllerStateChanged;
         }
 
-        void reader_ControllerStateChanged (object sender, EventArgs e)
+        void reader_ControllerStateChanged (IControllerReader reader, ControllerState state)
         {
             foreach (var binding in _bindings) 
             {
                 bool allRequiredButtonsDown = true;
 
                 foreach (var requiredButton in binding.RequiredButtons) {
-                    allRequiredButtonsDown &= _reader.State.Buttons [requiredButton];
+                    allRequiredButtonsDown &= state.Buttons [requiredButton];
                 }
 
                 if (allRequiredButtonsDown && !binding.CurrentlyDepressed) {

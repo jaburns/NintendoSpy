@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NintendoSpy.Readers
 {
-    sealed public class Nintendo64 : ISerialControllerState
+    static public class Nintendo64
     {
         const int PACKET_SIZE = 32;
 
@@ -14,30 +14,25 @@ namespace NintendoSpy.Readers
             "a", "b", "z", "start", "up", "down", "left", "right", null, null, "l", "r", "cup", "cdown", "cleft", "cright"
         };
 
-        Dictionary <string, bool> _buttons = new Dictionary <string, bool> ();
-        public IReadOnlyDictionary <string, bool> Buttons { get; private set; }
-
-        Dictionary <string, float> _analogs = new Dictionary <string, float> ();
-        public IReadOnlyDictionary <string, float> Analogs { get; private set; }
-
-        public Nintendo64 () {
-            Buttons = _buttons;
-            Analogs = _analogs;
+        static float readStick (byte input) {
+            return (float)((sbyte)input) / 128;
         }
 
-        public void ReadFromPacket (byte[] packet)
+        static public ControllerState ReadFromPacket (byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE) return;
+            if (packet.Length < PACKET_SIZE) return null;
+
+            var state = new ControllerStateBuilder ();
 
             for (int i = 0 ; i < BUTTONS.Length ; ++i) {
                 if (string.IsNullOrEmpty (BUTTONS [i])) continue;
-                _buttons [BUTTONS [i]] = packet[i] != 0x00;
+                state.SetButton (BUTTONS[i], packet[i] != 0x00);
             }
 
-            Func <byte, float> readStick = input => (float)((sbyte)input) / 128;
+            state.SetAnalog ("stick_x", readStick (SignalTool.readByte (packet, BUTTONS.Length    )));
+            state.SetAnalog ("stick_y", readStick (SignalTool.readByte (packet, BUTTONS.Length + 8)));
 
-            _analogs ["stick_x"] = readStick (SignalTool.readByte (packet, BUTTONS.Length    ));
-            _analogs ["stick_y"] = readStick (SignalTool.readByte (packet, BUTTONS.Length + 8));
+            return state.Build ();
         }
     }
 }
