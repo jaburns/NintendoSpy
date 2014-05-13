@@ -52,17 +52,17 @@ This is the most time consuming piece, especially if you have never done any wir
 
 7. Solder each wire back together with your spliced wires, here's what mine looked like when finished I soldered them this way (instead of end-to-end) because this will provide more strain relief against the small controller extension wires possibly breaking with use.
 
-![](http://i.imgur.com/heGzrDes.jpg) 
+![](http://i.imgur.com/heGzrDe.jpg) 
 
 8. After soldering everything back together, test out your extension cable with your game system to see that it still works before proceeding.
 
 9. Use electrical tape to tape up each wire separately.
 
-![](http://i.imgur.com/dOF7cG4s.jpg)
+![](http://i.imgur.com/dOF7cG4.jpg)
 
 10. Again use electrical tape to tape all the wires back together, make sure to tape all the way back up to where the extension cable covering starts
 
-![](http://i.imgur.com/U3MjsdAs.jpg).
+![](http://i.imgur.com/U3MjsdA.jpg).
 
 11. (optional) Wire the spliced cables to a connector to make easy swapping between controllers, you will need the opposite gender connector, pins, and more wires to go to the Arduino.
 
@@ -74,13 +74,13 @@ This is the most time consuming piece, especially if you have never done any wir
 
 Note I am using a breadboard here to just jumper the wires over to the Arduino, it is not needed.
 
-![](http://i.imgur.com/4Ew6CjMs.jpg)
-![](http://i.imgur.com/vimMORKs.jpg)
+![](http://i.imgur.com/4Ew6CjM.jpg)
+![](http://i.imgur.com/vimMORK.jpg)
 
-/// http://i.imgur.com/KpmJnVXs.jpg
-/// http://i.imgur.com/RIUqaEps.jpg
-/// http://i.imgur.com/54HtRdBs.jpg
-/// http://i.imgur.com/iYBCDOts.jpg
+/// http://i.imgur.com/KpmJnVX.jpg
+/// http://i.imgur.com/RIUqaEp.jpg
+/// http://i.imgur.com/54HtRdB.jpg
+/// http://i.imgur.com/iYBCDOt.jpg
 
 #### Software and Setup
 
