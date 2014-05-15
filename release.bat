@@ -18,6 +18,7 @@ cd slimdx\x64
 cd ..\..
 
 "C:\Program Files\7-Zip\7z.exe" a NintendoSpy-release.zip skins
+"C:\Program Files\7-Zip\7z.exe" a NintendoSpy-release.zip firmware
 "C:\Program Files\7-Zip\7z.exe" a NintendoSpy-release.zip keybindings.xml
 
 :end
