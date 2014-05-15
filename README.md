@@ -9,15 +9,13 @@ NintendoSpy
 
 [N64 hardware tutorial](https://github.com/jaburns/NintendoSpy/blob/master/docs/tutorial-n64.md)
 
-### Documentation
-
-#### Using the viewer software
-
-#### Creating your own skins
-
-#### Binding controller inputs to keyboard key presses
-
-### Wiring setup for controller connections
-
 **TODO** The wiring diagram is outdated!  It's missing the NES/SNES clock pin.  Should move the wiring diagram in to the tutorials as well anyway.
 https://github.com/jaburns/NintendoSpy/raw/master/docs/tutorial-images/wiring-all.jpg
+
+## Documentation
+
+### Using the viewer software
+
+### Creating your own skins
+
+### Binding controller inputs to keyboard key presses
