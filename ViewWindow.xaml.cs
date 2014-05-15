@@ -22,7 +22,7 @@ namespace NintendoSpy
         Skin _skin;
         IControllerReader _reader;
         Keybindings _keybindings;
-        LowPassFilter _lowPassFilter = new LowPassFilter ();
+        BlinkReductionFilter _blinkFilter = new BlinkReductionFilter ();
 
         List <Tuple <Skin.Button,Image>> _buttonsWithImages = new List <Tuple <Skin.Button,Image>> ();
         List <Tuple <Skin.RangeButton,Image>> _rangeButtonsWithImages = new List <Tuple <Skin.RangeButton,Image>> ();
@@ -34,9 +34,9 @@ namespace NintendoSpy
 
 
         /// Expose the enabled status of the low-pass filter for data binding.
-        public bool LowPassFilterEnabled {
-            get { return _lowPassFilter.Enabled; }
-            set { _lowPassFilter.Enabled = value;  OnPropertyChanged ("LowPassFilterEnabled"); }
+        public bool BlinkReductionEnabled {
+            get { return _blinkFilter.Enabled; }
+            set { _blinkFilter.Enabled = value;  OnPropertyChanged ("BlinkReductionEnabled"); }
         }
 
 
@@ -146,8 +146,8 @@ namespace NintendoSpy
             this.Topmost = !this.Topmost;
         }
 
-        void LowPassFilterEnabled_Click (object sender, RoutedEventArgs e) {
-            this.LowPassFilterEnabled = !this.LowPassFilterEnabled;
+        void BlinkReductionEnabledEnabled_Click (object sender, RoutedEventArgs e) {
+            this.BlinkReductionEnabled = !this.BlinkReductionEnabled;
         }
 
 
@@ -166,9 +166,7 @@ namespace NintendoSpy
 
         void reader_ControllerStateChanged (IControllerReader reader, ControllerState newState)
         {
-            if (_lowPassFilter.Enabled) {
-                newState = _lowPassFilter.Process (newState);
-            }
+            newState = _blinkFilter.Process (newState);
 
             foreach (var button in _buttonsWithImages) 
             {

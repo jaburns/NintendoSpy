@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace NintendoSpy.Readers
 {
-    public class LowPassFilter
+    public class BlinkReductionFilter
     {
         public bool Enabled { get; set; }
 
         List <ControllerState> _states = new List <ControllerState> ();
 
-        public LowPassFilter ()
+        public BlinkReductionFilter ()
         {
             Enabled = false;
             _states.Add (ControllerState.Zero);
