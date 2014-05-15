@@ -1,26 +1,23 @@
 NintendoSpy
 ======
 
-Live console controller viewer for NES, SNES, N64, and Gamecube controllers.
+[Download the latest NintendoSpy release here.](https://github.com/jaburns/NintendoSpy/releases/latest)  It contains the desktop viewer software as well as the Arduino firmware.  For help setting up the hardware, take a look at the guides here:
 
-#### Downloads
-
-[Download the latest desktop viewer software here.](https://github.com/jaburns/NintendoSpy/releases)
-
-[Download the latest Arduino sketch here.](https://raw.github.com/jaburns/NintendoSpy/master/firmware/firmware.ino)
-
-#### Documentation
-
-[EvilAsh25's hardware building guide](https://github.com/jaburns/NintendoSpy/blob/master/docs/guide-evilash25.md)
+[EvilAsh25's SNES hardware building guide](https://github.com/jaburns/NintendoSpy/blob/master/docs/guide-evilash25.md)
 
 [Gamecube hardware tutorial](https://github.com/jaburns/NintendoSpy/blob/master/docs/tutorial-gamecube.md)
 
 [N64 hardware tutorial](https://github.com/jaburns/NintendoSpy/blob/master/docs/tutorial-n64.md)
 
-[Skin format documentation](https://github.com/jaburns/NintendoSpy/blob/master/docs/skins.md)
+### Documentation
 
-[Keyboard binding documentation](https://github.com/jaburns/NintendoSpy/blob/master/docs/keybindings.md)
+#### Using the viewer software
+
+#### Creating your own skins
+
+#### Binding controller inputs to keyboard key presses
 
 ### Wiring setup for controller connections
 
-![alt text](https://github.com/jaburns/NintendoSpy/raw/master/docs/tutorial-images/wiring-all.jpg "")
+**TODO** The wiring diagram is outdated!  It's missing the NES/SNES clock pin.  Should move the wiring diagram in to the tutorials as well anyway.
+https://github.com/jaburns/NintendoSpy/raw/master/docs/tutorial-images/wiring-all.jpg
