@@ -88,7 +88,7 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 3. Once installed, open the Arduino software, you should see "Arduino Uno on COMX" at the bottom right corner if everything is working. If not, you may need to restart and/or replug the USB connector.
 
-4. Download and unzip the latest release of NintendoSpy somewhere.
+4. Download and unzip the [latest release of NintendoSpy somewhere](https://github.com/jaburns/NintendoSpy/releases/latest).
 
 ![](http://i.imgur.com/KpmJnVX.jpg)
 
