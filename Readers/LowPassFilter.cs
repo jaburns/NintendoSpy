@@ -10,16 +10,40 @@ namespace NintendoSpy.Readers
     {
         public bool Enabled { get; set; }
 
-        public LowPassFilter () {
+        List <ControllerState> _states = new List <ControllerState> ();
+
+        public LowPassFilter ()
+        {
             Enabled = false;
+            _states.Add (ControllerState.Zero);
+            _states.Add (ControllerState.Zero);
+            _states.Add (ControllerState.Zero);
         }
 
-        public ControllerState Process (ControllerState newState)
+        public ControllerState Process (ControllerState state)
         {
-            if (!Enabled) return newState;
+            if (!Enabled) return state;
 
-            // TODO stuff instead of returning zero.
-            return newState;
+            _states.RemoveAt (0);
+            _states.Add (state);
+
+            var stateIsNoise = false;
+
+            foreach (var button in _states[0].Buttons.Keys)
+            {
+                if (_states[0].Buttons[button] == _states[2].Buttons[button] &&
+                    _states[0].Buttons[button] != _states[1].Buttons[button])
+                {
+                    stateIsNoise = true;
+                    break;
+                }
+            }
+
+            if (stateIsNoise) {
+                // TODO check analogs
+            }
+
+            return stateIsNoise ? _states[2] : _states[1];
         }
     }
 }
