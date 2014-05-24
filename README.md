@@ -34,14 +34,27 @@ Once you've selected the input source, you'll have to pick a skin.  Each skin ca
 Each skin consists of a subfolder in the "skins" directory, which is expected to contain a file called ``skin.xml`` along with all the PNG image assets required by the skin.  The easiest way to create a skin for your target console is probably just to copy+paste the default skin and modify it according to your needs.  What follows is a thorough documentation of the skin.xml format for reference if you'd like to create more complex skins.
 
 The root node of the ``skin.xml`` file must define the following 3 attributes:
-```xml
-<skin name="Default PC 360" <!-- hi -->
-      author="jaburns"
-      type="pc360">
-  ...
-</skin>
 ```
-``
+<skin name="Default PC 360" # This is the name of the skin as it will appear in the selection list.
+      author="jaburns"      # Your name or handle.
+      type="pc360">         # The input type this skin is used for.
+```
+Valid values for the ``type`` attribute are as follows: ``nes``, ``snes``, ``n64``, ``gamecube``, ``pc360``, ``generic``. 
+
+Each skin must define at least one ``<background>`` element.  Each background entry will be listed in the skin selector as a separate entry.  Every background for your skin must have the same dimensions.
+```
+<background name="Default"     # The name which will appear in the selection list.
+            image="pad.png" /> # The PNG file to use for this background selection.
+```
+The rest of the ``skin.xml`` file defines how to render button and analog inputs.  Each type exposes a variety of buttons and analog values.  Button inputs are mapped to images at specific locations using the ``<button>`` tag, and there is a small variety of possible ways to map analog inputs.
+
+```
+<button name="up"          # Name of the source input button to map this image to.
+        image="circle.png" # Image file to display when this input is pressed.
+        x="101" y="71"     # Location in pixels where the top/left corner of the image should sit.
+        width="16"         # width and height specification can OPTIONALLY be used to scale
+        height="16" />     #   an image to a specific size.  The default size is the orignal image size.
+```
 
 ### Binding controller inputs to keyboard key presses
 
