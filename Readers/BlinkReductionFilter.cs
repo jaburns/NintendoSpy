@@ -39,9 +39,7 @@ namespace NintendoSpy.Readers
                 }
             }
 
-            if (stateIsNoise) {
-                // TODO check analogs
-            }
+            // TODO check analogs for erratic movement if no noise detected in buttons
 
             return stateIsNoise ? _states[2] : _states[1];
         }
