@@ -146,7 +146,7 @@ namespace NintendoSpy
             this.Topmost = !this.Topmost;
         }
 
-        void BlinkReductionEnabledEnabled_Click (object sender, RoutedEventArgs e) {
+        void BlinkReductionEnabled_Click (object sender, RoutedEventArgs e) {
             this.BlinkReductionEnabled = !this.BlinkReductionEnabled;
         }
 
