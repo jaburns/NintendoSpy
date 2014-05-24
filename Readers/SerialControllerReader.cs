@@ -33,7 +33,10 @@ namespace NintendoSpy.Readers
         void serialMonitor_PacketReceived (object sender, byte[] packet)
         {
             if (ControllerStateChanged != null) {
-                ControllerStateChanged (this, _packetParser (packet));
+                var state = _packetParser (packet);
+                if (state != null) {
+                    ControllerStateChanged (this, state);
+                }
             }
         }
 
