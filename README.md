@@ -19,3 +19,7 @@ https://github.com/jaburns/NintendoSpy/raw/master/docs/tutorial-images/wiring-al
 ### Creating your own skins
 
 ### Binding controller inputs to keyboard key presses
+
+### Wiring and hardware
+
+![](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/wiring-all.png)
