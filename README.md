@@ -1,8 +1,7 @@
 NintendoSpy
 ======
 
-***[Download the latest NintendoSpy release here.](https://github.com/jaburns/NintendoSpy/releases/latest)***
-It contains the desktop viewer software as well as the Arduino firmware.
+#### [Download the latest NintendoSpy release here.](https://github.com/jaburns/NintendoSpy/releases/latest)
 
 This project provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.
 
@@ -12,7 +11,7 @@ NintendoSpy supports custom skins using a straight-forward XML-based skin format
 
 ### Wiring and hardware
 
-The general design of NintendoSpy involves splicing the controller wire, and attaching the appropriate signal wires to an Arduino.  For more in-depth tutorials on how to do this, check out some of the links below.
+The general design of NintendoSpy involves splicing the controller wire, and attaching the appropriate signal wires to an Arduino.  Then you just need to install the Arduino firmware packaged in the NintendoSpy release, and run the viewer software.  For more in-depth tutorials on how to do this, check out some of the links below.
 
 ![](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/wiring-all.png)
 
@@ -24,7 +23,11 @@ The general design of NintendoSpy involves splicing the controller wire, and att
 
 ### Using the viewer software
 
+Once you've unzipped the NintendoSpy release, run NintendoSpy.exe to open the controller viewer.  You'll be greeted by the input source configuration screen, which is fairly straightforward to configure.  First select the console your NintendoSpy hardware is set up to view, "PC 360", or "Generic PC Gamepad".  For the latter 2 choices, COM port is irrelevant since the device is expected to simply interface over standard USB.  If you select a Nintendo console however, you'll have to select the COM port the Arduino is communicating over.  Honestly, the easiest way to figure this out is to just try each port.  There are never many in the list, and it does no harm to pick the wrong one other than you won't see any inputs.
+
 ![](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/interface.png)
+
+Once you've selected the input source, you'll have to pick a skin.  Each skin can have multiple backgrounds, which are generally used to provide various colors for the controller itself.  After picked a skin, hit "Go!" and you should see the viewer screen.
 
 ### Creating your own skins
 
