@@ -35,25 +35,52 @@ Each skin consists of a subfolder in the "skins" directory, which is expected to
 
 The root node of the ``skin.xml`` file must define the following 3 attributes:
 ```
-<skin name="Default PC 360" # This is the name of the skin as it will appear in the selection list.
-      author="jaburns"      # Your name or handle.
-      type="pc360">         # The input type this skin is used for.
+<skin
+    name="Default PC 360" # This is the name of the skin as it will appear in the selection list.
+    author="jaburns"      # Your name or handle.
+    type="pc360">         # The input type this skin is used for.
 ```
 Valid values for the ``type`` attribute are as follows: ``nes``, ``snes``, ``n64``, ``gamecube``, ``pc360``, ``generic``. 
 
 Each skin must define at least one ``<background>`` element.  Each background entry will be listed in the skin selector as a separate entry.  Every background for your skin must have the same dimensions.
 ```
-<background name="Default"     # The name which will appear in the selection list.
-            image="pad.png" /> # The PNG file to use for this background selection.
+<background
+    name="Default"     # The name which will appear in the selection list.
+    image="pad.png" /> # The PNG file to use for this background selection.
 ```
 The rest of the ``skin.xml`` file defines how to render button and analog inputs.  Each type exposes a variety of buttons and analog values.  Button inputs are mapped to images at specific locations using the ``<button>`` tag, and there is a small variety of possible ways to map analog inputs.
 
 ```
-<button name="up"          # Name of the source input button to map this image to.
-        image="circle.png" # Image file to display when this input is pressed.
-        x="101" y="71"     # Location in pixels where the top/left corner of the image should sit.
-        width="16"         # width and height specification can OPTIONALLY be used to scale
-        height="16" />     #   an image to a specific size.  The default size is the orignal image size.
+<button
+    name="up"          # Name of the source input button to map this image to.
+    image="circle.png" # Image file to display when this input is pressed.
+    x="101" y="71"     # Location in pixels where the top/left corner of the image should sit.
+    width="16"         # width and height specification can OPTIONALLY be used to scale
+    height="16" />     #   an image to a specific size.  The default size is the orignal image size.
+```
+Analog values can be mapping as sticks, ranges, or range-based buttons.  Ranges are used for things like analog shoulder buttons and render by filling an image by the amount the range is pressed.  Range buttons are useful for creating a button-like display when an analog value is in a certain ranage.  An example of this use case is if you are streaming a SNES game, but playing using a 360 controller, you can bind the analog stick to appear as if you are pressing the d-pad buttons.
+```
+<stick
+    xname="lstick_x"  #
+    yname="lstick_y"  #
+    image="stick.png" #
+    x="53" y="31"     #
+    width="34"        #
+    height="35"       #
+    xrange="9"        #
+    yrange="9" />     #
+```
+```
+<analog
+    name="trig_l"
+    image="trig-l.png"
+    x="15" y="18"
+    direction="up"     # The direction to sweep the image. Valid options are 'up', 'down', 'left', 'right'
+    reverse="true" />
+```
+```
+<rangebutton
+/>
 ```
 
 ### Binding controller inputs to keyboard key presses
