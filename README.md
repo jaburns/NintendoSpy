@@ -97,7 +97,7 @@ Analog values can be mapping as sticks, ranges, or range-based buttons.  Ranges 
 ### Binding controller inputs to keyboard key presses
 
 Binding controller inputs to keyboard key presses is achieved by placing ``<binding>`` definitions
-in the ``keybindings.xml`` file.  The ``output-key`` attribute on the binding specifies which keyboard key to press when the provided gamepad buttons are pressed.  Values of ``output-key`` can simply be letters, or [see here other for valid key bindings.](https://github.com/jaburns/NintendoSpy/blob/master/Keybindings.cs#L110).  Each binding must contain at least one child ``<input>`` element.  The input elements specify which buttons on the controller must be depressed in order to send the key press signal.  See below for an example ``keybindings.xml`` file which makes pressing L and R together trigger a ``home`` key press on the keyboard.
+in the ``keybindings.xml`` file.  The ``output-key`` attribute on the binding specifies which keyboard key to press when the provided gamepad buttons are pressed.  Values of ``output-key`` can simply be letters, or [see here other for valid key bindings (the text in red are the acceptable values for ``output-key``)](https://github.com/jaburns/NintendoSpy/blob/master/Keybindings.cs#L110).  Each binding must contain at least one child ``<input>`` element.  The input elements specify which buttons on the controller must be depressed in order to send the key press signal.  See below for an example ``keybindings.xml`` file which makes pressing L and R together trigger a ``home`` key press on the keyboard.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
