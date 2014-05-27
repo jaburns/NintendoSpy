@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="May Flash N64 Adapter (High-Res)" author="Forstride / iotku" type="generic">
     <background name="Grey" image="../n64-highres/pad-grey.png" />
-	<background name="Black" image="../n64-highres/pad-black.png" />
-	<background name="Red" image="../n64-highres/pad-red.png" />
-	<background name="Orange" image="../n64-highres/pad-orange.png" />
-	<background name="Yellow" image="../n64-highres/pad-yellow.png" />
-	<background name="Lime Green" image="../n64-highres/pad-lime.png" />
-	<background name="Green" image="../n64-highres/pad-green.png" />
-	<background name="Aqua" image="../n64-highres/pad-aqua.png" />
-	<background name="Light Blue" image="../n64-highres/pad-lightblue.png" />
-	<background name="Blue" image="../n64-highres/pad-blue.png" />
-	<background name="Purple" image="../n64-highres/pad-purple.png" />
-	<background name="Pink" image="../n64-highres/pad-pink.png" />
-	<background name="Gold" image="../n64-highres/pad-gold.png" />
-	<background name="Millennium 2000" image="../n64-highres/pad-2000.png" />
-	<background name="Donkey Kong 64" image="../n64-highres/pad-dk.png" />
-	<background name="Pokemon" image="../n64-highres/pad-pokemon.png" />
-	<background name="Banjo-Kazooie (Custom)" image="../n64-highres/pad-banjo.png" />
-	<background name="Chameleon Twist (Custom)" image="../n64-highres/pad-twist.png" />
-	<background name="The Legend of Zelda (Custom)" image="../n64-highres/pad-zelda.png" />
+    <background name="Black" image="../n64-highres/pad-black.png" />
+    <background name="Red" image="../n64-highres/pad-red.png" />
+    <background name="Orange" image="../n64-highres/pad-orange.png" />
+    <background name="Yellow" image="../n64-highres/pad-yellow.png" />
+    <background name="Lime Green" image="../n64-highres/pad-lime.png" />
+    <background name="Green" image="../n64-highres/pad-green.png" />
+    <background name="Aqua" image="../n64-highres/pad-aqua.png" />
+    <background name="Light Blue" image="../n64-highres/pad-lightblue.png" />
+    <background name="Blue" image="../n64-highres/pad-blue.png" />
+    <background name="Purple" image="../n64-highres/pad-purple.png" />
+    <background name="Pink" image="../n64-highres/pad-pink.png" />
+    <background name="Gold" image="../n64-highres/pad-gold.png" />
+    <background name="Millennium 2000" image="../n64-highres/pad-2000.png" />
+    <background name="Donkey Kong 64" image="../n64-highres/pad-dk.png" />
+    <background name="Pokemon" image="../n64-highres/pad-pokemon.png" />
+    <background name="Banjo-Kazooie (Custom)" image="../n64-highres/pad-banjo.png" />
+    <background name="Chameleon Twist (Custom)" image="../n64-highres/pad-twist.png" />
+    <background name="The Legend of Zelda (Custom)" image="../n64-highres/pad-zelda.png" />
 
-	<button name="b1" image="../n64-highres/button-face.png" x="624" y="318" width="80" height="80" />
+    <button name="b1" image="../n64-highres/button-face.png" x="624" y="318" width="80" height="80" />
     <button name="b2" image="../n64-highres/button-face.png" x="563" y="259" width="80" height="80" />
     <button name="b8" image="../n64-highres/button-z.png" x="278" y="461" width="68" height="140" />
     <button name="b9" image="../n64-highres/button-face.png" x="399" y="259" width="93" height="94" />
