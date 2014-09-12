@@ -68,7 +68,10 @@ Analog values can be mapping as sticks, ranges, or range-based buttons.  Ranges 
     width="34"        # Width and height specification can OPTIONALLY be used to scale 
     height="35"       #   an image to a specific size.  The default size is the orignal image size.
     xrange="9"        # xrange and yrange specify how much to move the stick image in either axis
-    yrange="9" />     #   when the stick is deplaced.
+    yrange="9"        #   when the stick is deplaced.
+    xreverse="false"  # Settings xreverse or yreverse to true will reverse the direction
+    yreverse="true"   #   that the stick moves along that axis
+    />     
 ```
 ```
 <analog
