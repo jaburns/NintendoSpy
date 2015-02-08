@@ -70,9 +70,13 @@ namespace NintendoSpy
             this.Hide ();
 
             try {
+                var reader = _vm.Sources.SelectedItem.BuildReader(_vm.Ports.SelectedItem);
+                if (_vm.DelayInMilliseconds > 0)
+                    reader = new DelayedControllerReader(reader, _vm.DelayInMilliseconds);
+
                 new ViewWindow (_vm.Skins.SelectedItem,
                                 _vm.Backgrounds.SelectedItem, 
-                                _vm.Sources.SelectedItem.BuildReader (_vm.Ports.SelectedItem))
+                                reader)
                     .ShowDialog ();
             }
 #if DEBUG
@@ -131,6 +135,7 @@ namespace NintendoSpy
         public ListView <Skin> Skins { get; set; }
         public ListView <Skin.Background> Backgrounds { get; set; }
         public ListView <InputSource> Sources { get; set; }
+        public int DelayInMilliseconds { get; set; }
 
         Visibility _comPortOptionVisibility;
         public Visibility ComPortOptionVisibility {

@@ -61,6 +61,7 @@
     <Compile Include="Keybindings.cs" />
     <Compile Include="Readers\ControllerStateBuilder.cs" />
     <Compile Include="Readers\ControllerState.cs" />
+    <Compile Include="Readers\DelayedControllerReader.cs" />
     <Compile Include="Readers\GameCube.cs" />
     <Compile Include="Readers\IControllerReader.cs" />
     <Compile Include="Readers\BlinkReductionFilter.cs" />
