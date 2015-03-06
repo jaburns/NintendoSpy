@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="StarkNebula's GC Skin" author="Starknebula" type="gamecube">
+  
+  	<!-- Load Controller images - Menu name, file path + name, read in order -->
+  	<!-- Any new image/skin you make must have it's own entry in here! -->
+    <background name="Black" image="GCN_Controllers\\GCN_Controller_Black.png" />
+	<background name="Blue"  image="GCN_Controllers\\GCN_Controller_Blue.png" />
+    <background name="Green" image="GCN_Controllers\\GCN_Controller_Green.png" />
+    <background name="Hot Pink" image="GCN_Controllers\\GCN_Controller_Hot_Pink.png" />
+    <background name="Ice Blue" image="GCN_Controllers\\GCN_Controller_Ice_Blue.png" />
+    <background name="Indigo" image="GCN_Controllers\\GCN_Controller_Indigo.png" />
+    <background name="Lime Green" image="GCN_Controllers\\GCN_Controller_Lime_Green.png" />
+    <background name="Red" image="GCN_Controllers\\GCN_Controller_Red.png" />
+    <background name="Silver" image="GCN_Controllers\\GCN_Controller_Silver.png" />
+    <background name="Spice Orange" image="GCN_Controllers\\GCN_Controller_Spice_Orange.png" />
+    <background name="Tropical Pink" image="GCN_Controllers\\GCN_Controller_Tropical_Pink.png" />
+    <background name="White" image="GCN_Controllers\\GCN_Controller_White.png" />
+    <background name="Yellow" image="GCN_Controllers\\GCN_Controller_Yellow.png" />
+
+
+	<!-- Face buttons. No need to specify width/height unless you want to transform image size -->
+    <button name="a" image="GCN_Buttons\\A.png" x="473" y="138" />
+    <button name="b" image="GCN_Buttons\\B.png" x="416" y="189" />
+    <button name="x" image="GCN_Buttons\\X.png" x="558" y="127" />
+    <button name="y" image="GCN_Buttons\\Y.png" x="457" y="89" />
+    <button name="z" image="GCN_Buttons\\Z.png" x="584" y="50" />
+  
+    <button name="start" image="GCN_Buttons\\Start.png" x="302" y="164" />
+
+
+	<!-- L/R triggers and the pressure bar associated with them -->
+    <button name="r" image="GCN_Buttons\\R.png" x="468" y="16" />
+    <analog name="trig_r" image="GCN_Buttons\\R-bar.png" x="440" y="4" direction="right" reverse="false" height="8" />
+
+    <button name="l" image="GCN_Buttons\\L.png" x="58" y="16" />
+    <analog name="trig_l" image="GCN_Buttons\\L-bar.png" x="40" y="4" direction="left" reverse="false" height="8"/>
+
+
+	<!-- D-Pad -->
+    <button name="up" image="GCN_Buttons\\Dpad-Up.png" x="202" y="276" />
+    <button name="down" image="GCN_Buttons\\Dpad-Down.png" x="202" y="336" />
+    <button name="left" image="GCN_Buttons\\Dpad-Left.png" x="172" y="306" />
+    <button name="right" image="GCN_Buttons\\Dpad-Right.png" x="232" y="306" />
+
+
+	<!-- Analogue & C-Stick - xrange = how far the image moves from it's center point when tilted -->
+    <stick xname="lstick_x" yname="lstick_y" image="GCN_Buttons\\Analogue-Stick.png" x="83" y="139" xrange="32" yrange="32"/>
+    <stick xname="cstick_x" yname="cstick_y" image="GCN_Buttons\\C-Stick.png" x="395" y="291" xrange="30" yrange="30"/>
+
+</skin>
