@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Glossy GameCube Skins" author="StarkNebula" type="gamecube">
+<skin name="Simple GameCube Skin" author="StarkNebula" type="gamecube">
   
   	<!-- Load Controller images - Menu name, file path + name, read in order -->
   	<!-- Any new image/skin you make must have it's own entry in here! -->
-    <background name="Black" image="GCN_Controllers\\GCN_Controller_Black.png" />
-    <background name="Blue"  image="GCN_Controllers\\GCN_Controller_Blue.png" />
-    <background name="Green" image="GCN_Controllers\\GCN_Controller_Green.png" />
-    <background name="Hot Pink" image="GCN_Controllers\\GCN_Controller_Hot_Pink.png" />
-    <background name="Ice Blue" image="GCN_Controllers\\GCN_Controller_Ice_Blue.png" />
-    <background name="Indigo" image="GCN_Controllers\\GCN_Controller_Indigo.png" />
-    <background name="Lime Green" image="GCN_Controllers\\GCN_Controller_Lime_Green.png" />
-    <background name="Red" image="GCN_Controllers\\GCN_Controller_Red.png" />
-    <background name="Silver" image="GCN_Controllers\\GCN_Controller_Silver.png" />
-    <background name="Spice Orange" image="GCN_Controllers\\GCN_Controller_Spice_Orange.png" />
-    <background name="Tropical Pink" image="GCN_Controllers\\GCN_Controller_Tropical_Pink.png" />
-    <background name="White" image="GCN_Controllers\\GCN_Controller_White.png" />
-    <background name="Yellow" image="GCN_Controllers\\GCN_Controller_Yellow.png" />
+    <background name="Black" image="GCN_Controllers\\GCN_NintendoSpy_Black_No_Frills.png" />
 
 
 	<!-- Face buttons. No need to specify width/height unless you want to transform image size -->
