@@ -9,6 +9,7 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
+// Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
 // The only reason you'd want to use 2-wire SNES mode is if you built a NintendoSpy
@@ -231,11 +232,11 @@ void loop()
 #elif defined MODE_NES
     loop_NES();
 #elif defined MODE_DETECT
-    if( PINC_READ( MODEPIN_SNES ) ) {
+    if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
-    } else if( PINC_READ( MODEPIN_N64 ) ) {
+    } else if( !PINC_READ( MODEPIN_N64 ) ) {
         loop_N64();
-    } else if( PINC_READ( MODEPIN_GC ) ) {
+    } else if( !PINC_READ( MODEPIN_GC ) ) {
         loop_GC();
     } else {
         loop_NES();
