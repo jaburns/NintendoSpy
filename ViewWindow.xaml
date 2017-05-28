@@ -3,10 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ViewWindow" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="CanMinimize" Closing="Window_Closing">
     <Grid Name="ControllerGrid" Width="300" Height="300" VerticalAlignment="Top" HorizontalAlignment="Left">
+        
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Always On Top" Click="AlwaysOnTop_Click" IsChecked="{Binding Topmost}" />
-                <MenuItem Header="Blink Reduction" Click="BlinkReductionEnabled_Click" IsChecked="{Binding BlinkReductionEnabled}" />
+                
+                <MenuItem Header="Blink Reduction:" Click="AllBlinkReductionEnabled_Click" IsChecked="{Binding AllBlinkReductionEnabled}" />
+                <!-- Four spaces to indicate group - unsure what's preferred on Windows UI design-->
+                <MenuItem Header="    Button Blink Reduction" Click="ButtonBlinkReductionEnabled_Click" IsChecked="{Binding ButtonBlinkReductionEnabled}" />
+                <MenuItem Header="    Analog Blink Reduction" Click="AnalogBlinkReductionEnabled_Click" IsChecked="{Binding AnalogBlinkReductionEnabled}" />
+                <MenuItem Header="    Mass Blink Reduction" Click="MassBlinkReductionEnabled_Click" IsChecked="{Binding MassBlinkReductionEnabled}" />
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>

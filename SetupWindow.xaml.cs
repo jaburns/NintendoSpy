@@ -19,6 +19,7 @@ namespace NintendoSpy
     {
         SetupWindowViewModel _vm;
         DispatcherTimer _portListUpdateTimer;
+        DispatcherTimer _xiAndGamepadListUpdateTimer;
         List <Skin> _skins;
 
         public SetupWindow ()
@@ -41,17 +42,38 @@ namespace NintendoSpy
             }
 
             _vm.Skins.UpdateContents (_skins.Where (x => x.Type == InputSource.DEFAULT));
+            
 
             _vm.Sources.UpdateContents (InputSource.ALL);
-            _vm.Sources.SelectedItem = InputSource.DEFAULT;
+            
+
+            _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
 
             _portListUpdateTimer = new DispatcherTimer ();
             _portListUpdateTimer.Interval = TimeSpan.FromSeconds (1);
             _portListUpdateTimer.Tick += (sender, e) => updatePortList ();
             _portListUpdateTimer.Start ();
 
+            _xiAndGamepadListUpdateTimer = new DispatcherTimer();
+            _xiAndGamepadListUpdateTimer.Interval = TimeSpan.FromSeconds(2);
+            _xiAndGamepadListUpdateTimer.Tick += (sender, e) =>
+            {
+                if (_vm.Sources.SelectedItem == InputSource.PAD)
+                {
+                    updateGamepadList();
+                }
+                else if (_vm.Sources.SelectedItem == InputSource.PC360)
+                {
+                    updateXIList();
+                }
+            };
+            _xiAndGamepadListUpdateTimer.Start();
+
             updatePortList ();
             _vm.Ports.SelectFirst ();
+            _vm.XIAndGamepad.SelectFirst();
+            _vm.Sources.SelectId(Properties.Settings.Default.Source);
+            _vm.Skins.SelectId(Properties.Settings.Default.Skin);
         }
 
         void showSkinParseErrors (List <string> errs) {
@@ -65,12 +87,38 @@ namespace NintendoSpy
             _vm.Ports.UpdateContents (SerialPort.GetPortNames ());
         }
 
+        void updateGamepadList()
+        {
+            _vm.XIAndGamepad.UpdateContents(GamepadReader.GetDevices());
+        }
+
+        void updateXIList()
+        {
+            _vm.XIAndGamepad.UpdateContents(XInputReader.GetDevices());
+        }
+
         void goButton_Click (object sender, RoutedEventArgs e) 
         {
             this.Hide ();
+            Properties.Settings.Default.Source = _vm.Sources.GetSelectedId();
+            Properties.Settings.Default.Skin = _vm.Skins.GetSelectedId();
+            Properties.Settings.Default.Delay = _vm.DelayInMilliseconds;
+            Properties.Settings.Default.Background = _vm.Backgrounds.GetSelectedId();
+            Properties.Settings.Default.Save();
 
             try {
-                var reader = _vm.Sources.SelectedItem.BuildReader(_vm.Ports.SelectedItem);
+                IControllerReader reader; 
+                if(_vm.Sources.SelectedItem == InputSource.PAD)
+                {
+                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
+                }
+                else if (_vm.Sources.SelectedItem == InputSource.PC360)
+                {
+                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
+                }
+                else {
+                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.Ports.SelectedItem);
+                }
                 if (_vm.DelayInMilliseconds > 0)
                     reader = new DelayedControllerReader(reader, _vm.DelayInMilliseconds);
 
@@ -94,8 +142,16 @@ namespace NintendoSpy
         {
             if (_vm.Sources.SelectedItem == null) return;
             _vm.ComPortOptionVisibility = _vm.Sources.SelectedItem.RequiresComPort ? Visibility.Visible : Visibility.Hidden;
+            _vm.XIAndGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresId ? Visibility.Visible : Visibility.Hidden;
+            updateGamepadList();
+            updateXIList();
+            updatePortList();
             _vm.Skins.UpdateContents (_skins.Where (x => x.Type == _vm.Sources.SelectedItem));
             _vm.Skins.SelectFirst ();
+            if(_vm.Sources.GetSelectedId() == Properties.Settings.Default.Source)
+            {
+                _vm.Skins.SelectId(Properties.Settings.Default.Skin);
+            }
         }
 
         private void Skin_SelectionChanged (object sender, SelectionChangedEventArgs e)
@@ -103,6 +159,10 @@ namespace NintendoSpy
             if (_vm.Skins.SelectedItem == null) return;
             _vm.Backgrounds.UpdateContents (_vm.Skins.SelectedItem.Backgrounds);
             _vm.Backgrounds.SelectFirst ();
+            if (_vm.Skins.GetSelectedId() == Properties.Settings.Default.Skin)
+            {
+                _vm.Backgrounds.SelectId(Properties.Settings.Default.Background);
+            }
         }
     }
 
@@ -129,9 +189,31 @@ namespace NintendoSpy
             public void SelectFirst () {
                 if (_items.Count > 0) SelectedItem = _items [0];
             }
+
+            public void SelectId(int id)
+            {
+                if (_items.Count > 0 && id >= 0 && id < _items.Count)
+                {
+                    SelectedItem = _items[id];
+                }
+                else
+                {
+                    SelectFirst();
+                }
+            }
+
+            public int GetSelectedId()
+            {
+                if( SelectedItem != null)
+                {
+                    return _items.IndexOf(SelectedItem);
+                }
+                return -1;
+            }
         }
 
         public ListView <string> Ports { get; set; }
+        public ListView <uint> XIAndGamepad { get; set; }
         public ListView <Skin> Skins { get; set; }
         public ListView <Skin.Background> Backgrounds { get; set; }
         public ListView <InputSource> Sources { get; set; }
@@ -146,8 +228,20 @@ namespace NintendoSpy
             }
         }
 
+        Visibility _XIAndGamepadOptionVisibility;
+        public Visibility XIAndGamepadOptionVisibility
+        {
+            get { return _XIAndGamepadOptionVisibility; }
+            set
+            {
+                _XIAndGamepadOptionVisibility = value;
+                NotifyPropertyChanged("XIAndGamepadOptionVisibility");
+            }
+        }
+
         public SetupWindowViewModel () {
             Ports   = new ListView <string> ();
+            XIAndGamepad = new ListView<uint>();
             Skins   = new ListView <Skin> ();
             Sources = new ListView <InputSource> ();
             Backgrounds = new ListView <Skin.Background> ();

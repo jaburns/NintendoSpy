@@ -3,20 +3,86 @@
   
   	<!-- Load Controller images - Menu name, file path + name, read in order -->
   	<!-- Any new image/skin you make must have it's own entry in here! -->
-    <background name="Black" image="GCN_Controllers\\GCN_Controller_Black.png" />
-    <background name="Blue"  image="GCN_Controllers\\GCN_Controller_Blue.png" />
-    <background name="Green" image="GCN_Controllers\\GCN_Controller_Green.png" />
-    <background name="Hot Pink" image="GCN_Controllers\\GCN_Controller_Hot_Pink.png" />
-    <background name="Ice Blue" image="GCN_Controllers\\GCN_Controller_Ice_Blue.png" />
-    <background name="Indigo" image="GCN_Controllers\\GCN_Controller_Indigo.png" />
-    <background name="Lime Green" image="GCN_Controllers\\GCN_Controller_Lime_Green.png" />
-    <background name="Red" image="GCN_Controllers\\GCN_Controller_Red.png" />
-    <background name="Silver" image="GCN_Controllers\\GCN_Controller_Silver.png" />
-    <background name="Spice Orange" image="GCN_Controllers\\GCN_Controller_Spice_Orange.png" />
-    <background name="Tropical Pink" image="GCN_Controllers\\GCN_Controller_Tropical_Pink.png" />
-    <background name="White" image="GCN_Controllers\\GCN_Controller_White.png" />
-    <background name="Yellow" image="GCN_Controllers\\GCN_Controller_Yellow.png" />
+    <background name="No Springs" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Black.png" />
+    <background name="No Springs Chroma (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Black.png" />
 
+    <background name="Black on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Black.png" />
+	<background name="Black on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Black.png" />
+	<background name="Black on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Black.png" />
+	<background name="Black on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Black.png" />
+	<background name="Black on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Black.png" />
+
+	<background name="Blue on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Blue.png" />
+	<background name="Blue on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Blue.png" />
+	<background name="Blue on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Blue.png" />
+	<background name="Blue on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Blue.png" />
+	<background name="Blue on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Blue.png" />
+
+	<background name="Green on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Green.png" />
+	<background name="Green on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Green.png" />
+	<background name="Green on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Green.png" />
+	<background name="Green on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Green.png" />
+	<background name="Green on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Green.png" />
+
+	<background name="Hot Pink on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Hot_Pink.png" />
+	<background name="Hot Pink on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Hot_Pink.png" />
+	<background name="Hot Pink on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Hot_Pink.png" />
+	<background name="Hot Pink on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Hot_Pink.png" />
+	<background name="Hot Pink on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Hot_Pink.png" />
+
+	<background name="Ice Blue on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Ice_Blue.png" />
+	<background name="Ice Blue on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Ice_Blue.png" />
+	<background name="Ice Blue on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Ice_Blue.png" />
+	<background name="Ice Blue on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Ice_Blue.png" />
+	<background name="Ice Blue on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Ice_Blue.png" />
+
+	<background name="Indigo on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Indigo.png" />
+	<background name="Indigo on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Indigo.png" />
+	<background name="Indigo on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Indigo.png" />
+	<background name="Indigo on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Indigo.png" />
+	<background name="Indigo on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Indigo.png" />
+
+	<background name="Lime Green on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Lime_Green.png" />
+	<background name="Lime Green on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Lime_Green.png" />
+	<background name="Lime Green on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Lime_Green.png" />
+	<background name="Lime Green on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Lime_Green.png" />
+	<background name="Lime Green on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Lime_Green.png" />
+
+	<background name="Red on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Red.png" />
+	<background name="Red on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Red.png" />
+	<background name="Red on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Red.png" />
+	<background name="Red on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Red.png" />
+	<background name="Red on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Red.png" />
+
+	<background name="Silver on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Silver.png" />
+	<background name="Silver on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Silver.png" />
+	<background name="Silver on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Silver.png" />
+	<background name="Silver on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Silver.png" />
+	<background name="Silver on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Silver.png" />
+
+	<background name="Spice Orange on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Spice_Orange.png" />
+	<background name="Spice Orange on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Spice_Orange.png" />
+	<background name="Spice Orange on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Spice_Orange.png" />
+	<background name="Spice Orange on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Spice_Orange.png" />
+	<background name="Spice Orange on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Spice_Orange.png" />
+
+	<background name="Tropical Pink on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Tropical_Pink.png" />
+	<background name="Tropical Pink on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Tropical_Pink.png" />
+	<background name="Tropical Pink on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Tropical_Pink.png" />
+	<background name="Tropical Pink on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Tropical_Pink.png" />
+	<background name="Tropical Pink on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Tropical_Pink.png" />
+
+	<background name="White on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_White.png" />
+	<background name="White on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_White.png" />
+	<background name="White on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_White.png" />
+	<background name="White on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_White.png" />
+	<background name="White on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_White.png" />
+
+	<background name="Yellow on Green (#00FF00)" color="#00FF00" image="GCN_Controllers\\GCN_Controller_Yellow.png" />
+	<background name="Yellow on Magenta (#FF00FF)" color="#FF00FF" image="GCN_Controllers\\GCN_Controller_Yellow.png" />
+	<background name="Yellow on Blue (#0000FF)" color="#0000FF" image="GCN_Controllers\\GCN_Controller_Yellow.png" />
+	<background name="Yellow on Black (#000000)" color="#000000" image="GCN_Controllers\\GCN_Controller_Yellow.png" />
+	<background name="Yellow on White (#FFFFFF)" color="#FFFFFF" image="GCN_Controllers\\GCN_Controller_Yellow.png" />
 
 	<!-- Face buttons. No need to specify width/height unless you want to transform image size -->
     <button name="a" image="GCN_Buttons\\A.png" x="473" y="138" />
@@ -27,13 +93,14 @@
   
     <button name="start" image="GCN_Buttons\\Start.png" x="302" y="164" />
 
+    <detail name="no_springs_text" x="0" y="480" image="no-springs-text.png" target="No Springs;No Springs Chroma (#0000FF)"/>
 
 	<!-- L/R triggers and the pressure bar associated with them -->
     <button name="r" image="GCN_Buttons\\R.png" x="468" y="16" />
-    <analog name="trig_r" image="GCN_Buttons\\R-bar.png" x="440" y="4" direction="right" reverse="false" height="8" />
+    <analog name="trig_r" image="GCN_Buttons\\R-bar.png" x="440" y="4" direction="right" reverse="false" height="8" ignore="No Springs;No Springs Chroma (#0000FF)" />
 
     <button name="l" image="GCN_Buttons\\L.png" x="58" y="16" />
-    <analog name="trig_l" image="GCN_Buttons\\L-bar.png" x="40" y="4" direction="left" reverse="false" height="8"/>
+    <analog name="trig_l" image="GCN_Buttons\\L-bar.png" x="40" y="4" direction="left" reverse="false" height="8" ignore="No Springs;No Springs Chroma (#0000FF)" />
 
 
 	<!-- D-Pad -->
