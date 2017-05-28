@@ -30,9 +30,26 @@ namespace NintendoSpy.Readers
             public Int16 sThumbRY;
         }
 
-        static class XInputDLL {
+ 
+   
+
+    static class XInputDLL {
             [DllImport("xinput9_1_0.dll")]
             static public extern uint XInputGetState (uint userIndex, ref XInputState inputState);
+        }
+
+        public static List<uint> GetDevices()
+        {
+            var result = new List<uint>();
+            var dummy = new XInputState();
+            for (uint i = 0; i < 4; i++) //Poll all 4 possible controllers to see which are connected, thats how it works :/
+            {
+                if (XInputDLL.XInputGetState(i, ref dummy) == 0)
+                {
+                    result.Add(i);
+                }
+            }
+            return result;
         }
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -40,9 +57,10 @@ namespace NintendoSpy.Readers
         const double TIMER_MS = 30;
 
         DispatcherTimer _timer;
-
-        public XInputReader ()
+        uint _id = 0;
+        public XInputReader (uint id = 0)
         {
+            _id = id;
             _timer = new DispatcherTimer ();
             _timer.Interval = TimeSpan.FromMilliseconds (TIMER_MS);
             _timer.Tick += tick;
@@ -52,8 +70,7 @@ namespace NintendoSpy.Readers
         void tick (object sender, EventArgs e)
         {
             var state = new XInputState ();
-
-            if (XInputDLL.XInputGetState (0, ref state) > 0) {
+            if (XInputDLL.XInputGetState (_id, ref state) > 0) {
                 if (ControllerDisconnected != null) ControllerDisconnected (this, EventArgs.Empty);
                 Finish ();
                 return;

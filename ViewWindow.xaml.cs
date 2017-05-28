@@ -34,12 +34,38 @@ namespace NintendoSpy
 
 
         /// Expose the enabled status of the low-pass filter for data binding.
-        public bool BlinkReductionEnabled {
-            get { return _blinkFilter.Enabled; }
-            set { _blinkFilter.Enabled = value;  OnPropertyChanged ("BlinkReductionEnabled"); }
+        public bool ButtonBlinkReductionEnabled {
+            get { return _blinkFilter.ButtonEnabled; }
+            set {
+
+                _blinkFilter.ButtonEnabled = value;
+                OnPropertyChanged ("ButtonBlinkReductionEnabled");
+            }
         }
-
-
+        public bool MassBlinkReductionEnabled
+        {
+            get { return _blinkFilter.MassEnabled; }
+            set {
+                _blinkFilter.MassEnabled = value;
+                OnPropertyChanged("MassBlinkReductionEnabled");
+            }
+        }
+        public bool AnalogBlinkReductionEnabled
+        {
+            get { return _blinkFilter.AnalogEnabled; }
+            set {
+                _blinkFilter.AnalogEnabled = value;
+                OnPropertyChanged("AnalogBlinkReductionEnabled");
+            }
+        }
+        public bool AllBlinkReductionEnabled
+        {
+            get { return ButtonBlinkReductionEnabled && AnalogBlinkReductionEnabled && MassBlinkReductionEnabled; }
+            set {
+                ButtonBlinkReductionEnabled = AnalogBlinkReductionEnabled = MassBlinkReductionEnabled = value;
+                OnPropertyChanged("AllBlinkReductionEnabled");
+            }
+        }
 
         public ViewWindow (Skin skin, Skin.Background skinBackground, IControllerReader reader)
         {
@@ -49,37 +75,69 @@ namespace NintendoSpy
             _skin = skin;
             _reader = reader;
 
-            ControllerGrid.Width = skinBackground.Image.PixelWidth;
-            ControllerGrid.Height = skinBackground.Image.PixelHeight;
-
-            var brush = new ImageBrush (skinBackground.Image);
-            brush.Stretch = Stretch.Uniform;
+            ControllerGrid.Width = skinBackground.Width;
+            ControllerGrid.Height = skinBackground.Height;
+            var brush = new SolidColorBrush(skinBackground.Color);
             ControllerGrid.Background = brush;
 
+            if (skinBackground.Image != null)
+            {
+                var img = new Image();
+                img.VerticalAlignment = VerticalAlignment.Top;
+                img.HorizontalAlignment = HorizontalAlignment.Left;
+                img.Source = skinBackground.Image;
+                img.Stretch = Stretch.Uniform;
+                img.Margin = new Thickness(0, 0, 0, 0);
+                img.Width = skinBackground.Image.PixelWidth;
+                img.Height = skinBackground.Image.PixelHeight;
+                ControllerGrid.Children.Add(img);
+            }
+
+            foreach (var detail in _skin.Details)
+            {
+                if (bgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
+                {
+                    var image = getImageForElement(detail.Config);
+                    ControllerGrid.Children.Add(image);
+                }
+            }
+
             foreach (var trigger in _skin.AnalogTriggers) {
-                var grid = getGridForAnalogTrigger (trigger);
-                _triggersWithGridImages.Add (new Tuple <Skin.AnalogTrigger,Grid> (trigger, grid));
-                ControllerGrid.Children.Add (grid);
+                if (bgIsActive(skinBackground.Name, trigger.Config.TargetBackgrounds, trigger.Config.IgnoreBackgrounds))
+                {
+                    var grid = getGridForAnalogTrigger(trigger);
+                    _triggersWithGridImages.Add(new Tuple<Skin.AnalogTrigger, Grid>(trigger, grid));
+                    ControllerGrid.Children.Add(grid);
+                }
             }
 
             foreach (var button in _skin.Buttons) {
-                var image = getImageForElement (button.Config);
-                _buttonsWithImages.Add (new Tuple <Skin.Button,Image> (button, image));
-                image.Visibility = Visibility.Hidden;
-                ControllerGrid.Children.Add (image);
+                if (bgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
+                {
+                    var image = getImageForElement(button.Config);
+                    _buttonsWithImages.Add(new Tuple<Skin.Button, Image>(button, image));
+                    image.Visibility = Visibility.Hidden;
+                    ControllerGrid.Children.Add(image);
+                }
             }
 
             foreach (var button in _skin.RangeButtons) {
-                var image = getImageForElement (button.Config);
-                _rangeButtonsWithImages.Add (new Tuple <Skin.RangeButton,Image> (button, image));
-                image.Visibility = Visibility.Hidden;
-                ControllerGrid.Children.Add (image);
+                if (bgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
+                {
+                    var image = getImageForElement(button.Config);
+                    _rangeButtonsWithImages.Add(new Tuple<Skin.RangeButton, Image>(button, image));
+                    image.Visibility = Visibility.Hidden;
+                    ControllerGrid.Children.Add(image);
+                }
             }
             
             foreach (var stick in _skin.AnalogSticks) {
-                var image = getImageForElement (stick.Config);
-                _sticksWithImages.Add (new Tuple <Skin.AnalogStick,Image> (stick, image));
-                ControllerGrid.Children.Add (image);
+                if (bgIsActive(skinBackground.Name, stick.Config.TargetBackgrounds, stick.Config.IgnoreBackgrounds))
+                {
+                    var image = getImageForElement(stick.Config);
+                    _sticksWithImages.Add(new Tuple<Skin.AnalogStick, Image>(stick, image));
+                    ControllerGrid.Children.Add(image);
+                }
             }
 
             _reader.ControllerStateChanged += reader_ControllerStateChanged;
@@ -90,10 +148,22 @@ namespace NintendoSpy
             } catch (ConfigParseException) {
                 MessageBox.Show ("Error parsing keybindings.xml. Not binding any keys to gamepad inputs");
             }
+
+            MassBlinkReductionEnabled = Properties.Settings.Default.MassFilter;
+            AnalogBlinkReductionEnabled = Properties.Settings.Default.AnalogFilter;
+            ButtonBlinkReductionEnabled = Properties.Settings.Default.ButtonFilter;
+            Topmost = Properties.Settings.Default.TopMost;
         }
 
 
-
+        static bool bgIsActive(string bgName, List<string> eligableBgs, List<string> ignoreBgs)
+        {
+            if (ignoreBgs.Contains(bgName))
+            {
+                return false;
+            }
+            return eligableBgs.Count == 0 || eligableBgs.Contains(bgName);
+        }
         static Image getImageForElement (Skin.ElementConfig config)
         {
             var img = new Image ();
@@ -110,7 +180,6 @@ namespace NintendoSpy
         static Grid getGridForAnalogTrigger (Skin.AnalogTrigger trigger)
         {
             var img = new Image ();
-
             img.VerticalAlignment = VerticalAlignment.Top;
 
             img.HorizontalAlignment = 
@@ -124,10 +193,11 @@ namespace NintendoSpy
                 : VerticalAlignment.Top;
 
             img.Source = trigger.Config.Image;
-            img.Stretch = Stretch.None;
+            img.Stretch = Stretch.Fill;
             img.Margin = new Thickness (0, 0, 0, 0);
             img.Width = trigger.Config.Width;
             img.Height = trigger.Config.Height;
+            
 
             var grid = new Grid ();
 
@@ -144,10 +214,36 @@ namespace NintendoSpy
 
         void AlwaysOnTop_Click (object sender, RoutedEventArgs e) {
             this.Topmost = !this.Topmost;
+            Properties.Settings.Default.TopMost = Topmost;
         }
+        void AllBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.ButtonBlinkReductionEnabled && this.AnalogBlinkReductionEnabled && this.MassBlinkReductionEnabled)
+            {
+                this.AllBlinkReductionEnabled = false;
 
-        void BlinkReductionEnabled_Click (object sender, RoutedEventArgs e) {
-            this.BlinkReductionEnabled = !this.BlinkReductionEnabled;
+            }
+            else
+            {
+                this.AllBlinkReductionEnabled = true;
+            }
+            Properties.Settings.Default.ButtonFilter = ButtonBlinkReductionEnabled;
+            Properties.Settings.Default.AnalogFilter = AnalogBlinkReductionEnabled;
+            Properties.Settings.Default.MassFilter = MassBlinkReductionEnabled;
+        }
+        void ButtonBlinkReductionEnabled_Click (object sender, RoutedEventArgs e) {
+            this.ButtonBlinkReductionEnabled = !this.ButtonBlinkReductionEnabled;
+            Properties.Settings.Default.ButtonFilter = ButtonBlinkReductionEnabled;
+        }
+        void AnalogBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            this.AnalogBlinkReductionEnabled = !this.AnalogBlinkReductionEnabled;
+            Properties.Settings.Default.AnalogFilter = AnalogBlinkReductionEnabled;
+        }
+        void MassBlinkReductionEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            this.MassBlinkReductionEnabled = !this.MassBlinkReductionEnabled;
+            Properties.Settings.Default.MassFilter = MassBlinkReductionEnabled;
         }
 
 
@@ -158,6 +254,7 @@ namespace NintendoSpy
 
         void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Properties.Settings.Default.Save();
             if (_keybindings != null) {
                 _keybindings.Finish ();
             }
@@ -215,7 +312,6 @@ namespace NintendoSpy
                 if (skin.UseNegative) val *= -1;
                 if (skin.IsReversed) val = 1 - val;
                 if (val < 0) val = 0;
-
                 switch (skin.Direction) 
                 {
                     case Skin.AnalogTrigger.DirectionValue.Right:
@@ -248,5 +344,7 @@ namespace NintendoSpy
         protected void OnPropertyChanged (string propertyName) {
             if (PropertyChanged != null) PropertyChanged (this, new PropertyChangedEventArgs(propertyName));
         }
+
+        
     }
 }

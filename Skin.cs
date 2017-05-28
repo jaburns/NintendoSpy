@@ -17,11 +17,22 @@ namespace NintendoSpy
         public class ElementConfig {
             public BitmapImage Image;
             public uint X, Y, Width, Height;
+            public List<string> TargetBackgrounds { get; set; }
+            public List<string> IgnoreBackgrounds { get; set; }
         }
 
         public class Background {
             public string Name { get; set; }
             public BitmapImage Image { get; set; }
+            public Color Color { get; set; }
+            public uint Width, Height;
+        }
+
+        public class Detail
+        {
+            public string Name { get; set; }
+            public ElementConfig Config;
+            
         }
 
         public class Button {
@@ -59,6 +70,9 @@ namespace NintendoSpy
 
         List <Background> _backgrounds = new List <Background> ();
         public IReadOnlyList <Background> Backgrounds { get { return _backgrounds; } }
+
+        List<Detail> _details = new List<Detail>();
+        public IReadOnlyList <Detail> Details { get { return _details; } }
 
         List <Button> _buttons = new List <Button> ();
         public IReadOnlyList <Button> Buttons { get { return _buttons; } }
@@ -99,9 +113,45 @@ namespace NintendoSpy
             }
 
             foreach (var elem in bgElems) {
-                _backgrounds.Add (new Background {
-                    Name = readStringAttr (elem, "name"),
-                    Image = loadImage (skinPath, readStringAttr (elem, "image"))
+                var imgPath = readStringAttr(elem, "image", false);
+                BitmapImage image = null;
+                uint width = 0;
+                uint height = 0;
+                if (!string.IsNullOrEmpty(imgPath)) {
+                    image = loadImage(skinPath, imgPath);
+                    width = (uint)image.PixelWidth;
+                    var widthAttr = elem.Attributes("width");
+                    if (widthAttr.Count() > 0) width = uint.Parse(widthAttr.First().Value);
+                    height = (uint)image.PixelHeight;
+                    var heightAttr = elem.Attributes("height");
+                    if (heightAttr.Count() > 0) height = uint.Parse(heightAttr.First().Value);
+                }
+                else
+                {
+                    var widthAttr = elem.Attributes("width");
+                    if (widthAttr.Count() > 0) width = uint.Parse(widthAttr.First().Value);
+                    var heightAttr = elem.Attributes("height");
+                    if (heightAttr.Count() > 0) height = uint.Parse(heightAttr.First().Value);
+                    if(width == 0 || height == 0)
+                    {
+                        throw new ConfigParseException("Element 'background' should either define 'image' with optionally 'width' and 'height' or both 'width' and 'height'.");
+                    }
+                }
+                _backgrounds.Add(new Background {
+                    Name = readStringAttr(elem, "name"),
+                    Image = image,
+                    Color = readColorAttr(elem, "color", false),
+                    Width = width,
+                    Height = height
+                });
+            }
+
+            foreach (var elem in doc.Root.Elements("detail"))
+            {
+                _details.Add(new Detail
+                {
+                    Config = parseStandardConfig(skinPath, elem),
+                    Name = readStringAttr(elem, "name"),
                 });
             }
 
@@ -164,11 +214,62 @@ namespace NintendoSpy
             }
         }
 
-        static string readStringAttr (XElement elem, string attrName)
+        static string readStringAttr(XElement elem, string attrName, bool required = true)
         {
             var attrs = elem.Attributes (attrName);
-            if (attrs.Count() == 0) throw new ConfigParseException ("Required attribute '"+attrName+"' not found on element '"+elem.Name+"'.");
+            if (attrs.Count() == 0)
+            {
+                if (required)
+                {
+                    throw new ConfigParseException("Required attribute '" + attrName + "' not found on element '" + elem.Name + "'.");
+                }
+                else
+                {
+                    return "";
+                }
+            }
             return attrs.First().Value;
+        }
+
+        static List<string> getArrayAttr(XElement elem, string attrName, bool required = true)
+        {
+            var attrs = elem.Attributes(attrName);
+            if (attrs.Count() == 0)
+            {
+                if (required)
+                {
+                    throw new ConfigParseException("Required attribute '" + attrName + "' not found on element '" + elem.Name + "'. You can use it with ';' for multiple values.");
+                }
+                else
+                {
+                    return new List<string>(0);
+                }
+            }
+            return new List<string>(attrs.First().Value.Split(';'));
+        }
+
+        static Color readColorAttr(XElement elem, string attrName, bool required)
+        {
+            Color result = new Color ();
+           
+            var attrs = elem.Attributes(attrName);
+            if (attrs.Count() == 0)
+            {
+                if (required)
+                {
+                    throw new ConfigParseException("Required attribute '" + attrName + "' not found on element '" + elem.Name + "'.");
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            var converted = ColorConverter.ConvertFromString(attrs.First().Value);
+            if(result != null)
+            {
+                result = (Color) converted;
+            }
+            return result;
         }
 
         static float readFloatConfig (XElement elem, string attrName)
@@ -216,8 +317,11 @@ namespace NintendoSpy
             uint x = readUintAttr (elem, "x");
             uint y = readUintAttr (elem, "y");
 
+            var targetBgs = getArrayAttr(elem, "target", false);
+            var ignoreBgs = getArrayAttr(elem, "ignore", false);
+
             return new ElementConfig {
-                X = x, Y = y, Image = image, Width = width, Height = height
+                X = x, Y = y, Image = image, Width = width, Height = height, TargetBackgrounds = targetBgs, IgnoreBackgrounds = ignoreBgs
             };
         }
 
