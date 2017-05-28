@@ -1,7 +1,7 @@
 NintendoSpy
 ======
 
-#### [Download the latest NintendoSpy release here.](https://github.com/jaburns/NintendoSpy/releases/latest) (x64 Windows binary)
+#### [Download the latest NintendoSpy release here.](https://github.com/jaburns/NintendoSpy/releases/latest) (x64 and experimental x86 Windows binary)
 
 This project provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.
 
@@ -46,9 +46,24 @@ Each skin must define at least one ``<background>`` element.  Each background en
 ```
 <background
     name="Default"     # The name which will appear in the selection list.
-    image="pad.png" /> # The PNG file to use for this background selection.
+    image="pad.png"    # Optional PNG file to use for this background selection.
+    color="red"        # Optional Color to use as background, either a text or a hex (#123DEF) style
+    /> 
 ```
 The rest of the ``skin.xml`` file defines how to render button and analog inputs.  Each type exposes a variety of buttons and analog values.  Button inputs are mapped to images at specific locations using the ``<button>`` tag, and there is a small variety of possible ways to map analog inputs.
+
+```
+<detail
+    name="Static Image"                  # Name of the source input button to map this image to.
+    image="Dropshadow.png"               # Image file to display when this input is pressed.
+    x="101" y="71"                       # Location in pixels where the top/left corner of the image should sit.
+    width="16"                           # Width and height specification can OPTIONALLY be used to scale
+    height="16" 
+    target="Background A;Background C"   # Optional. Only show for this background. Available for all elements.
+    ignore="Background B"                # Optional. Do not show for this background (not required when target is defined)
+    />     #   an image to a specific size.  The default size is the orignal image size.
+```
+A static image to show, works great with ignore and targets to add more variety with ease to skins.
 
 ```
 <button
