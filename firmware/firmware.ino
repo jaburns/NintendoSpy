@@ -213,7 +213,7 @@ inline void loop_NES()
 #ifdef MODE_2WIRE_SNES
     read_shiftRegister< SNES_LATCH , SNES_DATA , true >( NES_BITCOUNT );
 #else
-    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( SNES_BITCOUNT );
+    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( NES_BITCOUNT );
 #endif
     interrupts();
     sendRawData( 0 , NES_BITCOUNT );
