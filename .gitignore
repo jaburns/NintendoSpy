@@ -116,3 +116,5 @@ Backup*/
 !slimdx/
 !slimdx/*
 !slimdx/**/*
+/.vs
+/.vs

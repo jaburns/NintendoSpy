@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Generic Genesis" author="chmaller" type="genericanalogtodpad">
+
+    <background name="Genesis" image="sega_genesis.png" />
+
+    <button name="b0" image="circle.png" x="162" y="78" width="20" height="20" />
+	<button name="b1" image="circle.png" x="186" y="67" width="20" height="20" />
+	<button name="b2" image="circle.png" x="210" y="58" width="20" height="20" />
+
+	<button name="b3" image="circle.png" x="119" y="56" width="20" height="10" />
+	
+	<button name="b4" image="circle.png" x="157" y="55" width="17" height="17" />
+	<button name="b5" image="circle.png" x="177" y="47" width="17" height="17" />
+	<button name="b6" image="circle.png" x="198" y="38" width="17" height="17" />
+
+	<button name="up" image="circle.png" x="66" y="46" width="10" height="10" />
+	<button name="down" image="circle.png" x="66" y="76" width="10" height="10" />
+	<button name="left" image="circle.png" x="50" y="61" width="10" height="10" />	
+	<button name="right" image="circle.png" x="82" y="61" width="10" height="10" />
+	
+</skin>

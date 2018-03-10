@@ -75,6 +75,8 @@ namespace NintendoSpy
             _skin = skin;
             _reader = reader;
 
+            Title = skin.Name;
+
             ControllerGrid.Width = skinBackground.Width;
             ControllerGrid.Height = skinBackground.Height;
             var brush = new SolidColorBrush(skinBackground.Color);
@@ -97,6 +99,7 @@ namespace NintendoSpy
             {
                 if (bgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
                 {
+                    
                     var image = getImageForElement(detail.Config);
                     ControllerGrid.Children.Add(image);
                 }
