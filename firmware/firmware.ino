@@ -9,6 +9,7 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
+#define MODE_SEGA
 // Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -17,6 +18,16 @@
 // compatibility only.
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
+
+#include <SegaController.h>
+
+#ifdef MODE_SEGA
+// Specify the Arduino pins that are connected to
+// DB9 Pin 7, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
+SegaController controller(8, 2, 3, 4, 5, 6, 7);
+word currentState = 0;
+word lastState = 0;
+#endif
 
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
@@ -58,10 +69,13 @@ unsigned char rawData[ 128 ];
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
-    PORTD = 0x00;
-    DDRD  = 0x00;
+    #ifndef MODE_SEGA
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
+    PORTD = 0x00;
+    DDRD  = 0x00;
+    #endif
+    
     Serial.begin( 115200 );
 }
 
@@ -173,6 +187,34 @@ inline void sendRawData( unsigned char first, unsigned char count )
     Serial.write( SPLIT );
 }
 
+inline void sendRawSegaData()
+{
+    for (unsigned char i = 0; i < 13; ++i)
+    {
+      Serial.write (currentState & (1 << i) ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+//    if (currentState != lastState)
+//    {
+//        Serial.print((currentState & SC_CTL_ON)    ? "+" : "-");
+//        Serial.print((currentState & SC_BTN_UP)    ? "U" : "0");
+//        Serial.print((currentState & SC_BTN_DOWN)  ? "D" : "0");
+//        Serial.print((currentState & SC_BTN_LEFT)  ? "L" : "0");
+//        Serial.print((currentState & SC_BTN_RIGHT) ? "R" : "0");
+//        Serial.print((currentState & SC_BTN_START) ? "S" : "0");
+//        Serial.print((currentState & SC_BTN_A)     ? "A" : "0");
+//        Serial.print((currentState & SC_BTN_B)     ? "B" : "0");
+//        Serial.print((currentState & SC_BTN_C)     ? "C" : "0");
+//        Serial.print((currentState & SC_BTN_X)     ? "X" : "0");
+//        Serial.print((currentState & SC_BTN_Y)     ? "Y" : "0");
+//        Serial.print((currentState & SC_BTN_Z)     ? "Z" : "0");
+//        Serial.print((currentState & SC_BTN_MODE)  ? "M" : "0");
+//
+//        Serial.print("\n");
+//
+//                lastState = currentState;
+//    }
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update loop definitions for the various console modes.
@@ -219,6 +261,14 @@ inline void loop_NES()
     sendRawData( 0 , NES_BITCOUNT );
 }
 
+inline void loop_Sega()
+{
+      noInterrupts();
+  currentState = controller.getState();
+      interrupts();
+  sendRawSegaData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -231,6 +281,8 @@ void loop()
     loop_SNES();
 #elif defined MODE_NES
     loop_NES();
+#elif defined MODE_SEGA
+    loop_Sega();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
