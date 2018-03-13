@@ -10,8 +10,9 @@
 //#define MODE_SNES
 //#define MODE_NES
 //#define MODE_SEGA
-#define MODE_CLASSIC
-// Bridge one of the analog GND to the right analog IN to enable your selected mode
+//#define MODE_CLASSIC
+//#define MODE_BOOSTER_GRIP
+//Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
 // The only reason you'd want to use 2-wire SNES mode is if you built a NintendoSpy
@@ -19,11 +20,12 @@
 // compatibility only.
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
-// Turn this on for classic and genesis serial debugging output
-#define SEGADEBUG
+// Uncomment this for MODE_SEGA, MODE_CLASSIC and MODE_BOOSTER_GRIP serial debugging output
+//#define SEGADEBUG
 
 #include <SegaControllerSpy.h>
 #include <ClassicController.h>
+#include <BoosterGrip.h>
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 7, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
@@ -34,6 +36,10 @@ word lastState = 0;
 // Specify the Arduino pins that are connected to
 // DB9 Pin 7, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
 ClassicController classicController(8, 2, 3, 4, 5, 6, 7);
+
+// Specify the Arduino pins that are connected to
+// DB9 Pin 5, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
+BoosterGrip boosterGrip(8, 2, 3, 4, 5, 6, 7);
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
@@ -284,6 +290,12 @@ inline void loop_Classic()
   sendRawSegaData();
 }
 
+inline void loop_BoosterGrip()
+{
+  currentState = boosterGrip.getState();
+  sendRawSegaData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -300,6 +312,8 @@ void loop()
     loop_Sega();
 #elif defined MODE_CLASSIC
     loop_Classic();
+#elif defined MODE_BOOSTER_GRIP
+    loop_BoosterGrip();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
