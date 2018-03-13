@@ -9,7 +9,8 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
-#define MODE_SEGA
+//#define MODE_SEGA
+//#define MODE_CLASSIC
 // Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -18,17 +19,21 @@
 // compatibility only.
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
+// Turn this on for classic and genesis serial debugging output
+//#SEGADEBUG
 
-#include <SegaController.h>
+#include <SegaControllerSpy.h>
+#include <ClassicController.h>
 
-#ifdef MODE_SEGA
 // Specify the Arduino pins that are connected to
 // DB9 Pin 7, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
-SegaController controller(8, 2, 3, 4, 5, 6, 7);
+SegaControllerSpy segaController(8, 2, 3, 4, 5, 6, 7);
 word currentState = 0;
 word lastState = 0;
-#endif
 
+// Specify the Arduino pins that are connected to
+// DB9 Pin 7, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
+ClassicController classicController(8, 2, 3, 4, 5, 6, 7);
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
@@ -70,10 +75,12 @@ unsigned char rawData[ 128 ];
 void setup()
 {
     #ifndef MODE_SEGA
+    #ifndef MODE_CLASSIC
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
     PORTD = 0x00;
     DDRD  = 0x00;
+    #endif
     #endif
     
     Serial.begin( 115200 );
@@ -189,31 +196,35 @@ inline void sendRawData( unsigned char first, unsigned char count )
 
 inline void sendRawSegaData()
 {
+  #ifndef SEGADEBUG
+  
     for (unsigned char i = 0; i < 13; ++i)
     {
       Serial.write (currentState & (1 << i) ? ONE : ZERO );
     }
     Serial.write( SPLIT );
-//    if (currentState != lastState)
-//    {
-//        Serial.print((currentState & SC_CTL_ON)    ? "+" : "-");
-//        Serial.print((currentState & SC_BTN_UP)    ? "U" : "0");
-//        Serial.print((currentState & SC_BTN_DOWN)  ? "D" : "0");
-//        Serial.print((currentState & SC_BTN_LEFT)  ? "L" : "0");
-//        Serial.print((currentState & SC_BTN_RIGHT) ? "R" : "0");
-//        Serial.print((currentState & SC_BTN_START) ? "S" : "0");
-//        Serial.print((currentState & SC_BTN_A)     ? "A" : "0");
-//        Serial.print((currentState & SC_BTN_B)     ? "B" : "0");
-//        Serial.print((currentState & SC_BTN_C)     ? "C" : "0");
-//        Serial.print((currentState & SC_BTN_X)     ? "X" : "0");
-//        Serial.print((currentState & SC_BTN_Y)     ? "Y" : "0");
-//        Serial.print((currentState & SC_BTN_Z)     ? "Z" : "0");
-//        Serial.print((currentState & SC_BTN_MODE)  ? "M" : "0");
-//
-//        Serial.print("\n");
-//
-//                lastState = currentState;
-//    }
+#else
+    if (currentState != lastState)
+    {
+        Serial.print((currentState & SC_CTL_ON)    ? "+" : "-");
+        Serial.print((currentState & SC_BTN_UP)    ? "U" : "0");
+        Serial.print((currentState & SC_BTN_DOWN)  ? "D" : "0");
+        Serial.print((currentState & SC_BTN_LEFT)  ? "L" : "0");
+        Serial.print((currentState & SC_BTN_RIGHT) ? "R" : "0");
+        Serial.print((currentState & SC_BTN_START) ? "S" : "0");
+        Serial.print((currentState & SC_BTN_A)     ? "A" : "0");
+        Serial.print((currentState & SC_BTN_B)     ? "B" : "0");
+        Serial.print((currentState & SC_BTN_C)     ? "C" : "0");
+        Serial.print((currentState & SC_BTN_X)     ? "X" : "0");
+        Serial.print((currentState & SC_BTN_Y)     ? "Y" : "0");
+        Serial.print((currentState & SC_BTN_Z)     ? "Z" : "0");
+        Serial.print((currentState & SC_BTN_MODE)  ? "M" : "0");
+
+        Serial.print("\n");
+
+                lastState = currentState;
+    }
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,9 +274,13 @@ inline void loop_NES()
 
 inline void loop_Sega()
 {
-      noInterrupts();
-  currentState = controller.getState();
-      interrupts();
+  currentState = segaController.getState();
+  sendRawSegaData();
+}
+
+inline void loop_Classic()
+{
+  currentState = classicController.getState();
   sendRawSegaData();
 }
 
@@ -283,6 +298,8 @@ void loop()
     loop_NES();
 #elif defined MODE_SEGA
     loop_Sega();
+#elif defined MODE_CLASSIC
+    loop_Classic();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
