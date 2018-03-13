@@ -10,7 +10,7 @@
 //#define MODE_SNES
 //#define MODE_NES
 //#define MODE_SEGA
-//#define MODE_CLASSIC
+#define MODE_CLASSIC
 // Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -20,7 +20,7 @@
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
 // Turn this on for classic and genesis serial debugging output
-//#SEGADEBUG
+#define SEGADEBUG
 
 #include <SegaControllerSpy.h>
 #include <ClassicController.h>
