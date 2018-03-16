@@ -201,34 +201,60 @@ inline void sendRawData( unsigned char first, unsigned char count )
 inline void sendRawSegaData()
 {
   #ifndef SEGADEBUG
-  
-    for (unsigned char i = 0; i < 13; ++i)
-    {
-      Serial.write (currentState & (1 << i) ? ONE : ZERO );
-    }
-    Serial.write( SPLIT );
-#else
-    if (currentState != lastState)
-    {
-        Serial.print((currentState & SCS_CTL_ON)    ? "+" : "-");
-        Serial.print((currentState & SCS_BTN_UP)    ? "U" : "0");
-        Serial.print((currentState & SCS_BTN_DOWN)  ? "D" : "0");
-        Serial.print((currentState & SCS_BTN_LEFT)  ? "L" : "0");
-        Serial.print((currentState & SCS_BTN_RIGHT) ? "R" : "0");
-        Serial.print((currentState & SCS_BTN_START) ? "S" : "0");
-        Serial.print((currentState & SCS_BTN_A)     ? "A" : "0");
-        Serial.print((currentState & SCS_BTN_B)     ? "B" : "0");
-        Serial.print((currentState & SCS_BTN_C)     ? "C" : "0");
-        Serial.print((currentState & SCS_BTN_X)     ? "X" : "0");
-        Serial.print((currentState & SCS_BTN_Y)     ? "Y" : "0");
-        Serial.print((currentState & SCS_BTN_Z)     ? "Z" : "0");
-        Serial.print((currentState & SCS_BTN_MODE)  ? "M" : "0");
-
-        Serial.print("\n");
-
-                lastState = currentState;
-    }
-#endif
+  for (unsigned char i = 0; i < 13; ++i)
+  {
+    Serial.write (currentState & (1 << i) ? ONE : ZERO );
+  }
+  Serial.write( SPLIT );
+  #else
+  #ifdef MODE_SEGA
+  if (currentState != lastState)
+  {
+      Serial.print((currentState & SCS_CTL_ON)    ? "+" : "-");
+      Serial.print((currentState & SCS_BTN_UP)    ? "U" : "0");
+      Serial.print((currentState & SCS_BTN_DOWN)  ? "D" : "0");
+      Serial.print((currentState & SCS_BTN_LEFT)  ? "L" : "0");
+      Serial.print((currentState & SCS_BTN_RIGHT) ? "R" : "0");
+      Serial.print((currentState & SCS_BTN_START) ? "S" : "0");
+      Serial.print((currentState & SCS_BTN_A)     ? "A" : "0");
+      Serial.print((currentState & SCS_BTN_B)     ? "B" : "0");
+      Serial.print((currentState & SCS_BTN_C)     ? "C" : "0");
+      Serial.print((currentState & SCS_BTN_X)     ? "X" : "0");
+      Serial.print((currentState & SCS_BTN_Y)     ? "Y" : "0");
+      Serial.print((currentState & SCS_BTN_Z)     ? "Z" : "0");
+      Serial.print((currentState & SCS_BTN_MODE)  ? "M" : "0");
+      Serial.print("\n");
+      lastState = currentState;
+  }
+  #endif
+  #ifdef MODE_CLASSIC
+  if (currentState != lastState)
+  {
+      Serial.print((currentState & CC_BTN_UP)    ? "U" : "0");
+      Serial.print((currentState & CC_BTN_DOWN)  ? "D" : "0");
+      Serial.print((currentState & CC_BTN_LEFT)  ? "L" : "0");
+      Serial.print((currentState & CC_BTN_RIGHT) ? "R" : "0");
+      Serial.print((currentState & CC_BTN_1)     ? "1" : "0");
+      Serial.print((currentState & CC_BTN_2)     ? "2" : "0");
+      Serial.print("\n");
+      lastState = currentState;
+  } 
+  #endif
+  #ifdef MODE_BOOSTER_GRIP
+  if (currentState != lastState)
+  {
+      Serial.print((currentState & BG_BTN_UP)    ? "U" : "0");
+      Serial.print((currentState & BG_BTN_DOWN)  ? "D" : "0");
+      Serial.print((currentState & BG_BTN_LEFT)  ? "L" : "0");
+      Serial.print((currentState & BG_BTN_RIGHT) ? "R" : "0");
+      Serial.print((currentState & BG_BTN_1)     ? "1" : "0");
+      Serial.print((currentState & BG_BTN_2)     ? "2" : "0");
+      Serial.print((currentState & BG_BTN_3)     ? "3" : "0");
+      Serial.print("\n");
+      lastState = currentState;
+  } 
+  #endif
+  #endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
