@@ -27,19 +27,17 @@
 #include <ClassicController.h>
 #include <BoosterGrip.h>
 
-// Specify the Arduino pins that are connected to
-// DB9 Pin 7, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
-SegaControllerSpy segaController(8, 2, 3, 4, 5, 6, 7);
+SegaControllerSpy segaController;
 word currentState = 0;
 word lastState = 0;
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 7, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
-ClassicController classicController(8, 2, 3, 4, 5, 6, 7);
+ClassicController classicController(7, 2, 3, 4, 5, 6, 8);
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 5, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
-BoosterGrip boosterGrip(8, 2, 3, 4, 5, 6, 7);
+BoosterGrip boosterGrip(7, 2, 3, 4, 5, 6, 8);
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
