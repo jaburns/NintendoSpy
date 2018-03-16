@@ -13,19 +13,19 @@ NintendoSpy supports custom skins using a straight-forward XML-based skin format
 
 The general design of NintendoSpy involves splicing the controller wire, and attaching the appropriate signal wires to an Arduino.  Then you just need to install the Arduino firmware packaged in the NintendoSpy release, and run the viewer software.  For more in-depth tutorials on how to do this, check out some of the links below.
 
-![](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/wiring-all.png)
+![](https://github.com/zoggins/RetroSpy/raw/master/docs/tutorial-images/wiring-all.png)
 
-[EvilAsh25's SNES hardware building guide](https://github.com/jaburns/NintendoSpy/blob/master/docs/guide-evilash25.md)
+[EvilAsh25's SNES hardware building guide](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md)
 
-[Gamecube hardware tutorial](https://github.com/jaburns/NintendoSpy/blob/master/docs/tutorial-gamecube.md)
+[Gamecube hardware tutorial](https://github.com/zoggins/RetroSpy/blob/master/docs/tutorial-gamecube.md)
 
-[N64 hardware tutorial](https://github.com/jaburns/NintendoSpy/blob/master/docs/tutorial-n64.md)
+[N64 hardware tutorial](https://github.com/zoggins/RetroSpy/blob/master/docs/tutorial-n64.md)
 
 ### Using the viewer software
 
 Once you've unzipped the NintendoSpy release, run NintendoSpy.exe to open the controller viewer.  You'll be greeted by the input source configuration screen, which is fairly straightforward to configure.  First select the console your NintendoSpy hardware is set up to view, "PC 360", or "Generic PC Gamepad".  For the latter 2 choices, COM port is irrelevant since the device is expected to simply interface over standard USB.  If you select a Nintendo console however, you'll have to select the COM port the Arduino is communicating over.  Honestly, the easiest way to figure this out is to just try each port.  There are never many in the list, and it does no harm to pick the wrong one other than you won't see any inputs.
 
-![](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/interface.png)
+![](https://github.com/zoggins/RetroSpy/raw/master/docs/tutorial-images/interface.png)
 
 Once you've selected the input source, you'll have to pick a skin.  Each skin can have multiple backgrounds, which are generally used to provide various colors for the controller itself.  After picked a skin, hit ``Go!`` and you should see the viewer screen.
 
@@ -115,7 +115,7 @@ Analog values can be mapping as sticks, ranges, or range-based buttons.  Ranges 
 ### Binding controller inputs to keyboard key presses
 
 Binding controller inputs to keyboard key presses is achieved by placing ``<binding>`` definitions
-in the ``keybindings.xml`` file.  The ``output-key`` attribute on the binding specifies which keyboard key to press when the provided gamepad buttons are pressed.  Values of ``output-key`` can simply be letters, or [see here other for valid key bindings (the text in red are the acceptable values for ``output-key``)](https://github.com/jaburns/NintendoSpy/blob/master/Keybindings.cs#L110).  Each binding must contain at least one child ``<input>`` element.  The input elements specify which buttons on the controller must be depressed in order to send the key press signal.  See below for an example ``keybindings.xml`` file which makes pressing L and R together trigger a ``home`` key press on the keyboard.
+in the ``keybindings.xml`` file.  The ``output-key`` attribute on the binding specifies which keyboard key to press when the provided gamepad buttons are pressed.  Values of ``output-key`` can simply be letters, or [see here other for valid key bindings (the text in red are the acceptable values for ``output-key``)](https://github.com/zoggins/RetroSpy/blob/master/Keybindings.cs#L110).  Each binding must contain at least one child ``<input>`` element.  The input elements specify which buttons on the controller must be depressed in order to send the key press signal.  See below for an example ``keybindings.xml`` file which makes pressing L and R together trigger a ``home`` key press on the keyboard.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
