@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Generic SMS" author="chmaller" type="sega">
+<skin name="Generic SMS" author="chmaller" type="classic">
 
     <background name="SMS" image="sms.png" />
 

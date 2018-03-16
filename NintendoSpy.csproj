@@ -93,6 +93,7 @@
     <Compile Include="Readers\GamepadReaderAnalogToDPad.cs" />
     <Compile Include="Readers\IControllerReader.cs" />
     <Compile Include="Readers\BlinkReductionFilter.cs" />
+    <Compile Include="Readers\Classic.cs" />
     <Compile Include="Readers\Sega.cs" />
     <Compile Include="Readers\Nintendo64.cs" />
     <Compile Include="Readers\SerialControllerReader.cs" />
