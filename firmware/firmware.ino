@@ -1,7 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// NintendoSpy Firmware for Arduino
-// v1.0.1
-// Written by jaburns
+// RetroSpy Firmware for Arduino
+// v2.0
+// RetroSpy written by zoggins
+// NintendoSpy originally written by jaburns
 
 
 // ---------- Uncomment one of these options to select operation mode --------------
@@ -32,13 +33,13 @@ word currentState = 0;
 word lastState = 0;
 
 // Specify the Arduino pins that are connected to
-// DB9 Pin 7, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
-ClassicController classicController(7, 2, 3, 4, 5, 6, 8);
+// DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
+ClassicController classicController(2, 3, 4, 5, 7, 8);
 
 // Specify the Arduino pins that are connected to
-// DB9 Pin 5, DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 6, DB9 Pin 9
-BoosterGrip boosterGrip(7, 2, 3, 4, 5, 6, 8);
-
+// DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
+BoosterGrip boosterGrip(2, 3, 4, 5, 6, 7, 8);
+ 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
 #define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"

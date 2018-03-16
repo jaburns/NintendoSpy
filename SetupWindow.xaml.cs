@@ -132,7 +132,7 @@ namespace NintendoSpy
 #else
             catch (Exception ex) {
 #endif
-                MessageBox.Show (ex.Message, "NintendoSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show (ex.Message, "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             this.Show ();
