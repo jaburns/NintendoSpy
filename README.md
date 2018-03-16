@@ -11,19 +11,31 @@ The following documentation is in addition to the original NintendoSpy documenta
 
 The general design of RetroSpy involves splicing the controller wire, and attaching the appropriate signal wires to an Arduino.  Then you just need to install the Arduino firmware packaged in the RetroSpy release, and run the viewer software.
 
-## Components and Equipment needed
+## Components and Equipment needed for all types of cables 
 
 1. [Arduino Uno](http://www.amazon.com/Arduino-UNO-board-DIP-ATmega328P/dp/B006H06TVG). You might be able to find this cheaper elsewhere.  A clone such as [Funduino](https://www.foxytronics.com/products/265-funduino-uno-r3) works just as well.
 2. [USB cable to connect the Arduino to your computer](http://www.amazon.com/AmazonBasics-Hi-Speed-A-Male-B-Male-Meters/dp/B001TH7GUA/)
-3. controller extension cable (NES, SNES, N64, or GCN)
-4. (optional) male/female connectors with 5 pins minimum for easy controller switching
-5. wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
-6. wire cutters/strippers
-7. exacto knife or box cutters
-8. soldering iron and solder
-9. electrical tape
-10. digital multimeter or a cheap continuity tester
 
+## Specific Components and Equipment needed for a Nintendo cable
+
+1. Controller extension cable (NES, SNES, N64, or GCN)
+2. (optional) male/female connectors with 5 pins minimum for easy controller switching
+3. Wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
+4. Wire cutters/strippers
+5. Exacto knife or box cutters
+6. Soldering iron and solder
+7. Electrical tape
+8. Digital multimeter or a cheap continuity tester
+
+## Specific Components and Equipment needed for a Genesis/SMS/Atari cable
+
+1. Controller extension cable (NES, SNES, N64, or GCN)
+3. Wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
+4. Wire cutters/strippers
+5. Exacto knife or box cutters
+6. Soldering iron and solder
+7. Electrical tape
+8. Digital multimeter or a cheap continuity tester
 
 ## Software
 
@@ -38,4 +50,4 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 
 ### Wiring
 
-The following is how to build a cable for the Genesis, SMS and Atari.  For building a NES, SNES, N64 or GameCube cable follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  
+For building a NES, SNES, N64 or GameCube cable follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The following is how to build a cable for the Genesis, SMS and Atari.
