@@ -13,7 +13,7 @@
 //#define MODE_SEGA
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
-//#define MODE_KEYBOARD_CONTROLLER
+//#define MODE_KEYBOARD_CONTROLLER /* THIS DOES NOT CURRENTLY WORK! */
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
