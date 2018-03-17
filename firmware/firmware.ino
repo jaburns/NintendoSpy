@@ -13,6 +13,7 @@
 //#define MODE_SEGA
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
+//#define MODE_KEYBOARD_CONTROLLER
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -27,10 +28,12 @@
 #include <SegaControllerSpy.h>
 #include <ClassicController.h>
 #include <BoosterGrip.h>
+#include <KeyboardController.h>
 
 SegaControllerSpy segaController;
 word currentState = 0;
 word lastState = 0;
+
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
@@ -39,7 +42,9 @@ ClassicController classicController(2, 3, 4, 5, 7, 8);
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
 BoosterGrip boosterGrip(2, 3, 4, 5, 6, 7, 8);
- 
+
+KeyboardController keyboardController;
+
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
 #define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
@@ -87,6 +92,9 @@ void setup()
     DDRD  = 0x00;
     #endif
     #endif
+
+    lastState = -1;
+    currentState = -1;
     
     Serial.begin( 115200 );
 }
@@ -107,6 +115,7 @@ read_loop:
     WAIT_FALLING_EDGE( pin );
 
     // Wait ~2us between line reads
+    
     asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
 
     // Read a bit from the line and store as a byte in "rawData"
@@ -255,6 +264,14 @@ inline void sendRawSegaData()
       lastState = currentState;
   } 
   #endif
+  #ifdef MODE_KEYBOARD_CONTROLLER
+    
+  if (currentState != lastState)
+  {
+        Serial.println(currentState);
+  } 
+  lastState = currentState;
+  #endif
   #endif
 }
 
@@ -321,6 +338,12 @@ inline void loop_BoosterGrip()
   sendRawSegaData();
 }
 
+inline void loop_KeyboardController()
+{
+  currentState = keyboardController.getState();
+  sendRawSegaData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -339,6 +362,8 @@ void loop()
     loop_Classic();
 #elif defined MODE_BOOSTER_GRIP
     loop_BoosterGrip();
+#elif defined MODE_KEYBOARD_CONTROLLER
+    loop_KeyboardController();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
