@@ -95,7 +95,7 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 3. Once installed, open the Arduino software, you should see "Arduino Uno on COMX" at the bottom right corner if everything is working. If not, you may need to restart and/or replug the USB connector.
 
-![](http://i.imgur.com/KpmJnVX.jpg)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/arduinooncom3.jpg)
 
 4. Install my Arduino ClassicController library:
 
@@ -111,11 +111,11 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 6. Now uncomment the option for the operation mode (which controller) you will use. Note I am using a SNES controller here.  MODE_SEGA is for Genesis & MODE_CLASSIC is for SMS/Atari.
 
-![](http://i.imgur.com/RIUqaEp.jpg)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/uncomment_mode.jpg)
 
 7. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes.
 
-![](http://i.imgur.com/54HtRdB.jpg)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/doneuploading.jpg)
 
 8. Run ``RetroSpy.exe``.
 
