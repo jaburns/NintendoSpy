@@ -29,13 +29,11 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 
 ## Specific Components and Equipment needed for a Genesis/SMS/Atari cable
 
-1. Controller extension cable (NES, SNES, N64, or GCN)
-3. Wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
-4. Wire cutters/strippers
-5. Exacto knife or box cutters
-6. Soldering iron and solder
-7. Electrical tape
-8. Digital multimeter or a cheap continuity tester
+1. Atari Controller extension cable
+2. [Wires](https://www.amazon.com/gp/product/B06XRV92ZB/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1)
+3. [DB9 Male to 2 Female Splitter Cable](https://www.amazon.com/gp/product/B007F2E188/ref=oh_aui_detailpage_o08_s00?ie=UTF8&psc=1)
+4. [DB9 Male Breakout Board to Screw Terminals](https://www.amazon.com/gp/product/B00CLTP2O2/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
+5. Wire cutters/strippers
 
 ## Software
 
