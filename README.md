@@ -99,17 +99,17 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 4. Install my Arduino ClassicController library:
 
-1. Download ClassicController.zip from https://github.com/zoggins/ClassicController/releases/latest
+ * Download ClassicController.zip from https://github.com/zoggins/ClassicController/releases/latest
 
-2. Open "Sketch > Include Library > Add .ZIP Library..."
+ * Open "Sketch > Include Library > Add .ZIP Library..."
 
-3. Select the zip file you downloaded in step 1
+ * Select the zip file you downloaded in step 1
 
-* Download and unzip the [latest release of RetroSpy somewhere](https://github.com/zoggins/RetroSpy/releases/latest).
+4. Download and unzip the [latest release of RetroSpy somewhere](https://github.com/zoggins/RetroSpy/releases/latest).
 
-* Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
+5. Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
 
-* Now uncomment the option for the operation mode (which controller) you will use. Note I am using a SNES controller here.  MODE_SEGA is for Genesis & MODE_CLASSIC is for SMS/Atari.
+6. Now uncomment the option for the operation mode (which controller) you will use. Note I am using a SNES controller here.  MODE_SEGA is for Genesis & MODE_CLASSIC is for SMS/Atari.
 
 ![](http://i.imgur.com/RIUqaEp.jpg)
 
