@@ -29,7 +29,7 @@ namespace NintendoSpy
             DataContext = _vm;
 
             if (! Directory.Exists ("skins")) {
-                MessageBox.Show ("Could not find skins folder!", "NintendoSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show ("Could not find skins folder!", "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
                 Close ();
                 return;
             }
@@ -80,7 +80,7 @@ namespace NintendoSpy
             StringBuilder msg = new StringBuilder ();
             msg.AppendLine ("Some skins were unable to be parsed:");
             foreach (var err in errs) msg.AppendLine (err);
-            MessageBox.Show (msg.ToString (), "NintendoSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show (msg.ToString (), "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         void updatePortList () {
