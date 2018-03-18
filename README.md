@@ -33,6 +33,7 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 2. [Wires](https://www.amazon.com/gp/product/B06XRV92ZB/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1)
 3. [DB9 Male to 2 Female Splitter Cable](https://www.amazon.com/gp/product/B007F2E188/ref=oh_aui_detailpage_o08_s00?ie=UTF8&psc=1)
 4. [DB9 Male Breakout Board to Screw Terminals](https://www.amazon.com/gp/product/B00CLTP2O2/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
+5. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/gp/product/B0756KRCFX/ref=oh_aui_detailpage_o06_s00?ie=UTF8&psc=1)
 5. Wire cutters/strippers
 
 ## Software
@@ -48,4 +49,74 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 
 ### Wiring
 
-For building a NES, SNES, N64 or GameCube cable follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The following is how to build a cable for the Genesis, SMS and Atari.
+For building a NES, SNES, N64 or GameCube cable follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The following is how to build a cable for the Genesis, SMS and Atari.  It is possible to simply solder 9 jumper wires onto each wire of the Atari extension cable and be done, but since Genesis/SMS/Atari/etc use a standarded DB9 port we can build a cable with no soldering required.
+
+1.  Take the Atari extension cable, wires, DB9 Breakout Board, DB9 Y cable and optional headers you have acquired and put them together in this configuration:
+
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/ataricable.jpg)
+
+### Hardware Setup
+
+For Sega Genesis controllers you will need to make the following connections:
+
+| DB9 Pin | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |          2          |
+|    2    |          3          |
+|    3    |          4          |
+|    4    |          5          |
+|    5    |    Not Connected    |
+|    6    |          6          |
+|    7    |          8          |
+|    8    |    Not Connected    |
+|    9    |          7          |
+
+For Atari Joysticks, Sega Master System controllers and the Atari Omega Race Booster Grip you will need to make the following connections:
+
+| DB9 Pin | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |          2          |
+|    2    |          3          |
+|    3    |          4          |
+|    4    |          5          |
+|    5    |          6          |
+|    6    |          7          |
+|    7    |    Not Connected    |
+|    8    |    Not Connected    |
+|    9    |          8          |
+
+## Software and Setup
+
+Once the wiring is done, hook everything up to your game system and computer, now for the easy part.
+
+1. Plug in the USB connector to your Arduino and PC.
+
+2. Install the [latest Arduino software](http://arduino.cc/en/Main/Software), download the Windows Installer option.
+
+3. Once installed, open the Arduino software, you should see "Arduino Uno on COMX" at the bottom right corner if everything is working. If not, you may need to restart and/or replug the USB connector.
+
+![](http://i.imgur.com/KpmJnVX.jpg)
+
+4. Install my Arduino ClassicController library:
+
+1. Download ClassicController.zip from https://github.com/zoggins/ClassicController/releases/latest
+
+2. Open "Sketch > Include Library > Add .ZIP Library..."
+
+3. Select the zip file you downloaded in step 1
+
+4. Download and unzip the [latest release of RetroSpy somewhere](https://github.com/zoggins/RetroSpy/releases/latest).
+
+5. Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
+
+6. Now uncomment the option for the operation mode (which controller) you will use. Note I am using a SNES controller here.  MODE_SEGA is for Genesis & MODE_CLASSIC is for SMS/Atari.
+
+![](http://i.imgur.com/RIUqaEp.jpg)
+
+7. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes.
+
+![](http://i.imgur.com/54HtRdB.jpg)
+
+8. Run ``RetroSpy.exe``.
+
+9. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
