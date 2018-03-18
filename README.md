@@ -1,127 +1,122 @@
-NintendoSpy
+RetroSpy
 ======
 
-#### [Download the latest NintendoSpy release here.](https://github.com/jaburns/NintendoSpy/releases/latest) (x64 and experimental x86 Windows binary)
+#### [Download the latest RetroSpy release here.](https://github.com/zoggins/RetroSpy/releases/latest) (x64 and experimental x86 Windows binary)
 
-This project provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.
+This is a fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy).  NintendoSpy provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.  My fork allows for the support of Atari/Commodore joysticks, Sega Genesis controllers, SMS controllers and the Atari 2600 Omega Race Booster Grip.
 
-NintendoSpy supports custom skins using a straight-forward XML-based skin format.  You can also bind controller input combinations to trigger keypresses for hitting checkpoints on your splits.  If you create your own skins, feel free to submit them as pull requests to this repository.
+The following documentation is in addition to the original NintendoSpy documentation found [here](https://github.com/zoggins/RetroSpy/blob/master/README-ORIG.md).
 
 ## Documentation
 
-### Wiring and hardware
+The general design of RetroSpy involves splicing the controller wire, and attaching the appropriate signal wires to an Arduino.  Then you just need to install the Arduino firmware packaged in the RetroSpy release, and run the viewer software.
 
-The general design of NintendoSpy involves splicing the controller wire, and attaching the appropriate signal wires to an Arduino.  Then you just need to install the Arduino firmware packaged in the NintendoSpy release, and run the viewer software.  For more in-depth tutorials on how to do this, check out some of the links below.
+## Components and Equipment needed for all types of cables 
 
-![](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/wiring-all.png)
+1. [Arduino Uno](http://www.amazon.com/Arduino-UNO-board-DIP-ATmega328P/dp/B006H06TVG). You might be able to find this cheaper elsewhere.  A clone such as [Funduino](https://www.foxytronics.com/products/265-funduino-uno-r3) works just as well.
+2. [USB cable to connect the Arduino to your computer](http://www.amazon.com/AmazonBasics-Hi-Speed-A-Male-B-Male-Meters/dp/B001TH7GUA/)
 
-[EvilAsh25's SNES hardware building guide](https://github.com/jaburns/NintendoSpy/blob/master/docs/guide-evilash25.md)
+## Specific Components and Equipment needed for a Nintendo cable
 
-[Gamecube hardware tutorial](https://github.com/jaburns/NintendoSpy/blob/master/docs/tutorial-gamecube.md)
+1. Controller extension cable (NES, SNES, N64, or GCN)
+2. (optional) male/female connectors with 5 pins minimum for easy controller switching
+3. Wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
+4. Wire cutters/strippers
+5. Exacto knife or box cutters
+6. Soldering iron and solder
+7. Electrical tape
+8. Digital multimeter or a cheap continuity tester
 
-[N64 hardware tutorial](https://github.com/jaburns/NintendoSpy/blob/master/docs/tutorial-n64.md)
+## Specific Components and Equipment needed for a Genesis/SMS/Atari cable
 
-### Using the viewer software
+1. Atari Controller extension cable
+2. [Wires](https://www.amazon.com/gp/product/B06XRV92ZB/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1)
+3. [DB9 Male to 2 Female Splitter Cable](https://www.amazon.com/gp/product/B007F2E188/ref=oh_aui_detailpage_o08_s00?ie=UTF8&psc=1)
+4. [DB9 Male Breakout Board to Screw Terminals](https://www.amazon.com/gp/product/B00CLTP2O2/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
+5. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/gp/product/B0756KRCFX/ref=oh_aui_detailpage_o06_s00?ie=UTF8&psc=1)
+5. Wire cutters/strippers
 
-Once you've unzipped the NintendoSpy release, run NintendoSpy.exe to open the controller viewer.  You'll be greeted by the input source configuration screen, which is fairly straightforward to configure.  First select the console your NintendoSpy hardware is set up to view, "PC 360", or "Generic PC Gamepad".  For the latter 2 choices, COM port is irrelevant since the device is expected to simply interface over standard USB.  If you select a Nintendo console however, you'll have to select the COM port the Arduino is communicating over.  Honestly, the easiest way to figure this out is to just try each port.  There are never many in the list, and it does no harm to pick the wrong one other than you won't see any inputs.
+## Software
 
-![](https://github.com/jeremyaburns/NintendoSpy/raw/master/docs/tutorial-images/interface.png)
+1. [the latest Arduino software](http://arduino.cc/en/Main/Software)
+2. [ClassicController Arduino Library](https://github.com/zoggins/ClassicController/releases/latest)
+2. Firmware for the Arduino
+3. PC software to connect to the Arduino and display the controller
 
-Once you've selected the input source, you'll have to pick a skin.  Each skin can have multiple backgrounds, which are generally used to provide various colors for the controller itself.  After picked a skin, hit ``Go!`` and you should see the viewer screen.
+\#2 and #3 above are included in the release package of RetroSpy.  The firmware is located in the ``firmware`` folder and is called ``firmware.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 
-### Creating your own skins
+## Instructions
 
-Each skin consists of a subfolder in the "skins" directory, which is expected to contain a file called ``skin.xml`` along with all the PNG image assets required by the skin.  The easiest way to create a skin for your target console is probably just to copy+paste the default skin and modify it according to your needs.  What follows is a thorough documentation of the skin.xml format for reference if you'd like to create more complex skins.
+### Wiring
 
-The root node of the ``skin.xml`` file must define the following 3 attributes:
-```
-<skin
-    name="Default PC 360" # This is the name of the skin as it will appear in the selection list.
-    author="jaburns"      # Your name or handle.
-    type="pc360">         # The input type this skin is used for.
-```
-Valid values for the ``type`` attribute are as follows: ``nes``, ``snes``, ``n64``, ``gamecube``, ``pc360``, ``generic``. 
+For building a NES, SNES, N64 or GameCube cable follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The following is how to build a cable for the Genesis, SMS and Atari.  It is possible to simply solder 9 jumper wires onto each wire of the Atari extension cable and be done, but since Genesis/SMS/Atari/etc use a standarded DB9 port we can build a cable with no soldering required.
 
-Each skin must define at least one ``<background>`` element.  Each background entry will be listed in the skin selector as a separate entry.  Every background for your skin must have the same dimensions.
-```
-<background
-    name="Default"     # The name which will appear in the selection list.
-    image="pad.png"    # Optional PNG file to use for this background selection.
-    color="red"        # Optional Color to use as background, either a text or a hex (#123DEF) style
-    /> 
-```
-The rest of the ``skin.xml`` file defines how to render button and analog inputs.  Each type exposes a variety of buttons and analog values.  Button inputs are mapped to images at specific locations using the ``<button>`` tag, and there is a small variety of possible ways to map analog inputs.
+1.  Take the Atari extension cable, wires, DB9 Breakout Board, DB9 Y cable and optional headers you have acquired and put them together in this configuration:
 
-```
-<detail
-    name="Static Image"                  # Name of the source input button to map this image to.
-    image="Dropshadow.png"               # Image file to display when this input is pressed.
-    x="101" y="71"                       # Location in pixels where the top/left corner of the image should sit.
-    width="16"                           # Width and height specification can OPTIONALLY be used to scale
-    height="16" 
-    target="Background A;Background C"   # Optional. Only show for this background. Available for all elements.
-    ignore="Background B"                # Optional. Do not show for this background (not required when target is defined)
-    />     #   an image to a specific size.  The default size is the orignal image size.
-```
-A static image to show, works great with ignore and targets to add more variety with ease to skins.
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/ataricable.jpg)
 
-```
-<button
-    name="up"          # Name of the source input button to map this image to.
-    image="circle.png" # Image file to display when this input is pressed.
-    x="101" y="71"     # Location in pixels where the top/left corner of the image should sit.
-    width="16"         # Width and height specification can OPTIONALLY be used to scale
-    height="16" />     #   an image to a specific size.  The default size is the orignal image size.
-```
-Analog values can be mapping as sticks, ranges, or range-based buttons.  Ranges are used for things like analog shoulder buttons and render by filling an image by the amount the range is pressed.  Range buttons are useful for creating a button-like display when an analog value is in a certain ranage.  An example of this use case is if you are streaming a SNES game, but playing using a 360 controller, you can bind the analog stick to appear as if you are pressing the d-pad buttons.
-```
-<stick
-    xname="lstick_x"  # Analogs values to bind the image's x 
-    yname="lstick_y"  #   and y displacements to.
-    image="stick.png" # Image file to use for the stick.
-    x="53" y="31"     # Location in pixels where the top/left corner of the image should sit. 
-    width="34"        # Width and height specification can OPTIONALLY be used to scale 
-    height="35"       #   an image to a specific size.  The default size is the orignal image size.
-    xrange="9"        # xrange and yrange specify how much to move the stick image in either axis
-    yrange="9"        #   when the stick is deplaced.
-    xreverse="false"  # Settings xreverse or yreverse to true will reverse the direction
-    yreverse="true"   #   that the stick moves along that axis
-    />     
-```
-```
-<analog
-    name="trig_l"      # Analog value to bind the display to.
-    image="trig-l.png" # Image file to mask over the background as the input changes.
-    x="15" y="18"      # Location in pixels where the top/left corner of the image should sit. 
-    direction="up"     # The direction to sweep the image.
-                         Valid options are 'up', 'down', 'left', 'right'.
-    reverse="true"     # 'true' or 'false'. Setting to true will cause the image to clear instead
-                         of fill as the analog value is further engaged.
-    usenegative="true" # 'true' or 'false'. If set to true, then the image will change when the analog
-                         value ranges from 0 to -1 instead of 0 to 1.  Useful for generic gamepad skins
-                         who use a single axis for analog L/R buttons.
-    />
-```
-```
-<rangebutton
-    name="lstick_x"    # Analog value to bind the display to.
-    image="d-left.png" # Image file to mask over the background as the input changes.
-    x="15" y="18"      # Location in pixels where the top/left corner of the image should sit. 
-    from="-1.0"        # From and to attributes specify the range which the specified analog
-    to="-0.5"          #   input must be in to display the image.
-/>
-```
+### Hardware Setup
 
-### Binding controller inputs to keyboard key presses
+For Sega Genesis controllers you will need to make the following connections:
 
-Binding controller inputs to keyboard key presses is achieved by placing ``<binding>`` definitions
-in the ``keybindings.xml`` file.  The ``output-key`` attribute on the binding specifies which keyboard key to press when the provided gamepad buttons are pressed.  Values of ``output-key`` can simply be letters, or [see here other for valid key bindings (the text in red are the acceptable values for ``output-key``)](https://github.com/jaburns/NintendoSpy/blob/master/Keybindings.cs#L110).  Each binding must contain at least one child ``<input>`` element.  The input elements specify which buttons on the controller must be depressed in order to send the key press signal.  See below for an example ``keybindings.xml`` file which makes pressing L and R together trigger a ``home`` key press on the keyboard.
+| DB9 Pin | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |          2          |
+|    2    |          3          |
+|    3    |          4          |
+|    4    |          5          |
+|    5    |    Not Connected    |
+|    6    |          6          |
+|    7    |          8          |
+|    8    |    Not Connected    |
+|    9    |          7          |
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<keybindings>
-    <binding output-key="home">
-        <input button="r" />
-        <input button="l" />
-    </binding>
-</keybindings>
+For Atari Joysticks, Sega Master System controllers and the Atari Omega Race Booster Grip you will need to make the following connections:
+
+| DB9 Pin | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |          2          |
+|    2    |          3          |
+|    3    |          4          |
+|    4    |          5          |
+|    5    |          6          |
+|    6    |          7          |
+|    7    |    Not Connected    |
+|    8    |    Not Connected    |
+|    9    |          8          |
+
+## Software and Setup
+
+Once the wiring is done, hook everything up to your game system and computer, now for the easy part.
+
+1. Plug in the USB connector to your Arduino and PC.
+
+2. Install the [latest Arduino software](http://arduino.cc/en/Main/Software), download the Windows Installer option.
+
+3. Once installed, open the Arduino software, you should see "Arduino Uno on COMX" at the bottom right corner if everything is working. If not, you may need to restart and/or replug the USB connector.
+
+![](http://i.imgur.com/KpmJnVX.jpg)
+
+4. Install my Arduino ClassicController library:
+
+ * Download ClassicController.zip from https://github.com/zoggins/ClassicController/releases/latest
+
+ * Open "Sketch > Include Library > Add .ZIP Library..."
+
+ * Select the zip file you downloaded in step 1
+
+4. Download and unzip the [latest release of RetroSpy somewhere](https://github.com/zoggins/RetroSpy/releases/latest).
+
+5. Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
+
+6. Now uncomment the option for the operation mode (which controller) you will use. Note I am using a SNES controller here.  MODE_SEGA is for Genesis & MODE_CLASSIC is for SMS/Atari.
+
+![](http://i.imgur.com/RIUqaEp.jpg)
+
+7. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes.
+
+![](http://i.imgur.com/54HtRdB.jpg)
+
+8. Run ``RetroSpy.exe``.
+
+9. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.

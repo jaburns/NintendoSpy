@@ -58,7 +58,7 @@ namespace NintendoSpy
             _xiAndGamepadListUpdateTimer.Interval = TimeSpan.FromSeconds(2);
             _xiAndGamepadListUpdateTimer.Tick += (sender, e) =>
             {
-                if (_vm.Sources.SelectedItem == InputSource.PAD)
+                if (_vm.Sources.SelectedItem == InputSource.PAD || _vm.Sources.SelectedItem == InputSource.PADATOD)
                 {
                     updateGamepadList();
                 }
@@ -108,7 +108,7 @@ namespace NintendoSpy
 
             try {
                 IControllerReader reader; 
-                if(_vm.Sources.SelectedItem == InputSource.PAD)
+                if(_vm.Sources.SelectedItem == InputSource.PAD || _vm.Sources.SelectedItem == InputSource.PADATOD)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }
@@ -132,7 +132,7 @@ namespace NintendoSpy
 #else
             catch (Exception ex) {
 #endif
-                MessageBox.Show (ex.Message, "NintendoSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show (ex.Message, "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             this.Show ();

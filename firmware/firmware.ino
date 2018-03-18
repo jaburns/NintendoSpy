@@ -1,7 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// NintendoSpy Firmware for Arduino
-// v1.0.1
-// Written by jaburns
+// RetroSpy Firmware for Arduino
+// v2.0
+// RetroSpy written by zoggins
+// NintendoSpy originally written by jaburns
 
 
 // ---------- Uncomment one of these options to select operation mode --------------
@@ -9,7 +10,10 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
-// Bridge one of the analog GND to the right analog IN to enable your selected mode
+//#define MODE_SEGA
+//#define MODE_CLASSIC
+//#define MODE_BOOSTER_GRIP
+//Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
 // The only reason you'd want to use 2-wire SNES mode is if you built a NintendoSpy
@@ -17,8 +21,25 @@
 // compatibility only.
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
+// Uncomment this for MODE_SEGA, MODE_CLASSIC and MODE_BOOSTER_GRIP serial debugging output
+//#define SEGADEBUG
 
+#include <SegaControllerSpy.h>
+#include <ClassicController.h>
+#include <BoosterGrip.h>
 
+SegaControllerSpy segaController;
+word currentState = 0;
+word lastState = 0;
+
+// Specify the Arduino pins that are connected to
+// DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
+ClassicController classicController(2, 3, 4, 5, 7, 8);
+
+// Specify the Arduino pins that are connected to
+// DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
+BoosterGrip boosterGrip(2, 3, 4, 5, 6, 7, 8);
+ 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
 #define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
@@ -58,10 +79,15 @@ unsigned char rawData[ 128 ];
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
-    PORTD = 0x00;
-    DDRD  = 0x00;
+    #ifndef MODE_SEGA
+    #ifndef MODE_CLASSIC
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
+    PORTD = 0x00;
+    DDRD  = 0x00;
+    #endif
+    #endif
+    
     Serial.begin( 115200 );
 }
 
@@ -173,6 +199,64 @@ inline void sendRawData( unsigned char first, unsigned char count )
     Serial.write( SPLIT );
 }
 
+inline void sendRawSegaData()
+{
+  #ifndef SEGADEBUG
+  for (unsigned char i = 0; i < 13; ++i)
+  {
+    Serial.write (currentState & (1 << i) ? ONE : ZERO );
+  }
+  Serial.write( SPLIT );
+  #else
+  #ifdef MODE_SEGA
+  if (currentState != lastState)
+  {
+      Serial.print((currentState & SCS_CTL_ON)    ? "+" : "-");
+      Serial.print((currentState & SCS_BTN_UP)    ? "U" : "0");
+      Serial.print((currentState & SCS_BTN_DOWN)  ? "D" : "0");
+      Serial.print((currentState & SCS_BTN_LEFT)  ? "L" : "0");
+      Serial.print((currentState & SCS_BTN_RIGHT) ? "R" : "0");
+      Serial.print((currentState & SCS_BTN_START) ? "S" : "0");
+      Serial.print((currentState & SCS_BTN_A)     ? "A" : "0");
+      Serial.print((currentState & SCS_BTN_B)     ? "B" : "0");
+      Serial.print((currentState & SCS_BTN_C)     ? "C" : "0");
+      Serial.print((currentState & SCS_BTN_X)     ? "X" : "0");
+      Serial.print((currentState & SCS_BTN_Y)     ? "Y" : "0");
+      Serial.print((currentState & SCS_BTN_Z)     ? "Z" : "0");
+      Serial.print((currentState & SCS_BTN_MODE)  ? "M" : "0");
+      Serial.print("\n");
+      lastState = currentState;
+  }
+  #endif
+  #ifdef MODE_CLASSIC
+  if (currentState != lastState)
+  {
+      Serial.print((currentState & CC_BTN_UP)    ? "U" : "0");
+      Serial.print((currentState & CC_BTN_DOWN)  ? "D" : "0");
+      Serial.print((currentState & CC_BTN_LEFT)  ? "L" : "0");
+      Serial.print((currentState & CC_BTN_RIGHT) ? "R" : "0");
+      Serial.print((currentState & CC_BTN_1)     ? "1" : "0");
+      Serial.print((currentState & CC_BTN_2)     ? "2" : "0");
+      Serial.print("\n");
+      lastState = currentState;
+  } 
+  #endif
+  #ifdef MODE_BOOSTER_GRIP
+  if (currentState != lastState)
+  {
+      Serial.print((currentState & BG_BTN_UP)    ? "U" : "0");
+      Serial.print((currentState & BG_BTN_DOWN)  ? "D" : "0");
+      Serial.print((currentState & BG_BTN_LEFT)  ? "L" : "0");
+      Serial.print((currentState & BG_BTN_RIGHT) ? "R" : "0");
+      Serial.print((currentState & BG_BTN_1)     ? "1" : "0");
+      Serial.print((currentState & BG_BTN_2)     ? "2" : "0");
+      Serial.print((currentState & BG_BTN_3)     ? "3" : "0");
+      Serial.print("\n");
+      lastState = currentState;
+  } 
+  #endif
+  #endif
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update loop definitions for the various console modes.
@@ -219,6 +303,24 @@ inline void loop_NES()
     sendRawData( 0 , NES_BITCOUNT );
 }
 
+inline void loop_Sega()
+{
+  currentState = segaController.getState();
+  sendRawSegaData();
+}
+
+inline void loop_Classic()
+{
+  currentState = classicController.getState();
+  sendRawSegaData();
+}
+
+inline void loop_BoosterGrip()
+{
+  currentState = boosterGrip.getState();
+  sendRawSegaData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -231,6 +333,12 @@ void loop()
     loop_SNES();
 #elif defined MODE_NES
     loop_NES();
+#elif defined MODE_SEGA
+    loop_Sega();
+#elif defined MODE_CLASSIC
+    loop_Classic();
+#elif defined MODE_BOOSTER_GRIP
+    loop_BoosterGrip();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
