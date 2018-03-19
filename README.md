@@ -97,13 +97,7 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/arduinooncom3.jpg)
 
-4. Install my Arduino ClassicController library:
-
- * Download ClassicController.zip from https://github.com/zoggins/ClassicController/releases/latest
-
- * Open "Sketch > Include Library > Add .ZIP Library..."
-
- * Select the zip file you downloaded in step 1
+4. Install my Arduino ClassicController library.  Installation directions are [here](https://github.com/zoggins/ClassicController#installation).
 
 4. Download and unzip the [latest release of RetroSpy somewhere](https://github.com/zoggins/RetroSpy/releases/latest).
 
