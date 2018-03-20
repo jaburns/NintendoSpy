@@ -39,7 +39,7 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 ## Software
 
 1. [the latest Arduino software](http://arduino.cc/en/Main/Software)
-2. [ClassicController Arduino Library](https://github.com/zoggins/ClassicController/releases/latest)
+2. [ClassicController Arduino Library](https://github.com/zoggins/ClassicControllerSpy/releases/latest)
 2. Firmware for the Arduino
 3. PC software to connect to the Arduino and display the controller
 
@@ -97,7 +97,7 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/arduinooncom3.jpg)
 
-4. Install my Arduino ClassicController library.  Installation directions are [here](https://github.com/zoggins/ClassicController#installation).
+4. Install my Arduino ClassicControllerSpy library.  Installation directions are [here](https://github.com/zoggins/ClassicControllerSpy#installation).
 
 4. Download and unzip the [latest release of RetroSpy somewhere](https://github.com/zoggins/RetroSpy/releases/latest).
 

@@ -26,8 +26,8 @@
 //#define SEGADEBUG
 
 #include <SegaControllerSpy.h>
-#include <ClassicController.h>
-#include <BoosterGrip.h>#
+#include <ClassicControllerSpy.h>
+#include <BoosterGripSpy.h>
 #ifdef MODE_KEYBOARD_CONTROLLER
 #include <KeyboardController.h>
 #endif
@@ -39,11 +39,11 @@ word lastState = 0;
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
-ClassicController classicController(2, 3, 4, 5, 7, 8);
+ClassicControllerSpy classicController(2, 3, 4, 5, 7, 8);
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
-BoosterGrip boosterGrip(2, 3, 4, 5, 6, 7, 8);
+BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
 
 #ifdef MODE_KEYBOARD_CONTROLLER
 KeyboardController keyboardController;
