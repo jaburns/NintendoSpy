@@ -9,17 +9,17 @@ goto end
 :buildOK
 del RetroSpy-release.zip
 
-cd bin\Release
-"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip RetroSpy.exe
-cd ..\..
+cd bin\x64\Release
+"C:\Program Files\7-Zip\7z.exe" a ..\..\..\RetroSpy-release.zip RetroSpy.exe
+cd ..\..\..
 
-cd slimdx\x64
-"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip SlimDX.dll
-cd ..\..
+;cd slimdx\x64
+;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip SlimDX.dll
+;cd ..\..
 
-"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip skins
-"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip firmware
-"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip keybindings.xml
+;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip skins
+;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip firmware
+;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip keybindings.xml
 
 :end
 pause
