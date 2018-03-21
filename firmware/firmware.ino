@@ -13,7 +13,6 @@
 //#define MODE_SEGA
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
-//#define MODE_KEYBOARD_CONTROLLER /* THIS DOES NOT CURRENTLY WORK! */
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -23,19 +22,15 @@
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
 // Uncomment this for MODE_SEGA, MODE_CLASSIC and MODE_BOOSTER_GRIP serial debugging output
-//#define SEGADEBUG
+//#define DEBUG
 
 #include <SegaControllerSpy.h>
 #include <ClassicControllerSpy.h>
 #include <BoosterGripSpy.h>
-#ifdef MODE_KEYBOARD_CONTROLLER
-#include <KeyboardController.h>
-#endif
 
 SegaControllerSpy segaController;
 word currentState = 0;
 word lastState = 0;
-
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
@@ -214,7 +209,7 @@ inline void sendRawData( unsigned char first, unsigned char count )
 
 inline void sendRawSegaData()
 {
-  #ifndef SEGADEBUG
+  #ifndef DEBUG
   for (unsigned char i = 0; i < 13; ++i)
   {
     Serial.write (currentState & (1 << i) ? ONE : ZERO );
@@ -267,13 +262,6 @@ inline void sendRawSegaData()
       Serial.print("\n");
       lastState = currentState;
   } 
-  #endif
-  #ifdef MODE_KEYBOARD_CONTROLLER
-  if (currentState != lastState)
-  {
-        Serial.println(currentState);
-  } 
-  lastState = currentState;
   #endif
   #endif
 }
@@ -341,14 +329,6 @@ inline void loop_BoosterGrip()
   sendRawSegaData();
 }
 
-#ifdef MODE_KEYBOARD_CONTROLLER
-inline void loop_KeyboardController()
-{
-  currentState = keyboardController.getState();
-  sendRawSegaData();
-}
-#endif 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -367,8 +347,6 @@ void loop()
     loop_Classic();
 #elif defined MODE_BOOSTER_GRIP
     loop_BoosterGrip();
-#elif defined MODE_KEYBOARD_CONTROLLER
-    loop_KeyboardController();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
