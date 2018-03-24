@@ -7,6 +7,10 @@ This project provides a general solution for live-streaming your controller inpu
 
 NintendoSpy supports custom skins using a straight-forward XML-based skin format.  You can also bind controller input combinations to trigger keypresses for hitting checkpoints on your splits.  If you create your own skins, feel free to submit them as pull requests to this repository.
 
+Some extra skins for NES and SNES [can be found here](http://proximitysound.com/skins).
+
+There's also a [fork available here](https://github.com/zoggins/RetroSpy) which supports Atari/Commodore joysticks, Sega Genesis controllers, SMS controllers and the Atari 2600 Omega Race Booster Grip.
+
 ## Documentation
 
 ### Wiring and hardware
