@@ -89,6 +89,7 @@
     <Compile Include="Readers\ControllerStateBuilder.cs" />
     <Compile Include="Readers\ControllerState.cs" />
     <Compile Include="Readers\DelayedControllerReader.cs" />
+    <Compile Include="Readers\Playstation.cs" />
     <Compile Include="Readers\GameCube.cs" />
     <Compile Include="Readers\GamepadReaderAnalogToDPad.cs" />
     <Compile Include="Readers\IControllerReader.cs" />
@@ -611,6 +612,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\pc360-default\trig-r.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-analog-red\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-analog-red\playstation-analog-stick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-analog-red\playstation-analog.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-analog-red\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\playstation-digital.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation-digital\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\sega-genesis\circle.png">

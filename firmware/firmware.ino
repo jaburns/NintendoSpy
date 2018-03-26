@@ -13,6 +13,7 @@
 //#define MODE_SEGA
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
+//#define MODE_PLAYSTATION
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -49,6 +50,7 @@ KeyboardController keyboardController;
 #define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 
 #define WAIT_FALLING_EDGE( pin ) while( !PIN_READ(pin) ); while( PIN_READ(pin) );
+#define WAIT_LEADING_EDGE( pin ) while( PIN_READ(pin) ); while( !PIN_READ(pin) );
 
 #define MODEPIN_SNES 0
 #define MODEPIN_N64  1
@@ -72,12 +74,8 @@ KeyboardController keyboardController;
 #define ONE    '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
 #define SPLIT '\n'  // Use a new-line character to split up the controller state packets.
 
-
-
-
 // Declare some space to store the bits we read from a controller.
 unsigned char rawData[ 128 ];
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
@@ -91,6 +89,9 @@ void setup()
     DDRD  = 0x00;
     #endif
     #endif
+
+    for(int i = 2; i <= 6; ++i)
+      pinMode(i, INPUT_PULLUP);
 
     lastState = -1;
     currentState = 0;
@@ -205,6 +206,100 @@ inline void sendRawData( unsigned char first, unsigned char count )
         Serial.write( rawData[i] ? ONE : ZERO );
     }
     Serial.write( SPLIT );
+}
+
+#define PS_ATT 2
+#define PS_CLOCK 3
+#define PS_ACK 4
+#define PS_CMD 5
+#define PS_DATA 6
+
+inline void read_Playstation( )
+{
+  WAIT_FALLING_EDGE(PS_ATT);
+
+  unsigned char bits = 8;
+  do {
+     WAIT_LEADING_EDGE(PS_CLOCK);
+  }
+  while( --bits > 0 );
+
+  byte controllerType = 0;
+  bits = 0;
+  do {
+      WAIT_LEADING_EDGE(PS_CLOCK);
+      controllerType |= ((PIN_READ(PS_DATA) == 0 ? 0 : 1) << bits);
+  }
+  while( ++bits < 8 );
+  rawData[0] = controllerType;
+  
+  bits = 0;
+  do {
+      WAIT_LEADING_EDGE(PS_CLOCK);
+  }
+  while( ++bits < 8 );
+  
+  bits = 0;
+  do {
+      WAIT_LEADING_EDGE(PS_CLOCK);
+      rawData[bits+1] = !PIN_READ(PS_DATA);
+  }
+  while( ++bits < 16 );
+
+  // Read analog sticks for Analog Controller in Red Mode
+  if (controllerType == 0x73)
+  {
+    for(int i = 0; i < 4; ++i)
+    {
+      bits = 0;
+      rawData[17+i] = 0;
+      do {
+          WAIT_LEADING_EDGE(PS_CLOCK);
+          rawData[17+i] |= ((PIN_READ(PS_DATA) == 0 ? 0 : 1) << bits);
+      }
+      while( ++bits < 8 );
+    }
+  }
+}
+
+inline void sendRawPsData()
+{
+    #ifndef DEBUG
+    Serial.write( rawData[0] );
+    for (unsigned char i = 1; i < 17; ++i)
+    {
+      Serial.write( rawData[i] ? ONE : ZERO );
+    }
+    Serial.write( rawData[17] );
+    Serial.write( rawData[18] );
+    Serial.write( rawData[19] );
+    Serial.write( rawData[20] );
+    Serial.write( SPLIT );
+    #else
+    Serial.print(rawData[0]);
+    Serial.print(" ");
+    Serial.print(rawData[1] != 0 ? "S" : "0");
+    Serial.print(rawData[2] != 0 ? "5" : "0");
+    Serial.print(rawData[3] != 0 ? "6" : "0");
+    Serial.print(rawData[4] != 0 ? "T" : "0");
+    Serial.print(rawData[5] != 0 ? "U" : "0");
+    Serial.print(rawData[6] != 0 ? "R" : "0");
+    Serial.print(rawData[7] != 0 ? "D" : "0");
+    Serial.print(rawData[8] != 0 ? "L" : "0");
+    Serial.print(rawData[9] != 0 ? "1" : "0");
+    Serial.print(rawData[10] != 0 ? "2" : "0");
+    Serial.print(rawData[11] != 0 ? "3" : "0");
+    Serial.print(rawData[12] != 0 ? "4" : "0");
+    Serial.print(rawData[13] != 0 ? "/" : "0");
+    Serial.print(rawData[14] != 0 ? "O" : "0");
+    Serial.print(rawData[15] != 0 ? "X" : "0");
+    Serial.print(rawData[16] != 0 ? "Q" : "0");
+    Serial.print(rawData[17]);
+    Serial.print(rawData[18]);
+    Serial.print(rawData[19]);
+    Serial.print(rawData[20]);
+    Serial.print("\n");
+    #endif
 }
 
 inline void sendRawSegaData()
@@ -329,6 +424,14 @@ inline void loop_BoosterGrip()
   sendRawSegaData();
 }
 
+inline void loop_Playstation()
+{
+  noInterrupts();
+  read_Playstation();
+  interrupts();
+  sendRawPsData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -347,6 +450,8 @@ void loop()
     loop_Classic();
 #elif defined MODE_BOOSTER_GRIP
     loop_BoosterGrip();
+#elif defined MODE_PLAYSTATION
+    loop_Playstation();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
