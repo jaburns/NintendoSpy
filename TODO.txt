@@ -7,6 +7,8 @@ TurboGraphx
 
 NEO GEO
 
+Gamecube Gameboy Player
+
 
 -- Probably will work, but haven't attempted --
 
