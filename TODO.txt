@@ -1,0 +1,39 @@
+State of Unsupported Controllers
+
+
+-- Work in Progress --
+
+TurboGraphx
+
+NEO GEO
+
+
+-- Probably will work, but haven't attempted --
+
+Atari Driving Controller: Probably possible, but haven't tried. Digital.
+
+Atari 7800: Probably possible, but don't have a 7800. Digital.
+
+Dreamcast: Probably will work, but the protocol is very complicated (i.e. LOTS OF WORK).  Complex serial protocol.
+
+Sega Saturn: Probably possible, but I don't own a Saturn. 4 page banking.
+
+Atari Jaguar: Probably possible, but I don't own a Jaguar.  Much like the atari keyboard controller.  Column by row polling.
+
+Intellivision: Probably possible, but I don't own an Intellivision. Digital.
+
+3DO: Probably possible, but don't own one. 2 page banking.
+
+CD-i: Seems to be a serial communication of some for, so should be possible.  There isn't a lot of documentation online describing the protocol through. http://cdii.blogspot.com/2016/05/now-you-can-play-cd-i-games-with-your.html
+
+
+-- Currently no plans to support --
+
+Atari Paddles: Must need more electronics because as soon as I plug in the two analog pins to the Arduino the Atari quits responding to the paddle.  I will support these it if I can sort out the problem.
+
+Atari Keyboard Controller: There is no standard read method, so every cartridge does it differently.  This makes it only work on a game by game basis, so really frustrating.
+
+Playstation 2: The protocol is difficult to spy because the console can program the controller to return a custom response format.  This isn't an absolute no, but would require a lot of work.
+
+Original Xbox: The controllers are USB hubs, so without implementing a full USB spy type system its not possible.
+
