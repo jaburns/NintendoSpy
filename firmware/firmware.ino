@@ -9,17 +9,18 @@
 //#define MODE_GC
 //#define MODE_N64
 //#define MODE_SNES
+#define MODE_SUPER_GAMEBOY
 //#define MODE_NES
 //#define MODE_SEGA
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
+//#define MODE_TG16
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
 // The only reason you'd want to use 2-wire SNES mode is if you built a NintendoSpy
 // before the 3-wire firmware was implemented.  This mode is for backwards
-// compatibility only.
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
 // Uncomment this for MODE_SEGA, MODE_CLASSIC and MODE_BOOSTER_GRIP serial debugging output
@@ -64,7 +65,8 @@ KeyboardController keyboardController;
 #define SNES_DATA       4
 #define SNES_CLOCK      6
 #define SNES_BITCOUNT  16
-#define  NES_BITCOUNT   8
+#define SGB_BITCOUNT   32
+#define NES_BITCOUNT    8
 
 #define GC_PIN        5
 #define GC_PREFIX    25
@@ -196,6 +198,14 @@ void read_shiftRegister( unsigned char bits )
         ++rawDataPtr;
     }
     while( --bits > 0 );
+
+//    bits=16;
+//        do {
+//        WAIT_FALLING_EDGE( clock );
+//        *rawDataPtr = !PIN_READ(data);
+//        ++rawDataPtr;
+//    }
+//    while( --bits > 0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,6 +216,27 @@ inline void sendRawData( unsigned char first, unsigned char count )
         Serial.write( rawData[i] ? ONE : ZERO );
     }
     Serial.write( SPLIT );
+}
+
+#define TG_SELECT 6
+#define TG_DATA1 2
+#define TG_DATA2 3
+#define TG_DATA3 4
+#define TG_DATA4 5
+
+inline void read_TgData()
+{
+  byte data = PIND;
+  if ((PIND & 0b01000000) != 0)
+  {
+    currentState &= 0b1111111111110000;
+    currentState |= ~((PIND & 0b00111100) >> 2);
+  }
+//  else if ((data & 0b01000000) == 0)
+//  {
+//    currentState &= 0b1111111100001111;
+//    currentState |= ~((data & 0b0111100) << 2);
+//  }
 }
 
 #define PS_ATT 2
@@ -302,6 +333,32 @@ inline void sendRawPsData()
     #endif
 }
 
+inline void sendRawTgData()
+{
+    #ifndef DEBUG
+    Serial.write( rawData[0] );
+    for (unsigned char i = 1; i < 8; ++i)
+    {
+      Serial.write( rawData[i] ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else
+  if (currentState != lastState)
+  {
+      Serial.print((currentState & 0b0000000000000001)    ? "U" : "0");
+      Serial.print((currentState & 0b0000000000000010)    ? "R" : "0");
+      Serial.print((currentState & 0b0000000000000100)    ? "D" : "0");
+      Serial.print((currentState & 0b0000000000001000)    ? "L" : "0");
+      Serial.print((currentState & 0b0000000000010000)    ? "A" : "0");
+      Serial.print((currentState & 0b0000000000100000)    ? "B" : "0");
+      Serial.print((currentState & 0b0000000001000000)    ? "S" : "0");
+      Serial.print((currentState & 0b0000000010000000)    ? "R" : "0");
+      Serial.print("\n");
+        lastState = currentState;
+  }
+    #endif
+}
+
 inline void sendRawSegaData()
 {
   #ifndef DEBUG
@@ -394,6 +451,14 @@ inline void loop_SNES()
     sendRawData( 0 , SNES_BITCOUNT );
 }
 
+inline void loop_SGB()
+{
+    noInterrupts();
+    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( SGB_BITCOUNT );
+    interrupts();
+    sendRawData( 0 , SNES_BITCOUNT );
+}
+
 inline void loop_NES()
 {
     noInterrupts();
@@ -432,6 +497,14 @@ inline void loop_Playstation()
   sendRawPsData();
 }
 
+inline void loop_TG16()
+{
+  noInterrupts();
+  read_TgData();
+  interrupts();
+  sendRawTgData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -442,6 +515,8 @@ void loop()
     loop_N64();
 #elif defined MODE_SNES
     loop_SNES();
+#elif defined MODE_SUPER_GAMEBOY
+    loop_SGB();
 #elif defined MODE_NES
     loop_NES();
 #elif defined MODE_SEGA
@@ -452,6 +527,8 @@ void loop()
     loop_BoosterGrip();
 #elif defined MODE_PLAYSTATION
     loop_Playstation();
+#elif defined MODE_TG16
+    loop_TG16();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
