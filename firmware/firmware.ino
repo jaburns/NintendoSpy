@@ -9,6 +9,7 @@
 //#define MODE_GC
 //#define MODE_N64
 //#define MODE_SNES
+//#define MODE_SUPER_GAMEBOY
 //#define MODE_NES
 //#define MODE_SEGA
 //#define MODE_CLASSIC
@@ -64,7 +65,8 @@ KeyboardController keyboardController;
 #define SNES_DATA       4
 #define SNES_CLOCK      6
 #define SNES_BITCOUNT  16
-#define  NES_BITCOUNT   8
+#define SGB_BITCOUNT   32
+#define NES_BITCOUNT    8
 
 #define GC_PIN        5
 #define GC_PREFIX    25
@@ -394,6 +396,14 @@ inline void loop_SNES()
     sendRawData( 0 , SNES_BITCOUNT );
 }
 
+inline void loop_SGB()
+{
+    noInterrupts();
+    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( SGB_BITCOUNT );
+    interrupts();
+    sendRawData( 0 , SNES_BITCOUNT );
+}
+
 inline void loop_NES()
 {
     noInterrupts();
@@ -442,6 +452,8 @@ void loop()
     loop_N64();
 #elif defined MODE_SNES
     loop_SNES();
+#elif defined MODE_SUPER_GAMEBOY
+    loop_SGB();
 #elif defined MODE_NES
     loop_NES();
 #elif defined MODE_SEGA
