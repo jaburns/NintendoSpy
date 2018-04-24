@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Super Gameboy SNES" author="zoggins" type="snes">
+
+    <background name="Super Gameboy" image="gameboy.png" />
+
+    <button name="a" image="circle.png" x="196" y="50" width="24" height="24" />
+    <button name="b" image="circle.png" x="175" y="69" width="24" height="24" />
+
+    <button name="start" image="circle.png" x="113" y="62" width="28" height="17" />
+    <button name="select" image="circle.png" x="83" y="62" width="28" height="17" />
+
+    <button name="up" image="circle.png" x="46" y="41" width="16" height="16" />
+    <button name="down" image="circle.png" x="46" y="69" width="16" height="16" />
+    <button name="left" image="circle.png" x="32" y="55" width="16" height="16" />
+    <button name="right" image="circle.png" x="60" y="55" width="16" height="16" />
+
+</skin>

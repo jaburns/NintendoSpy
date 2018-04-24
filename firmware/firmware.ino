@@ -9,7 +9,7 @@
 //#define MODE_GC
 //#define MODE_N64
 //#define MODE_SNES
-#define MODE_SUPER_GAMEBOY
+//#define MODE_SUPER_GAMEBOY
 //#define MODE_NES
 //#define MODE_SEGA
 //#define MODE_CLASSIC
@@ -198,14 +198,6 @@ void read_shiftRegister( unsigned char bits )
         ++rawDataPtr;
     }
     while( --bits > 0 );
-
-//    bits=16;
-//        do {
-//        WAIT_FALLING_EDGE( clock );
-//        *rawDataPtr = !PIN_READ(data);
-//        ++rawDataPtr;
-//    }
-//    while( --bits > 0 );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,24 +211,25 @@ inline void sendRawData( unsigned char first, unsigned char count )
 }
 
 #define TG_SELECT 6
-#define TG_DATA1 2
-#define TG_DATA2 3
-#define TG_DATA3 4
-#define TG_DATA4 5
+#define TG_DATA1  2
+#define TG_DATA2  3
+#define TG_DATA3  4
+#define TG_DATA4  5
 
 inline void read_TgData()
 {
-  byte data = PIND;
-  if ((PIND & 0b01000000) != 0)
-  {
-    currentState &= 0b1111111111110000;
-    currentState |= ~((PIND & 0b00111100) >> 2);
-  }
-//  else if ((data & 0b01000000) == 0)
-//  {
-//    currentState &= 0b1111111100001111;
-//    currentState |= ~((data & 0b0111100) << 2);
-//  }
+  currentState = 0x0000;
+  while((PIND & 0b01000000) == 0){}    
+  asm volatile(
+        "nop\nnop\n");
+    currentState |= ((PIND & 0b00111100) >> 2);
+
+  while((PIND & 0b01000000) != 0){}    
+    asm volatile(
+        "nop\nnop\n");
+    currentState |= ((PIND & 0b00111100) << 2);
+
+    currentState = ~currentState;
 }
 
 #define PS_ATT 2
@@ -336,26 +329,21 @@ inline void sendRawPsData()
 inline void sendRawTgData()
 {
     #ifndef DEBUG
-    Serial.write( rawData[0] );
-    for (unsigned char i = 1; i < 8; ++i)
+    for (unsigned char i = 0; i < 8; ++i)
     {
-      Serial.write( rawData[i] ? ONE : ZERO );
+      Serial.write (currentState & (1 << i) ? ONE : ZERO );
     }
     Serial.write( SPLIT );
-    #else
-  if (currentState != lastState)
-  {
-      Serial.print((currentState & 0b0000000000000001)    ? "U" : "0");
-      Serial.print((currentState & 0b0000000000000010)    ? "R" : "0");
-      Serial.print((currentState & 0b0000000000000100)    ? "D" : "0");
-      Serial.print((currentState & 0b0000000000001000)    ? "L" : "0");
-      Serial.print((currentState & 0b0000000000010000)    ? "A" : "0");
-      Serial.print((currentState & 0b0000000000100000)    ? "B" : "0");
-      Serial.print((currentState & 0b0000000001000000)    ? "S" : "0");
-      Serial.print((currentState & 0b0000000010000000)    ? "R" : "0");
-      Serial.print("\n");
-        lastState = currentState;
-  }
+    #else 
+    Serial.print((currentState & 0b0000000000000001)    ? "U" : "0");
+    Serial.print((currentState & 0b0000000000000010)    ? "R" : "0");
+    Serial.print((currentState & 0b0000000000000100)    ? "D" : "0");
+    Serial.print((currentState & 0b0000000000001000)    ? "L" : "0");
+    Serial.print((currentState & 0b0000000000010000)    ? "A" : "0");
+    Serial.print((currentState & 0b0000000000100000)    ? "B" : "0");
+    Serial.print((currentState & 0b0000000001000000)    ? "S" : "0");
+    Serial.print((currentState & 0b0000000010000000)    ? "R" : "0");
+    Serial.print("\n");
     #endif
 }
 
