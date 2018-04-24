@@ -15,12 +15,13 @@
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
+//#define MODE_TG16
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
 // The only reason you'd want to use 2-wire SNES mode is if you built a NintendoSpy
 // before the 3-wire firmware was implemented.  This mode is for backwards
-// compatibility only.
+// compatibility only. 
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
 // Uncomment this for MODE_SEGA, MODE_CLASSIC and MODE_BOOSTER_GRIP serial debugging output
@@ -210,6 +211,28 @@ inline void sendRawData( unsigned char first, unsigned char count )
     Serial.write( SPLIT );
 }
 
+#define TG_SELECT 6
+#define TG_DATA1  2
+#define TG_DATA2  3
+#define TG_DATA3  4
+#define TG_DATA4  5
+
+inline void read_TgData()
+{
+  currentState = 0x0000;
+  while((PIND & 0b01000000) == 0){}    
+  asm volatile(
+        "nop\nnop\n");
+    currentState |= ((PIND & 0b00111100) >> 2);
+
+  while((PIND & 0b01000000) != 0){}    
+    asm volatile(
+        "nop\nnop\n");
+    currentState |= ((PIND & 0b00111100) << 2);
+
+    currentState = ~currentState;
+}
+
 #define PS_ATT 2
 #define PS_CLOCK 3
 #define PS_ACK 4
@@ -300,6 +323,27 @@ inline void sendRawPsData()
     Serial.print(rawData[18]);
     Serial.print(rawData[19]);
     Serial.print(rawData[20]);
+    Serial.print("\n");
+    #endif
+}
+
+inline void sendRawTgData()
+{
+    #ifndef DEBUG
+    for (unsigned char i = 0; i < 8; ++i)
+    {
+      Serial.write (currentState & (1 << i) ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else 
+    Serial.print((currentState & 0b0000000000000001)    ? "U" : "0");
+    Serial.print((currentState & 0b0000000000000010)    ? "R" : "0");
+    Serial.print((currentState & 0b0000000000000100)    ? "D" : "0");
+    Serial.print((currentState & 0b0000000000001000)    ? "L" : "0");
+    Serial.print((currentState & 0b0000000000010000)    ? "A" : "0");
+    Serial.print((currentState & 0b0000000000100000)    ? "B" : "0");
+    Serial.print((currentState & 0b0000000001000000)    ? "S" : "0");
+    Serial.print((currentState & 0b0000000010000000)    ? "R" : "0");
     Serial.print("\n");
     #endif
 }
@@ -442,6 +486,14 @@ inline void loop_Playstation()
   sendRawPsData();
 }
 
+inline void loop_TG16()
+{
+  noInterrupts();
+  read_TgData();
+  interrupts();
+  sendRawTgData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -464,6 +516,8 @@ void loop()
     loop_BoosterGrip();
 #elif defined MODE_PLAYSTATION
     loop_Playstation();
+#elif defined MODE_TG16
+    loop_TG16();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();

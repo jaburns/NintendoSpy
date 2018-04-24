@@ -95,6 +95,7 @@
     <Compile Include="Readers\IControllerReader.cs" />
     <Compile Include="Readers\BlinkReductionFilter.cs" />
     <Compile Include="Readers\Classic.cs" />
+    <Compile Include="Readers\TG16.cs" />
     <Compile Include="Readers\Sega.cs" />
     <Compile Include="Readers\Nintendo64.cs" />
     <Compile Include="Readers\SerialControllerReader.cs" />
@@ -136,6 +137,24 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="skins\tg16-default\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\tg16-default\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\tg16-default\tg16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-supergameboy\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-supergameboy\gameboy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\snes-supergameboy\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
