@@ -54,7 +54,7 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 2. Firmware for the Arduino
 3. PC software to connect to the Arduino and display the controller
 
-\#2 and #3 above are included in the release package of RetroSpy.  The firmware is located in the ``firmware`` folder and is called ``firmware.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
+\#3 and #4 above are included in the release package of RetroSpy.  The firmware is located in the ``firmware`` folder and is called ``firmware.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 
 ## Instructions for NES, SNES, N64 or GameCube
 
