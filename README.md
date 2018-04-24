@@ -3,7 +3,7 @@ RetroSpy
 
 #### [Download the latest RetroSpy release here.](https://github.com/zoggins/RetroSpy/releases/latest)
 
-This is a fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy).  NintendoSpy provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.  My fork allows for the support of Atari/Commodore joysticks, Sega Genesis controllers, SMS controllers, the Atari 2600 Omega Race Booster Grip and PSX controllers.  Additionally, it adds full support for the Super Gameboy SNES cartridge, which wasn't correctly supported in the original NintendoSpy.
+This is a fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy).  NintendoSpy provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.  My fork allows for the support of Atari/Commodore joysticks, Sega Genesis controllers, SMS controllers, the Atari 2600 Omega Race Booster Grip, Turbographx-16/PC Engine controllers and PSX controllers.  Additionally, it adds full support for the Super Gameboy SNES cartridge, which wasn't correctly supported in the original NintendoSpy.
 
 The following documentation is in addition to the original NintendoSpy documentation found [here](https://github.com/zoggins/RetroSpy/blob/master/README-ORIG.md).  These instructions borrow heavily from evilash25's awesome NintendoSpy build guide, which can be found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).
 
@@ -35,6 +35,17 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 4. [DB9 Male Breakout Board to Screw Terminals](https://www.amazon.com/gp/product/B00CLTP2O2/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
 5. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/gp/product/B0756KRCFX/ref=oh_aui_detailpage_o06_s00?ie=UTF8&psc=1)
 5. Wire cutters/strippers
+## Specific Components and Equipment needed for a PSX and Turbographx-16/PC Engine cable
+
+1. Controller extension cable (PSX or TG16/PC Engine)
+2. (optional) male/female connectors with 5 pins minimum for easy controller switching
+3. Wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
+4. Wire cutters/strippers
+5. Exacto knife or box cutters
+6. Soldering iron and solder
+7. Electrical tape
+8. Digital multimeter or a cheap continuity tester
+
 
 ## Software
 
@@ -45,11 +56,46 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 
 \#2 and #3 above are included in the release package of RetroSpy.  The firmware is located in the ``firmware`` folder and is called ``firmware.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 
-## Instructions
+## Instructions for NES, SNES, N64 or GameCube
+
+For building a NES, SNES, N64 or GameCube cable follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).
+
+## Instructions for PSX or Turbographx-16/PC Engine
+
+The building of PSX or Turbographx-16 cable is very similar to building a Nintendo cable, so for the most part follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The pinout of the cables is as follows.
+
+### PSX
+
+|   PSX   | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |          6          |
+|    2    |          5          |
+|    3    |    Not Connected    |
+|    4    |    Not Connected    |
+|    5    |    Not Connected    |
+|    6    |          2          |
+|    7    |          3          |
+|    8    |    Not Connected    |
+|    9    |          4          |
+
+### Turbografx-16/PC Engine
+
+|  TG16   | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |    Not Connected    |
+|    2    |          2          |
+|    3    |          3          |
+|    4    |          4          |
+|    5    |          5          |
+|    6    |          6          |
+|    7    |    Not Connected    |
+|    8    |    Not Connected    |
+
+## Instructions for Genesis/SMS/Atari cable
 
 ### Wiring
 
-For building a NES, SNES, N64 or GameCube cable follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The following is how to build a cable for the Genesis, SMS and Atari.  It is possible to simply solder 9 jumper wires onto each wire of the Atari extension cable and be done, but since Genesis/SMS/Atari/etc use a standarded DB9 port we can build a cable with no soldering required.
+It is possible to simply solder 9 jumper wires onto each wire of the Atari extension cable and be done, but since Genesis/SMS/Atari/etc use a standarded DB9 port we can build a cable with no soldering required.
 
 1.  Take the Atari extension cable, wires, DB9 Breakout Board, DB9 Y cable and optional headers you have acquired and put them together in this configuration:
 
