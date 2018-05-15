@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Default Classic Pro Controller" author="Zas" type="classiccontroller">
+
+    <background name="Black" image="CCPro_Black.png" />
+    
+    <button name="zl" image="zl.png" x="99" y="0" />
+    
+    <button name="zr" image="zr.png" x="438" y="0" />
+    
+    <button name="a" image="a.png" x="537" y="113" />
+    <button name="b" image="b.png" x="484" y="154" />
+    <button name="x" image="x.png" x="478" y="71" />
+    <button name="y" image="y.png" x="425" y="112" />
+    <button name="minus" image="minus.png" x="265" y="121" />
+    <button name="home" image="home.png" x="309" y="123" />
+    <button name="plus" image="plus.png" x="350" y="120" />
+
+    <button name="l" image="l.png" x="110" y="6" />
+
+    <button name="r" image="r.png" x="447" y="6" />
+
+    <button name="up" image="up.png" x="120" y="80" />
+    <button name="down" image="down.png" x="118" y="135" />
+    <button name="left" image="left.png" x="86" y="113" />
+    <button name="right" image="right.png" x="141" y="115" />
+
+    <stick xname="lstick_x" yname="lstick_y" image="stick.png"
+           x="188" y="190" xrange="28" yrange="28"/>
+
+    <stick xname="rstick_x" yname="rstick_y" image="stick.png"
+           x="383" y="190" xrange="28" yrange="28"/>
+
+</skin>
