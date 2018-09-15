@@ -16,6 +16,7 @@
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
 //#define MODE_TG16
+#define MODE_SATURN
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -34,6 +35,10 @@
 SegaControllerSpy segaController;
 word currentState = 0;
 word lastState = 0;
+byte ssState1 = 0;
+byte ssState2 = 0;
+byte ssState3 = 0;
+byte ssState4 = 0;
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
@@ -209,6 +214,85 @@ inline void sendRawData( unsigned char first, unsigned char count )
         Serial.write( rawData[i] ? ONE : ZERO );
     }
     Serial.write( SPLIT );
+}
+
+#define SS_SELECT1 4
+#define SS_SELECT2 5
+#define SS_DATA1   2
+#define SS_DATA2   3
+#define SS_DATA3   6
+#define SS_DATA4   7
+
+inline void read_SSData()
+{
+  word pincache = 0;
+
+  while((PIND & 0b00110000) != 0b00100000){}
+  pincache |= PIND;
+  if ((pincache & 0b00110000) == 0b00100000)
+    ssState3 = ~pincache;
+
+  pincache = 0;
+  while((PIND & 0b00110000) != 0b00010000){}
+  pincache |= PIND;
+  if ((pincache & 0b00110000) == 0b00010000)
+    ssState2 = ~pincache;
+
+  pincache = 0;
+  while((PIND & 0b00110000) != 0){}
+  pincache |= PIND;
+  if ((pincache & 0b00110000) == 0)
+    ssState1 = ~pincache;
+
+  pincache = 0;
+  while((PIND & 0b00110000) != 0b00110000){}
+  pincache |= PIND;
+  if ((pincache & 0b00110000) == 0b00110000)
+    ssState4 = ~pincache;
+
+}
+
+inline void sendRawSSData()
+{
+    #ifndef DEBUG
+    Serial.write ((ssState1 & 0b00000100) ? ONE : ZERO );
+    Serial.write ((ssState1 & 0b00001000) ? ONE : ZERO );
+    Serial.write ((ssState1 & 0b01000000) ? ONE : ZERO );
+    Serial.write ((ssState1 & 0b10000000) ? ONE : ZERO );
+
+    Serial.write ((ssState2 & 0b00000100) ? ONE : ZERO );
+    Serial.write ((ssState2 & 0b00001000) ? ONE : ZERO );
+    Serial.write ((ssState2 & 0b01000000) ? ONE : ZERO );
+    Serial.write ((ssState2 & 0b10000000) ? ONE : ZERO );
+
+    Serial.write ((ssState3 & 0b00000100) ? ONE : ZERO );
+    Serial.write ((ssState3 & 0b00001000) ? ONE : ZERO );
+    Serial.write ((ssState3 & 0b01000000) ? ONE : ZERO );
+    Serial.write ((ssState3 & 0b10000000) ? ONE : ZERO );
+
+    Serial.write ((ssState4 & 0b01000000) ? ONE : ZERO );
+
+    Serial.write( SPLIT );
+    #else 
+    Serial.print((ssState1 & 0b00000100)    ? "Y" : "0");
+    Serial.print((ssState1 & 0b00001000)    ? "Z" : "0");
+    Serial.print((ssState1 & 0b01000000)    ? "R" : "0");
+    Serial.print((ssState1 & 0b10000000)    ? "X" : "0");
+
+    Serial.print((ssState2 & 0b00000100)    ? "C" : "0");
+    Serial.print((ssState2 & 0b00001000)    ? "B" : "0");
+    Serial.print((ssState2 & 0b01000000)    ? "S" : "0");
+    Serial.print((ssState2 & 0b10000000)    ? "A" : "0");
+
+    Serial.print((ssState3 & 0b00000100)    ? "d" : "0");
+    Serial.print((ssState3 & 0b00001000)    ? "u" : "0");
+    Serial.print((ssState3 & 0b01000000)    ? "r" : "0");
+    Serial.print((ssState3 & 0b10000000)    ? "l" : "0");
+    
+    Serial.print((ssState4 & 0b01000000)    ? "L" : "0");
+ 
+    Serial.print("\n");
+    #endif
 }
 
 #define TG_SELECT 6
@@ -494,6 +578,14 @@ inline void loop_TG16()
   sendRawTgData();
 }
 
+inline void loop_SS()
+{
+  noInterrupts();
+  read_SSData();
+  interrupts();
+  sendRawSSData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -518,6 +610,8 @@ void loop()
     loop_Playstation();
 #elif defined MODE_TG16
     loop_TG16();
+#elif defined MODE_SATURN
+    loop_SS();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
