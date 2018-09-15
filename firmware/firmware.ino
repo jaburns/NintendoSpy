@@ -216,38 +216,38 @@ inline void sendRawData( unsigned char first, unsigned char count )
     Serial.write( SPLIT );
 }
 
-#define SS_SELECT1 4
-#define SS_SELECT2 5
+#define SS_SELECT1 6
+#define SS_SELECT2 7
 #define SS_DATA1   2
 #define SS_DATA2   3
-#define SS_DATA3   6
-#define SS_DATA4   7
+#define SS_DATA3   4
+#define SS_DATA4   5
 
 inline void read_SSData()
 {
   word pincache = 0;
 
-  while((PIND & 0b00110000) != 0b00100000){}
+  while((PIND & 0b11000000) != 0b10000000){}
   pincache |= PIND;
-  if ((pincache & 0b00110000) == 0b00100000)
+  if ((pincache & 0b11000000) == 0b10000000)
     ssState3 = ~pincache;
 
   pincache = 0;
-  while((PIND & 0b00110000) != 0b00010000){}
+  while((PIND & 0b11000000) != 0b01000000){}
   pincache |= PIND;
-  if ((pincache & 0b00110000) == 0b00010000)
+  if ((pincache & 0b11000000) == 0b01000000)
     ssState2 = ~pincache;
 
   pincache = 0;
-  while((PIND & 0b00110000) != 0){}
+  while((PIND & 0b11000000) != 0){}
   pincache |= PIND;
-  if ((pincache & 0b00110000) == 0)
+  if ((pincache & 0b11000000) == 0)
     ssState1 = ~pincache;
 
   pincache = 0;
-  while((PIND & 0b00110000) != 0b00110000){}
+  while((PIND & 0b11000000) != 0b11000000){}
   pincache |= PIND;
-  if ((pincache & 0b00110000) == 0b00110000)
+  if ((pincache & 0b11000000) == 0b11000000)
     ssState4 = ~pincache;
 
 }
@@ -257,39 +257,39 @@ inline void sendRawSSData()
     #ifndef DEBUG
     Serial.write ((ssState1 & 0b00000100) ? ONE : ZERO );
     Serial.write ((ssState1 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b01000000) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b10000000) ? ONE : ZERO );
+    Serial.write ((ssState1 & 0b00010000) ? ONE : ZERO );
+    Serial.write ((ssState1 & 0b00100000) ? ONE : ZERO );
 
     Serial.write ((ssState2 & 0b00000100) ? ONE : ZERO );
     Serial.write ((ssState2 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b01000000) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b10000000) ? ONE : ZERO );
+    Serial.write ((ssState2 & 0b00010000) ? ONE : ZERO );
+    Serial.write ((ssState2 & 0b00100000) ? ONE : ZERO );
 
     Serial.write ((ssState3 & 0b00000100) ? ONE : ZERO );
     Serial.write ((ssState3 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b01000000) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b10000000) ? ONE : ZERO );
+    Serial.write ((ssState3 & 0b00010000) ? ONE : ZERO );
+    Serial.write ((ssState3 & 0b00100000) ? ONE : ZERO );
 
-    Serial.write ((ssState4 & 0b01000000) ? ONE : ZERO );
+    Serial.write ((ssState4 & 0b00010000) ? ONE : ZERO );
 
     Serial.write( SPLIT );
     #else 
     Serial.print((ssState1 & 0b00000100)    ? "Y" : "0");
     Serial.print((ssState1 & 0b00001000)    ? "Z" : "0");
-    Serial.print((ssState1 & 0b01000000)    ? "R" : "0");
-    Serial.print((ssState1 & 0b10000000)    ? "X" : "0");
+    Serial.print((ssState1 & 0b00010000)    ? "R" : "0");
+    Serial.print((ssState1 & 0b00100000)    ? "X" : "0");
 
     Serial.print((ssState2 & 0b00000100)    ? "C" : "0");
     Serial.print((ssState2 & 0b00001000)    ? "B" : "0");
-    Serial.print((ssState2 & 0b01000000)    ? "S" : "0");
-    Serial.print((ssState2 & 0b10000000)    ? "A" : "0");
+    Serial.print((ssState2 & 0b00010000)    ? "S" : "0");
+    Serial.print((ssState2 & 0b00100000)    ? "A" : "0");
 
     Serial.print((ssState3 & 0b00000100)    ? "d" : "0");
     Serial.print((ssState3 & 0b00001000)    ? "u" : "0");
-    Serial.print((ssState3 & 0b01000000)    ? "r" : "0");
-    Serial.print((ssState3 & 0b10000000)    ? "l" : "0");
+    Serial.print((ssState3 & 0b00010000)    ? "r" : "0");
+    Serial.print((ssState3 & 0b00100000)    ? "l" : "0");
     
-    Serial.print((ssState4 & 0b01000000)    ? "L" : "0");
+    Serial.print((ssState4 & 0b00010000)    ? "L" : "0");
  
     Serial.print("\n");
     #endif
