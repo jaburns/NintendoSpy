@@ -16,7 +16,7 @@
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
 //#define MODE_TG16
-#define MODE_SATURN
+//#define MODE_SATURN
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
