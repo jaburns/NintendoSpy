@@ -35,9 +35,9 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 4. [DB9 Male Breakout Board to Screw Terminals](https://www.amazon.com/gp/product/B00CLTP2O2/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
 5. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/gp/product/B0756KRCFX/ref=oh_aui_detailpage_o06_s00?ie=UTF8&psc=1)
 5. Wire cutters/strippers
-## Specific Components and Equipment needed for a PSX and Turbographx-16/PC Engine cable
+## Specific Components and Equipment needed for a PSX, Turbographx-16/PC Engine or Sega Saturn cable
 
-1. Controller extension cable (PSX or TG16/PC Engine)
+1. Controller extension cable (PSX, TG16/PC Engine or Sega Saturn)
 2. (optional) male/female connectors with 5 pins minimum for easy controller switching
 3. Wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
 4. Wire cutters/strippers
@@ -60,9 +60,9 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 
 For building a NES, SNES, N64 or GameCube cable follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).
 
-## Instructions for PSX or Turbographx-16/PC Engine
+## Instructions for PSX, Turbographx-16/PC Engine or Sega Saturn
 
-The building of PSX or Turbographx-16 cable is very similar to building a Nintendo cable, so for the most part follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The pinout of the cables is as follows.
+The building of PSX, Turbographx-16 or Sega Saturn cable is very similar to building a Nintendo cable, so for the most part follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The pinout of the cables is as follows.
 
 ### PSX
 
@@ -90,6 +90,20 @@ The building of PSX or Turbographx-16 cable is very similar to building a Ninten
 |    6    |          6          |
 |    7    |    Not Connected    |
 |    8    |    Not Connected    |
+
+### Sega Saturn
+
+|  Saturn   | Arduino Digital Pin |
+|:---------:|:-------------------:|
+|    1      |    Not Connected    |
+|    2      |          2          |
+|    3      |          3          |
+|    4      |          6          |
+|    5      |          7          |
+|    6      |          8          |
+|    7      |          4          |
+|    8      |          5          |
+|    9      |    Not Connected    |
 
 ## Instructions for Genesis/SMS/Atari cable
 
