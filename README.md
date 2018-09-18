@@ -66,12 +66,14 @@ The building of PSX, Turbographx-16 or Sega Saturn cable is very similar to buil
 
 ### PSX
 
+NOTE/WARNING:  PIN 4 usually does not beed to be connected, but I have encountered controllers that will behave oddly without it connect to the Arduino's GND.
+
 |   PSX   | Arduino Digital Pin |
 |:-------:|:-------------------:|
 |    1    |          6          |
 |    2    |          5          |
 |    3    |    Not Connected    |
-|    4    |    Not Connected    |
+|    4    |    Not Connected or GND   |
 |    5    |    Not Connected    |
 |    6    |          2          |
 |    7    |          3          |
