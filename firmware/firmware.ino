@@ -6,7 +6,7 @@
 
 
 // ---------- Uncomment one of these options to select operation mode --------------
-//#define MODE_GC
+#define MODE_GC
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_SUPER_GAMEBOY
@@ -150,6 +150,36 @@ inline bool checkPrefixN64 ()
     return true;
 }
 
+inline bool checkPrefixGC ()
+{
+    if( rawData[0] != 0 ) return false; // 0
+    if( rawData[1] == 0 ) return false; // 1
+    if( rawData[2] != 0 ) return false; // 0
+    if( rawData[3] != 0 ) return false; // 0
+    if( rawData[4] != 0 ) return false; // 0
+    if( rawData[5] != 0 ) return false; // 0
+    if( rawData[6] != 0 ) return false; // 0
+    if( rawData[7] != 0 ) return false; // 0
+    if( rawData[8] != 0 ) return false; // 0
+    if( rawData[9] != 0 ) return false; // 0
+    if( rawData[10] != 0 ) return false; // 0
+    if( rawData[11] != 0 ) return false; // 0
+    if( rawData[12] != 0 ) return false; // 0
+    if( rawData[13] != 0 ) return false; // 0
+    if( rawData[14] == 0 ) return false; // 1
+    if( rawData[15] == 0 ) return false; // 1
+    if( rawData[16] != 0 ) return false; // 0
+    if( rawData[17] != 0 ) return false; // 0
+    if( rawData[18] != 0 ) return false; // 0
+    if( rawData[19] != 0 ) return false; // 0
+    if( rawData[20] != 0 ) return false; // 0
+    if( rawData[21] != 0 ) return false; // 0
+    //if( rawData[22] != 0 ) return false; // 0 or 1
+    if( rawData[23] != 0 ) return false; // 0
+    if( rawData[24] == 0 ) return false; // 1
+    return true;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Performs a read cycle from a shift register based controller (SNES + NES) using only the data and latch
 // wires, and waiting a fixed time between reads.  This read method is deprecated due to being finicky,
@@ -210,10 +240,24 @@ void read_shiftRegister( unsigned char bits )
 // Sends a packet of controller data over the Arduino serial interface.
 inline void sendRawData( unsigned char first, unsigned char count )
 {
+    #ifndef DEBUG
     for( unsigned char i = first ; i < first + count ; i++ ) {
         Serial.write( rawData[i] ? ONE : ZERO );
     }
     Serial.write( SPLIT );
+    #else
+
+    for( unsigned char i = 0 ; i < first; i++ ) {
+        Serial.print( rawData[i] ? "1" : "0" );
+    }
+    Serial.print("|");
+    for( unsigned char i = first ; i < first + count ; i++ ) {
+        Serial.print( rawData[i] ? "1" : "0" );
+        if (i % 8 == 0)
+        Serial.print("|");
+    }
+    Serial.print("\n");
+    #endif
 }
 
 #define SS_SELECT1 6
@@ -227,28 +271,28 @@ inline void read_SSData()
 {
   word pincache = 0;
 
-  while((PIND & 0b11000000) != 0b10000000){}
-  pincache |= PIND;
-  if ((pincache & 0b11000000) == 0b10000000)
-    ssState3 = ~pincache;
-
-  pincache = 0;
-  while((PIND & 0b11000000) != 0b01000000){}
-  pincache |= PIND;
-  if ((pincache & 0b11000000) == 0b01000000)
-    ssState2 = ~pincache;
-
-  pincache = 0;
-  while((PIND & 0b11000000) != 0){}
-  pincache |= PIND;
-  if ((pincache & 0b11000000) == 0)
-    ssState1 = ~pincache;
-
-  pincache = 0;
-  while((PIND & 0b11000000) != 0b11000000){}
-  pincache |= PIND;
-  if ((pincache & 0b11000000) == 0b11000000)
-    ssState4 = ~pincache;
+//  while((PIND & 0b11000000) != 0b10000000){}
+//  pincache |= PIND;
+//  if ((pincache & 0b11000000) == 0b10000000)
+//    ssState3 = ~pincache;
+//
+//  pincache = 0;
+//  while((PIND & 0b11000000) != 0b01000000){}
+//  pincache |= PIND;
+//  if ((pincache & 0b11000000) == 0b01000000)
+//    ssState2 = ~pincache;
+//
+//  pincache = 0;
+//  while((PIND & 0b11000000) != 0){}
+//  pincache |= PIND;
+//  if ((pincache & 0b11000000) == 0)
+//    ssState1 = ~pincache;
+//
+//  pincache = 0;
+//  while((PIND & 0b11000000) != 0b11000000){}
+//  pincache |= PIND;
+//  if ((pincache & 0b11000000) == 0b11000000)
+//    ssState4 = ~pincache;
 
 }
 
@@ -499,13 +543,15 @@ inline void loop_GC()
     noInterrupts();
     read_oneWire< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
     interrupts();
-    sendRawData( GC_PREFIX , GC_BITCOUNT );
+    if (checkPrefixGC() ) {
+      sendRawData( GC_PREFIX , GC_BITCOUNT );
+    }
 }
 
 inline void loop_N64()
 {
     noInterrupts();
-    read_oneWire< N64_PIN >( N64_PREFIX + N64_BITCOUNT );
+    read_oneWire< N64_PIN >( N64_PREFIX*2 + N64_BITCOUNT );
     interrupts();
     if( checkPrefixN64() ) {
         sendRawData( N64_PREFIX , N64_BITCOUNT );

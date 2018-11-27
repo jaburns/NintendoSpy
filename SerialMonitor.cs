@@ -11,7 +11,7 @@ namespace NintendoSpy
     public class SerialMonitor
     {
         const int BAUD_RATE = 115200;
-        const int TIMER_MS  = 30;
+        const int TIMER_MS  = 7;
 
         public event PacketEventHandler PacketReceived;
         public event EventHandler Disconnected;
