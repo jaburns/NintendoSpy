@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="GBA SP" author ="sk84uhlivin" type="gamecube">
+
+	<background name="Black" image="gbasp_black.png" />
+	<background name="Blue" image="gbasp_blue.png" />
+	<background name="Dark Grey" image="gbasp_darkgrey.png" />
+	<background name="Green" image="gbasp_green.png" />
+	<background name="Pink" image="gbasp_pink.png" />
+	<background name="Purple" image="gbasp_purple.png" />
+	<background name="Red" image="gbasp_red.png" />
+	<background name="White" image="gbasp_white.png" />
+	<background name="Zelda" image="gbasp_zelda.png" />
+
+
+	<button name="a" image="abbutton.png" x="437" y="712" />
+	<button name="b" image="abbutton.png" x="351" y="740" />
+	<button name="start" image="startselect.png" x="316" y="982" />
+	<button name="select" image="startselect.png" x="219" y="982" />
+	<button name="l" image="lbutton.png" x="33" y="433" />
+	<button name="r" image="rbutton.png" x="490" y="433" />
+
+
+	<button name="up" image="up.png" x="124" y="693" width="43" height="39" />
+	<button name="down" image="down.png" x="124" y="782" width="43" height="37" />
+	<button name="left" image="left.png" x="82" y="735" width="38" height="43" />
+	<button name="right" image="right.png" x="170" y="734" width="39" height="43" />
+   
+
+</skin>
