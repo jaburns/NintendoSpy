@@ -15,6 +15,7 @@
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
+//#define MODE_PLAYSTATION2
 //#define MODE_TG16
 //#define MODE_SATURN
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
@@ -83,7 +84,7 @@ KeyboardController keyboardController;
 #define SPLIT '\n'  // Use a new-line character to split up the controller state packets.
 
 // Declare some space to store the bits we read from a controller.
-unsigned char rawData[ 128 ];
+unsigned char rawData[ 256 ];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
@@ -535,6 +536,87 @@ inline void sendRawPsData()
     #endif
 }
 
+inline void read_Playstation2( )
+{
+  byte numBits = 0;
+  WAIT_FALLING_EDGE(PS_ATT);
+
+  unsigned char bits = 8;
+  do {
+     WAIT_LEADING_EDGE(PS_CLOCK);
+  }
+  while( --bits > 0 );
+
+  bits = 0;
+  do {
+      WAIT_LEADING_EDGE(PS_CLOCK);
+      rawData[numBits++] = PIN_READ(PS_DATA);
+  }
+  while( ++bits < 8 );
+  
+  bits = 0;
+  do {
+      WAIT_LEADING_EDGE(PS_CLOCK);
+  }
+  while( ++bits < 8 );
+  
+  bits = 0;
+  do {
+      WAIT_LEADING_EDGE(PS_CLOCK);
+      rawData[numBits++] = !PIN_READ(PS_DATA);
+  }
+  while( ++bits < 16 );
+
+  //Read analog sticks for Analog Controller in Red Mode
+  if (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x73*/)
+  {
+    for(int i = 0; i < 4; ++i)
+    {
+      bits = 0;
+      do {
+          WAIT_LEADING_EDGE(PS_CLOCK);
+          rawData[numBits++] = PIN_READ(PS_DATA);
+      }
+      while( ++bits < 8 );
+    }
+  }
+  else if (rawData[0] != 0 && rawData[1] == 0 && rawData[2] == 0 && rawData[3] != 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x79*/)
+  {
+    for(int i = 0; i < 16; ++i)
+    {
+      bits = 0;
+      do {
+          WAIT_LEADING_EDGE(PS_CLOCK);
+          rawData[numBits++] = PIN_READ(PS_DATA);
+      }
+      while( ++bits < 8 );
+    }    
+  }
+  else
+  {
+    
+  }
+}
+
+inline void sendRawPs2Data()
+{
+    #ifndef DEBUG
+    for (unsigned char i = 0; i < 152; ++i)
+    {
+      Serial.write( rawData[i] ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else
+    for(int i = 0; i < 152; ++i)
+    {
+      if (i % 8 == 0)
+        Serial.print("|");
+      Serial.print(rawData[i] ? "1" : "0");
+    }
+    Serial.print("\n");
+    #endif
+}
+
 inline void sendRawTgData()
 {
     #ifndef DEBUG
@@ -699,6 +781,15 @@ inline void loop_Playstation()
   sendRawPsData();
 }
 
+
+inline void loop_Playstation2()
+{
+  noInterrupts();
+  read_Playstation2();
+  interrupts();
+  sendRawPs2Data();
+}
+
 inline void loop_TG16()
 {
   noInterrupts();
@@ -737,6 +828,8 @@ void loop()
     loop_BoosterGrip();
 #elif defined MODE_PLAYSTATION
     loop_Playstation();
+#elif defined MODE_PLAYSTATION2
+    loop_Playstation2();
 #elif defined MODE_TG16
     loop_TG16();
 #elif defined MODE_SATURN
