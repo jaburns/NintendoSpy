@@ -497,6 +497,7 @@ inline void read_SS3DData()
 inline void sendRawSS3DData()
 {
     #ifndef DEBUG
+
     for (unsigned char i = 0; i < 56; ++i)
     {
       Serial.write( rawData[i] ? ONE : ZERO );
@@ -901,9 +902,9 @@ inline void loop_SS()
 
 inline void loop_SS3D()
 {
-  //noInterrupts();
+  noInterrupts();
   read_SS3DData();
- //interrupts();
+ interrupts();
   sendRawSS3DData();
 }
 
