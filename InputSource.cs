@@ -23,9 +23,10 @@ namespace NintendoSpy
         static public readonly InputSource TG16 = new InputSource("tg16", "Turbographx 16", true, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
         static public readonly InputSource SATURN = new InputSource("saturn", "Sega Saturn", true, false, port => new SerialControllerReader(port, SS.ReadFromPacket));
         static public readonly InputSource SATURN3D = new InputSource("saturn3d", "Sega Saturn 3D", true, false, port => new SerialControllerReader(port, SS3D.ReadFromPacket));
+        static public readonly InputSource NEOGEO = new InputSource("neogeo", "NeoGeo", true, false, port => new SerialControllerReader(port, NeoGeo.ReadFromPacket));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION, PLAYSTATION2, TG16, SATURN, SATURN3D
+            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION, PLAYSTATION2, TG16, SATURN, SATURN3D, NEOGEO
         };
 
         static public readonly InputSource DEFAULT = NES;

@@ -19,6 +19,7 @@
 //#define MODE_TG16
 //#define MODE_SATURN
 //#define MODE_SATURN3D
+//#define MODE_NEOGEO
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -791,6 +792,50 @@ inline void sendRawSegaData()
   #endif
 }
 
+// PORTD
+#define NEOGEO_SELECT 2
+#define NEOGEO_D 3
+#define NEOGEO_B 4
+#define NEOGEO_RIGHT 5
+#define NEOGEO_DOWN 6
+#define NEOGEO_START 7
+//PORTB
+#define NEOGEO_C 0
+#define NEOGEO_A 1
+#define NEOGEO_LEFT 2
+#define NEOGEO_UP 3
+
+inline void read_NeoGeo()
+{
+  rawData[0] = PIN_READ(NEOGEO_SELECT);
+  rawData[1] = PIN_READ(NEOGEO_D);
+  rawData[2] = PIN_READ(NEOGEO_B);
+  rawData[3] = PIN_READ(NEOGEO_RIGHT);
+  rawData[4] = PIN_READ(NEOGEO_DOWN);
+  rawData[5] = PIN_READ(NEOGEO_START);
+  rawData[6] = PINB_READ(NEOGEO_C);
+  rawData[7] = PINB_READ(NEOGEO_A);
+  rawData[8] = PINB_READ(NEOGEO_LEFT);
+  rawData[9] = PINB_READ(NEOGEO_UP);
+}
+
+inline void sendNeoGeoData()
+{
+    #ifndef DEBUG
+    for (unsigned char i = 0; i < 10; ++i)
+    {
+      Serial.write( rawData[i] ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else
+    for(int i = 0; i < 10; ++i)
+    {
+      Serial.print(rawData[i] ? "1" : "0");
+    }
+    Serial.print("\n");
+    #endif
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update loop definitions for the various console modes.
 
@@ -908,6 +953,14 @@ inline void loop_SS3D()
   sendRawSS3DData();
 }
 
+inline void loop_NeoGeo()
+{
+  noInterrupts();
+  read_NeoGeo();
+ interrupts();
+  sendNeoGeoData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -938,6 +991,8 @@ void loop()
     loop_SS();
 #elif defined MODE_SATURN3D
     loop_SS3D();
+#elif defined MODE_NEOGEO
+    loop_NeoGeo();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
