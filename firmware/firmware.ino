@@ -824,13 +824,13 @@ inline void sendNeoGeoData()
     #ifndef DEBUG
     for (unsigned char i = 0; i < 10; ++i)
     {
-      Serial.write( rawData[i] ? ONE : ZERO );
+      Serial.write( rawData[i] ? ZERO : ONE );
     }
     Serial.write( SPLIT );
     #else
     for(int i = 0; i < 10; ++i)
     {
-      Serial.print(rawData[i] ? "1" : "0");
+      Serial.print(rawData[i] ? "0" : "1");
     }
     Serial.print("\n");
     #endif

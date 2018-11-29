@@ -26,14 +26,18 @@ namespace NintendoSpy.Readers
                 state.SetButton(BUTTONS[i], packet[i] != 0x00);
 
                 if (packet[3] != 0x00)
-                    state.SetAnalog("x", 1);
+                    state.SetAnalog("lstick_x", 1);
                 else if (packet[8] != 0x00)
-                    state.SetAnalog("x", -1);
+                    state.SetAnalog("lstick_x", -1);
+                else
+                    state.SetAnalog("lstick_x", 0);
 
                 if (packet[4] != 0x00)
-                    state.SetAnalog("y", 1);
+                    state.SetAnalog("lstick_y", 1);
                 else if (packet[9] != 0x00)
-                    state.SetAnalog("y", -1);
+                    state.SetAnalog("lstick_y", -1);
+                else
+                    state.SetAnalog("lstick_y", 0);
             }
 
             return state.Build();
