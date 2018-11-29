@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Playstation 2 Analog" author="zoggins" type="playstation2">
+
+    <background name="Default" image="playstation2-analog.png" />
+
+    <button name="circle" image="circle.png" x="950" y="205" width="80" height="80" />
+    <button name="square" image="circle.png" x="771" y="205" width="80" height="80" />
+    <button name="triangle" image="circle.png" x="861" y="117" width="80" height="80" />
+    <button name="x" image="circle.png" x="861" y="300" width="80" height="80" />
+
+    <button name="l1" image="circle.png" x="170" y="5" width="150" height="30" />
+    <button name="r1" image="circle.png" x="825" y="5" width="150" height="30" />
+    <button name="l2" image="circle.png" x="30" y="10" width="80" height="80" />
+    <button name="r2" image="circle.png" x="1020" y="10" width="80" height="80" />
+	
+    <button name="start" image="circle.png" x="620" y="225" width="80" height="50" />
+    <button name="select" image="circle.png" x="420" y="225" width="80" height="50" />
+
+    <button name="up" image="circle.png" x="187" y="150" width="80" height="80" />
+    <button name="left" image="circle.png" x="120" y="210" width="80" height="80" />
+	<button name="down" image="circle.png" x="187" y="275" width="80" height="80" />
+    <button name="right" image="circle.png" x="250" y="210" width="80" height="80" />
+	
+	<button name="lstick" image="circle.png" x="300" y="328" width="180" height="180" />
+    <button name="rstick" image="circle.png" x="645" y="330" width="180" height="180" />
+	
+	<stick xname="lstick_x" yname="lstick_y" image="playstation-analog-stick.png"
+	   x="318" y="342" width="150" height="150" xrange="20" yrange="20" yreverse="true" />
+	<stick xname="rstick_x" yname="rstick_y" image="playstation-analog-stick.png"
+	   x="665" y="345" width="150" height="150" xrange="20" yrange="20" yreverse="true" />
+
+</skin>
