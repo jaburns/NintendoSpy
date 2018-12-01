@@ -3,7 +3,7 @@ RetroSpy
 
 #### [Download the latest RetroSpy release here.](https://github.com/zoggins/RetroSpy/releases/latest)
 
-This is a fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy).  NintendoSpy provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.  My fork allows for the support of Atari/Commodore joysticks, Sega Genesis controllers, SMS controllers, the Atari 2600 Omega Race Booster Grip, Turbographx-16/PC Engine controllers and PSX controllers.  Additionally, it adds full support for the Super Gameboy SNES cartridge, which wasn't correctly supported in the original NintendoSpy.
+This is a fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy).  NintendoSpy provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.  My fork allows for the support of Atari/Commodore joysticks, Sega Genesis controllers, SMS controllers, the Atari 2600 Omega Race Booster Grip, Turbographx-16/PC Engine controllers, NeoGeo, Sega Saturn (both standard and 3D controllers) and PSX/PS2 controllers.  Additionally, it adds full support for the Super Gameboy SNES cartridge and the Gamecube Gameboy Player, which were not correctly supported in the original NintendoSpy.
 
 The following documentation is in addition to the original NintendoSpy documentation found [here](https://github.com/zoggins/RetroSpy/blob/master/README-ORIG.md).  These instructions borrow heavily from evilash25's awesome NintendoSpy build guide, which can be found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).
 
@@ -35,7 +35,17 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 4. [DB9 Male Breakout Board to Screw Terminals](https://www.amazon.com/gp/product/B00CLTP2O2/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
 5. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/gp/product/B0756KRCFX/ref=oh_aui_detailpage_o06_s00?ie=UTF8&psc=1)
 5. Wire cutters/strippers
-## Specific Components and Equipment needed for a PSX, Turbographx-16/PC Engine or Sega Saturn cable
+
+## Specific Components and Equipment needed for a NeoGeo cable
+
+1. NeoGeo Controller extension cable or [DB15 Male to Female Extension Cable](https://www.amazon.com/gp/product/B073M86247/ref=oh_aui_search_detailpage?ie=UTF8&psc=1
+2. [Wires](https://www.amazon.com/gp/product/B06XRV92ZB/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1)
+3. [DB15 Male to 2 Female Splitter Adapter](http://www.l-com.com/d-sub-db15-y-splitter-adapter-db15m-db15f-db15f)
+4. [DB15 Male Breakout Connector](https://www.amazon.com/DB15-Breakout-Connector-Pin-Male/dp/B073RGHNVD)
+5. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/gp/product/B0756KRCFX/ref=oh_aui_detailpage_o06_s00?ie=UTF8&psc=1)
+5. Wire cutters/strippers
+
+## Specific Components and Equipment needed for a PSX, PS2, Turbographx-16/PC Engine or Sega Saturn cable
 
 1. Controller extension cable (PSX, TG16/PC Engine or Sega Saturn)
 2. (optional) male/female connectors with 5 pins minimum for easy controller switching
@@ -64,7 +74,7 @@ For building a NES, SNES, N64 or GameCube cable follow the steps found [here](ht
 
 The building of PSX, Turbographx-16 or Sega Saturn cable is very similar to building a Nintendo cable, so for the most part follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The pinout of the cables is as follows.
 
-### PSX
+### PSX and PS2
 
 **NOTE/WARNING**:  PIN 4 usually does not need to be connected, but I have encountered controllers that will behave oddly without it connected to the Arduino's GND.
 
@@ -98,13 +108,13 @@ The building of PSX, Turbographx-16 or Sega Saturn cable is very similar to buil
 |  Saturn   | Arduino Digital Pin |
 |:---------:|:-------------------:|
 |    1      |    Not Connected    |
-|    2      |          2          |
-|    3      |          3          |
+|    2      |          3          |
+|    3      |          2          |
 |    4      |          6          |
 |    5      |          7          |
 |    6      |          8          |
-|    7      |          4          |
-|    8      |          5          |
+|    7      |          5          |
+|    8      |          4          |
 |    9      |    Not Connected    |
 
 ## Instructions for Genesis/SMS/Atari cable
@@ -146,6 +156,38 @@ For Atari Joysticks, Sega Master System controllers and the Atari Omega Race Boo
 |    7    |    Not Connected    |
 |    8    |    Not Connected    |
 |    9    |          8          |
+
+## Instructions for NeoGeo
+
+### Wiring
+
+It is possible to simply solder 10 jumper wires onto each wire of the NeoGeo extension cable and be done, but since NeoGeo uses a standarded DB15 port we can build a cable with no soldering required.
+
+1.  Take the NeoGeo extension cable, wires, DB15 Breakout Board, DB15 Y adapter and optional headers you have acquired and put them together in this configuration (ignoring the fact that the cable pictured is actually an Atari cable):
+
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/ataricable.jpg)
+
+### Hardware Setup
+
+You will need to make the following connections:
+
+| DB15 Pin | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |          Not Connected          |
+|    2    |          Not Connected          |
+|    3    |          2          |
+|    4    |          3          |
+|    5    |          4    |
+|    6    |          5          |
+|    7    |          6          |
+|    8    |    Not Connected    |
+|    9    |    Not Connected          |
+|    10    |   Not Connected          |
+|    11    |          7          |
+|    12    |          8          |
+|    13    |          9          |
+|    14    |          10          |
+|    15    |          11          |
 
 ## Software and Setup
 
