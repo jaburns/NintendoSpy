@@ -29,11 +29,15 @@ namespace NintendoSpy.Readers
                     state.SetAnalog("x", 1);
                 else if (packet[2] != 0x00)
                     state.SetAnalog("x", -1);
+                else
+                    state.SetAnalog("x", 0);
 
                 if (packet[0] != 0x00)
                     state.SetAnalog("y", 1);
                 else if (packet[1] != 0x00)
                     state.SetAnalog("y", -1);
+                else
+                    state.SetAnalog("y", 0);
             }
 
             return state.Build();

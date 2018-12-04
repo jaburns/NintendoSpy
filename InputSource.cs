@@ -18,11 +18,12 @@ namespace NintendoSpy
         static public readonly InputSource PADATOD = new InputSource ("genericanalogtodpad", "Generic PC Gamepad AnalogToDPad", false, true, controllerId => new GamepadReaderAnalogToDPad (int.Parse(controllerId)));
         static public readonly InputSource SEGA = new InputSource("sega", "Sega Genesis", true, false, port => new SerialControllerReader(port, Sega.ReadFromPacket));
         static public readonly InputSource CLASSIC = new InputSource("classic", "Atari/SMS", true, false, port => new SerialControllerReader(port, Classic.ReadFromPacket));
+        static public readonly InputSource ATARIKEYBOARD = new InputSource("atarikeyboard", "Atari Keyboard Controller", true, false, port => new SerialControllerReader(port, AtariKeyboard.ReadFromPacket));
         static public readonly InputSource PLAYSTATION = new InputSource("playstation", "Playstation", true, false, port => new SerialControllerReader(port, Playstation.ReadFromPacket));
         static public readonly InputSource TG16 = new InputSource("tg16", "Turbographx 16", true, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION, TG16
+            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION, TG16, ATARIKEYBOARD
         };
 
         static public readonly InputSource DEFAULT = NES;
