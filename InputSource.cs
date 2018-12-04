@@ -22,9 +22,11 @@ namespace NintendoSpy
         static public readonly InputSource PLAYSTATION = new InputSource("playstation", "Playstation", true, false, port => new SerialControllerReader(port, Playstation.ReadFromPacket));
         static public readonly InputSource TG16 = new InputSource("tg16", "Turbographx 16", true, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
         static public readonly InputSource SATURN = new InputSource("saturn", "Sega Saturn", true, false, port => new SerialControllerReader(port, SS.ReadFromPacket));
+        static public readonly InputSource PADDLES = new InputSource("paddles", "Atari Paddles", true, false, port => new SerialControllerReader(port, Paddles.ReadFromPacket));
+        static public readonly InputSource DRIVINGCONTROLLER = new InputSource("drivingcontroller", "Atari Driving Controller", true, false, port => new SerialControllerReader(port, DrivingController.ReadFromPacket));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION, TG16, SATURN, ATARIKEYBOARD
+            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION, TG16, SATURN, ATARIKEYBOARD, PADDLES, DRIVINGCONTROLLER
         };
 
         static public readonly InputSource DEFAULT = NES;
