@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Playstation DDR NoSS" author ="sk84uhlivin" type="playstation">
+
+    <background name="Default" image="playstation-ddr-background.png" />
+
+    <button name="circle" image="circle.png" x="364" y="363" width="110" height="110" />
+    <button name="square" image="square.png" x="26" y="363" width="109" height="109" />
+    <button name="triangle" image="triangle.png" x="356" y="8" width="127" height="127" />
+    <button name="x" image="cross.png" x="26" y="26" width="107" height="107" />
+
+    <button name="l1" image="arrowU.png" x="1020" y="1000" width="150" height="30" />
+    <button name="r1" image="arrowU.png" x="1020" y="1000" width="150" height="30" />
+    <button name="l2" image="arrowU.png" x="1020" y="1000" width="126" height="95" />
+    <button name="r2" image="arrowU.png" x="1020" y="1000" width="126" height="95" />
+	
+    <button name="start" image="arrowU.png" x="732" y="347" width="82" height="60" />
+    <button name="select" image="arrowU.png" x="565" y="355" width="74" height="50" />
+
+    <button name="up" image="arrowU.png" x="175" y="26" width="150" height="150" />
+    <button name="left" image="arrowL.png" x="26" y="175" width="150" height="150" />
+	<button name="down" image="arrowD.png" x="175" y="323" width="150" height="150" />
+    <button name="right" image="arrowR.png" x="323" y="175" width="150" height="150" />
+
+</skin>

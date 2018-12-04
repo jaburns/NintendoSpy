@@ -16,6 +16,7 @@
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
 //#define MODE_TG16
+//#define MODE_SATURN
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -34,6 +35,10 @@
 SegaControllerSpy segaController;
 word currentState = 0;
 word lastState = 0;
+byte ssState1 = 0;
+byte ssState2 = 0;
+byte ssState3 = 0;
+byte ssState4 = 0;
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
@@ -145,6 +150,53 @@ inline bool checkPrefixN64 ()
     return true;
 }
 
+inline bool checkPrefixGC ()
+{
+    if( rawData[0] != 0 ) return false; // 0
+    if( rawData[1] == 0 ) return false; // 1
+    if( rawData[2] != 0 ) return false; // 0
+    if( rawData[3] != 0 ) return false; // 0
+    if( rawData[4] != 0 ) return false; // 0
+    if( rawData[5] != 0 ) return false; // 0
+    if( rawData[6] != 0 ) return false; // 0
+    if( rawData[7] != 0 ) return false; // 0
+    if( rawData[8] != 0 ) return false; // 0
+    if( rawData[9] != 0 ) return false; // 0
+    if( rawData[10] != 0 ) return false; // 0
+    if( rawData[11] != 0 ) return false; // 0
+    if( rawData[12] != 0 ) return false; // 0
+    if( rawData[13] != 0 ) return false; // 0
+    if( rawData[14] == 0 ) return false; // 1
+    if( rawData[15] == 0 ) return false; // 1
+    if( rawData[16] != 0 ) return false; // 0
+    if( rawData[17] != 0 ) return false; // 0
+    if( rawData[18] != 0 ) return false; // 0
+    if( rawData[19] != 0 ) return false; // 0
+    if( rawData[20] != 0 ) return false; // 0
+    if( rawData[21] != 0 ) return false; // 0
+    //if( rawData[22] != 0 ) return false; // 0 or 1
+    if( rawData[23] != 0 ) return false; // 0
+    if( rawData[24] == 0 ) return false; // 1
+    return true;
+}
+
+inline bool checkPrefixGBA ()
+{
+    if( rawData[0] != 0 ) return false; // 0
+    if( rawData[1] != 0 ) return false; // 0
+    if( rawData[2] != 0 ) return false; // 0
+    if( rawData[3] == 0 ) return false; // 1
+    if( rawData[4] != 0 ) return false; // 0
+    if( rawData[5] == 0 ) return false; // 1
+    if( rawData[6] != 0 ) return false; // 0
+    if( rawData[7] != 0 ) return false; // 0
+    if( rawData[8] == 0 ) return false; // 1
+    if( rawData[9] != 0 ) return false; // 0
+    if( rawData[10] != 0 ) return false; // 0
+    if( rawData[11] == 0 ) return false; // 1
+    return true;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Performs a read cycle from a shift register based controller (SNES + NES) using only the data and latch
 // wires, and waiting a fixed time between reads.  This read method is deprecated due to being finicky,
@@ -205,10 +257,166 @@ void read_shiftRegister( unsigned char bits )
 // Sends a packet of controller data over the Arduino serial interface.
 inline void sendRawData( unsigned char first, unsigned char count )
 {
+    #ifndef DEBUG
     for( unsigned char i = first ; i < first + count ; i++ ) {
         Serial.write( rawData[i] ? ONE : ZERO );
     }
     Serial.write( SPLIT );
+    #else
+
+    for( unsigned char i = 0 ; i < first; i++ ) {
+        Serial.print( rawData[i] ? "1" : "0" );
+    }
+    Serial.print("|");
+    for( unsigned char i = first ; i < first + count ; i++ ) {
+        Serial.print( rawData[i] ? "1" : "0" );
+        if (i % 8 == 0)
+        Serial.print("|");
+    }
+    Serial.print("\n");
+    #endif
+}
+
+inline void sendRawGBAData()
+{
+  #ifndef DEBUG
+  Serial.write(ZERO );
+  Serial.write(ZERO );
+  Serial.write(ZERO );
+  Serial.write(rawData[21] ? ONE : ZERO);
+  Serial.write(ZERO );
+  Serial.write(ZERO );
+  Serial.write(rawData[23] ? ONE : ZERO);
+  Serial.write(rawData[24] ? ONE : ZERO);
+  Serial.write(ZERO );
+  Serial.write(rawData[31] ? ONE : ZERO);
+  Serial.write(rawData[32] ? ONE : ZERO);
+  Serial.write(rawData[22] ? ONE : ZERO);
+  Serial.write(rawData[18] ? ONE : ZERO);
+  Serial.write(rawData[17] ? ONE : ZERO);
+  Serial.write(rawData[19] ? ONE : ZERO);
+  Serial.write(rawData[20] ? ONE : ZERO);
+  Serial.write(ONE);
+  for(int i = 0; i < 7; ++i)
+    Serial.write(ZERO );
+  Serial.write(ONE);
+  for(int i = 0; i < 7; ++i)
+    Serial.write(ZERO );
+  Serial.write(ONE);
+  for(int i = 0; i < 7; ++i)
+    Serial.write(ZERO );
+  Serial.write(ONE);
+  for(int i = 0; i < 7; ++i)
+    Serial.write(ZERO );
+  for(int i = 0; i < 8; ++i)
+    Serial.write(ZERO );
+  for(int i = 0; i < 8; ++i)
+    Serial.write(ZERO );
+  Serial.write( SPLIT );
+  #else
+  Serial.print("0");
+  Serial.print("0");
+  Serial.print("0");
+  Serial.print(rawData[21] ? "t" : "0");
+  Serial.print("0" );
+  Serial.print("0" );
+  Serial.print(rawData[23] ? "b" : "0");
+  Serial.print(rawData[24] ? "a" : "0");
+  Serial.print("0" );
+  Serial.print(rawData[31] ? "L": "0");
+  Serial.print(rawData[32] ? "R": "0");
+  Serial.print(rawData[22] ? "s" : "0");
+  Serial.print(rawData[18] ? "u" : "0");
+  Serial.print(rawData[17] ? "d" : "0");
+  Serial.print(rawData[19] ? "r" : "0");
+  Serial.print(rawData[20] ? "l" : "0");
+  Serial.print(128);
+  Serial.print(128);
+  Serial.print(128);
+  Serial.print(128);
+  Serial.print(0);
+  Serial.print(0);
+  Serial.print( "\n" );
+  #endif
+}
+
+#define SS_SELECT1 6
+#define SS_SELECT2 7
+#define SS_DATA1   2
+#define SS_DATA2   3
+#define SS_DATA3   4
+#define SS_DATA4   5
+
+inline void read_SSData()
+{
+  word pincache = 0;
+
+  while((PIND & 0b11000000) != 0b10000000){}
+  pincache |= PIND;
+  if ((pincache & 0b11000000) == 0b10000000)
+    ssState3 = ~pincache;
+
+  pincache = 0;
+  while((PIND & 0b11000000) != 0b01000000){}
+  pincache |= PIND;
+  if ((pincache & 0b11000000) == 0b01000000)
+    ssState2 = ~pincache;
+
+  pincache = 0;
+  while((PIND & 0b11000000) != 0){}
+  pincache |= PIND;
+  if ((pincache & 0b11000000) == 0)
+    ssState1 = ~pincache;
+
+  pincache = 0;
+  while((PIND & 0b11000000) != 0b11000000){}
+  pincache |= PIND;
+  if ((pincache & 0b11000000) == 0b11000000)
+    ssState4 = ~pincache;
+
+}
+
+inline void sendRawSSData()
+{
+    #ifndef DEBUG
+    Serial.write ((ssState1 & 0b00000100) ? ONE : ZERO );
+    Serial.write ((ssState1 & 0b00001000) ? ONE : ZERO );
+    Serial.write ((ssState1 & 0b00010000) ? ONE : ZERO );
+    Serial.write ((ssState1 & 0b00100000) ? ONE : ZERO );
+
+    Serial.write ((ssState2 & 0b00000100) ? ONE : ZERO );
+    Serial.write ((ssState2 & 0b00001000) ? ONE : ZERO );
+    Serial.write ((ssState2 & 0b00010000) ? ONE : ZERO );
+    Serial.write ((ssState2 & 0b00100000) ? ONE : ZERO );
+
+    Serial.write ((ssState3 & 0b00000100) ? ONE : ZERO );
+    Serial.write ((ssState3 & 0b00001000) ? ONE : ZERO );
+    Serial.write ((ssState3 & 0b00010000) ? ONE : ZERO );
+    Serial.write ((ssState3 & 0b00100000) ? ONE : ZERO );
+
+    Serial.write ((ssState4 & 0b00010000) ? ONE : ZERO );
+
+    Serial.write( SPLIT );
+    #else 
+    Serial.print((ssState1 & 0b00000100)    ? "Y" : "0");
+    Serial.print((ssState1 & 0b00001000)    ? "Z" : "0");
+    Serial.print((ssState1 & 0b00010000)    ? "R" : "0");
+    Serial.print((ssState1 & 0b00100000)    ? "X" : "0");
+
+    Serial.print((ssState2 & 0b00000100)    ? "C" : "0");
+    Serial.print((ssState2 & 0b00001000)    ? "B" : "0");
+    Serial.print((ssState2 & 0b00010000)    ? "S" : "0");
+    Serial.print((ssState2 & 0b00100000)    ? "A" : "0");
+
+    Serial.print((ssState3 & 0b00000100)    ? "d" : "0");
+    Serial.print((ssState3 & 0b00001000)    ? "u" : "0");
+    Serial.print((ssState3 & 0b00010000)    ? "r" : "0");
+    Serial.print((ssState3 & 0b00100000)    ? "l" : "0");
+    
+    Serial.print((ssState4 & 0b00010000)    ? "L" : "0");
+ 
+    Serial.print("\n");
+    #endif
 }
 
 #define TG_SELECT 6
@@ -415,7 +623,12 @@ inline void loop_GC()
     noInterrupts();
     read_oneWire< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
     interrupts();
-    sendRawData( GC_PREFIX , GC_BITCOUNT );
+    if (checkPrefixGC() ) {
+      sendRawData( GC_PREFIX , GC_BITCOUNT );
+    }
+    else if (checkPrefixGBA() ) {
+      sendRawGBAData();
+    }
 }
 
 inline void loop_N64()
@@ -494,6 +707,14 @@ inline void loop_TG16()
   sendRawTgData();
 }
 
+inline void loop_SS()
+{
+  noInterrupts();
+  read_SSData();
+  interrupts();
+  sendRawSSData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -518,6 +739,8 @@ void loop()
     loop_Playstation();
 #elif defined MODE_TG16
     loop_TG16();
+#elif defined MODE_SATURN
+    loop_SS();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
