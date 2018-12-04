@@ -11,7 +11,7 @@
 //#define STAR_RAIDERS
 
 // PINOUTS
-// For every other game, besides Star Raiders and Big Bird's Egg Catch the pinout is straightforward:
+// For every other game, besides Star Raiders and Big Bird's Egg Catch the pinout is straightforward.  This is the same as the standard Atari controller pinout.
 // Atari Pin 1 -> Digital Pin 2
 // Atari Pin 2 -> Digital Pin 3
 // Atari Pin 3 -> Digital Pin 4
@@ -20,7 +20,7 @@
 // Atari Pin 6 -> Digital Pin 7
 // Atari Pin 9 -> Digital Pin 8
 //
-// For Star Raiders and Big Bird's Egg Catch the pinout involves the analog pins
+// For Star Raiders and Big Bird's Egg Catch the pinout involves the analog pins.
 // Atari Pin 1 -> Digital Pin 2
 // Atari Pin 2 -> Digital Pin 3
 // Atari Pin 3 -> Digital Pin 4
