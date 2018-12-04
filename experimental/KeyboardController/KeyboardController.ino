@@ -11,6 +11,7 @@
 //#define STAR_RAIDERS
 
 // PINOUTS
+//
 // For every other game, besides Star Raiders and Big Bird's Egg Catch the pinout is straightforward.  This is the same as the standard Atari controller pinout.
 // Atari Pin 1 -> Digital Pin 2
 // Atari Pin 2 -> Digital Pin 3
@@ -20,7 +21,8 @@
 // Atari Pin 6 -> Digital Pin 7
 // Atari Pin 9 -> Digital Pin 8
 //
-// For Star Raiders and Big Bird's Egg Catch the pinout involves the analog pins.
+// For Star Raiders and Big Bird's Egg Catch the pinout involves the analog pins.  Theoretically this method could be extended to handle the "regular" case also
+// but the pin mapping being different from the standard Atari controller pinout makes it less deseriable to use.
 // Atari Pin 1 -> Digital Pin 2
 // Atari Pin 2 -> Digital Pin 3
 // Atari Pin 3 -> Digital Pin 4
@@ -28,6 +30,9 @@
 // Atari Pin 5 -> Analog Pin 0
 // Atari Pin 6 -> Digital Pin 7
 // Atari Pin 9 -> Analog Pin 1
+
+// WARNING:  The behavior of simultaneous button presses is UNDEFINED in both this firmware and on the hardware itself.  
+// Typically the highest number presses is registered, but even that leads to weird cases in some situations.
 
 #include <PinChangeInterrupt.h>
 #include <PinChangeInterruptBoards.h>
