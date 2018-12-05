@@ -1,12 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// RetroSpy Atari Keyboard Controller Firmware for Arduino
+// RetroSpy Atari Driving Controller Firmware for Arduino
 // v1.0
 // RetroSpy written by zoggins
 
 // Requires this package: https://github.com/NicoHood/PinChangeInterrupt
 
-// ---------- Uncomment this for debugging mode --------------
+// ---------- Uncomment these for debugging modes --------------
 //#define DEBUG
+//#define PRETTY_PRINT
 
 // PINOUT
 // Atari Pin 1 -> Digital Pin 2
@@ -27,56 +28,38 @@
 volatile byte currentState[2];
 volatile byte currentEncoderValue;
 volatile byte lastPosition;
+volatile byte bit1_isr_cnt = 0;
+volatile byte bit2_isr_cnt = 0;
 
 byte lastRawData = 0;
 
-void bit1_isr()
+static void bitchange_isr()
 {
-  byte rawData = 0;
-  rawData |= (PIND >> 2);
-
   byte encoderValue = 0;
-  encoderValue |= ((PIN_READ(2) & 0b00000100) >> 1) | ((PIN_READ(4) & 0b00010000) >> 4);
+  encoderValue |= ((PIND & 0b00001100)) >> 2;
 
-  if ((encoderValue == 0x0 && currentEncoderValue == 0x1)
-      || (encoderValue == 0x1 && currentEncoderValue == 0x3)
-      || (encoderValue == 0x3 && currentEncoderValue == 0x2)
-      || (encoderValue == 0x2 && currentEncoderValue == 0x0))
-    lastPosition = (lastPosition + 1) % 16;
-  else if ((encoderValue == 0x0 && currentEncoderValue == 0x2)
-      || (encoderValue == 0x2 && currentEncoderValue == 0x3)
-      || (encoderValue == 0x3 && currentEncoderValue == 0x1)
-      || (encoderValue == 0x1 && currentEncoderValue == 0x0))
-    lastPosition = (lastPosition - 1) % 16;
-
+  if ((currentEncoderValue == 0x3 && encoderValue == 0x2)
+      || currentEncoderValue == 0x2 && encoderValue == 0x0
+      || currentEncoderValue == 0x0 && encoderValue == 0x1
+      || currentEncoderValue == 0x1 && encoderValue == 0x3)
+    {
+      if (currentState[1] == 0)
+        currentState[1] = 15;
+      else
+        currentState[1] = (currentState[1]-1)%16;
+    }
+  else if (currentEncoderValue == 0x2 && encoderValue == 0x3
+      || currentEncoderValue == 0x3 && encoderValue == 0x1
+      || currentEncoderValue == 0x1 && encoderValue == 0x0
+      || currentEncoderValue == 0x0 && encoderValue == 0x2)
+  {
+    if (currentState[1] == 15)
+      currentState[1] = 0;
+    else
+      currentState[1] = (currentState[1]+1)%16;
+  } 
   currentEncoderValue = encoderValue;
-  currentState[1] = (byte)lastPosition;
-  currentState[0] = (byte)((rawData & 0b0100000) == 0);
-
-}
-
-void bit2_isr()
-{
-  byte rawData = 0;
-  rawData |= (PIND >> 2);
-
-  byte encoderValue = 0;
-  encoderValue |= ((PIN_READ(2) & 0b00000100) >> 1) | ((PIN_READ(4) & 0b00010000) >> 4);
-
-  if ((encoderValue == 0x0 && currentEncoderValue == 0x1)
-      || (encoderValue == 0x1 && currentEncoderValue == 0x3)
-      || (encoderValue == 0x3 && currentEncoderValue == 0x2)
-      || (encoderValue == 0x2 && currentEncoderValue == 0x0))
-    lastPosition = (lastPosition - 1) % 16;
-  else if ((encoderValue == 0x0 && currentEncoderValue == 0x2)
-      || (encoderValue == 0x2 && currentEncoderValue == 0x3)
-      || (encoderValue == 0x3 && currentEncoderValue == 0x1)
-      || (encoderValue == 0x1 && currentEncoderValue == 0x0))
-    lastPosition = (lastPosition + 1) % 16;
-
-  currentEncoderValue = encoderValue;
-  currentState[1] = (byte)lastPosition;
-  currentState[0] = (byte)((rawData & 0b0100000) == 0);
+  
 }
 
 void setup() {
@@ -85,43 +68,54 @@ void setup() {
     pinMode(i, INPUT_PULLUP);
 
   currentEncoderValue = 0;
-  currentEncoderValue |= ((PIN_READ(2) & 0b00000100) >> 1);
-  currentEncoderValue |= ((PIN_READ(4) & 0b00010000) >> 4);
+  currentEncoderValue |= ((PIND & 0b01001100)) >> 2;
 
   currentState[0] = 0;
   currentState[1] = 0;
 
   Serial.begin( 115200 );
 
-  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), bit1_isr, CHANGE);
-  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(5), bit2_isr, CHANGE);
+#ifndef DEBUG
+  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(2), bitchange_isr, CHANGE);
+  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(3), bitchange_isr, CHANGE);
+#endif
 }
 
-
-byte rawData;
-
 void loop() {
-  // put your main code here, to run repeatedly:
-  
-#ifdef DEBUG
+
   noInterrupts();
-  rawData = 0;
+  byte rawData = 0;
   rawData |= (PIND >> 2);
   interrupts();
+
+#ifndef DEBUG
+  currentState[0] = (byte)((rawData & 0b00100000) == 0);
 #endif
 
 #ifdef DEBUG
   if (rawData != lastRawData)
   {
-    Serial.print((rawData & 0b0000000000000010) != 0 ? "-" : "2");
-    Serial.print((rawData & 0b0000000000001000) != 0 ? "-" : "4");
-    Serial.print((rawData & 0b0000000000100000) != 0 ? "-" : "6");
+    Serial.print((rawData & 0b00000001) != 0 ? "-" : "1");
+    Serial.print((rawData & 0b00000010) != 0 ? "-" : "1");
+    Serial.print((rawData & 0b00100000) != 0 ? "-" : "6");
     Serial.print("\n");
     lastRawData = rawData;
   }
 #else
-  Serial.print(currentState[0]);
+#ifdef PRETTY_PRINT
+  Serial.print(currentState[0]);  
+  Serial.print("|");
   Serial.print(currentState[1]);
+  Serial.print("|");
+  Serial.print((rawData & 0b00000001) != 0 ? "-" : "1");
+  Serial.print((rawData & 0b00000010) != 0 ? "-" : "1");
+  Serial.print("|");
+  Serial.print(currentEncoderValue);
   Serial.print("\n");
+#else
+  Serial.write(currentState[0]); 
+  Serial.write(currentState[1]); 
+  Serial.write('\n'); 
+#endif
 #endif
 }
