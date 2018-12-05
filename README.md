@@ -1,3 +1,4 @@
+
 RetroSpy
 ======
 
@@ -16,81 +17,110 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 1. [Arduino Uno](http://www.amazon.com/Arduino-UNO-board-DIP-ATmega328P/dp/B006H06TVG). You might be able to find this cheaper elsewhere.  A clone such as [Funduino](https://www.foxytronics.com/products/265-funduino-uno-r3) works just as well.
 2. [USB cable to connect the Arduino to your computer](http://www.amazon.com/AmazonBasics-Hi-Speed-A-Male-B-Male-Meters/dp/B001TH7GUA/)
 
-## Specific Components and Equipment needed for a Nintendo cable
+## Components and Equipment needed for a Nintendo/Playstation/TG16&PC-E/Saturn cable
 
-1. Controller extension cable (NES, SNES, N64, or GCN)
-2. (optional) male/female connectors with 5 pins minimum for easy controller switching
-3. Wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
-4. Wire cutters/strippers
-5. Exacto knife or box cutters
-6. Soldering iron and solder
-7. Electrical tape
-8. Digital multimeter or a cheap continuity tester
+1. Controller extension cable
+2. Wires to solder into the controller extension cable to go to the Arduino (Male to Male Dupont wires, such as [these](https://www.newegg.com/Product/Product.aspx?Item=9SIABKS5R54282&ignorebbr=1&nm_mc=KNC-GoogleMKP-PC&cm_mmc=KNC-GoogleMKP-PC-_-pla-New+Ocean+Tech-_-Gadgets-_-9SIABKS5R54282&gclid=Cj0KCQiAi57gBRDqARIsABhDSMpuM-JL8VWplLwJAD_A3pZrJ0GYVSMUcdcLZrZELpDAdR4VpBIDVyYaApR_EALw_wcB&gclsrc=aw.ds) work very well)
+3. Wire cutters/strippers
+4. Soldering iron and solder
+5. Electrical tape
+6. Digital multimeter or a cheap continuity tester 
+7. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/ADAFRUIT-INDUSTRIES-85-STACKING-COMPATIBLE/dp/B00LB76EVU)
 
-## Specific Components and Equipment needed for a Genesis/SMS/Atari cable
+While the preceding list of equipment can be used for any system, the following systems have components that make the process easier.
 
-1. Atari Controller extension cable
-2. [Wires](https://www.amazon.com/gp/product/B06XRV92ZB/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1)
-3. [DB9 Male to 2 Female Splitter Cable](https://www.amazon.com/gp/product/B007F2E188/ref=oh_aui_detailpage_o08_s00?ie=UTF8&psc=1)
-4. [DB9 Male Breakout Board to Screw Terminals](https://www.amazon.com/gp/product/B00CLTP2O2/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
-5. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/gp/product/B0756KRCFX/ref=oh_aui_detailpage_o06_s00?ie=UTF8&psc=1)
+## Components and Equipment needed for a Genesis/SMS/Atari cable
+
+1. Atari/Genesis Controller extension cable (a standard DB9 extension cable can be used, but you need to make sure it will fit in your console)
+2. [DB9 Male Breakout Board to Screw Terminals](https://www.amazon.com/gp/product/B00CLTP2O2/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
+3. [DB9 Male to 2 Female Splitter](https://www.amazon.com/gp/product/B007F2E188/ref=oh_aui_detailpage_o08_s00?ie=UTF8&psc=1)
+4. Wires to insert into the breakout board to go to the Arduino (Male to Male Dupont wires, such as [these](https://www.newegg.com/Product/Product.aspx?Item=9SIABKS5R54282&ignorebbr=1&nm_mc=KNC-GoogleMKP-PC&cm_mmc=KNC-GoogleMKP-PC-_-pla-New+Ocean+Tech-_-Gadgets-_-9SIABKS5R54282&gclid=Cj0KCQiAi57gBRDqARIsABhDSMpuM-JL8VWplLwJAD_A3pZrJ0GYVSMUcdcLZrZELpDAdR4VpBIDVyYaApR_EALw_wcB&gclsrc=aw.ds) work very well)
 5. Wire cutters/strippers
+6. Digital multimeter or a cheap continuity tester 
+7. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/ADAFRUIT-INDUSTRIES-85-STACKING-COMPATIBLE/dp/B00LB76EVU)
 
-## Specific Components and Equipment needed for a NeoGeo cable
+## Components and Equipment needed for a NeoGeo cable
 
-1. NeoGeo Controller extension cable or [DB15 Male to Female Extension Cable](https://www.amazon.com/gp/product/B073M86247/ref=oh_aui_search_detailpage?ie=UTF8&psc=1
-2. [Wires](https://www.amazon.com/gp/product/B06XRV92ZB/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1)
-3. [DB15 Male to 2 Female Splitter Adapter](http://www.l-com.com/d-sub-db15-y-splitter-adapter-db15m-db15f-db15f)
-4. [DB15 Male Breakout Connector](https://www.amazon.com/DB15-Breakout-Connector-Pin-Male/dp/B073RGHNVD)
-5. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/gp/product/B0756KRCFX/ref=oh_aui_detailpage_o06_s00?ie=UTF8&psc=1)
+1. NeoGeo Controller extension cable or (a standard DB15 extension cable can be used, but you need to make sure it will fit in your console)
+2. [DB15 Male Breakout Board](https://www.amazon.com/DB15-Breakout-Connector-Pin-Male/dp/B073RGHNVD)
+3. [DB15 Male to 2 Female Splitter](http://www.l-com.com/d-sub-db15-y-splitter-adapter-db15m-db15f-db15f)
+4. Wires to insert into the breakout board to go to the Arduino (Male to Male Dupont wires, such as [these](https://www.newegg.com/Product/Product.aspx?Item=9SIABKS5R54282&ignorebbr=1&nm_mc=KNC-GoogleMKP-PC&cm_mmc=KNC-GoogleMKP-PC-_-pla-New+Ocean+Tech-_-Gadgets-_-9SIABKS5R54282&gclid=Cj0KCQiAi57gBRDqARIsABhDSMpuM-JL8VWplLwJAD_A3pZrJ0GYVSMUcdcLZrZELpDAdR4VpBIDVyYaApR_EALw_wcB&gclsrc=aw.ds) work very well)
 5. Wire cutters/strippers
-
-## Specific Components and Equipment needed for a PSX, PS2, Turbographx-16/PC Engine or Sega Saturn cable
-
-1. Controller extension cable (PSX, TG16/PC Engine or Sega Saturn)
-2. (optional) male/female connectors with 5 pins minimum for easy controller switching
-3. Wires to solder into the controller extension cable to go to the Arduino (the Arduino sockets are very small, so you will need some smaller gauge wire to fit, so it might be best to pickup some wire after you see the socket size)
-4. Wire cutters/strippers
-5. Exacto knife or box cutters
-6. Soldering iron and solder
-7. Electrical tape
-8. Digital multimeter or a cheap continuity tester
+6. Digital multimeter or a cheap continuity tester 
+7. (optional) [Shield Stacking Header Set for Arduino UNO R3](https://www.amazon.com/ADAFRUIT-INDUSTRIES-85-STACKING-COMPATIBLE/dp/B00LB76EVU) 
 
 
 ## Software
 
-1. [the latest Arduino software](http://arduino.cc/en/Main/Software)
+1. [The latest Arduino software](http://arduino.cc/en/Main/Software)
 2. [ClassicController Arduino Library](https://github.com/zoggins/ClassicControllerSpy/releases/latest)
-2. Firmware for the Arduino
-3. PC software to connect to the Arduino and display the controller
+3. Firmware for the Arduino
+4. PC software to connect to the Arduino and display the controller
 
 \#3 and #4 above are included in the release package of RetroSpy.  The firmware is located in the ``firmware`` folder and is called ``firmware.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 
-## Instructions for NES, SNES, N64 or GameCube
+## Instructions for Nintendo/Playstation/TG16&PC-E/Saturn cable
 
-For building a NES, SNES, N64 or GameCube cable follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).
+evilash25 made a very good [guide](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring) for building splice cables, and can be applied to any of the following systems.
 
-## Instructions for PSX, Turbographx-16/PC Engine or Sega Saturn
+###	NES
 
-The building of PSX, Turbographx-16 or Sega Saturn cable is very similar to building a Nintendo cable, so for the most part follow the steps found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  The pinout of the cables is as follows.
+|   NES   | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|   GND   |    Not Connected    |
+|  Clock  |          6          |
+|  Latch  |          3          |
+|   Data  |          4          |
+|   5V    |    Not Connected    |
+|  Zp.LS  |    Not Connected    |
+|  Zp.TP  |    Not Connected    |
 
-### PSX and PS2
+### SNES
 
-**NOTE/WARNING**:  PIN 4 usually does not need to be connected, but I have encountered controllers that will behave oddly without it connected to the Arduino's GND.
+|  SNES   | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    5V   |    Not Connected    |
+|  Clock  |          6          |
+|  Latch  |          3          |
+|   Data  |          4          |
+|   GND   |    Not Connected    |
 
-|   PSX   | Arduino Digital Pin |
+### N64
+
+|   N64   | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|  3.3V   |    Not Connected    |
+|  Data   |          2          |
+|   GND   |         GND         |
+
+### Gamecube
+
+|   GCN   | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|   5V    |    Not Connected    |
+|   Data  |          5          |
+|   GND   |         GND         |
+|   3.3V  |    Not Connected    |
+
+Only 1 GND from the GCN controller is required.
+
+### Playstation 1/2
+
+|  PSX/2  | Arduino Digital Pin |
 |:-------:|:-------------------:|
 |    1    |          6          |
 |    2    |          5          |
 |    3    |    Not Connected    |
-|    4    |    Not Connected or GND   |
+|    4    |  GND/Not Connected  |
 |    5    |    Not Connected    |
 |    6    |          2          |
 |    7    |          3          |
 |    8    |    Not Connected    |
 |    9    |          4          |
 
-### Turbografx-16/PC Engine
+**NOTE/WARNING**:  PIN 4 usually does not need to be connected, but I have encountered controllers that will behave oddly without it connected to the Arduino's GND.
+
+### Turbographx-16/PC Engine
 
 |  TG16   | Arduino Digital Pin |
 |:-------:|:-------------------:|
@@ -172,22 +202,22 @@ It is possible to simply solder 10 jumper wires onto each wire of the NeoGeo ext
 You will need to make the following connections:
 
 | DB15 Pin | Arduino Digital Pin |
-|:-------:|:-------------------:|
-|    1    |          Not Connected          |
-|    2    |          Not Connected          |
-|    3    |          2          |
-|    4    |          3          |
-|    5    |          4    |
-|    6    |          5          |
-|    7    |          6          |
-|    8    |    Not Connected    |
-|    9    |    Not Connected          |
-|    10    |   Not Connected          |
+|:--------:|:-------------------:|
+|    1     |    Not Connected    |
+|    2     |    Not Connected    |
+|    3     |          2          |
+|    4     |          3          |
+|    5     |          4          |
+|    6     |          5          |
+|    7     |          6          |
+|    8     |    Not Connected    |
+|    9     |    Not Connected    |
+|    10    |    Not Connected    |
 |    11    |          7          |
 |    12    |          8          |
 |    13    |          9          |
-|    14    |          10          |
-|    15    |          11          |
+|    14    |          10         |
+|    15    |          11         |
 
 ## Software and Setup
 
