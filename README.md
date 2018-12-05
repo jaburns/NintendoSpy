@@ -118,7 +118,7 @@ Only 1 GND from the GCN controller is required.
 |    8    |    Not Connected    |
 |    9    |          4          |
 
-**NOTE/WARNING**:  PIN 4 usually does not need to be connected, but I have encountered controllers that will behave oddly without it connected to the Arduino's GND.
+**NOTE/WARNING**:  PIN 4 usually does not need to be connected, but controllers have been encountered that will behave oddly without it connected to the Arduino's GND.
 
 ### Turbographx-16/PC Engine
 
