@@ -11,7 +11,7 @@ namespace NintendoSpy.Readers
         const int PACKET_SIZE = 13;
 
         static readonly string[] BUTTONS = {
-            "Y", "Z", "R", "X", "C", "B", "start", "A", "down", "up", "right", "left", "L"
+            "Z", "Y", "X", "R", "B", "C", "A", "start", "up", "down", "left", "right", "L"
         };
 
         static public ControllerState ReadFromPacket (byte[] packet)
