@@ -20,8 +20,11 @@ namespace NintendoSpy.Readers
 
             var state = new ControllerStateBuilder();
 
-            if (packet[0] != 0)
-                state.SetButton(BUTTONS[packet[0]], true);
+            for (int i = 0; i < BUTTONS.Length; ++i)
+            {
+                if (string.IsNullOrEmpty(BUTTONS[i])) continue;
+                state.SetButton(BUTTONS[i], i == packet[0]);
+            }
 
             return state.Build();
         }
