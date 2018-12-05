@@ -23,11 +23,13 @@ namespace NintendoSpy
         static public readonly InputSource PLAYSTATION2 = new InputSource("playstation2", "Playstation 2", true, false, port => new SerialControllerReader(port, Playstation2.ReadFromPacket));
         static public readonly InputSource TG16 = new InputSource("tg16", "Turbographx 16", true, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
         static public readonly InputSource SATURN = new InputSource("saturn", "Sega Saturn", true, false, port => new SerialControllerReader(port, SS.ReadFromPacket));
+        static public readonly InputSource PADDLES = new InputSource("paddles", "Atari Paddles", true, false, port => new SerialControllerReader(port, Paddles.ReadFromPacket));
+        static public readonly InputSource DRIVINGCONTROLLER = new InputSource("drivingcontroller", "Atari Driving Controller", true, false, port => new SerialControllerReader(port, DrivingController.ReadFromPacket));
         static public readonly InputSource SATURN3D = new InputSource("saturn3d", "Sega Saturn 3D", true, false, port => new SerialControllerReader(port, SS3D.ReadFromPacket));
         static public readonly InputSource NEOGEO = new InputSource("neogeo", "NeoGeo", true, false, port => new SerialControllerReader(port, NeoGeo.ReadFromPacket));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION, PLAYSTATION2, TG16, SATURN, SATURN3D, NEOGEO, ATARIKEYBOARD
+            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION, PLAYSTATION2, TG16, SATURN, SATURN3D, NEOGEO, ATARIKEYBOARD, PADDLES, DRIVINGCONTROLLER
         };
 
         static public readonly InputSource DEFAULT = NES;

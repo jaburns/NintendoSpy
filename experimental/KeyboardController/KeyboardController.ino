@@ -6,7 +6,7 @@
 // Requires this package: https://github.com/NicoHood/PinChangeInterrupt
 
 // ---------- Uncomment one of these options to select operation mode --------------
-//#define DEBUG
+#define DEBUG
 //#define BIG_BIRD
 //#define STAR_RAIDERS
 
@@ -185,6 +185,8 @@ void loop() {
   rawData |= (PIND >> 2) | (PINB << 6);
   int analog0 =  analogRead(0);
   int analog1 =  analogRead(1);
+  int analog2 =  analogRead(2);
+  int analog3 =  analogRead(3);
   interrupts();
 #elif defined BIG_BIRD
   noInterrupts();
@@ -200,8 +202,8 @@ void loop() {
 #endif
 
 #ifdef DEBUG
-  if (rawData != lastRawData)
-  {
+  //if (rawData != lastRawData)
+  //{
     Serial.print((rawData & 0b0000000000000001) != 0 ? "-" : "1");
     Serial.print((rawData & 0b0000000000000010) != 0 ? "-" : "2");
     Serial.print((rawData & 0b0000000000000100) != 0 ? "-" : "3");
@@ -213,14 +215,18 @@ void loop() {
     Serial.print(analog0);
     Serial.print("|");
     Serial.print(analog1);
+    Serial.print("|");
+    Serial.print(analog2);
+    Serial.print("|");
+    Serial.print(analog3);
     Serial.print("\n");
     lastRawData = rawData;
-  }
+  //}
 #else
   if (currentState != lastState)
   {
-    Serial.print(currentState);
-    Serial.print("\n");
+    Serial.write(currentState);
+    Serial.write("\n");
     lastState = currentState;
   }
 #endif
