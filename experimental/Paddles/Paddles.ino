@@ -7,19 +7,39 @@
 //#define DEBUG
 
 // PINOUTS
-// Atari Pin 3 -> Digital Pin 2
-// Atari Pin 4 -> Digital Pin 3
+// Atari Pin 3 -> Digital Pin 4
+// Atari Pin 4 -> Digital Pin 5
 // Atari Pin 5 -> Analog Pin 0
+// Atari Pin 8 -> Arduino GND
 // Atari Pin 9 -> Analog Pin 1
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 
-// The below values are not scientific, but they seem to work.  These may need to be tuned for different systems.
-float EMA_al = 0.6;      //initialization of EMA alpha left
-float EMA_ar = 0.6;      //initialization of EMA alpha right
+// The below values are not scientific. These will need to be tuned for different sets of paddles.
+float EMA_al = .08;      //initialization of EMA alpha left
+float EMA_ar = .08;      //initialization of EMA alpha right
+int nominal_left_min = 87;
+int nominal_right_min = 110;
+int nominal_left_max = 1007;
+int nominal_right_max = 1009;
+int left_min_threshold = 5;
+int right_min_threshold = 5;
+int left_max_threshold = 253;
+int right_max_threshold = 253;
 
-int EMA_Sr = 0;          //initialization of EMA S right
 int EMA_Sl = 0;          //initialization of EMA S left
+int EMA_Sr = 0;          //initialization of EMA S right
+
+static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax, float minThreshold, float maxThreshold)
+{
+  float newValue = ((oldValue - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin;
+  if (newValue > maxThreshold)
+    return newMax;
+  if (newValue < minThreshold)
+    return newMin;
+
+  return newValue;
+}
 
 void setup() {
 
@@ -34,8 +54,6 @@ void setup() {
 
 void loop() {
 
-  byte rawData[6];
-
   noInterrupts();
   byte pins = 0;
   pins |= (PIND >> 2);
@@ -43,24 +61,30 @@ void loop() {
   int rightPaddle = analogRead(1);
   interrupts();
 
-  rawData[0] = ((pins & 0b0000000000000100) == 0);
-  rawData[1] = ((pins & 0b0000000000001000) == 0);
-  rawData[2] = EMA_Sl = (int)((EMA_al*leftPaddle) + ((1-EMA_al)*EMA_Sl)); 
-  rawData[4] = EMA_Sr = (int)((EMA_ar*rightPaddle) + ((1-EMA_ar)*EMA_Sr)); 
-  
+  byte fire1 = ((pins & 0b0000000000000100) == 0);
+  byte fire2 = ((pins & 0b0000000000001000) == 0);
+  EMA_Sl = (EMA_al*leftPaddle) + ((1-EMA_al)*EMA_Sl); 
+  EMA_Sr = (EMA_ar*rightPaddle) + ((1-EMA_ar)*EMA_Sr);
+
 #ifdef DEBUG
-    Serial.print(rawData[0] ? "3" : "-");
-    Serial.print(rawData[1] ? "4" : "-");
+    Serial.print(fire1 ? "3" : "-");
+    Serial.print(fire2 ? "4" : "-");
     Serial.print("|");
-    Serial.print(rawData[2]);
+    Serial.print(EMA_Sl);
     Serial.print("|");
-    Serial.print(rawData[4]);
+    Serial.print(ScaleInteger(EMA_Sl, nominal_left_min, nominal_left_max, 0, 255, left_min_threshold, left_max_threshold));
+    Serial.print("|");
+    Serial.print(EMA_Sr);
+    Serial.print("|");
+    Serial.print(ScaleInteger(EMA_Sr, nominal_right_min, nominal_right_max, 0, 255, right_min_threshold, right_max_threshold));
     Serial.print("\n");
 #else
-    Serial.print(rawData[0]);
-    Serial.print(rawData[1]);
-    Serial.print((word)rawData[2]);
-    Serial.print((word)rawData[4]);
-    Serial.print("\n");
+    Serial.write(fire1);
+    Serial.write(fire2);
+    Serial.write(ScaleInteger(EMA_Sl, nominal_left_min, nominal_left_max, 0, 255, left_min_threshold, left_max_threshold));
+    Serial.write(ScaleInteger(EMA_Sr, nominal_right_min, nominal_right_max, 0, 255, right_min_threshold, right_max_threshold));
+    Serial.write('\n');
 #endif
+
+  delay(2);
 }

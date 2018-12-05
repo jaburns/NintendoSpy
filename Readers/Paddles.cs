@@ -8,19 +8,21 @@ namespace NintendoSpy.Readers
 {
     static public class Paddles
     {
-        const int PACKET_SIZE = 6;
+
+        const int PACKET_SIZE = 4;
 
         static readonly string[] BUTTONS = {
-            "1", "2"
+            "2", "1"
         };
 
         static float readPaddle(ushort input)
         {
-            return input/1024;
+            return (float)(input)/256;
         }
 
         static public ControllerState ReadFromPacket(byte[] packet)
         {
+           
             if (packet.Length < PACKET_SIZE) return null;
 
             var state = new ControllerStateBuilder();
@@ -32,7 +34,7 @@ namespace NintendoSpy.Readers
             }
 
             state.SetAnalog("left", readPaddle(packet[2]));
-            state.SetAnalog("right", readPaddle(packet[4]));
+            state.SetAnalog("right", readPaddle(packet[3]));
 
             return state.Build();
         }

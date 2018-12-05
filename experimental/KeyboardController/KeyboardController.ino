@@ -6,12 +6,13 @@
 // Requires this package: https://github.com/NicoHood/PinChangeInterrupt
 
 // ---------- Uncomment one of these options to select operation mode --------------
-//#define DEBUG
+#define DEBUG
 //#define BIG_BIRD
 //#define STAR_RAIDERS
 
 // PINOUTS
-// For every other game, besides Star Raiders and Big Bird's Egg Catch the pinout is straightforward:
+//
+// For every other game, besides Star Raiders and Big Bird's Egg Catch the pinout is straightforward.  This is the same as the standard Atari controller pinout.
 // Atari Pin 1 -> Digital Pin 2
 // Atari Pin 2 -> Digital Pin 3
 // Atari Pin 3 -> Digital Pin 4
@@ -20,7 +21,8 @@
 // Atari Pin 6 -> Digital Pin 7
 // Atari Pin 9 -> Digital Pin 8
 //
-// For Star Raiders and Big Bird's Egg Catch the pinout involves the analog pins
+// For Star Raiders and Big Bird's Egg Catch the pinout involves the analog pins.  Theoretically this method could be extended to handle the "regular" case also
+// but the pin mapping being different from the standard Atari controller pinout makes it less deseriable to use.
 // Atari Pin 1 -> Digital Pin 2
 // Atari Pin 2 -> Digital Pin 3
 // Atari Pin 3 -> Digital Pin 4
@@ -28,6 +30,9 @@
 // Atari Pin 5 -> Analog Pin 0
 // Atari Pin 6 -> Digital Pin 7
 // Atari Pin 9 -> Analog Pin 1
+
+// WARNING:  The behavior of simultaneous button presses is UNDEFINED in both this firmware and on the hardware itself.  
+// Typically the highest number presses is registered, but even that leads to weird cases in some situations.
 
 #include <PinChangeInterrupt.h>
 #include <PinChangeInterruptBoards.h>
@@ -180,6 +185,8 @@ void loop() {
   rawData |= (PIND >> 2) | (PINB << 6);
   int analog0 =  analogRead(0);
   int analog1 =  analogRead(1);
+  int analog2 =  analogRead(2);
+  int analog3 =  analogRead(3);
   interrupts();
 #elif defined BIG_BIRD
   noInterrupts();
@@ -195,8 +202,8 @@ void loop() {
 #endif
 
 #ifdef DEBUG
-  if (rawData != lastRawData)
-  {
+  //if (rawData != lastRawData)
+  //{
     Serial.print((rawData & 0b0000000000000001) != 0 ? "-" : "1");
     Serial.print((rawData & 0b0000000000000010) != 0 ? "-" : "2");
     Serial.print((rawData & 0b0000000000000100) != 0 ? "-" : "3");
@@ -208,14 +215,18 @@ void loop() {
     Serial.print(analog0);
     Serial.print("|");
     Serial.print(analog1);
+    Serial.print("|");
+    Serial.print(analog2);
+    Serial.print("|");
+    Serial.print(analog3);
     Serial.print("\n");
     lastRawData = rawData;
-  }
+  //}
 #else
   if (currentState != lastState)
   {
-    Serial.print(currentState);
-    Serial.print("\n");
+    Serial.write(currentState);
+    Serial.write("\n");
     lastState = currentState;
   }
 #endif
