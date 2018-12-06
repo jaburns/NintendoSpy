@@ -38,7 +38,7 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 
 ## Specific Components and Equipment needed for a NeoGeo cable
 
-1. NeoGeo Controller extension cable or [DB15 Male to Female Extension Cable](https://www.amazon.com/gp/product/B073M86247/ref=oh_aui_search_detailpage?ie=UTF8&psc=1
+1. NeoGeo Controller extension cable or [DB15 Male to Female Extension Cable](https://www.amazon.com/gp/product/B073M86247/ref=oh_aui_search_detailpage?ie=UTF8&psc=1)
 2. [Wires](https://www.amazon.com/gp/product/B06XRV92ZB/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1)
 3. [DB15 Male to 2 Female Splitter Adapter](http://www.l-com.com/d-sub-db15-y-splitter-adapter-db15m-db15f-db15f)
 4. [DB15 Male Breakout Connector](https://www.amazon.com/DB15-Breakout-Connector-Pin-Male/dp/B073RGHNVD)
