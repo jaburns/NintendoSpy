@@ -18,6 +18,8 @@
 //#define MODE_PLAYSTATION2
 //#define MODE_TG16
 //#define MODE_SATURN
+//#define MODE_SATURN3D
+//#define MODE_NEOGEO
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -55,10 +57,14 @@ KeyboardController keyboardController;
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
+#define PINB_READ( pin ) (PINB&(1<<(pin)))
 #define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 
 #define WAIT_FALLING_EDGE( pin ) while( !PIN_READ(pin) ); while( PIN_READ(pin) );
 #define WAIT_LEADING_EDGE( pin ) while( PIN_READ(pin) ); while( !PIN_READ(pin) );
+
+#define WAIT_FALLING_EDGEB( pin ) while( !PINB_READ(pin) ); while( PINB_READ(pin) );
+#define WAIT_LEADING_EDGEB( pin ) while( PINB_READ(pin) ); while( !PINB_READ(pin) );
 
 #define MODEPIN_SNES 0
 #define MODEPIN_N64  1
@@ -95,6 +101,7 @@ void setup()
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
     PORTD = 0x00;
+    PORTB = 0x00;
     DDRD  = 0x00;
     #endif
     #endif
@@ -341,12 +348,15 @@ inline void sendRawGBAData()
   #endif
 }
 
-#define SS_SELECT1 6
-#define SS_SELECT2 7
-#define SS_DATA1   2
-#define SS_DATA2   3
-#define SS_DATA3   4
-#define SS_DATA4   5
+#define SS_SELECT0 6
+#define SS_SEL 6
+#define SS_SELECT1 7
+#define SS_REQ 7
+#define SS_ACK 0 // 8 - 0 on PORTB 
+#define SS_DATA0   2
+#define SS_DATA1   3
+#define SS_DATA2   4
+#define SS_DATA3   5
 
 inline void read_SSData()
 {
@@ -362,7 +372,7 @@ inline void read_SSData()
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b01000000)
     ssState2 = ~pincache;
-
+    
   pincache = 0;
   while((PIND & 0b11000000) != 0){}
   pincache |= PIND;
@@ -399,23 +409,108 @@ inline void sendRawSSData()
 
     Serial.write( SPLIT );
     #else 
-    Serial.print((ssState1 & 0b00000100)    ? "Y" : "0");
-    Serial.print((ssState1 & 0b00001000)    ? "Z" : "0");
-    Serial.print((ssState1 & 0b00010000)    ? "R" : "0");
-    Serial.print((ssState1 & 0b00100000)    ? "X" : "0");
+    Serial.print((ssState1 & 0b00000100)    ? "Z" : "0");
+    Serial.print((ssState1 & 0b00001000)    ? "Y" : "0");
+    Serial.print((ssState1 & 0b00010000)    ? "X" : "0");
+    Serial.print((ssState1 & 0b00100000)    ? "R" : "0");
 
-    Serial.print((ssState2 & 0b00000100)    ? "C" : "0");
-    Serial.print((ssState2 & 0b00001000)    ? "B" : "0");
-    Serial.print((ssState2 & 0b00010000)    ? "S" : "0");
-    Serial.print((ssState2 & 0b00100000)    ? "A" : "0");
+    Serial.print((ssState2 & 0b00000100)    ? "B" : "0");
+    Serial.print((ssState2 & 0b00001000)    ? "C" : "0");
+    Serial.print((ssState2 & 0b00010000)    ? "A" : "0");
+    Serial.print((ssState2 & 0b00100000)    ? "S" : "0");
 
-    Serial.print((ssState3 & 0b00000100)    ? "d" : "0");
-    Serial.print((ssState3 & 0b00001000)    ? "u" : "0");
-    Serial.print((ssState3 & 0b00010000)    ? "r" : "0");
-    Serial.print((ssState3 & 0b00100000)    ? "l" : "0");
+    Serial.print((ssState3 & 0b00000100)    ? "u" : "0");
+    Serial.print((ssState3 & 0b00001000)    ? "d" : "0");
+    Serial.print((ssState3 & 0b00010000)    ? "l" : "0");
+    Serial.print((ssState3 & 0b00100000)    ? "r" : "0");
     
-    Serial.print((ssState4 & 0b00010000)    ? "L" : "0");
+    Serial.print((ssState4 & 0b00100000)    ? "L" : "0");
  
+    Serial.print("\n");
+    #endif
+}
+
+inline void read_SS3DData()
+{
+  byte numBits = 0;
+  
+  WAIT_FALLING_EDGE(SS_SEL);
+
+  for(int i = 0; i < 3; ++i)
+  {
+      WAIT_FALLING_EDGE(SS_REQ);
+    
+      WAIT_FALLING_EDGEB(SS_ACK);
+  
+      rawData[numBits++] = PIN_READ(SS_DATA3);
+      rawData[numBits++] = PIN_READ(SS_DATA2);
+      rawData[numBits++] = PIN_READ(SS_DATA1);    
+      rawData[numBits++] = PIN_READ(SS_DATA0);
+  
+      WAIT_LEADING_EDGE(SS_REQ);
+    
+      WAIT_LEADING_EDGEB(SS_ACK);
+  
+      rawData[numBits++] = PIN_READ(SS_DATA3);
+      rawData[numBits++] = PIN_READ(SS_DATA2);
+      rawData[numBits++] = PIN_READ(SS_DATA1);    
+      rawData[numBits++] = PIN_READ(SS_DATA0);
+  }
+
+  if (rawData[3] != 0)
+  {
+    for(int i = 0; i < 4; ++i)
+    {
+      WAIT_FALLING_EDGE(SS_REQ);
+    
+      WAIT_FALLING_EDGEB(SS_ACK);
+
+      rawData[numBits++] = PIN_READ(SS_DATA3);
+      rawData[numBits++] = PIN_READ(SS_DATA2);
+      rawData[numBits++] = PIN_READ(SS_DATA1);    
+      rawData[numBits++] = PIN_READ(SS_DATA0);
+  
+      WAIT_LEADING_EDGE(SS_REQ);
+      
+      WAIT_LEADING_EDGEB(SS_ACK);
+    
+      rawData[numBits++] = PIN_READ(SS_DATA3);
+      rawData[numBits++] = PIN_READ(SS_DATA2);
+      rawData[numBits++] = PIN_READ(SS_DATA1);    
+      rawData[numBits++] = PIN_READ(SS_DATA0);
+    }
+  }
+  else
+  {
+    rawData[numBits++] = 1;
+    for(int i = 0; i < 7; ++i)
+      rawData[numBits++] = 0;
+
+    rawData[numBits++] = 1;
+    for(int i = 0; i < 7; ++i)
+      rawData[numBits++] = 0;
+
+    for(int i = 0; i < 16;++i)
+      rawData[numBits++] = 0;
+  }
+}
+
+inline void sendRawSS3DData()
+{
+    #ifndef DEBUG
+
+    for (unsigned char i = 0; i < 56; ++i)
+    {
+      Serial.write( rawData[i] ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else
+    for(int i = 0; i < 56; ++i)
+    {
+      if (i % 8 == 0)
+        Serial.print("|");
+      Serial.print(rawData[i] ? "1" : "0");
+    }
     Serial.print("\n");
     #endif
 }
@@ -697,6 +792,50 @@ inline void sendRawSegaData()
   #endif
 }
 
+// PORTD
+#define NEOGEO_SELECT 2
+#define NEOGEO_D 3
+#define NEOGEO_B 4
+#define NEOGEO_RIGHT 5
+#define NEOGEO_DOWN 6
+#define NEOGEO_START 7
+//PORTB
+#define NEOGEO_C 0
+#define NEOGEO_A 1
+#define NEOGEO_LEFT 2
+#define NEOGEO_UP 3
+
+inline void read_NeoGeo()
+{
+  rawData[0] = PIN_READ(NEOGEO_SELECT);
+  rawData[1] = PIN_READ(NEOGEO_D);
+  rawData[2] = PIN_READ(NEOGEO_B);
+  rawData[3] = PIN_READ(NEOGEO_RIGHT);
+  rawData[4] = PIN_READ(NEOGEO_DOWN);
+  rawData[5] = PIN_READ(NEOGEO_START);
+  rawData[6] = PINB_READ(NEOGEO_C);
+  rawData[7] = PINB_READ(NEOGEO_A);
+  rawData[8] = PINB_READ(NEOGEO_LEFT);
+  rawData[9] = PINB_READ(NEOGEO_UP);
+}
+
+inline void sendNeoGeoData()
+{
+    #ifndef DEBUG
+    for (unsigned char i = 0; i < 10; ++i)
+    {
+      Serial.write( rawData[i] ? ZERO : ONE );
+    }
+    Serial.write( SPLIT );
+    #else
+    for(int i = 0; i < 10; ++i)
+    {
+      Serial.print(rawData[i] ? "0" : "1");
+    }
+    Serial.print("\n");
+    #endif
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update loop definitions for the various console modes.
 
@@ -806,6 +945,22 @@ inline void loop_SS()
   sendRawSSData();
 }
 
+inline void loop_SS3D()
+{
+  noInterrupts();
+  read_SS3DData();
+ interrupts();
+  sendRawSS3DData();
+}
+
+inline void loop_NeoGeo()
+{
+  noInterrupts();
+  read_NeoGeo();
+ interrupts();
+  sendNeoGeoData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -834,6 +989,10 @@ void loop()
     loop_TG16();
 #elif defined MODE_SATURN
     loop_SS();
+#elif defined MODE_SATURN3D
+    loop_SS3D();
+#elif defined MODE_NEOGEO
+    loop_NeoGeo();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
