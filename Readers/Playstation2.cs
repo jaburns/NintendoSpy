@@ -36,8 +36,6 @@ namespace NintendoSpy.Readers
                 polishedPacket[0] |= (byte)((packet[i] == 0 ? 0 : 1) << i);
             }
 
-            Console.WriteLine(polishedPacket[0]);
-
             for (byte i = 0; i < 16; ++i)
             {
                 polishedPacket[i + 1] = packet[i + 8];
