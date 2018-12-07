@@ -87,8 +87,8 @@ KeyboardController keyboardController;
 #define GC_BITCOUNT  64
 
 #define ThreeDO_LATCH      2
-#define ThreeDO_DATA       3
-#define ThreeDO_CLOCK      4   
+#define ThreeDO_DATA       4
+#define ThreeDO_CLOCK      3   
 #define ThreeDO_BITCOUNT  16
 
 #define ZERO  '\0'  // Use a byte value of 0x00 to represent a bit with value 0.
@@ -276,7 +276,7 @@ void read_shiftRegister_reverse_clock( unsigned char bits )
 
     do {
         WAIT_LEADING_EDGE( clock );
-        *rawDataPtr = !PIN_READ(data);
+        *rawDataPtr = PIN_READ(data);
         ++rawDataPtr;
     }
     while( --bits > 0 );
@@ -299,7 +299,7 @@ inline void sendRawData( unsigned char first, unsigned char count )
     Serial.print("|");
     for( unsigned char i = first ; i < first + count ; i++ ) {
         Serial.print( rawData[i] ? "1" : "0" );
-        if (i % 8 == 0)
+        if (i % 8 == 0 && i != 0)
         Serial.print("|");
     }
     Serial.print("\n");

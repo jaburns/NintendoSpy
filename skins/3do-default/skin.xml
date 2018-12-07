@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Default 3DO" author="zoggins" type="3do">
+
+  <background name="Default" image="3dobackground.png" />
+
+  <button name="a" image="circle2.png" x="530" y="200" width="60" height="60" />
+  <button name="b" image="circle2.png" x="590" y="147" width="60" height="60" />
+  <button name="c" image="circle2.png" x="660" y="107" width="60" height="60" />
+
+  <button name="l" image="circle2.png" x="164" y="34" width="100" height="25" />
+  <button name="r" image="circle2.png" x="530" y="34" width="100" height="25" />
+
+  <button name="x" image="circle2.png" x="311" y="168" width="40" height="20" />
+  <button name="p" image="circle2.png" x="430" y="168" width="40" height="20" />
+
+  <button name="up" image="circle2.png" x="150" y="125" width="30" height="30" />
+  <button name="down" image="circle2.png" x="154" y="213" width="30" height="30" />
+  <button name="left" image="circle2.png" x="109" y="166" width="30" height="30" />
+  <button name="right" image="circle2.png" x="200" y="165" width="30" height="30" />
+
+</skin>
