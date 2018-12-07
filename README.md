@@ -157,6 +157,20 @@ For Atari Joysticks, Sega Master System controllers and the Atari Omega Race Boo
 |    8    |    Not Connected    |
 |    9    |          8          |
 
+For 3DO controllers you will need to make the following connections:
+
+| DB9 Pin | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |    Not Connected    |
+|    2    |    Not Connected    |
+|    3    |    Not Connected    |
+|    4    |    Not Connected    |
+|    5    |    Not Connected    |
+|    6    |          2          |
+|    7    |          3          |
+|    8    |    Not Connected    |
+|    9    |          4          |
+
 ## Instructions for NeoGeo
 
 ### Wiring
