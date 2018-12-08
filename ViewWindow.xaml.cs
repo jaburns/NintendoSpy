@@ -338,6 +338,12 @@ namespace NintendoSpy
                         grid.Margin = new Thickness (skin.Config.X, skin.Config.Y + offy, 0, 0);
                         grid.Height = height;
                         break;
+                    case Skin.AnalogTrigger.DirectionValue.Fade:
+                        grid.Height = skin.Config.Height;
+                        grid.Width = skin.Config.Width;
+                        grid.Opacity = val;
+                        break;
+
                 }
             }
         }

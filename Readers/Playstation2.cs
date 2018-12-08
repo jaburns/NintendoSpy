@@ -66,7 +66,7 @@ namespace NintendoSpy.Readers
             }
 
             if (polishedPacket.Length < POLISHED_PACKET_SIZE) return null;
-            // Currently only support digital and analog in red mode
+
             if (polishedPacket[0] != 0x41 && polishedPacket[0] != 0x73 && polishedPacket[0] != 0x79) return null;
 
             var state = new ControllerStateBuilder();
@@ -83,6 +83,13 @@ namespace NintendoSpy.Readers
                 state.SetAnalog("rstick_y", readStick(polishedPacket[18]));
                 state.SetAnalog("lstick_x", readStick(polishedPacket[19]));
                 state.SetAnalog("lstick_y", readStick(polishedPacket[20]));
+            }
+            else
+            {
+                state.SetAnalog("rstick_x", 0);
+                state.SetAnalog("rstick_y", 0);
+                state.SetAnalog("lstick_x", 0);
+                state.SetAnalog("lstick_y", 0);
             }
 
             if (polishedPacket[0] == 0x79)
@@ -101,6 +108,23 @@ namespace NintendoSpy.Readers
                 state.SetAnalog("analog_r1", readAnalogButton(polishedPacket[30]));
                 state.SetAnalog("analog_l2", readAnalogButton(polishedPacket[31]));
                 state.SetAnalog("analog_r2", readAnalogButton(polishedPacket[32]));
+            }
+            else
+            {
+                state.SetAnalog("analog_right", (float)(polishedPacket[6] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_left", (float)(polishedPacket[8] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_up", (float)(polishedPacket[5] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_down", (float)(polishedPacket[7] != 0x00 ? 1.0 : 0.0));
+
+                state.SetAnalog("analog_triangle", (float)(polishedPacket[13] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_circle", (float)(polishedPacket[14] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_x", (float)(polishedPacket[15] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_square", (float)(polishedPacket[16] != 0x00 ? 1.0 : 0.0));
+
+                state.SetAnalog("analog_l1", (float)(polishedPacket[11] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_r1", (float)(polishedPacket[12] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_l2", (float)(polishedPacket[9] != 0x00 ? 1.0 : 0.0));
+                state.SetAnalog("analog_r2", (float)(polishedPacket[10] != 0x00 ? 1.0 : 0.0));
             }
 
             return state.Build();
