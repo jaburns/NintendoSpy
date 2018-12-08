@@ -426,7 +426,7 @@ inline void sendRawSSData()
     Serial.write ((ssState3 & 0b00010000) ? ONE : ZERO );
     Serial.write ((ssState3 & 0b00100000) ? ONE : ZERO );
 
-    Serial.write ((ssState4 & 0b00010000) ? ONE : ZERO );
+    Serial.write ((ssState4 & 0b00100000) ? ONE : ZERO );
 
     Serial.write( SPLIT );
     #else 
