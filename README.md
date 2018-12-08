@@ -1,4 +1,3 @@
-
 RetroSpy
 ======
 
@@ -229,22 +228,22 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 3. Once installed, open the Arduino software, you should see "Arduino Uno on COMX" at the bottom right corner if everything is working. If not, you may need to restart and/or replug the USB connector.
 
-![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/arduinooncom3.jpg)
+![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/readme/docs/tutorial-images/readme_images/emptyide.png)
 
 4. Install my Arduino ClassicControllerSpy library.  Installation directions are [here](https://github.com/zoggins/ClassicControllerSpy#installation).
 
-4. Download and unzip the [latest release of RetroSpy somewhere](https://github.com/zoggins/RetroSpy/releases/latest).
+5. Download and unzip the [latest release of RetroSpy somewhere](https://github.com/zoggins/RetroSpy/releases/latest).
 
-5. Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
+6. Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
 
-6. Now uncomment the option for the operation mode (which controller) you will use. Note I am using a SNES controller here.  MODE_SEGA is for Genesis & MODE_CLASSIC is for SMS/Atari.
+7. Now uncomment the option for the operation mode (which controller) you will use. Note I am using a SNES controller here.  MODE_SEGA is for Genesis & MODE_CLASSIC is for SMS/Atari.
 
-![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/uncomment_mode.jpg)
+![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/readme/docs/tutorial-images/readme_images/uncomment.png)
 
-7. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes.
+8. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes.
 
-![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/doneuploading.jpg)
+![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/readme/docs/tutorial-images/readme_images/upload.png)
 
-8. Run ``RetroSpy.exe``.
+9. Run ``RetroSpy.exe``.
 
-9. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
+10. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
