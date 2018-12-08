@@ -20,6 +20,7 @@
 //#define MODE_SATURN
 //#define MODE_SATURN3D
 //#define MODE_NEOGEO
+//#define MODE_3DO
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -28,7 +29,7 @@
 // compatibility only. 
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
-// Uncomment this for MODE_SEGA, MODE_CLASSIC and MODE_BOOSTER_GRIP serial debugging output
+// Uncomment this for serial debugging output
 //#define DEBUG
 
 #include <SegaControllerSpy.h>
@@ -84,6 +85,11 @@ KeyboardController keyboardController;
 #define GC_PIN        5
 #define GC_PREFIX    25
 #define GC_BITCOUNT  64
+
+#define ThreeDO_LATCH      2
+#define ThreeDO_DATA       4
+#define ThreeDO_CLOCK      3   
+#define ThreeDO_BITCOUNT  16
 
 #define ZERO  '\0'  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE    '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
@@ -261,6 +267,21 @@ void read_shiftRegister( unsigned char bits )
     while( --bits > 0 );
 }
 
+template< unsigned char latch, unsigned char data, unsigned char clock >
+void read_shiftRegister_reverse_clock( unsigned char bits )
+{
+    unsigned char *rawDataPtr = rawData;
+
+    WAIT_FALLING_EDGE( latch );
+
+    do {
+        WAIT_LEADING_EDGE( clock );
+        *rawDataPtr = PIN_READ(data);
+        ++rawDataPtr;
+    }
+    while( --bits > 0 );
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sends a packet of controller data over the Arduino serial interface.
 inline void sendRawData( unsigned char first, unsigned char count )
@@ -278,7 +299,7 @@ inline void sendRawData( unsigned char first, unsigned char count )
     Serial.print("|");
     for( unsigned char i = first ; i < first + count ; i++ ) {
         Serial.print( rawData[i] ? "1" : "0" );
-        if (i % 8 == 0)
+        if (i % 8 == 0 && i != 0)
         Serial.print("|");
     }
     Serial.print("\n");
@@ -387,6 +408,59 @@ inline void read_SSData()
 
 }
 
+inline void sendRawSSDataV2()
+{
+    #ifndef DEBUG
+    for(int i = 0; i < 8;++i)
+    {
+      Serial.write(i == 6 ? ONE : ZERO);
+    }
+    Serial.write((ssState3 & 0b00100000) ? ZERO : ONE);
+    Serial.write((ssState3 & 0b00010000) ? ZERO : ONE);
+    Serial.write((ssState3 & 0b00001000) ? ZERO : ONE);
+    Serial.write((ssState3 & 0b00000100) ? ZERO : ONE);
+
+    Serial.write((ssState2 & 0b00100000) ? ZERO : ONE);
+    Serial.write((ssState2 & 0b00010000) ? ZERO : ONE);
+    Serial.write((ssState2 & 0b00001000) ? ZERO : ONE);
+    Serial.write((ssState2 & 0b00000100) ? ZERO : ONE);
+    
+    Serial.write ((ssState1 & 0b00100000) ? ZERO : ONE );
+    Serial.write ((ssState1 & 0b00010000) ? ZERO : ONE );
+    Serial.write ((ssState1 & 0b00001000) ? ZERO : ONE );
+    Serial.write ((ssState1 & 0b00000100)  ? ZERO : ONE );
+
+    Serial.write ((ssState4 & 0b00100000) ? ZERO : ONE );
+    Serial.write (ONE);
+    Serial.write (ONE);
+    Serial.write (ONE);
+
+    for(int i = 0; i < 32;++i)
+      Serial.write(ZERO);
+
+    Serial.write( SPLIT );
+    #else 
+    Serial.print((ssState1 & 0b00000100)    ? "Z" : "0");
+    Serial.print((ssState1 & 0b00001000)    ? "Y" : "0");
+    Serial.print((ssState1 & 0b00010000)    ? "X" : "0");
+    Serial.print((ssState1 & 0b00100000)    ? "R" : "0");
+
+    Serial.print((ssState2 & 0b00000100)    ? "B" : "0");
+    Serial.print((ssState2 & 0b00001000)    ? "C" : "0");
+    Serial.print((ssState2 & 0b00010000)    ? "A" : "0");
+    Serial.print((ssState2 & 0b00100000)    ? "S" : "0");
+
+    Serial.print((ssState3 & 0b00000100)    ? "u" : "0");
+    Serial.print((ssState3 & 0b00001000)    ? "d" : "0");
+    Serial.print((ssState3 & 0b00010000)    ? "l" : "0");
+    Serial.print((ssState3 & 0b00100000)    ? "r" : "0");
+    
+    Serial.print((ssState4 & 0b00100000)    ? "L" : "0");
+ 
+    Serial.print("\n");
+    #endif
+}
+
 inline void sendRawSSData()
 {
     #ifndef DEBUG
@@ -405,7 +479,7 @@ inline void sendRawSSData()
     Serial.write ((ssState3 & 0b00010000) ? ONE : ZERO );
     Serial.write ((ssState3 & 0b00100000) ? ONE : ZERO );
 
-    Serial.write ((ssState4 & 0b00010000) ? ONE : ZERO );
+    Serial.write ((ssState4 & 0b00100000) ? ONE : ZERO );
 
     Serial.write( SPLIT );
     #else 
@@ -942,7 +1016,7 @@ inline void loop_SS()
   noInterrupts();
   read_SSData();
   interrupts();
-  sendRawSSData();
+  sendRawSSDataV2();
 }
 
 inline void loop_SS3D()
@@ -959,6 +1033,14 @@ inline void loop_NeoGeo()
   read_NeoGeo();
  interrupts();
   sendNeoGeoData();
+}
+
+inline void loop_3DO()
+{
+    noInterrupts();
+    read_shiftRegister_reverse_clock< ThreeDO_LATCH , ThreeDO_DATA , ThreeDO_CLOCK >( ThreeDO_BITCOUNT );
+    interrupts();
+    sendRawData( 0 , ThreeDO_BITCOUNT );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -993,6 +1075,8 @@ void loop()
     loop_SS3D();
 #elif defined MODE_NEOGEO
     loop_NeoGeo();
+#elif defined MODE_3DO
+    loop_3DO();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();

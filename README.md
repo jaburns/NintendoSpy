@@ -3,7 +3,7 @@ RetroSpy
 
 #### [Download the latest RetroSpy release here.](https://github.com/zoggins/RetroSpy/releases/latest)
 
-This is a fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy).  NintendoSpy provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.  My fork allows for the support of Atari/Commodore joysticks, Sega Genesis controllers, SMS controllers, the Atari 2600 Omega Race Booster Grip, Turbographx-16/PC Engine controllers, NeoGeo, Sega Saturn (both standard and 3D controllers) and PSX/PS2 controllers.  It also adds full support for the Super Gameboy and the Gamecube Gameboy Player, which were not correctly supported in the original NintendoSpy.  Lastly, it provides experimental support for the Atari Paddles, Atari Driving Controller, Atari Keyboard Controller, Atari Kid's Controller and the Atari Video Touch Pad.
+This is a fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy).  NintendoSpy provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.  My fork allows for the support of Atari/Commodore joysticks, Sega Genesis controllers, SMS controllers, the Atari 2600 Omega Race Booster Grip, Turbographx-16/PC Engine controllers, Neo Geo controllers, Sega Saturn (both standard and 3D) controllers, PSX/PS2 controllers and 3DO controllers.  It also adds full support for the Super Gameboy and the Gamecube Gameboy Player, which were not correctly supported in the original NintendoSpy.  Lastly, it provides experimental support for the Atari Paddles, Atari Driving Controller, Atari Keyboard Controller, Atari Kid's Controller and the Atari Video Touch Pad.
 
 The following documentation is in addition to the original NintendoSpy documentation found [here](https://github.com/zoggins/RetroSpy/blob/master/README-ORIG.md).  These instructions borrow heavily from evilash25's awesome NintendoSpy build guide, which can be found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring).  Documentation on experimentally support devices can be found [here](https://github.com/zoggins/RetroSpy/blob/master/docs/README-EXPERIMENTAL.md).
 
@@ -38,7 +38,7 @@ The general design of RetroSpy involves splicing the controller wire, and attach
 
 ## Specific Components and Equipment needed for a NeoGeo cable
 
-1. NeoGeo Controller extension cable or [DB15 Male to Female Extension Cable](https://www.amazon.com/gp/product/B073M86247/ref=oh_aui_search_detailpage?ie=UTF8&psc=1
+1. NeoGeo Controller extension cable or [DB15 Male to Female Extension Cable](https://www.amazon.com/gp/product/B073M86247/ref=oh_aui_search_detailpage?ie=UTF8&psc=1)
 2. [Wires](https://www.amazon.com/gp/product/B06XRV92ZB/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1)
 3. [DB15 Male to 2 Female Splitter Adapter](http://www.l-com.com/d-sub-db15-y-splitter-adapter-db15m-db15f-db15f)
 4. [DB15 Male Breakout Connector](https://www.amazon.com/DB15-Breakout-Connector-Pin-Male/dp/B073RGHNVD)
@@ -156,6 +156,20 @@ For Atari Joysticks, Sega Master System controllers and the Atari Omega Race Boo
 |    7    |    Not Connected    |
 |    8    |    Not Connected    |
 |    9    |          8          |
+
+For 3DO controllers you will need to make the following connections:
+
+| DB9 Pin | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |    Not Connected    |
+|    2    |    Not Connected    |
+|    3    |    Not Connected    |
+|    4    |    Not Connected    |
+|    5    |    Not Connected    |
+|    6    |          2          |
+|    7    |          3          |
+|    8    |    Not Connected    |
+|    9    |          4          |
 
 ## Instructions for NeoGeo
 

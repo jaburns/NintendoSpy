@@ -30,12 +30,12 @@ int right_max_threshold = 253;
 int EMA_Sl = 0;          //initialization of EMA S left
 int EMA_Sr = 0;          //initialization of EMA S right
 
-static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax, float minThreshold, float maxThreshold)
+static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
 {
   float newValue = ((oldValue - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin;
-  if (newValue > maxThreshold)
+  if (newValue > newMax)
     return newMax;
-  if (newValue < minThreshold)
+  if (newValue < newMin)
     return newMin;
 
   return newValue;
@@ -47,6 +47,11 @@ void setup() {
     pinMode(i, INPUT_PULLUP);
 
   EMA_Sl = analogRead(0);
+  delay(2);
+  EMA_Sl = analogRead(0);
+  delay(2);
+  EMA_Sr = analogRead(1);
+  delay(2);
   EMA_Sr = analogRead(1);
 
   Serial.begin( 115200 );
@@ -58,7 +63,12 @@ void loop() {
   byte pins = 0;
   pins |= (PIND >> 2);
   int leftPaddle = analogRead(0);
+  delay(2);
+  leftPaddle = analogRead(0);
+  delay(2);
   int rightPaddle = analogRead(1);
+  delay(2);
+  rightPaddle = analogRead(1);
   interrupts();
 
   byte fire1 = ((pins & 0b0000000000000100) == 0);
@@ -72,17 +82,17 @@ void loop() {
     Serial.print("|");
     Serial.print(EMA_Sl);
     Serial.print("|");
-    Serial.print(ScaleInteger(EMA_Sl, nominal_left_min, nominal_left_max, 0, 255, left_min_threshold, left_max_threshold));
+    Serial.print(ScaleInteger(EMA_Sl, nominal_left_min, nominal_left_max, 0, 255));
     Serial.print("|");
     Serial.print(EMA_Sr);
     Serial.print("|");
-    Serial.print(ScaleInteger(EMA_Sr, nominal_right_min, nominal_right_max, 0, 255, right_min_threshold, right_max_threshold));
+    Serial.print(ScaleInteger(EMA_Sr, nominal_right_min, nominal_right_max, 0, 255));
     Serial.print("\n");
 #else
     Serial.write(fire1);
     Serial.write(fire2);
-    Serial.write(ScaleInteger(EMA_Sl, nominal_left_min, nominal_left_max, 0, 255, left_min_threshold, left_max_threshold));
-    Serial.write(ScaleInteger(EMA_Sr, nominal_right_min, nominal_right_max, 0, 255, right_min_threshold, right_max_threshold));
+    Serial.write(ScaleInteger(EMA_Sl, nominal_left_min, nominal_left_max, 0, 255));
+    Serial.write(ScaleInteger(EMA_Sr, nominal_right_min, nominal_right_max, 0, 255));
     Serial.write('\n');
 #endif
 
