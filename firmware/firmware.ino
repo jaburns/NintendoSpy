@@ -15,7 +15,6 @@
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
-//#define MODE_PLAYSTATION2
 //#define MODE_TG16
 //#define MODE_SATURN
 //#define MODE_SATURN3D
@@ -617,94 +616,6 @@ inline void read_TgData()
 #define PS_CMD 5
 #define PS_DATA 6
 
-inline void read_Playstation( )
-{
-  WAIT_FALLING_EDGE(PS_ATT);
-
-  unsigned char bits = 8;
-  do {
-     WAIT_LEADING_EDGE(PS_CLOCK);
-  }
-  while( --bits > 0 );
-
-  byte controllerType = 0;
-  bits = 0;
-  do {
-      WAIT_LEADING_EDGE(PS_CLOCK);
-      controllerType |= ((PIN_READ(PS_DATA) == 0 ? 0 : 1) << bits);
-  }
-  while( ++bits < 8 );
-  rawData[0] = controllerType;
-  
-  bits = 0;
-  do {
-      WAIT_LEADING_EDGE(PS_CLOCK);
-  }
-  while( ++bits < 8 );
-  
-  bits = 0;
-  do {
-      WAIT_LEADING_EDGE(PS_CLOCK);
-      rawData[bits+1] = !PIN_READ(PS_DATA);
-  }
-  while( ++bits < 16 );
-
-  // Read analog sticks for Analog Controller in Red Mode
-  if (controllerType == 0x73)
-  {
-    for(int i = 0; i < 4; ++i)
-    {
-      bits = 0;
-      rawData[17+i] = 0;
-      do {
-          WAIT_LEADING_EDGE(PS_CLOCK);
-          rawData[17+i] |= ((PIN_READ(PS_DATA) == 0 ? 0 : 1) << bits);
-      }
-      while( ++bits < 8 );
-    }
-  }
-}
-
-inline void sendRawPsData()
-{
-    #ifndef DEBUG
-    Serial.write( rawData[0] );
-    for (unsigned char i = 1; i < 17; ++i)
-    {
-      Serial.write( rawData[i] ? ONE : ZERO );
-    }
-    Serial.write( rawData[17] );
-    Serial.write( rawData[18] );
-    Serial.write( rawData[19] );
-    Serial.write( rawData[20] );
-    Serial.write( SPLIT );
-    #else
-    Serial.print(rawData[0]);
-    Serial.print(" ");
-    Serial.print(rawData[1] != 0 ? "S" : "0");
-    Serial.print(rawData[2] != 0 ? "5" : "0");
-    Serial.print(rawData[3] != 0 ? "6" : "0");
-    Serial.print(rawData[4] != 0 ? "T" : "0");
-    Serial.print(rawData[5] != 0 ? "U" : "0");
-    Serial.print(rawData[6] != 0 ? "R" : "0");
-    Serial.print(rawData[7] != 0 ? "D" : "0");
-    Serial.print(rawData[8] != 0 ? "L" : "0");
-    Serial.print(rawData[9] != 0 ? "1" : "0");
-    Serial.print(rawData[10] != 0 ? "2" : "0");
-    Serial.print(rawData[11] != 0 ? "3" : "0");
-    Serial.print(rawData[12] != 0 ? "4" : "0");
-    Serial.print(rawData[13] != 0 ? "/" : "0");
-    Serial.print(rawData[14] != 0 ? "O" : "0");
-    Serial.print(rawData[15] != 0 ? "X" : "0");
-    Serial.print(rawData[16] != 0 ? "Q" : "0");
-    Serial.print(rawData[17]);
-    Serial.print(rawData[18]);
-    Serial.print(rawData[19]);
-    Serial.print(rawData[20]);
-    Serial.print("\n");
-    #endif
-}
-
 inline void read_Playstation2( )
 {
   byte numBits = 0;
@@ -986,15 +897,6 @@ inline void loop_BoosterGrip()
   sendRawSegaData();
 }
 
-inline void loop_Playstation()
-{
-  noInterrupts();
-  read_Playstation();
-  interrupts();
-  sendRawPsData();
-}
-
-
 inline void loop_Playstation2()
 {
   noInterrupts();
@@ -1064,8 +966,6 @@ void loop()
 #elif defined MODE_BOOSTER_GRIP
     loop_BoosterGrip();
 #elif defined MODE_PLAYSTATION
-    loop_Playstation();
-#elif defined MODE_PLAYSTATION2
     loop_Playstation2();
 #elif defined MODE_TG16
     loop_TG16();
