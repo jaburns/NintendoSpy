@@ -9,7 +9,6 @@
 //#define MODE_GC
 //#define MODE_N64
 //#define MODE_SNES
-//#define MODE_SUPER_GAMEBOY
 //#define MODE_NES
 //#define MODE_SEGA
 //#define MODE_CLASSIC
@@ -74,12 +73,12 @@ KeyboardController keyboardController;
 #define N64_PREFIX     9
 #define N64_BITCOUNT  32
 
-#define SNES_LATCH      3
-#define SNES_DATA       4
-#define SNES_CLOCK      6
-#define SNES_BITCOUNT  16
-#define SGB_BITCOUNT   32
-#define NES_BITCOUNT    8
+#define SNES_LATCH			     3
+#define SNES_DATA			       4
+#define SNES_CLOCK			     6
+#define SNES_BITCOUNT		    16
+#define SNES_BITCOUNT_EXT	  32
+#define NES_BITCOUNT		     8
 
 #define GC_PIN        5
 #define GC_PREFIX    25
@@ -263,7 +262,36 @@ void read_shiftRegister( unsigned char bits )
         *rawDataPtr = !PIN_READ(data);
         ++rawDataPtr;
     }
-    while( --bits > 0 );
+    while( --bits > 0 );    
+}
+
+template< unsigned char latch, unsigned char data, unsigned char clock >
+unsigned char read_shiftRegister_SNES()
+{
+    unsigned char position = 0;
+    unsigned char bits = 0;
+
+    WAIT_FALLING_EDGE( latch );
+
+    do {
+        WAIT_FALLING_EDGE( clock );
+        rawData[position++] = !PIN_READ(data);
+    }
+    while( ++bits <= SNES_BITCOUNT );    
+
+    if (rawData[15] != 0x0)
+    {
+      bits = 0;
+      do {
+          WAIT_FALLING_EDGE( clock );
+          rawData[position++] = !PIN_READ(data);
+      }
+      while( ++bits <= SNES_BITCOUNT );
+
+      return SNES_BITCOUNT_EXT;
+    }
+
+    return SNES_BITCOUNT;
 }
 
 template< unsigned char latch, unsigned char data, unsigned char clock >
@@ -436,49 +464,6 @@ inline void sendRawSSDataV2()
 
     for(int i = 0; i < 32;++i)
       Serial.write(ZERO);
-
-    Serial.write( SPLIT );
-    #else 
-    Serial.print((ssState1 & 0b00000100)    ? "Z" : "0");
-    Serial.print((ssState1 & 0b00001000)    ? "Y" : "0");
-    Serial.print((ssState1 & 0b00010000)    ? "X" : "0");
-    Serial.print((ssState1 & 0b00100000)    ? "R" : "0");
-
-    Serial.print((ssState2 & 0b00000100)    ? "B" : "0");
-    Serial.print((ssState2 & 0b00001000)    ? "C" : "0");
-    Serial.print((ssState2 & 0b00010000)    ? "A" : "0");
-    Serial.print((ssState2 & 0b00100000)    ? "S" : "0");
-
-    Serial.print((ssState3 & 0b00000100)    ? "u" : "0");
-    Serial.print((ssState3 & 0b00001000)    ? "d" : "0");
-    Serial.print((ssState3 & 0b00010000)    ? "l" : "0");
-    Serial.print((ssState3 & 0b00100000)    ? "r" : "0");
-    
-    Serial.print((ssState4 & 0b00100000)    ? "L" : "0");
- 
-    Serial.print("\n");
-    #endif
-}
-
-inline void sendRawSSData()
-{
-    #ifndef DEBUG
-    Serial.write ((ssState1 & 0b00000100) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b00010000) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write ((ssState2 & 0b00000100) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b00010000) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write ((ssState3 & 0b00000100) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b00010000) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write ((ssState4 & 0b00100000) ? ONE : ZERO );
 
     Serial.write( SPLIT );
     #else 
@@ -850,21 +835,14 @@ inline void loop_N64()
 inline void loop_SNES()
 {
     noInterrupts();
+    unsigned char bytesToReturn = SNES_BITCOUNT;
 #ifdef MODE_2WIRE_SNES
     read_shiftRegister_2wire< SNES_LATCH , SNES_DATA , false >( SNES_BITCOUNT );
 #else
-    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( SNES_BITCOUNT );
+    bytesToReturn = read_shiftRegister_SNES< SNES_LATCH , SNES_DATA , SNES_CLOCK >();
 #endif
     interrupts();
-    sendRawData( 0 , SNES_BITCOUNT );
-}
-
-inline void loop_SGB()
-{
-    noInterrupts();
-    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( SGB_BITCOUNT );
-    interrupts();
-    sendRawData( 0 , SNES_BITCOUNT );
+    sendRawData( 0 , bytesToReturn );
 }
 
 inline void loop_NES()
@@ -955,8 +933,6 @@ void loop()
     loop_N64();
 #elif defined MODE_SNES
     loop_SNES();
-#elif defined MODE_SUPER_GAMEBOY
-    loop_SGB();
 #elif defined MODE_NES
     loop_NES();
 #elif defined MODE_SEGA
