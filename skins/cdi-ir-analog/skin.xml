@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="CD-i Remote - Analog" author="zoggins" type="cdi">
+
+    <background name="Default" image="cdiremote.png" />
+
+    <button name="1" image="circle2.png" x="28" y="206" width="30" height="30" />
+    <button name="1a" image="circle2.png" x="189" y="203" width="30" height="30" />
+    <button name="2" image="circle2.png" x="105" y="72" width="30" height="30" />
+
+    <analog name="analog_left" image="circle2.png" x="111" y="122" width="30" height="30" direction="fade" />
+    <analog name="analog_down" image="circle2.png" x="118" y="196" width="30" height="30" direction="fade" />
+    <analog name="analog_left" image="circle2.png" x="71" y="158" width="30" height="30" direction="fade" />
+    <analog name="analog_right" image="circle2.png" x="153" y="161" width="30" height="30" direction="fade" />
+
+</skin>
