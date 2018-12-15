@@ -93,7 +93,6 @@
     <Compile Include="Readers\ControllerStateBuilder.cs" />
     <Compile Include="Readers\ControllerState.cs" />
     <Compile Include="Readers\DelayedControllerReader.cs" />
-    <Compile Include="Readers\Playstation.cs" />
     <Compile Include="Readers\GameCube.cs" />
     <Compile Include="Readers\GamepadReaderAnalogToDPad.cs" />
     <Compile Include="Readers\IControllerReader.cs" />
@@ -101,7 +100,6 @@
     <Compile Include="Readers\Classic.cs" />
     <Compile Include="Readers\SS3D.cs" />
     <Compile Include="Readers\Playstation2.cs" />
-    <Compile Include="Readers\SS.cs" />
     <Compile Include="Readers\TG16.cs" />
     <Compile Include="Readers\CDi.cs" />
     <Compile Include="Readers\ThreeDO.cs" />

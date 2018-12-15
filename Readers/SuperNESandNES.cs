@@ -35,7 +35,13 @@ namespace NintendoSpy.Readers
         }
 
         static public ControllerState ReadFromPacket_SNES (byte[] packet) {
-            return readPacketButtons (packet, BUTTONS_SNES);
+            var controllerState = readPacketButtons (packet, BUTTONS_SNES);
+            if (controllerState != null && packet[15] != 0x00)
+            {
+                // We have extended data do something with it
+            }
+
+            return controllerState;
         }
     }
 }
