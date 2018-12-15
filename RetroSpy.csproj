@@ -171,16 +171,16 @@
     <Content Include="skins\cdi-gamepad\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="skins\cdi-ir-analog\cdiremote.png">
+    <Content Include="skins\cdi-ir-analog\cdiremote.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="skins\cdi-ir-analog\circle2.png">
+    </Content>
+    <Content Include="skins\cdi-ir-analog\circle2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="skins\cdi-ir-analog\skin.xml">
+    </Content>
+    <Content Include="skins\cdi-ir-analog\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Resource>
+    </Content>
     <Content Include="skins\cdi-ir\cdiremote.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -761,6 +761,7 @@
     </Content>
     <Content Include="skins\gamecube-default\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="skins\gamecube-default\Start.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

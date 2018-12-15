@@ -46,8 +46,6 @@ namespace NintendoSpy.Readers
 
             }
 
-            
-
             state.SetAnalog("analog_right", readAnalogButton(packet[3]));
             state.SetAnalog("analog_left", readAnalogButton(packet[2]));
             state.SetAnalog("analog_up", readAnalogButton(packet[0]));
