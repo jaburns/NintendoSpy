@@ -9,7 +9,7 @@
 #include "IRLibAll.h"
 
 // These values may need adjusting based on the controller used.
-#define TIMEOUT 150
+#define TIMEOUT 100
 #define NORMALIZE_ANALOG true
 #define MAX_LEFT   173
 #define MAX_RIGHT   45
