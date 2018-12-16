@@ -5,6 +5,7 @@
 
 // Requires this package: https://github.com/cyborg5/IRLib2
 // Requires an IR receiver attached to Arduino digital pin #2
+// Here is what I used: https://www.adafruit.com/product/157 (TSOP38238)
 
 #include "IRLibAll.h"
 
