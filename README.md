@@ -23,7 +23,11 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
 
 ## Documentation
 
+<<<<<<< HEAD
 The rest of the README will explain how to get RetroSpy up and running. For more specific tutorials, check out the [docs](https://github.com/sk84uhlivin/RetroSpy/tree/readme/docs) folder in the repository.
+=======
+The rest of the README will explain how to get RetroSpy up and running. For more specific tutorials, check out the [docs](linkDOCShere) folder in the repository.
+>>>>>>> 3b46b644506e959ed55a871a9b59d988d6725824
 
 The general design of RetroSpy involves splicing a controller extension cable, and attaching the appropriate signal wires to an Arduino.  Then you just need to install the Arduino firmware packaged in the RetroSpy release, and run the display software.
 
