@@ -240,7 +240,7 @@ You will need to make the following connections:
 
 Once the wiring is done, hook everything up to your game system and computer, now for the easy part.
 
-1. Plug in the USB cableonnector to your Arduino and PC.
+1. Plug in the USB cable to your Arduino and PC.
 
 2. Install the [latest Arduino software](http://arduino.cc/en/Main/Software), download the Windows Installer option.
 
