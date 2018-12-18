@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Sega Saturn 3D" author="zoggins" type="saturn">
+
+  <background name="Default" image="ss3d-background.png" />
+
+  <button name="A" image="circle2.png" x="356" y="342" width="50" height="50" />
+  <button name="B" image="circle2.png" x="411" y="314" width="50" height="50" />
+  <button name="C" image="circle2.png" x="472" y="297" width="50" height="50" />
+
+  <button name="X" image="circle2.png" x="341" y="276" width="50" height="50" />
+  <button name="Y" image="circle2.png" x="393" y="255" width="50" height="50" />
+  <button name="Z" image="circle2.png" x="450" y="240" width="50" height="50" />
+
+  <button name="L" image="circle2.png" x="60" y="63" width="100" height="50" />
+  <button name="R" image="circle2.png" x="430" y="63" width="100" height="50" />
+
+  <button name="start" image="circle2.png" x="280" y="430" width="50" height="50" />
+
+  <button name="up" image="circle2.png" x="170" y="342" width="35" height="35" />
+  <button name="left" image="circle2.png" x="132" y="377" width="35" height="35" />
+  <button name="down" image="circle2.png" x="170" y="415" width="35" height="35" />
+  <button name="right" image="circle2.png" x="207" y="377" width="35" height="35" />
+  
+  <stick xname="lstick_x" yname="lstick_y" image="ss3dstick.png"
+	   x="95" y="200" width="94" height="95" xrange="15" yrange="15" yreverse="true"/>
+	   
+
+	<analog name="trig_r" image="R-bar.png" x="430" y="45" width="100" height="8"
+	direction="right" reverse="false" />
+
+    <analog name="trig_l" image="L-bar.png" x="60" y="45" width="100" height="8"
+            direction="left" reverse="false" />
+		   
+</skin>

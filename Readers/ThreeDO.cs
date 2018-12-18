@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace NintendoSpy.Readers
 {
-    static public class SS
+    static public class ThreeDO
     {
-        const int PACKET_SIZE = 13;
+        const int PACKET_SIZE = 16;
 
         static readonly string[] BUTTONS = {
-            "Z", "Y", "X", "R", "B", "C", "A", "start", "up", "down", "left", "right", "L"
+            null, null,"down", "up", "right", "left", "a", "b", "c","p", "x","r", "l", null, null, null
         };
 
         static public ControllerState ReadFromPacket (byte[] packet)
