@@ -9,21 +9,28 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Atari 2600
  - NES
  - Sega Master System
- - Atari 7800
  - Commodore 64
  - Sega Genesis
  - TurboGraphx-16
  - Neo-Geo 
  - SNES
+ - 3DO
  - Sega Saturn
  - PlayStation
  - Nintendo 64
  - PlayStation 2
  - GameCube 
 
+Additionally, RetroSpy has experimental support for:
+
+ - [Atari Paddles](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/paddles.md)
+ - [Atari Driving Controllers](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/driving.md)
+ - [Atari Keyboard, Kid's & Video Touch Pad Controllers](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/keyboard.md)
+ - [CD-i Infrared Remotes](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/cdi-ir.md)
+ 
 ## Documentation
 
-The rest of the README will explain how to get RetroSpy up and running. For more specific tutorials, check out the [docs](https://github.com/sk84uhlivin/RetroSpy/tree/readme/docs) folder in the repository.
+The rest of the README will explain how to get RetroSpy up and running. For more specific tutorials, check out the [docs](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs) folder in the repository.
 
 The general design of RetroSpy involves splicing a controller extension cable, and attaching the appropriate signal wires to an Arduino.  Then you just need to install the Arduino firmware packaged in the RetroSpy release, and run the display software.
 
@@ -239,7 +246,7 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 3. Once installed, open the Arduino software, you should see "Arduino Uno on COMX" at the bottom right corner if everything is working. If not, you may need to restart and/or replug the USB connector.
 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/readme/docs/tutorial-images/readme_images/emptyide.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/emptyide.png)
 
 4. Install my Arduino ClassicControllerSpy library.  Installation directions are [here](https://github.com/zoggins/ClassicControllerSpy#installation).
 
@@ -248,11 +255,11 @@ Once the wiring is done, hook everything up to your game system and computer, no
 6. Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
 
 7. Now uncomment the option for the operation mode (which controller) you will use. Note that `MODE_SNES` is uncommented. 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/readme/docs/tutorial-images/readme_images/uncomment.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/uncomment.png)
 
 8. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/readme/docs/tutorial-images/readme_images/upload.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/upload.png)
 
 9. Run ``RetroSpy.exe``.
 
