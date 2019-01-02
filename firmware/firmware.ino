@@ -6,21 +6,21 @@
 
 
 // ---------- Uncomment one of these options to select operation mode --------------
-//#define MODE_GC
-//#define MODE_N64
-//#define MODE_SNES
-//#define MODE_SUPER_GAMEBOY
-//#define MODE_NES
-//#define MODE_SEGA
-//#define MODE_CLASSIC
-//#define MODE_BOOSTER_GRIP
-//#define MODE_PLAYSTATION
-//#define MODE_PLAYSTATION2
-//#define MODE_TG16
-//#define MODE_SATURN
-//#define MODE_SATURN3D
-//#define MODE_NEOGEO
-//#define MODE_3DO
+//#define MODE_GC				// for Gamecube
+//#define MODE_N64				// for Nintendo 64
+//#define MODE_SNES				// for SNES
+//#define MODE_SUPER_GAMEBOY	// for SNES Super Game Boy
+//#define MODE_NES				// for NES
+//#define MODE_SEGA				// for Sega Genesis
+//#define MODE_CLASSIC			// for Sega Master System & Atari/Commodore Digital Joysticks
+//#define MODE_BOOSTER_GRIP		// for Atari 2600 Omega Race Booster Grip controller
+//#define MODE_PLAYSTATION		// for Sony Playstation 1
+//#define MODE_PLAYSTATION2		// for Sony Playstation 2
+//#define MODE_TG16				// for Turbografx 16/PC-Engine
+//#define MODE_SATURN			// for Sega Saturn digital gamepads
+//#define MODE_SATURN3D			// for Sega Saturn 3D Controller (both digital and analog modes)
+//#define MODE_NEOGEO			// for NeoGeo
+//#define MODE_3DO				// for 3DO
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
