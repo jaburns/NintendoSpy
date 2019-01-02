@@ -268,11 +268,56 @@ namespace NintendoSpy
         {
             newState = _blinkFilter.Process (newState);
 
-            foreach (var button in _buttonsWithImages) 
+            // This assumes you can't press left/right and up/down at the same time.  The code gets more complicated otherwise.
+            var compassDirectionStates = new Dictionary<string, bool>();
+            if (newState.Buttons.ContainsKey("up") && newState.Buttons.ContainsKey("left") && newState.Buttons.ContainsKey("right") && newState.Buttons.ContainsKey("down"))
             {
-                if (!newState.Buttons.ContainsKey (button.Item1.Name)) continue;
+                string[] compassDirections= { "north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest" };
 
-                button.Item2.Visibility = newState.Buttons [button.Item1.Name] ? Visibility.Visible : Visibility.Hidden ;
+                var compassDirectionStatesTemp = new bool[8];
+                compassDirectionStatesTemp[0] = newState.Buttons["up"];
+                compassDirectionStatesTemp[2] = newState.Buttons["right"];
+                compassDirectionStatesTemp[4] = newState.Buttons["down"];
+                compassDirectionStatesTemp[6] = newState.Buttons["left"];
+
+                if (compassDirectionStatesTemp[0] && compassDirectionStatesTemp[2])
+                {
+                    compassDirectionStatesTemp[1] = true;
+                    compassDirectionStatesTemp[0] = compassDirectionStatesTemp[2] = false;
+                }
+                else if (compassDirectionStatesTemp[2] && compassDirectionStatesTemp[4])
+                {
+                    compassDirectionStatesTemp[3] = true;
+                    compassDirectionStatesTemp[2] = compassDirectionStatesTemp[4] = false;
+                }
+                else if (compassDirectionStatesTemp[4] && compassDirectionStatesTemp[6])
+                {
+                    compassDirectionStatesTemp[5] = true;
+                    compassDirectionStatesTemp[4] = compassDirectionStatesTemp[6] = false;
+                }
+                else if (compassDirectionStatesTemp[6] && compassDirectionStatesTemp[0])
+                {
+                    compassDirectionStatesTemp[7] = true;
+                    compassDirectionStatesTemp[6] = compassDirectionStatesTemp[0] = false;
+                }
+
+                for(int i = 0; i < compassDirections.Length; ++i)
+                {
+                    compassDirectionStates[compassDirections[i]] = compassDirectionStatesTemp[i];
+                }
+            }
+
+            foreach (var button in _buttonsWithImages)
+            {
+                if (newState.Buttons.ContainsKey(button.Item1.Name))
+                {
+                    button.Item2.Visibility = newState.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                }
+                else if (compassDirectionStates.ContainsKey(button.Item1.Name))
+                {
+                    button.Item2.Visibility = compassDirectionStates[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                }
+
             }
 
             foreach (var button in _rangeButtonsWithImages) 
