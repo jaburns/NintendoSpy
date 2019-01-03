@@ -54,7 +54,7 @@ namespace NintendoSpy
         }
 
         public class AnalogTrigger {
-            public enum DirectionValue { Up, Down, Left, Right }
+            public enum DirectionValue { Up, Down, Left, Right, Fade }
             public ElementConfig Config;
             public string Name;
             public DirectionValue Direction;
@@ -201,7 +201,8 @@ namespace NintendoSpy
                     case "down": dir = AnalogTrigger.DirectionValue.Down; break;
                     case "left": dir = AnalogTrigger.DirectionValue.Left; break;
                     case "right": dir = AnalogTrigger.DirectionValue.Right; break;
-                    default: throw new ConfigParseException ("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right'.");
+                    case "fade": dir = AnalogTrigger.DirectionValue.Fade; break;
+                    default: throw new ConfigParseException ("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right', 'fade'.");
                 }
 
                 _analogTriggers.Add (new AnalogTrigger {

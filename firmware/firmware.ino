@@ -6,21 +6,19 @@
 
 
 // ---------- Uncomment one of these options to select operation mode --------------
-//#define MODE_GC				// for Gamecube
-//#define MODE_N64				// for Nintendo 64
-//#define MODE_SNES				// for SNES
-//#define MODE_SUPER_GAMEBOY	// for SNES Super Game Boy
-//#define MODE_NES				// for NES
-//#define MODE_SEGA				// for Sega Genesis
-//#define MODE_CLASSIC			// for Sega Master System & Atari/Commodore Digital Joysticks
-//#define MODE_BOOSTER_GRIP		// for Atari 2600 Omega Race Booster Grip controller
-//#define MODE_PLAYSTATION		// for Sony Playstation 1
-//#define MODE_PLAYSTATION2		// for Sony Playstation 2
-//#define MODE_TG16				// for Turbografx 16/PC-Engine
-//#define MODE_SATURN			// for Sega Saturn digital gamepads
-//#define MODE_SATURN3D			// for Sega Saturn 3D Controller (both digital and analog modes)
-//#define MODE_NEOGEO			// for NeoGeo
-//#define MODE_3DO				// for 3DO
+//#define MODE_GC
+//#define MODE_N64
+//#define MODE_SNES
+//#define MODE_NES
+//#define MODE_SEGA
+//#define MODE_CLASSIC
+//#define MODE_BOOSTER_GRIP
+//#define MODE_PLAYSTATION
+//#define MODE_TG16
+//#define MODE_SATURN
+//#define MODE_SATURN3D
+//#define MODE_NEOGEO
+//#define MODE_3DO
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -75,12 +73,12 @@ KeyboardController keyboardController;
 #define N64_PREFIX     9
 #define N64_BITCOUNT  32
 
-#define SNES_LATCH      3
-#define SNES_DATA       4
-#define SNES_CLOCK      6
-#define SNES_BITCOUNT  16
-#define SGB_BITCOUNT   32
-#define NES_BITCOUNT    8
+#define SNES_LATCH			     3
+#define SNES_DATA			       4
+#define SNES_CLOCK			     6
+#define SNES_BITCOUNT		    16
+#define SNES_BITCOUNT_EXT	  32
+#define NES_BITCOUNT		     8
 
 #define GC_PIN        5
 #define GC_PREFIX    25
@@ -264,7 +262,36 @@ void read_shiftRegister( unsigned char bits )
         *rawDataPtr = !PIN_READ(data);
         ++rawDataPtr;
     }
-    while( --bits > 0 );
+    while( --bits > 0 );    
+}
+
+template< unsigned char latch, unsigned char data, unsigned char clock >
+unsigned char read_shiftRegister_SNES()
+{
+    unsigned char position = 0;
+    unsigned char bits = 0;
+
+    WAIT_FALLING_EDGE( latch );
+
+    do {
+        WAIT_FALLING_EDGE( clock );
+        rawData[position++] = !PIN_READ(data);
+    }
+    while( ++bits <= SNES_BITCOUNT );    
+
+    if (rawData[15] != 0x0)
+    {
+      bits = 0;
+      do {
+          WAIT_FALLING_EDGE( clock );
+          rawData[position++] = !PIN_READ(data);
+      }
+      while( ++bits <= SNES_BITCOUNT );
+
+      return SNES_BITCOUNT_EXT;
+    }
+
+    return SNES_BITCOUNT;
 }
 
 template< unsigned char latch, unsigned char data, unsigned char clock >
@@ -461,49 +488,6 @@ inline void sendRawSSDataV2()
     #endif
 }
 
-inline void sendRawSSData()
-{
-    #ifndef DEBUG
-    Serial.write ((ssState1 & 0b00000100) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b00010000) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write ((ssState2 & 0b00000100) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b00010000) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write ((ssState3 & 0b00000100) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b00010000) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write ((ssState4 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write( SPLIT );
-    #else 
-    Serial.print((ssState1 & 0b00000100)    ? "Z" : "0");
-    Serial.print((ssState1 & 0b00001000)    ? "Y" : "0");
-    Serial.print((ssState1 & 0b00010000)    ? "X" : "0");
-    Serial.print((ssState1 & 0b00100000)    ? "R" : "0");
-
-    Serial.print((ssState2 & 0b00000100)    ? "B" : "0");
-    Serial.print((ssState2 & 0b00001000)    ? "C" : "0");
-    Serial.print((ssState2 & 0b00010000)    ? "A" : "0");
-    Serial.print((ssState2 & 0b00100000)    ? "S" : "0");
-
-    Serial.print((ssState3 & 0b00000100)    ? "u" : "0");
-    Serial.print((ssState3 & 0b00001000)    ? "d" : "0");
-    Serial.print((ssState3 & 0b00010000)    ? "l" : "0");
-    Serial.print((ssState3 & 0b00100000)    ? "r" : "0");
-    
-    Serial.print((ssState4 & 0b00100000)    ? "L" : "0");
- 
-    Serial.print("\n");
-    #endif
-}
-
 inline void read_SS3DData()
 {
   byte numBits = 0;
@@ -616,94 +600,6 @@ inline void read_TgData()
 #define PS_ACK 4
 #define PS_CMD 5
 #define PS_DATA 6
-
-inline void read_Playstation( )
-{
-  WAIT_FALLING_EDGE(PS_ATT);
-
-  unsigned char bits = 8;
-  do {
-     WAIT_LEADING_EDGE(PS_CLOCK);
-  }
-  while( --bits > 0 );
-
-  byte controllerType = 0;
-  bits = 0;
-  do {
-      WAIT_LEADING_EDGE(PS_CLOCK);
-      controllerType |= ((PIN_READ(PS_DATA) == 0 ? 0 : 1) << bits);
-  }
-  while( ++bits < 8 );
-  rawData[0] = controllerType;
-  
-  bits = 0;
-  do {
-      WAIT_LEADING_EDGE(PS_CLOCK);
-  }
-  while( ++bits < 8 );
-  
-  bits = 0;
-  do {
-      WAIT_LEADING_EDGE(PS_CLOCK);
-      rawData[bits+1] = !PIN_READ(PS_DATA);
-  }
-  while( ++bits < 16 );
-
-  // Read analog sticks for Analog Controller in Red Mode
-  if (controllerType == 0x73)
-  {
-    for(int i = 0; i < 4; ++i)
-    {
-      bits = 0;
-      rawData[17+i] = 0;
-      do {
-          WAIT_LEADING_EDGE(PS_CLOCK);
-          rawData[17+i] |= ((PIN_READ(PS_DATA) == 0 ? 0 : 1) << bits);
-      }
-      while( ++bits < 8 );
-    }
-  }
-}
-
-inline void sendRawPsData()
-{
-    #ifndef DEBUG
-    Serial.write( rawData[0] );
-    for (unsigned char i = 1; i < 17; ++i)
-    {
-      Serial.write( rawData[i] ? ONE : ZERO );
-    }
-    Serial.write( rawData[17] );
-    Serial.write( rawData[18] );
-    Serial.write( rawData[19] );
-    Serial.write( rawData[20] );
-    Serial.write( SPLIT );
-    #else
-    Serial.print(rawData[0]);
-    Serial.print(" ");
-    Serial.print(rawData[1] != 0 ? "S" : "0");
-    Serial.print(rawData[2] != 0 ? "5" : "0");
-    Serial.print(rawData[3] != 0 ? "6" : "0");
-    Serial.print(rawData[4] != 0 ? "T" : "0");
-    Serial.print(rawData[5] != 0 ? "U" : "0");
-    Serial.print(rawData[6] != 0 ? "R" : "0");
-    Serial.print(rawData[7] != 0 ? "D" : "0");
-    Serial.print(rawData[8] != 0 ? "L" : "0");
-    Serial.print(rawData[9] != 0 ? "1" : "0");
-    Serial.print(rawData[10] != 0 ? "2" : "0");
-    Serial.print(rawData[11] != 0 ? "3" : "0");
-    Serial.print(rawData[12] != 0 ? "4" : "0");
-    Serial.print(rawData[13] != 0 ? "/" : "0");
-    Serial.print(rawData[14] != 0 ? "O" : "0");
-    Serial.print(rawData[15] != 0 ? "X" : "0");
-    Serial.print(rawData[16] != 0 ? "Q" : "0");
-    Serial.print(rawData[17]);
-    Serial.print(rawData[18]);
-    Serial.print(rawData[19]);
-    Serial.print(rawData[20]);
-    Serial.print("\n");
-    #endif
-}
 
 inline void read_Playstation2( )
 {
@@ -939,21 +835,14 @@ inline void loop_N64()
 inline void loop_SNES()
 {
     noInterrupts();
+    unsigned char bytesToReturn = SNES_BITCOUNT;
 #ifdef MODE_2WIRE_SNES
     read_shiftRegister_2wire< SNES_LATCH , SNES_DATA , false >( SNES_BITCOUNT );
 #else
-    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( SNES_BITCOUNT );
+    bytesToReturn = read_shiftRegister_SNES< SNES_LATCH , SNES_DATA , SNES_CLOCK >();
 #endif
     interrupts();
-    sendRawData( 0 , SNES_BITCOUNT );
-}
-
-inline void loop_SGB()
-{
-    noInterrupts();
-    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( SGB_BITCOUNT );
-    interrupts();
-    sendRawData( 0 , SNES_BITCOUNT );
+    sendRawData( 0 , bytesToReturn );
 }
 
 inline void loop_NES()
@@ -985,15 +874,6 @@ inline void loop_BoosterGrip()
   currentState = boosterGrip.getState();
   sendRawSegaData();
 }
-
-inline void loop_Playstation()
-{
-  noInterrupts();
-  read_Playstation();
-  interrupts();
-  sendRawPsData();
-}
-
 
 inline void loop_Playstation2()
 {
@@ -1053,8 +933,6 @@ void loop()
     loop_N64();
 #elif defined MODE_SNES
     loop_SNES();
-#elif defined MODE_SUPER_GAMEBOY
-    loop_SGB();
 #elif defined MODE_NES
     loop_NES();
 #elif defined MODE_SEGA
@@ -1064,8 +942,6 @@ void loop()
 #elif defined MODE_BOOSTER_GRIP
     loop_BoosterGrip();
 #elif defined MODE_PLAYSTATION
-    loop_Playstation();
-#elif defined MODE_PLAYSTATION2
     loop_Playstation2();
 #elif defined MODE_TG16
     loop_TG16();
