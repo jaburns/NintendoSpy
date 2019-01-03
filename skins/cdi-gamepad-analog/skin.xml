@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="CD-i Gamepad - Analog" author="zoggins" type="cdi">
+
+    <background name="Default" image="cdicont.png" />
+
+    <button name="1" image="circle2.png" x="483" y="83" width="55" height="55" />
+    <button name="1a" image="circle2.png" x="486" y="183" width="55" height="55" />
+    <button name="2" image="circle2.png" x="539" y="133" width="55" height="55" />
+    <button name="3" image="circle2.png" x="417" y="129" width="55" height="55" />
+
+    <analog name="analog_up" image="circle2.png" x="111" y="61" width="30" height="30" direction="fade" />
+    <analog name="analog_down" image="circle2.png" x="105" y="136" width="30" height="30" direction="fade" />
+    <analog name="analog_left" image="circle2.png" x="68" y="102" width="30" height="30" direction="fade" />
+    <analog name="analog_right" image="circle2.png" x="148" y="104" width="30" height="30" direction="fade" />
+
+</skin>

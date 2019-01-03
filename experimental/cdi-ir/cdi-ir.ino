@@ -28,6 +28,8 @@ IRrecvPCI myReceiver(2);
 IRdecode myDecoder;   
 unsigned long timeout;
 byte rawData[6];
+byte yaxis;
+byte xaxis;
 
 void setup() {
   Serial.begin(115200);
@@ -60,11 +62,12 @@ void printRawData()
   for(int i = 0; i < 6; ++i)
   {
     Serial.print(rawData[i]);
-    if (i == 5)
-      Serial.print("\n");
-    else
-      Serial.print("|"); 
+    Serial.print("|"); 
   }
+  Serial.print(yaxis);
+  Serial.print("|"); 
+  Serial.print(xaxis);
+  Serial.print("\n");
 #endif
 }
 
@@ -85,7 +88,7 @@ void loop() {
       }
   }
 #else
-        byte yaxis = 0;
+        yaxis = 0;
         for (int i = 0; i < 8;++i)
         {
             yaxis |= (myDecoder.value & (1 << i));
@@ -97,16 +100,16 @@ void loop() {
         }
         else if (yaxis > 128)
         {
-          rawData[0] =  ScaleInteger(yaxis, 129, NORMALIZE_ANALOG ? MAX_UP : 255, 0, 255);
+          rawData[0] =  ScaleInteger(yaxis, 128, NORMALIZE_ANALOG ? MAX_UP : 255, 0, 255);
           rawData[1] = 0;
         }
         else
         {
-          rawData[1] =  ScaleInteger(yaxis, 1, NORMALIZE_ANALOG ? MAX_DOWN : 127, 0, 255);
+          rawData[1] =  ScaleInteger(yaxis, 0, NORMALIZE_ANALOG ? MAX_DOWN : 127, 0, 255);
           rawData[0] = 0;
         }
         
-        byte xaxis = 0;
+        xaxis = 0;
         for (int i = 8; i < 16;++i)
         {
             xaxis |= ((myDecoder.value & (1 << i)) >> 8);
@@ -118,12 +121,12 @@ void loop() {
         }
         else if (xaxis > 128)
         {
-          rawData[2] = ScaleInteger(xaxis, 129, NORMALIZE_ANALOG ? MAX_LEFT : 255, 0, 255);
+          rawData[2] = ScaleInteger(xaxis, 128, NORMALIZE_ANALOG ? MAX_LEFT : 255, 0, 255);
           rawData[3] = 0;
         }
         else
         {
-          rawData[3] = ScaleInteger(xaxis, 1, NORMALIZE_ANALOG ? MAX_RIGHT : 127, 0, 255);
+          rawData[3] = ScaleInteger(xaxis, 0, NORMALIZE_ANALOG ? MAX_RIGHT : 127, 0, 255);
           rawData[2] = 0;
         }
 
@@ -138,7 +141,7 @@ void loop() {
     {
       for(int i = 0; i < 6; ++i)
         rawData[i] = 0;
-
+      xaxis = yaxis = 0;
       printRawData();
     }
 #endif
