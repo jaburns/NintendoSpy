@@ -4,7 +4,7 @@
 // RetroSpy written by zoggins
 
 // The board that I bought to "splice" the controller cable has PIN 2 marked as PIN 8. 
-// The only thing that needs to connected is Controller Pin 2 to Arduino Digital Pin 10.
+// The only thing that needs to connected is Controller Pin 2 to Arduino Digital Pin 9.
 // Obviously this took me while as my board was marked wrong.
 
 #include <SoftwareSerial.h>
