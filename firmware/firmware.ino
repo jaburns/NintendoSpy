@@ -30,9 +30,9 @@
 // Uncomment this for serial debugging output
 //#define DEBUG
 
-#include <SegaControllerSpy.h>
-#include <ClassicControllerSpy.h>
-#include <BoosterGripSpy.h>
+#include "SegaControllerSpy.h"
+#include "ClassicControllerSpy.h"
+#include "BoosterGripSpy.h"
 
 SegaControllerSpy segaController;
 word currentState = 0;
