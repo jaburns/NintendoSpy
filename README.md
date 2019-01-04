@@ -71,11 +71,10 @@ While the preceding list of equipment can be used for any system, the following 
 ## Software
 
 1. [The latest Arduino software](http://arduino.cc/en/Main/Software)
-2. [ClassicController Arduino Library](https://github.com/zoggins/ClassicControllerSpy/releases/latest)
-3. Firmware for the Arduino
-4. PC software to connect to the Arduino and display the controller
+2. Firmware for the Arduino
+3. PC software to connect to the Arduino and display the controller
 
-\#3 and #4 above are included in the release package of RetroSpy.  The firmware is located in the ``firmware`` folder and is called ``firmware.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
+\#2 is included in the release package of RetroSpy.  The firmware is located in the ``firmware`` folder and is called ``firmware.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 
 ## Instructions for Nintendo/Playstation/TG16/Saturn cables
 
@@ -165,11 +164,11 @@ Only 1 GND from the GCN controller is required.
 |    8      |          4          |
 |    9      |    Not Connected    |
 
-## Instructions for Atari/SMS/Genesis cables
+## Instructions for Atari/SMS/Genesis/3DO cables
 
 ### Wiring
 
-It is possible to solder jumper wires onto each wire of the extension cable, but since Atari/SMS/Genesis use a standard DB9 port, we can build a cable with no soldering required.
+It is possible to solder jumper wires onto each wire of the extension cable, but since Atari/SMS/Genesis/3DO use a standard DB9 port, we can build a cable with no soldering required.
 
 1.  Take the Atari extension cable, wires, DB9 Breakout Board, DB9 Y cable and optional headers you have acquired and put them together in this configuration:
 
@@ -204,6 +203,21 @@ For Atari Joysticks, Sega Master System controllers and the Atari Omega Race Boo
 |    7    |    Not Connected    |
 |    8    |    Not Connected    |
 |    9    |          8          |
+
+For 3DO controllers will need to make the following connections:
+
+| DB9 Pin | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    7    |    Not Connected    |
+|    7    |    Not Connected    |
+|    7    |    Not Connected    |
+|    7    |    Not Connected    |
+|    7    |    Not Connected    |
+|    6    |          2          |
+|    7    |          3          |
+|    8    |    Not Connected    |
+|    9    |          4          |
+
 
 ## Instructions for a Neo-Geo cable
 
@@ -249,19 +263,17 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/emptyide.png)
 
-4. Install my Arduino ClassicControllerSpy library.  Installation directions are [here](https://github.com/zoggins/ClassicControllerSpy#installation).
+4. Download and unzip the [latest release of RetroSpy](https://github.com/zoggins/RetroSpy/releases/latest) somewhere.
 
-5. Download and unzip the [latest release of RetroSpy](https://github.com/zoggins/RetroSpy/releases/latest) somewhere.
+5. Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
 
-6. Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
-
-7. Now uncomment the option for the operation mode (which controller) you will use. Note that `MODE_SNES` is uncommented. 
+6. Now uncomment the option for the operation mode (which controller) you will use. Note that `MODE_SNES` is uncommented. 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/uncomment.png)
 
-8. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
+7. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/upload.png)
 
-9. Run ``RetroSpy.exe``.
+8. Run ``RetroSpy.exe``.
 
-10. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
+9. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
