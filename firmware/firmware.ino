@@ -29,7 +29,7 @@
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
 // Uncomment this for serial debugging output
-#define DEBUG
+//#define DEBUG
 
 #include "SegaControllerSpy.h"
 #include "ClassicControllerSpy.h"
@@ -844,7 +844,7 @@ void read_IntellivisionData()
 void writeIntellivisionDataToSerial()
 {
     #ifndef DEBUG
-    for (unsigned char i = 0; i < 31; ++i)
+    for (unsigned char i = 0; i < 32; ++i)
     {
       Serial.write( rawData[i] );
     }
@@ -862,7 +862,7 @@ void writeIntellivisionDataToSerial()
       Serial.print(rawData[i+16]);
     }
     Serial.print("|");   
-    for(int i = 0; i < 3; ++i)
+    for(int i = 0; i < 4; ++i)
     {
       Serial.print(rawData[i+28]);
     }
@@ -881,12 +881,12 @@ void sendIntellivisionData_Sane()
   // keypad pressed ignores disc
 
     // Check shoulder buttons first
-    rawData[28] = (intRawData & 0b00001010) == 0b00001010 ? 1 : 0;
-    rawData[29] = (intRawData & 0b00000110) == 0b00000110 ? 1 : 0;
-    rawData[30] = (intRawData & 0b00001100) == 0b00001100 ? 1 : 0;
+    rawData[28] = rawData[29] = (intRawData & 0b00001010) == 0b00001010 ? 1 : 0;
+    rawData[30] = (intRawData & 0b00000110) == 0b00000110 ? 1 : 0;
+    rawData[31] = (intRawData & 0b00001100) == 0b00001100 ? 1 : 0;
 
     byte numPushed = 0;
-    for(int i = 28; i < 31; ++i)
+    for(int i = 29; i < 32; ++i)
     {
       if (rawData[i])
         numPushed++;
@@ -894,7 +894,7 @@ void sendIntellivisionData_Sane()
 
     if (numPushed > 1)
     {
-      for(int i = 0; i < 31; ++i)
+      for(int i = 0; i < 32; ++i)
         rawData[i] = 0;
     }
     else
@@ -961,16 +961,16 @@ void sendIntellivisionData_Sane()
 
 void sendIntellivisionData_Raw()
 {
-    // The behavior of multiple buttons pushes is completely bizarre.
+    // The raw behavior of multiple buttons pushes is completely bizarre.
     // I am trying to replicate how bizare it is!
     
     // Check shoulder buttons first
-    rawData[28] = (intRawData & 0b00001010) == 0b00001010 ? 1 : 0;
-    rawData[29] = (intRawData & 0b00000110) == 0b00000110 ? 1 : 0;
-    rawData[30] = (intRawData & 0b00001100) == 0b00001100 ? 1 : 0;
+    rawData[28] = rawData[29] = (intRawData & 0b00001010) == 0b00001010 ? 1 : 0;
+    rawData[30] = (intRawData & 0b00000110) == 0b00000110 ? 1 : 0;
+    rawData[31] = (intRawData & 0b00001100) == 0b00001100 ? 1 : 0;
 
     bool shouldersPushed = false;
-    if (rawData[28] == 1 || rawData[29] == 1 || rawData[30] == 1)
+    if (rawData[28] == 1 || rawData[30] == 1 || rawData[31] == 1)
       shouldersPushed = true;
 
     rawData[16] = (intRawData & 0b00011000) == 0b00011000 ? 1 : 0;
