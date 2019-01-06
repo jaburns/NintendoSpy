@@ -500,9 +500,6 @@
     <Content Include="experimental\Paddles\Paddles.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\cdi-ir\cdi-ir.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="experimental\cdi\cdi.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
