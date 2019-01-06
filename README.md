@@ -7,6 +7,7 @@ RetroSpy
 A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is designed to present controller inputs from a console or computer in a display window.  This allows you to show your controller inputs for things like speedrunning, game tutorials, and more.  You can also convert controller presses into keystrokes to control programs on your computer such as LiveSplit and OBS.  RetroSpy supports the following systems and their regional equivalents:
 
  - Atari 2600
+ - Intellivision
  - NES
  - Sega Master System
  - Commodore 64/128/+4/Vic-20
@@ -52,7 +53,7 @@ The general design of RetroSpy involves splicing a controller extension cable, a
 
 While the preceding list of equipment can be used for any system, the following systems have components that make the process easier.
 
-## Components and Equipment needed for a Atari/SMS/Genesis cable
+## Components and Equipment needed for a DB9 (Atari, SMS, etc.) cable
 
 1. Atari/Genesis Controller extension cable (a standard DB9 extension cable can be used, but you need to make sure it fits in your console)
 2. [DB9 Male Breakout Board to Screw Terminals](https://www.amazon.com/gp/product/B00CLTP2O2/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
