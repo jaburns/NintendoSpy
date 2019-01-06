@@ -18,7 +18,7 @@
 #define MAX_DOWN    45
 
 // Uncomment for 2 levels of debugging output
-//#define PRETTY_PRINT
+#define PRETTY_PRINT
 //#define DEBUG
  
 //Create a receiver object to listen on pin 2
