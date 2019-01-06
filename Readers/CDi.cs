@@ -8,10 +8,11 @@ namespace NintendoSpy.Readers
 {
     static public class CDi
     {
-        const int PACKET_SIZE = 6;
+        const int PACKET_SIZE = 12;
 
         static readonly string[] BUTTONS = {
-            "up", "down", "left", "right", "1", "2"
+            "wired-up", "wired-down", "wired-left", "wired-right", "wired-1", "wired-2",
+            "wireless-up", "wireless-down", "wireless-left", "wireless-right", "wireless-1", "wireless-2"
         };
 
         static float readAnalogButton(byte input)
@@ -25,31 +26,42 @@ namespace NintendoSpy.Readers
 
             var state = new ControllerStateBuilder ();
 
-            for (int i = 0 ; i < BUTTONS.Length - 2 ; ++i) {
+            for (int i = 0 ; i < BUTTONS.Length ; ++i) {
                 if (string.IsNullOrEmpty (BUTTONS [i])) continue;
                 state.SetButton (BUTTONS[i], packet[i] != 0x00);
             }
 
+            // Set double 1 buttons
+            state.SetButton("wired-1a", packet[4] != 0x00);
+            state.SetButton("wireless-1a", packet[10] != 0x00);
+
+            // Handle 3 overriding other pushes
             if (packet[4] != 0x00 && packet[5] != 0x00)
             {
-                state.SetButton("3", true);
-                state.SetButton("1", false);
-                state.SetButton("1a", false);
-                state.SetButton("2", false);
+                state.SetButton("wired-3of3", true);
+                state.SetButton("wired-1of3", false);
+                state.SetButton("wired-1aof3", false);
+                state.SetButton("wired-2of3", false);
             }
             else
             {
-                state.SetButton("3", false);
-                state.SetButton("1", packet[4] != 0x00);
-                state.SetButton("1a", packet[4] != 0x00);
-                state.SetButton("2", packet[5] != 0x00);
-
+                state.SetButton("wired-3of3", false);
+                state.SetButton("wired-1of3", packet[4] != 0x00);
+                state.SetButton("wired-1aof3", packet[4] != 0x00);
+                state.SetButton("wired-2of3", packet[5] != 0x00);
             }
 
-            state.SetAnalog("analog_right", readAnalogButton(packet[3]));
-            state.SetAnalog("analog_left", readAnalogButton(packet[2]));
-            state.SetAnalog("analog_up", readAnalogButton(packet[0]));
-            state.SetAnalog("analog_down", readAnalogButton(packet[1]));
+            state.SetButton("wireless-1a", packet[10] != 0x00);
+
+            state.SetAnalog("wired-analog_right", readAnalogButton(packet[3]));
+            state.SetAnalog("wired-analog_left", readAnalogButton(packet[2]));
+            state.SetAnalog("wired-analog_up", readAnalogButton(packet[0]));
+            state.SetAnalog("wired-analog_down", readAnalogButton(packet[1]));
+
+            state.SetAnalog("wireless-analog_right", readAnalogButton(packet[9]));
+            state.SetAnalog("wireless-analog_left", readAnalogButton(packet[8]));
+            state.SetAnalog("wireless-analog_up", readAnalogButton(packet[6]));
+            state.SetAnalog("wireless-analog_down", readAnalogButton(packet[7]));
 
             return state.Build ();
         }

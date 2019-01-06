@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="CD-i Controller - Analog" author="zoggins" type="cdi">
+
+    <background name="Default" image="cdicont2.png" />
+
+    <button name="wired-1of3" image="circle2.png" x="170" y="66" width="30" height="30" />
+    <button name="wired-2of3" image="circle2.png" x="195" y="46" width="30" height="30" />
+	  <button name="wired-3of3" image="circle2.png" x="221" y="27" width="30" height="30" />
+
+  <button name="wireless-1" image="circle2.png" x="170" y="66" width="30" height="30" />
+  <button name="wireless-2" image="circle2.png" x="195" y="46" width="30" height="30" />
+  
+    <analog name="wired-analog_up" image="circle2.png" x="61" y="43" width="16" height="16" direction="fade" />
+    <analog name="wired-analog_down" image="circle2.png" x="58" y="73" width="16" height="16" direction="fade" />
+    <analog name="wired-analog_left" image="circle2.png" x="46" y="58" width="16" height="16" direction="fade" />
+    <analog name="wired-analog_right" image="circle2.png" x="76" y="57" width="16" height="16" direction="fade" />
+
+  <analog name="wireless-analog_up" image="circle2.png" x="61" y="43" width="16" height="16" direction="fade" />
+  <analog name="wireless-analog_down" image="circle2.png" x="58" y="73" width="16" height="16" direction="fade" />
+  <analog name="wireless-analog_left" image="circle2.png" x="46" y="58" width="16" height="16" direction="fade" />
+  <analog name="wireless-analog_right" image="circle2.png" x="76" y="57" width="16" height="16" direction="fade" />
+
+</skin>

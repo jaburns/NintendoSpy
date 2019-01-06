@@ -27,7 +27,7 @@ Additionally, RetroSpy has experimental support for:
  - [Atari Paddles](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/paddles.md)
  - [Atari Driving Controllers](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/driving.md)
  - [Atari Keyboard, Kid's & Video Touch Pad Controllers](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/keyboard.md)
- - [CD-i Infrared Remotes](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/cdi-ir.md)
+ - [CD-i Infrared Remotes & Wired Controllers](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/cdi.md)
  
 ## Documentation
 
