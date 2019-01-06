@@ -282,6 +282,7 @@ Once the wiring is done, hook everything up to your game system and computer, no
 5. Select File->Open and open the ``firmware.ino`` file from the firmware folder of the unzipped RetroSpy release.
 
 6. Now uncomment the option for the operation mode (which controller) you will use. Note that `MODE_SNES` is uncommented. 
+
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/uncomment.png)
 
 7. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
