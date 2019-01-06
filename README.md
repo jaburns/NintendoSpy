@@ -164,11 +164,11 @@ Only 1 GND from the GCN controller is required.
 |    8      |          4          |
 |    9      |    Not Connected    |
 
-## Instructions for Atari/SMS/Genesis/3DO cables
+## Instructions for Atari/SMS/Genesis/3DO/Intellivision cables
 
 ### Wiring
 
-It is possible to solder jumper wires onto each wire of the extension cable, but since Atari/SMS/Genesis/3DO use a standard DB9 port, we can build a cable with no soldering required.
+It is possible to solder jumper wires onto each wire of the extension cable, but since Atari/SMS/Genesis/3DO/Intellivision use a standard DB9 port, we can build a cable with no soldering required.
 
 1.  Take the Atari extension cable, wires, DB9 Breakout Board, DB9 Y cable and optional headers you have acquired and put them together in this configuration:
 
@@ -208,16 +208,29 @@ For 3DO controllers will need to make the following connections:
 
 | DB9 Pin | Arduino Digital Pin |
 |:-------:|:-------------------:|
-|    7    |    Not Connected    |
-|    7    |    Not Connected    |
-|    7    |    Not Connected    |
-|    7    |    Not Connected    |
-|    7    |    Not Connected    |
+|    1    |    Not Connected    |
+|    2    |    Not Connected    |
+|    3    |    Not Connected    |
+|    4    |    Not Connected    |
+|    5    |    Not Connected    |
 |    6    |          2          |
 |    7    |          3          |
 |    8    |    Not Connected    |
 |    9    |          4          |
 
+For Intellivision controllers will need to make the following connections:
+
+| DB9 Pin | Arduino Digital Pin |
+|:-------:|:-------------------:|
+|    1    |          2          |
+|    2    |          3          |
+|    3    |          4          |
+|    4    |          5          |
+|    5    |    Not Connected    |
+|    6    |          7          |
+|    7    |         10          |
+|    8    |         11          |
+|    9    |          8          |
 
 ## Instructions for a Neo-Geo cable
 

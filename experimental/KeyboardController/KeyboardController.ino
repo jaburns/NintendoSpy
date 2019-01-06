@@ -6,7 +6,8 @@
 // Requires this package: https://github.com/NicoHood/PinChangeInterrupt
 
 // ---------- Uncomment one of these options to select operation mode --------------
-#define DEBUG
+//#define DEBUG
+//#define PRETTY_PRINT
 //#define BIG_BIRD
 //#define STAR_RAIDERS
 
@@ -204,6 +205,8 @@ void loop() {
 #ifdef DEBUG
   //if (rawData != lastRawData)
   //{
+    Serial.print(currentState);
+    Serial.print("|");
     Serial.print((rawData & 0b0000000000000001) != 0 ? "-" : "1");
     Serial.print((rawData & 0b0000000000000010) != 0 ? "-" : "2");
     Serial.print((rawData & 0b0000000000000100) != 0 ? "-" : "3");
@@ -225,8 +228,13 @@ void loop() {
 #else
   if (currentState != lastState)
   {
-    Serial.write(currentState);
+#ifdef PRETTY_PRINT
+    Serial.print(currentState);
+    Serial.print("\n");
+#else
+    Serial.write(currentState+(byte)65);
     Serial.write("\n");
+#endif
     lastState = currentState;
   }
 #endif
