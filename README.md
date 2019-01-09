@@ -11,7 +11,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - NES
  - Sega Master System
  - Commodore 64/128/+4/Vic-20
- - Commodore Amiga/CDTV
+ - Commodore Amiga/CDTV/CD32
  - Sega Genesis
  - TurboGraphx-16
  - Neo-Geo 
@@ -205,7 +205,7 @@ For Atari Joysticks, Sega Master System controllers and the Atari Omega Race Boo
 |    8    |    Not Connected    |
 |    9    |          8          |
 
-For 3DO controllers will need to make the following connections:
+For 3DO controllers you will need to make the following connections:
 
 | DB9 Pin | Arduino Digital Pin |
 |:-------:|:-------------------:|
@@ -219,7 +219,7 @@ For 3DO controllers will need to make the following connections:
 |    8    |    Not Connected    |
 |    9    |          4          |
 
-For Intellivision controllers will need to make the following connections:
+For Intellivision controllers you will need to make the following connections:
 
 | DB9 Pin | Arduino Digital Pin |
 |:-------:|:-------------------:|
@@ -232,6 +232,22 @@ For Intellivision controllers will need to make the following connections:
 |    7    |         10          |
 |    8    |         11          |
 |    9    |          8          |
+
+For CD32 controllers you will need to make the following connections:
+
+|  DB9 Pin | Arduino Digital Pin |
+|:--------:|:-------------------:|
+|     1    |          8          |
+|     2    |          2          |
+|     3    |          3          |
+|     4    |  		  4          |
+|     5    |          5          |
+|     6    |          6          |
+|     7    |                     |
+|     8    |         GND         |
+|     9    |          7          |
+
+**NOTE/WARNING**:  GND has to be connected!  I also discovered that some controller extension cables do not handle GND to the Amiga's liking.  So, I had to plug the DB9 Y cable directly into the Amiga.
 
 ## Instructions for a Neo-Geo cable
 
