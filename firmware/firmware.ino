@@ -30,7 +30,7 @@
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
 // Uncomment this for serial debugging output
-#define DEBUG
+//#define DEBUG
 
 #include "SegaControllerSpy.h"
 #include "ClassicControllerSpy.h"
@@ -82,9 +82,9 @@ KeyboardController keyboardController;
 #define SNES_BITCOUNT_EXT	  32
 #define NES_BITCOUNT		     8
 
-#define CD32_LATCH    6  // Digital Pin 6
-#define CD32_DATA     0  // Digital Pin 8
-#define CD32_CLOCK    7  // Digital Pin 7
+#define CD32_LATCH    5  // Digital Pin 5
+#define CD32_DATA     7  // Digital Pin 7
+#define CD32_CLOCK    6  // Digital Pin 6
 #define CD32_BITCOUNT 7
 
 #define GC_PIN        5
@@ -123,7 +123,7 @@ void setup()
     #else
       for(int i = 2; i <= 8; ++i)
       {
-        if (i != 6)
+        if (i != 5 && i != 7)
           pinMode(i, INPUT_PULLUP);
         else
           pinMode(i, INPUT);
@@ -325,46 +325,43 @@ void read_shiftRegister_reverse_clock( unsigned char bits )
     while( --bits > 0 );
 }
 
-#define WAIT_LEADING_EDGE_PIN7 while( (PIND & 0b10000000) != 0); while( (PIND & 0b10000000) == 0) ;
-#define WAIT_FALLING_EDGE_PIN7 while( (PIND & 0b10000000) == 0); while( (PIND & 0b10000000) != 0) ;
+#define WAIT_LEADING_EDGE_PIN7 while( (PIND & 0b01000000) != 0){}; while( (PIND & 0b01000000) == 0){} ;
 
 void read_cd32_controller()
 {
     unsigned char *rawDataPtr = rawData;
 
-    WAIT_LEADING_EDGE( CD32_LATCH );
-          
+    WAIT_FALLING_EDGE(CD32_LATCH);
+
     WAIT_LEADING_EDGE_PIN7;
-    rawData[0] = PINB;
+    rawData[0] = PIND & 0b10000000 ? 0 : 1;
+      
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[1] = PIND & 0b10000000 ? 0 : 1;
 
-    WAIT_FALLING_EDGE_PIN7;
-    delayMicroseconds(2);
-    rawData[1] = PINB;
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[2] = PIND & 0b10000000 ? 0 : 1;
+    
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[3] = PIND & 0b10000000 ? 0 : 1;
 
-    WAIT_FALLING_EDGE_PIN7;
-    delayMicroseconds(2);
-    rawData[2] = PINB;
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[4] = PIND & 0b10000000 ? 0 : 1;
 
-    WAIT_FALLING_EDGE_PIN7;
-    delayMicroseconds(2);
-    rawData[3] = PINB;
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[5] = PIND & 0b10000000 ? 0 : 1;
+    
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[6] = PIND & 0b10000000 ? 0 : 1;
 
-    WAIT_FALLING_EDGE_PIN7; 
-    delayMicroseconds(2);
-    rawData[4] = PINB;
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[7] = PIND & 0b10000000 ? 0 : 1;
 
-    WAIT_FALLING_EDGE_PIN7; 
-    delayMicroseconds(2);
-    rawData[5] = PINB;
-
-    WAIT_FALLING_EDGE_PIN7;
-    delayMicroseconds(2);
-    rawData[6] = PINB;
-
-    rawData[7] = PIN_READ(2);
-    rawData[8] = PIN_READ(3);
-    rawData[9] = PIN_READ(4);
-    rawData[10] = PIN_READ(5);
+    rawData[7] =  (PINB & 0b00000001) == 0 ? 1 : 0;
+    rawData[8] =  (PIND & 0b00000100) == 0 ? 1 : 0;
+    rawData[9] =  (PIND & 0b00001000) == 0 ? 1 : 0;
+    rawData[10] = (PIND & 0b00010000) == 0 ? 1 : 0;
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1217,9 +1214,7 @@ inline void loop_CD32()
     noInterrupts();
     read_cd32_controller();
     interrupts();
-    for(int i = 0; i < 7; ++i)
-      rawData[i] = ((rawData[i] & 0b00000001) == 0) ? 0 : 1;
-    sendRawData( 0 , CD32_BITCOUNT + 4);
+    sendRawData(0, CD32_BITCOUNT+4);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
