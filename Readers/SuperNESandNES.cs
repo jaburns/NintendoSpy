@@ -34,6 +34,11 @@ namespace NintendoSpy.Readers
             "n", "nne", "ne", "ene", "e", "ese", "se", "sse", "s", "ssw", "sw", "wsw", "w", "wnw", "nw", "nnw", "1", "2", "3", "4", "5", "6", "7", "8", "9", "clear", "0", "enter", "topleft", "topright", "bottomleft", "bottomright"
         };
 
+        static readonly string[] BUTTONS_CD32 =
+        {
+            "blue", "red", "yellow", "green", "forward", "backward", "pause", "up", "down", "left", "right"
+        };
+
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
         {
             return readPacketButtons(packet, BUTTONS_INTELLIVISION);
@@ -41,6 +46,11 @@ namespace NintendoSpy.Readers
 
         static public ControllerState ReadFromPacket_NES (byte[] packet) {
             return readPacketButtons (packet, BUTTONS_NES);
+        }
+
+        static public ControllerState ReadFromPacket_CD32(byte[] packet)
+        {
+            return readPacketButtons(packet, BUTTONS_CD32);
         }
 
         static public ControllerState ReadFromPacket_SNES (byte[] packet) {

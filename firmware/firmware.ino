@@ -20,6 +20,7 @@
 //#define MODE_NEOGEO
 //#define MODE_3DO
 //#define INTELLIVISION
+#define CD32
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -81,6 +82,11 @@ KeyboardController keyboardController;
 #define SNES_BITCOUNT_EXT	  32
 #define NES_BITCOUNT		     8
 
+#define CD32_LATCH    5  // Digital Pin 5
+#define CD32_DATA     7  // Digital Pin 7
+#define CD32_CLOCK    6  // Digital Pin 6
+#define CD32_BITCOUNT 7
+
 #define GC_PIN        5
 #define GC_PREFIX    25
 #define GC_BITCOUNT  64
@@ -111,9 +117,18 @@ void setup()
     #endif
     #endif
 
+    #ifndef CD32
     for(int i = 2; i <= 6; ++i)
       pinMode(i, INPUT_PULLUP);
-
+    #else
+      for(int i = 2; i <= 8; ++i)
+      {
+        if (i != 5 && i != 7)
+          pinMode(i, INPUT_PULLUP);
+        else
+          pinMode(i, INPUT);
+      }
+    #endif
     lastState = -1;
     currentState = 0;
     
@@ -308,6 +323,45 @@ void read_shiftRegister_reverse_clock( unsigned char bits )
         ++rawDataPtr;
     }
     while( --bits > 0 );
+}
+
+#define WAIT_LEADING_EDGE_PIN7 while( (PIND & 0b01000000) != 0){}; while( (PIND & 0b01000000) == 0){} ;
+
+void read_cd32_controller()
+{
+    unsigned char *rawDataPtr = rawData;
+
+    WAIT_FALLING_EDGE(CD32_LATCH);
+
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[0] = PIND & 0b10000000 ? 0 : 1;
+      
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[1] = PIND & 0b10000000 ? 0 : 1;
+
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[2] = PIND & 0b10000000 ? 0 : 1;
+    
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[3] = PIND & 0b10000000 ? 0 : 1;
+
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[4] = PIND & 0b10000000 ? 0 : 1;
+
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[5] = PIND & 0b10000000 ? 0 : 1;
+    
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[6] = PIND & 0b10000000 ? 0 : 1;
+
+    WAIT_LEADING_EDGE_PIN7;
+    rawData[7] = PIND & 0b10000000 ? 0 : 1;
+
+    rawData[7] =  (PINB & 0b00000001) == 0 ? 1 : 0;
+    rawData[8] =  (PIND & 0b00000100) == 0 ? 1 : 0;
+    rawData[9] =  (PIND & 0b00001000) == 0 ? 1 : 0;
+    rawData[10] = (PIND & 0b00010000) == 0 ? 1 : 0;
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1151,8 +1205,16 @@ inline void loop_Intellivision()
     interrupts();
     if(INT_SANE_BEHAVIOR)
       sendIntellivisionData_Sane();
-    //else
-    //  sendIntellivisionData_Raw();
+    else
+      sendIntellivisionData_Raw();
+}
+
+inline void loop_CD32()
+{
+    noInterrupts();
+    read_cd32_controller();
+    interrupts();
+    sendRawData(0, CD32_BITCOUNT+4);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1187,6 +1249,8 @@ void loop()
     loop_3DO();
 #elif defined INTELLIVISION
     loop_Intellivision();
+#elif defined CD32
+    loop_CD32();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
