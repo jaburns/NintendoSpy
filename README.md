@@ -26,9 +26,9 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
 Additionally, RetroSpy has experimental support for:
 
  - [Atari Paddles](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/Paddles.md)
- - [Atari Driving Controllers](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/driving.md)
- - [Atari Keyboard, Kid's & Video Touch Pad Controllers](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/keyboard.md)
- - [CD-i Infrared Remotes & Wired Controllers](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/experimental/cdi.md)
+ - [Atari Driving Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/driving.md)
+ - [Atari Keyboard, Kid's & Video Touch Pad Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/keyboard.md)
+ - [CD-i Infrared Remotes & Wired Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/cdi.md)
  
 ## Documentation
 

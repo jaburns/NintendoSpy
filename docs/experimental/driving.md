@@ -1,10 +1,10 @@
 
-RetroSpy Setup for Atari Paddles
+RetroSpy Setup for Atari Driving Controller
 ======
 
 ## Why Experimental?
 
-Atari paddle support is experimental because it uses the analog pins, which potentially conflicts with RetroSpy's MODE_DETECT mode and the current output sucks.  The technical details of how Atari handles the paddles is beyond the scope of this document, but implementation causes the output to jitter pretty badly. I have tried to do some amount of smoothing, but the jitter still exists.  Additionally, the parameters for the smoothing code are very likely specific paddle dependent.
+Atari driving controller support is experimental because it requires a third party library to detect pin state changes.
 
 ## Components and Equipment needed for a cable
 
@@ -21,16 +21,17 @@ Atari paddle support is experimental because it uses the analog pins, which pote
 ## Software
 
 1. [The latest Arduino software](http://arduino.cc/en/Main/Software)
-2. Atari Paddle Firmware for the Arduino
-3. PC software to connect to the Arduino and display the controller
+2. Firmware for the Arduino
+3. Nico's PinChangeInterrupt Ardunio library, found [here](https://github.com/NicoHood/PinChangeInterrupt)
+4. PC software to connect to the Arduino and display the controller
 
-\#2 is included in the release package of RetroSpy.  The firmware is located in the ``experimental/Paddles`` folder and is called ``Paddles.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
+\#2 is included in the release package of RetroSpy.  The firmware is located in the ``experimental/DrivingController`` folder and is called ``DrivingController.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 
-## Instructions for Atari Paddles cable
+## Instructions for Atari Driving Controller cable
 
 ### Wiring
 
-It is possible to solder jumper wires onto each wire of the extension cable, but since Atari use a standard DB9 port, we can build a cable with no soldering required.
+It is possible to solder jumper wires onto each wire of the extension cable, but since Atari/SMS/Genesis/3DO/Intellivision use a standard DB9 port, we can build a cable with no soldering required.
 
 1.  Take the Atari extension cable, wires, DB9 Breakout Board, DB9 Y cable and optional headers you have acquired and put them together in this configuration:
 
@@ -42,15 +43,17 @@ The following connectects need to be made:
 
 | DB9 Pin | Arduino Digital Pin |
 |:-------:|:-------------------:|
-|    1    |    Not Connected    |
-|    2    |    Not Connected    |
+|    1    |          2          |
+|    2    |          3          |
 |    3    |          4          |
 |    4    |          5          |
-|    5    |       Analog 0      |
-|    6    |    Not Connected    |
+|    5    |          6          |
+|    6    |          7          |
 |    7    |    Not Connected    |
-|    8    |         GND         |
-|    9    |       Analog 1      |
+|    8    |    Not Connected    |
+|    9    |          8          |
+
+**NOTE**:  This is the same pinout as a standard Atari Joystick RetroSpy cable.
 
 ## Software and Setup
 
@@ -64,15 +67,16 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/emptyide.png)
 
-4. Download and unzip the [latest release of RetroSpy](https://github.com/zoggins/RetroSpy/releases/latest) somewhere.
+4. Install Nico's PinChangeInterrupt library.  Installation directions are [here](https://github.com/NicoHood/PinChangeInterrupt#installation).
 
-5. Select File->Open and open the ``Paddles.ino`` file from the ``experimental/Paddles folder`` of the unzipped RetroSpy release.
+5. Download and unzip the [latest release of RetroSpy](https://github.com/zoggins/RetroSpy/releases/latest) somewhere.
 
-6. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
+6. Select File->Open and open the ``DrivingController.ino`` file from the ``experimental/DrivingController`` folder of the unzipped RetroSpy release.
+
+7. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/upload.png)
 
-7. Run ``RetroSpy.exe``.
+8. Run ``RetroSpy.exe``.
 
-8. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
-
+9. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
