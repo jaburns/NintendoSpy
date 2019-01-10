@@ -4,7 +4,7 @@ RetroSpy Setup for Atari Paddles
 
 ## Why Experimental?
 
-Atari paddle support is experimental because it uses the analog pins, which potentially conflicts with RetroSpy's MODE_DETECT mode and the current output sucks.  The technical details of how Atari handles the paddles is beyond the scope of this document, but current implementation causes the output to jitter pretty badly. I have tried to do some amount of smoothing, but the jitter still exists.  Additionally, the parameters for the smoothing code are very likely specific paddle dependent.
+Atari paddle support is experimental because it uses the analog pins, which potentially conflicts with RetroSpy's MODE_DETECT mode and the current output sucks.  The technical details of how Atari handles the paddles is beyond the scope of this document, but implementation causes the output to jitter pretty badly. I have tried to do some amount of smoothing, but the jitter still exists.  Additionally, the parameters for the smoothing code are very likely specific paddle dependent.
 
 ## Components and Equipment needed for all types of cables 
 
@@ -25,6 +25,8 @@ Atari paddle support is experimental because it uses the analog pins, which pote
 3. PC software to connect to the Arduino and display the controller
 
 \#2 is included in the release package of RetroSpy.  The firmware is located in the ``experimental/Paddles`` folder and is called ``Paddles.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
+
+## Instructions for Atari Paddles cable
 
 ### Wiring
 
