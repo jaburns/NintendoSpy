@@ -32,26 +32,26 @@ state1:
   interrupts();
   byteCount = 0;
   DETECT_FALLING_EDGE
-  if (prevPin != 0x3 && rawData[byteCount] != 0x2)
+  if (prevPin != 0x3 && rawData[byteCount] != 0x2)   // Starts with both pins High and pin 1 drops
     goto state1;
   ++byteCount;
 
 //state2:
   DETECT_FALLING_EDGE
-  if (prevPin != 0x2 || rawData[byteCount] != 0x0)
+  if (prevPin != 0x2 || rawData[byteCount] != 0x0)  // Pin 5 now drops, pin 1 stays low
     goto state1;
   ++byteCount;
 
 state3:
   DETECT_FALLING_EDGE
-  if (prevPin != 0x2 || rawData[byteCount] != 0x0)
+  if (prevPin != 0x2 || rawData[byteCount] != 0x0)  // Pin 5 drops 3 more times, pin 1 says low
     goto state1;
   else if (++byteCount != 5)
     goto state3;
 
 //state4:
   DETECT_FALLING_EDGE
-  if (rawData[byteCount] != 0x01 || prevPin != 0x3)
+  if (rawData[byteCount] != 0x01 || prevPin != 0x3) // Pin 5 drops 1 more times, this time Pin 1 is high
     goto state1;
   ++byteCount;
 
