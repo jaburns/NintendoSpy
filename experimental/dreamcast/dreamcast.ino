@@ -32,7 +32,7 @@ state1:
   interrupts();
   byteCount = 0;
   DETECT_FALLING_EDGE
-  if (prevPin != 0x3 && rawData[byteCount] != 0x2)   // Starts with both pins High and pin 1 drops
+  if (prevPin != 0x3 || rawData[byteCount] != 0x2)   // Starts with both pins High and pin 1 drops
     goto state1;
   ++byteCount;
 
