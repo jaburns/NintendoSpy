@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Dreamcast Controller" author="zoggins" type="dreamcast">
+  
+    <background name="Default" image="dreamcast.png" />
+
+    <button name="x" image="circle.png" x="221" y="146" width="20" height="20"/>
+    <button name="y" image="circle.png" x="246" y="121" width="20" height="20"/>
+    <button name="b" image="circle.png" x="270" y="146" width="20" height="20"/>
+    <button name="a" image="circle.png" x="246" y="169" width="20" height="20"/>
+    
+	<button name="start" image="circle.png" x="145" y="230" height="30" width="30"/>
+  
+	<analog name="trig_l" image="L-bar.png" x="13" y="35" direction="left" reverse="false" height="8" width="100"/>
+    <analog name="trig_r" image="R-bar.png" x="210" y="35" direction="right" reverse="false" height="8" width="100"/>
+
+    <button name="up" image="circle.png" x="67" y="167" width="15" height="15" />
+    <button name="down" image="circle.png" x="67" y="200" width="15" height="15" />
+    <button name="left" image="circle.png" x="49" y="185" width="15" height="15" />
+    <button name="right" image="circle.png" x="83" y="185" width="15" height="15" />
+
+    <stick xname="stick_x" yname="stick_y" image="dreamcast_stick.png" x="31" y="110" xrange="15" yrange="15"/>
+
+</skin>
