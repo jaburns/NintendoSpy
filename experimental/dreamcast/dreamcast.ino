@@ -75,7 +75,7 @@ state7:
   interrupts();
 #ifndef DEBUG
   rawData[byteCount++] = '\n';
-  Serial.write(rawData, byteCount-6);    
+  Serial.write(p, byteCount-6);    
 #else
   int j = 0;
 
