@@ -27,7 +27,7 @@ Atari keyboard controller support is experimental because it requires a third pa
 
 \#2 is included in the release package of RetroSpy.  The firmware is located in the ``experimental/KeyboardController`` folder and is called ``KeyboardController.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 
-## Instructions for Atari Driving Controller cable
+## Instructions for Atari Keyboard Controller cable
 
 ### Wiring
 
