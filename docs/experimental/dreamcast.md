@@ -30,7 +30,7 @@ Dreamcast controller support is experimental because it requires a newer faster 
 ## Instructions for making a Dreamcast RetroSpy cable
 
 You will need to make a splice cable, and connect the controller lines to the listed digital pin on the Teensy. evilash25 made a very good [guide](https://github.com/zoggins/RetroSpy/blob/master/docs/guide-evilash25.md#wiring) for building splice cables.
-The correct for Dreamcast are:
+The correct connections for Dreamcast are:
 
 |   Dreamcast   | Teensy Digital Pin |
 |:-------------:|:-------------------:|
