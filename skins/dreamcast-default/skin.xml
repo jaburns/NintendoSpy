@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="Dreamcast Controller" author="zoggins" type="dreamcast">
   
-    <background name="Default" image="dreamcast.png" />
+    <background name="Default" image="dreamcast1.png" />
 
     <button name="x" image="circle.png" x="221" y="146" width="20" height="20"/>
     <button name="y" image="circle.png" x="246" y="121" width="20" height="20"/>
@@ -18,6 +18,6 @@
     <button name="left" image="circle.png" x="49" y="185" width="15" height="15" />
     <button name="right" image="circle.png" x="83" y="185" width="15" height="15" />
 
-    <stick xname="stick_x" yname="stick_y" image="dreamcast_stick.png" x="31" y="110" xrange="15" yrange="15"/>
+    <stick xname="stick_x" yname="stick_y" image="dreamcast_stick.png" x="31" y="110" xrange="5" yrange="5" yreverse="true"/>
 
 </skin>

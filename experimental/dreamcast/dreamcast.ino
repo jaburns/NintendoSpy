@@ -1,5 +1,5 @@
 
-#define DEBUG
+//#define DEBUG
 
 byte rawData[16000];
 byte* p;
@@ -20,7 +20,7 @@ void setup() {
   Serial.begin(115200);
 }
 
-#define DETECT_FALLING_EDGE rawData[byteCount] = GPIOD_PDIR; do { prevPin = rawData[byteCount]; rawData[byteCount] = GPIOD_PDIR; } while( rawData[byteCount] >= prevPin);
+#define DETECT_FALLING_EDGE rawData[byteCount] = (GPIOD_PDIR & 0x3); do { prevPin = rawData[byteCount]; rawData[byteCount] = (GPIOD_PDIR & 0x3); } while( rawData[byteCount] >= prevPin);
 
 FASTRUN void loop() 
 {
@@ -75,7 +75,7 @@ state7:
   interrupts();
 #ifndef DEBUG
   rawData[byteCount++] = '\n';
-  Serial.write(rawData, byteCount-6);    
+  Serial.write(p, byteCount-6);    
 #else
   int j = 0;
 
