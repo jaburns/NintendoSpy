@@ -33,7 +33,7 @@ CD-i controller support is experimental because it requires additional hardware 
 
 \#2 is included in the release package of RetroSpy.  The firmware is located in the ``experimental/cdi`` folder and is called ``cdi.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 
-### Hardware Setup
+## Hardware Setup
 
 ### Wireless
 
