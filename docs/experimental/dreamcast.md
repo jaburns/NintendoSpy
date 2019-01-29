@@ -61,7 +61,7 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 5. You should now see "Teensy 3.6, Serial, 240 MHz (overclock), Fastest + pure-code with LTO, US English on COMX" at the bottom right corner if everything is working. If not, you may need to restart and/or replug the USB connector.
 
-![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/emptyide.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/TeensyOnCom7.png)
 
 6. Download and unzip the [latest release of RetroSpy](https://github.com/zoggins/RetroSpy/releases/latest) somewhere.
 

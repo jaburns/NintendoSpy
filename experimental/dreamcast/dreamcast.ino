@@ -1,4 +1,12 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RetroSpy Dreamcast Firmware for Teensy 3.6
+// Tested Settings: Teensy 3.6, 240 MHz (overclock), Fastest + pure-code with LTO, US English
+// NOTE: A Teensy 3.5 or a lower speed setting on the 3.6 may be fast enough, 
+//       but I haven't tested it as much as 240 Mhz on the 3.6
+// v1.0
+// RetroSpy written by zoggins
 
+// ---------- Uncomment this for debugging ouput --------------
 //#define DEBUG
 
 byte rawData[16000];
