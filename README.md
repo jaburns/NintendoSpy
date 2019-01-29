@@ -11,7 +11,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - NES
  - Sega Master System
  - Commodore 64/128/+4/Vic-20
- - Commodore Amiga/CDTV/CD32
+ - Commodore Amiga/CD32
  - Sega Genesis
  - TurboGraphx-16
  - Neo-Geo 
