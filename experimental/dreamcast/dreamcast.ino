@@ -8,12 +8,6 @@ int byteCount;
 void setup() {
   pinMode(2, INPUT);     // DC Pin 1
   pinMode(14, INPUT);    // DC Pin 5
-  pinMode(5, INPUT);     // Connect to Teensy GND
-  pinMode(6, INPUT);     // Connect to Teensy GND
-  pinMode(7, INPUT);     // Connect to Teensy GND
-  pinMode(8, INPUT);     // Connect to Teensy GND
-  pinMode(20, INPUT);    // Connect to Teensy GND
-  pinMode(21, INPUT);    // Connect to Teensy GND
 
   p = &rawData[6];
 

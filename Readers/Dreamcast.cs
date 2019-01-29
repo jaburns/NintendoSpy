@@ -11,7 +11,7 @@ namespace NintendoSpy.Readers
         const int FRAME_HEADER_SIZE = 32;
 
         static readonly string[] BUTTONS = {
-            null, null, null, null, null, "x", "y", null, "right", "left", "down", "up", "start", "a", "b", null
+            "right2", "left2", "down2", "up2", "d", "x", "y", "z", "right", "left", "down", "up", "start", "a", "b", "c"    
         };
 
         static float readTrigger(byte input)
@@ -31,11 +31,11 @@ namespace NintendoSpy.Readers
 
             int j = 0;
 
-            byte numFrames = 0;
+            byte numWords = 0;
             for (int i = 0; i < 4; ++i)
             {
-                numFrames |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
-                numFrames |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                numWords |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                numWords |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
                 j += 2;
             }
 
@@ -50,7 +50,7 @@ namespace NintendoSpy.Readers
                 j += 2;
             }
 
-            if (dcCommand == 8 && numFrames >= 1)
+            if (dcCommand == 8 && numWords >= 1)
             {
                 uint controllerType = 0;
                 for (int i = 0; i < 2; i++)
@@ -65,7 +65,7 @@ namespace NintendoSpy.Readers
 
                 j += 16;
 
-                if (controllerType == 1 && numFrames == 3)
+                if (controllerType == 1 && numWords == 3)
                 {
 
                     byte ltrigger = 0;
@@ -96,7 +96,21 @@ namespace NintendoSpy.Readers
                         j += 2;
                     }
 
-                    j += 16;
+                    byte joyy2 = 0;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        joyy2 |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                        joyy2 |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                        j += 2;
+                    }
+
+                    byte joyx2 = 0;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        joyx2 |= (byte)(((packet[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+                        joyx2 |= (byte)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+                        j += 2;
+                    }
 
                     byte joyy = 0;
                     for (int i = 0; i < 4; ++i)
@@ -116,6 +130,8 @@ namespace NintendoSpy.Readers
 
                     state.SetAnalog("stick_x", readStick(joyx));
                     state.SetAnalog("stick_y", readStick(joyy));
+                    state.SetAnalog("stick_x2", readStick(joyx2));
+                    state.SetAnalog("stick_y2", readStick(joyy2));
                     state.SetAnalog("trig_r", readTrigger(rtrigger));
                     state.SetAnalog("trig_l", readTrigger(ltrigger));
 
