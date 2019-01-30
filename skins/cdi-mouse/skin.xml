@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="CD-i Mouse" author="zoggins" type="cdi">
+
+    <background name="Default" image="cdi-mouse.png" />
+
+    <button name="wired-1" image="circle2.png" x="194" y="173" width="130" height="130" />
+    <button name="wired-2" image="circle2.png" x="377" y="173" width="130" height="130" />
+
+    <stick xname="stick_x" yname="stick_y" image="circle2.png" x="330" y="590" xrange="200" yrange="200" height="50" width="50" yreverse="true"/>
+  
+</skin>
