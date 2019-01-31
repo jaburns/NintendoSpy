@@ -8,7 +8,7 @@ Dreamcast controller support is experimental because it requires a newer faster 
 
 ## Components and Equipment needed
 
-1. [Teensy 3.6 with Pins](https://www.amazon.com/PJRC-Teensy-3-6-with-pins/dp/B01MG2PYYP/ref=sr_1_1?s=electronics&ie=UTF8&qid=1548799893&sr=1-1&keywords=teensy+3.6) 
+1. [Teensy 3.6 with Pins](https://www.amazon.com/PJRC-Teensy-3-6-with-pins/dp/B01MG2PYYP/ref=sr_1_1?s=electronics&ie=UTF8&qid=1548799893&sr=1-1&keywords=teensy+3.6) (The code has been confirmed to also work with a Teensy 3.5 @ 168 Mhz)
 3. [Breadboard](https://www.amazon.com/EL-CP-003-Breadboard-Solderless-Distribution-Connecting/dp/B01EV6LJ7G/ref=pd_lpo_vtph_21_bs_img_1?_encoding=UTF8&psc=1&refRID=NW19FZVRQYZDFQC900X00)
 3. [USB cable](https://www.amazon.com/Staging-Product-Not-Retail-Sale/dp/B0741WGQ36/ref=sr_1_1_sspa?s=electronics&ie=UTF8&qid=1548799929&sr=1-1-spons&keywords=micro+USB+cable&psc=1) to connect the Arduino to your computer]
 4. Wire cutters/strippers
