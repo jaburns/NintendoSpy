@@ -31,14 +31,14 @@ IRrecvPCI myReceiver(2);
 
 // These values may need adjusting based on the controller used.
 #define WIRED_TIMEOUT 50
-#define WIRED_NORMALIZE_ANALOG true
+#define WIRED_NORMALIZE_ANALOG false
 #define WIRED_MAX_LEFT  136
 #define WIRED_MAX_RIGHT 8
 #define WIRED_MAX_UP    136
 #define WIRED_MAX_DOWN  8
 
 #define WIRELESS_TIMEOUT 100
-#define WIRELESS_NORMALIZE_ANALOG true
+#define WIRELESS_NORMALIZE_ANALOG false
 #define WIRELESS_MAX_LEFT         173
 #define WIRELESS_MAX_RIGHT         45
 #define WIRELESS_MAX_UP           173

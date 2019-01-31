@@ -20,7 +20,7 @@
 //#define MODE_NEOGEO
 //#define MODE_3DO
 //#define INTELLIVISION
-#define CD32
+//#define CD32
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
