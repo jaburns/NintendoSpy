@@ -34,7 +34,7 @@ namespace NintendoSpy.Readers
 
         static float ReadTrigger(byte input)
         {
-            return (float)(input) / 256;
+            return (float)(input)/256;
         }
 
         static float ReadStick(short input)
@@ -119,14 +119,14 @@ namespace NintendoSpy.Readers
 
         public static void ReadUSBWorker(object data)
         {
-            XboxReader reader = ((XboxReader)data); 
-
-            USBPacket packet = ((XboxReader)data).packetPool[((XboxReader)data).currentPacketInPool];
-            ((XboxReader)data).currentPacketInPool += ((XboxReader)data).currentPacketInPool;
-            ((XboxReader)data).currentPacketInPool %= 100;
+            XboxReader reader = ((XboxReader)data);
 
             while (!reader.inShutdown)
             {
+                USBPacket packet = reader.packetPool[reader.currentPacketInPool];
+                reader.currentPacketInPool += 1;
+                reader.currentPacketInPool %= 100;
+
                 uint status = 0;
                 uint events = 0;
                 ulong timeSop = 0;
@@ -137,19 +137,12 @@ namespace NintendoSpy.Readers
                        ((XboxReader)data).hBeagle, ref status, ref events, ref timeSop,
                        ref timeDuration, ref timeDataOffset, 1024, packet.Packet);
 
-                if (status != BeagleApi.BG_READ_OK)
+                if (packet.Length == 23
+                    && (packet.Packet[0] == BeagleApi.BG_USB_PID_DATA1 || packet.Packet[0] == BeagleApi.BG_USB_PID_DATA0)
+                    && packet.Packet[1] == 0x00
+                    && packet.Packet[2] == 0x14)
                 {
-                    reader.ControllerDisconnected?.Invoke(reader, EventArgs.Empty);
-                }
-                else
-                {
-                    if (packet.Length == 23 
-                        && (packet.Packet[0] == BeagleApi.BG_USB_PID_DATA1 || packet.Packet[0] == BeagleApi.BG_USB_PID_DATA0) 
-                        && packet.Packet[1] == 0x00 
-                        && packet.Packet[2] == 0x14)
-                    {
-                        reader.packetsToBeProcessed.Enqueue(packet);
-                    }
+                    reader.packetsToBeProcessed.Enqueue(packet);
                 }
             }
         }
