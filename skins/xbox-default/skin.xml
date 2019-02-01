@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="The Duke" author="zoggins" type="xbox">
+
+    <background name="Default" image="pad.png" />
+
+    <button name="a" image="circle.png" x="447" y="140" width="25" height="25" />
+    <button name="b" image="circle.png" x="447" y="102" width="25" height="25" />
+    <button name="x" image="circle.png" x="414" y="121" width="25" height="25" />
+    <button name="y" image="circle.png" x="414" y="83" width="25" height="25" />
+
+    <button name="white" image="circle.png" x="430" y="51" width="25" height="25" />
+    <analog name="trig_r" image="trig-r.png" x="500" y="26"
+            direction="up" reverse="true" />
+
+    <button name="black" image="circle.png" x="467" y="71" width="25" height="25" />
+    <analog name="trig_l" image="trig-l.png" x="98" y="26"
+            direction="up" reverse="true" />
+
+    <button name="start" image="circle.png" x="337" y="235" width="30" height="20" />
+    <button name="back" image="circle.png" x="282" y="235" width="30" height="20" />
+
+    <button name="l3" image="circle.png" x="158" y="78" width="77" height="72" />
+    <button name="r3" image="circle.png" x="382" y="169" width="77" height="72" />
+
+    <button name="up"    image="circle.png" x="215" y="178" width="25" height="25" />
+    <button name="down"  image="circle.png" x="215" y="215" width="25" height="25" />
+    <button name="left"  image="circle.png" x="194" y="197" width="25" height="25" />
+    <button name="right" image="circle.png" x="237" y="197" width="25" height="25" />
+
+    <stick xname="lstick_x" yname="lstick_y" image="lstick.png"
+           x="167" y="87" xrange="9" yrange="9"/>
+    <stick xname="rstick_x" yname="rstick_y" image="rstick.png"
+           x="391" y="178" xrange="9" yrange="9"/>
+
+</skin>
