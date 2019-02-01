@@ -1,19 +1,19 @@
 @echo off
-C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild.exe RetroSpy.sln /p:Configuration=Release /p:Platform=x86
+"c:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe" RetroSpy.sln /p:Configuration=Release /p:Platform=x86
 
 if errorlevel 0 goto x64Build
 echo Aborting release. Error during x86 build.
 goto end
 
 :x64Build
-C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild.exe RetroSpy.sln /p:Configuration=Release /p:Platform=x64
+"c:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe" RetroSpy.sln /p:Configuration=Release /p:Platform=x64
 
 if errorlevel 0 goto AnyCPUBuild
 echo Aborting release. Error during x64 build.
 goto end
 
 :AnyCPUBuild
-C:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild.exe RetroSpy.sln /p:Configuration=Release /p:Platform="Any CPU"
+"c:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\msbuild.exe" RetroSpy.sln /p:Configuration=Release /p:Platform="Any CPU"
 
 if errorlevel 0 goto buildOK
 echo Aborting release. Error during AnyCPU build.
