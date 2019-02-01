@@ -252,7 +252,16 @@ namespace NintendoSpy
 
         void reader_ControllerDisconnected (object sender, EventArgs e)
         {
-            Close ();
+            if (this.Dispatcher.CheckAccess())
+                Close();
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    Close();
+                });
+            }
+           
         }
 
         void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e)
