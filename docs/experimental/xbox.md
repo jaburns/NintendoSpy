@@ -4,7 +4,7 @@ RetroSpy Setup for Original Xbox
 
 ## Why Experimental?
 
-Xbox is experimental because it currently requires a 400 dollar USB protocol analyzer.  So this solution is only for the most dedicated.
+Xbox is experimental because it currently requires a 400 dollar USB protocol analyzer.  So this solution is only for the most dedicated.  I am also still investigating a high number of controller disconnect events.  I think its due to the ``Xbox Controller to PC USB Adapter Cable``  and not necessarily related to RetroSpy.  They seems to happen more with the original large controller and if you have a memory card inserted into the controller.
 
 ## Components and Equipment needed
 
