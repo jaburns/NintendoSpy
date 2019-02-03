@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="SNES Mouse" author="zoggins" type="mousetester">
+
+    <background name="Default" image="snes.png" />
+
+    <button name="left" image="circle.png" x="81" y="49" width="50" height="50" />
+    <button name="right" image="circle.png" x="170" y="49" width="50" height="50" />
+
+	  <stick xname="stick_x" yname="stick_y" image="circle.png" x="130" y="280" xrange="90" yrange="90" height="25" width="25" yreverse="true"/>
+
+
+</skin>

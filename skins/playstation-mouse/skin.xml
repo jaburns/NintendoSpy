@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Playstation Mouse" author="zoggins" type="mousetester">
+
+    <background name="Default" image="playstation.png" />
+
+    <button name="left" image="circle.png" x="59" y="47" width="75" height="75" />
+    <button name="right" image="circle.png" x="194" y="47" width="75" height="75" />
+  
+	  <stick xname="stick_x" yname="stick_y" image="circle.png" x="137" y="344" xrange="130" yrange="130" height="30" width="30" yreverse="true"/>
+
+
+</skin>
