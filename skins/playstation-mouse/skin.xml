@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Playstation Mouse" author="zoggins" type="mousetester">
+<skin name="Playstation Mouse" author="zoggins" type="playstation">
 
     <background name="Default" image="playstation.png" />
 
-    <button name="left" image="circle.png" x="59" y="47" width="75" height="75" />
-    <button name="right" image="circle.png" x="194" y="47" width="75" height="75" />
+    <button name="r1" image="circle.png" x="59" y="47" width="75" height="75" />
+    <button name="l1" image="circle.png" x="194" y="47" width="75" height="75" />
 
-  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="137" y="344" xrange="130" yrange="130" height="30" width="30" />
-  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="137" y="344" xrange="130" yrange="130" height="30" width="30" />
-  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="137" y="344" xrange="130" yrange="130" height="30" width="30" />
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="137" y="344" xrange="130" yrange="130" height="30" width="30" yreverse="true" />
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="137" y="344" xrange="130" yrange="130" height="30" width="30" yreverse="true" />
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="137" y="344" xrange="130" yrange="130" height="30" width="30" yreverse="true"/>
 
 
 </skin>

@@ -570,9 +570,15 @@ inline void read_SS3DData()
       rawData[numBits++] = PIN_READ(SS_DATA0);
   }
 
+  int numBytes = 0;
+  if (rawData[2] != 0 && rawData[3] != 0)
+    numBytes = 1;
+  else if (rawData[3] != 0)
+    numBytes = 4;
+
   if (rawData[3] != 0)
   {
-    for(int i = 0; i < 4; ++i)
+    for(int i = 0; i < numBytes; ++i)
     {
       WAIT_FALLING_EDGE(SS_REQ);
     
@@ -581,7 +587,7 @@ inline void read_SS3DData()
       rawData[numBits++] = PIN_READ(SS_DATA3);
       rawData[numBits++] = PIN_READ(SS_DATA2);
       rawData[numBits++] = PIN_READ(SS_DATA1);    
-      rawData[numBits++] = PIN_READ(SS_DATA0);
+            rawData[numBits++] = PIN_READ(SS_DATA0);
   
       WAIT_LEADING_EDGE(SS_REQ);
       
@@ -688,7 +694,7 @@ inline void read_Playstation2( )
   while( ++bits < 16 );
 
   //Read analog sticks for Analog Controller in Red Mode
-  if (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x73*/)
+  if (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x73 (DualShock 1)*/)
   {
     for(int i = 0; i < 4; ++i)
     {
@@ -699,8 +705,20 @@ inline void read_Playstation2( )
       }
       while( ++bits < 8 );
     }
+  }  
+  else if (rawData[0] == 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] == 0  && rawData[6] == 0 && rawData[7] == 0 /*controllerType == 0x12 (mouse)*/)
+  {
+    for(int i = 0; i < 2; ++i)
+    {
+      bits = 0;
+      do {
+          WAIT_LEADING_EDGE(PS_CLOCK);
+          rawData[numBits++] = PIN_READ(PS_DATA);
+      }
+      while( ++bits < 8 );
+    }  
   }
-  else if (rawData[0] != 0 && rawData[1] == 0 && rawData[2] == 0 && rawData[3] != 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x79*/)
+  else if (rawData[0] != 0 && rawData[1] == 0 && rawData[2] == 0 && rawData[3] != 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x79 (DualShock 2)*/)
   {
     for(int i = 0; i < 16; ++i)
     {

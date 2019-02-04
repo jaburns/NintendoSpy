@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Dreamcast Mouse" author="zoggins" type="mousetester">
+<skin name="Dreamcast Mouse" author="zoggins" type="dreamcast">
 
     <background name="Default" image="dreamcast.png" />
 
     <button name="left" image="circle.png" x="69" y="48" width="50" height="50" />
     <button name="right" image="circle.png" x="185" y="48" width="50" height="50" />
 
-  <button name="thumb" image="circle.png" x="15" y="112" width="30" height="80" />
+  <button name="start" image="circle.png" x="15" y="112" width="30" height="80" />
 
   <button name="scroll_up" image="circle.png" x="140" y="23" width="25" height="25" />
   <button name="scroll_down" image="circle.png" x="142" y="103" width="25" height="25" />
