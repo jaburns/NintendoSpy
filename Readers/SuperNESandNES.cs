@@ -45,7 +45,7 @@ namespace NintendoSpy.Readers
         }
 
         static public ControllerState ReadFromPacket_NES (byte[] packet) {
-            return readPacketButtons (packet, BUTTONS_NES);
+            return readPacketButtons(packet, BUTTONS_NES);
         }
 
         static public ControllerState ReadFromPacket_CD32(byte[] packet)
@@ -54,13 +54,26 @@ namespace NintendoSpy.Readers
         }
 
         static public ControllerState ReadFromPacket_SNES (byte[] packet) {
-            var controllerState = readPacketButtons (packet, BUTTONS_SNES);
-            if (controllerState != null && packet[15] != 0x00)
+            if (packet.Length < BUTTONS_SNES.Length) return null;
+
+            var state = new ControllerStateBuilder();
+
+            for (int i = 0; i < BUTTONS_SNES.Length; ++i)
             {
-                // We have extended data do something with it
+                if (string.IsNullOrEmpty(BUTTONS_SNES[i])) continue;
+                state.SetButton(BUTTONS_SNES[i], packet[i] != 0x00);
             }
 
-            return controllerState;
+            if (state != null && packet.Length == 32 && packet[15] != 0x00)
+            {
+                float y = (float)(SignalTool.readByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1)) / 127;
+                float x = (float)(SignalTool.readByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1)) / 127;
+                SignalTool.SetMouseProperties(x, y, state);
+
+            }
+
+            return state.Build();
         }
+
     }
 }

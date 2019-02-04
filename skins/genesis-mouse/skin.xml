@@ -8,8 +8,10 @@
     <button name="c" image="circle.png" x="115" y="43" width="25" height="25" />
 
     <button name="start" image="circle.png" x="40" y="95" width="20" height="50" />
-  
-	  <stick xname="stick_x" yname="stick_y" image="circle.png" x="75" y="207" xrange="50" yrange="50" height="20" width="20" yreverse="true"/>
+
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="75" y="207" xrange="50" yrange="50" height="20" width="20" />
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="75" y="207" xrange="50" yrange="50" height="20" width="20" />
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="75" y="207" xrange="50" yrange="50" height="20" width="20" />
 
 
 </skin>

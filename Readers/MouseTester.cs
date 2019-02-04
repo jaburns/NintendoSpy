@@ -5,7 +5,7 @@ namespace NintendoSpy.Readers
 {
     sealed public class MouseTester : IControllerReader
     {
-        const double TIMER_MS = 30;
+        const double TIMER_MS = 7;
 
         DispatcherTimer _timer;
 
@@ -23,13 +23,17 @@ namespace NintendoSpy.Readers
         bool buttonsOn = false;
         float theta = 0;
         bool inCenter = false;
+        int ticks = 0;
 
 
         void tick (object sender, EventArgs e)
         {
             var outState = new ControllerStateBuilder();
 
-            buttonsOn = buttonsOn ? false : true;
+            if (ticks % 18 == 0)
+                buttonsOn = buttonsOn ? false : true;
+
+            ticks++;
 
             if (!inCenter && (theta == 0 || theta == 90 || theta == 180 || theta == 270))
                 inCenter = true;
@@ -59,6 +63,8 @@ namespace NintendoSpy.Readers
             outState.SetButton("thumb", buttonsOn);
             outState.SetButton("scroll_up", buttonsOn);
             outState.SetButton("scroll_down", buttonsOn);
+
+            outState.SetButton("mouse_center", true);
 
             outState.SetAnalog("stick_x", x);
             outState.SetAnalog("stick_y", y);
