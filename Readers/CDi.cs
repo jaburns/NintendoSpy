@@ -72,9 +72,9 @@ namespace NintendoSpy.Readers
                 x = readAnalogButton(packet[3]);
 
             if (packet[0] > 0)
-                y = -1 * readAnalogButton(packet[0]);
+                y = readAnalogButton(packet[0]);
             else if (packet[1] > 0)
-                y = readAnalogButton(packet[1]);
+                y = -1 * readAnalogButton(packet[1]);
 
             state.SetAnalog("stick_x", x);
             state.SetAnalog("stick_y", y);
