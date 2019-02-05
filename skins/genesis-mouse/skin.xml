@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Mega Mouse" author="zoggins" type="mousetester">
+<skin name="Mega Mouse" author="zoggins" type="sega">
 
     <background name="Default" image="genesis.png" />
 
-    <button name="a" image="circle.png" x="30" y="43" width="25" height="25" />
-    <button name="b" image="circle.png" x="68" y="15" width="25" height="25" />
-    <button name="c" image="circle.png" x="115" y="43" width="25" height="25" />
+    <button name="left" image="circle.png" x="30" y="43" width="25" height="25" />
+    <button name="middle" image="circle.png" x="68" y="15" width="25" height="25" />
+    <button name="right" image="circle.png" x="115" y="43" width="25" height="25" />
 
     <button name="start" image="circle.png" x="40" y="95" width="20" height="50" />
 

@@ -10,7 +10,8 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
-//#define MODE_SEGA
+//#define MODE_SEGA  // For Genesis. Use MODE_CLASSIC for Master System
+#define MODE_GENESIS_MOUSE
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
@@ -94,6 +95,7 @@ KeyboardController keyboardController;
 #define ThreeDO_LATCH      2
 #define ThreeDO_DATA       4
 #define ThreeDO_CLOCK      3   
+#define ThreeDO_BITCOUNT  32
 
 #define ZERO  '\0'  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE    '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
@@ -106,10 +108,11 @@ unsigned char rawData[ 256 ];
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
-    #ifndef MODE_SEGA
-    #ifndef MODE_CLASSIC
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
+    
+    #ifndef MODE_SEGA
+    #ifndef MODE_CLASSIC
     PORTD = 0x00;
     PORTB = 0x00;
     DDRD  = 0x00;
@@ -298,7 +301,7 @@ unsigned char read_shiftRegister_SNES()
     {
       bits = 0;
       do {
-          WAIT_FALLING_EDGE( clock );
+	      WAIT_FALLING_EDGE( clock );
           rawData[position++] = !PIN_READ(data);
       }
       while( ++bits <= SNES_BITCOUNT );
@@ -806,10 +809,17 @@ inline void sendRawTgData()
 inline void sendRawSegaData()
 {
   #ifndef DEBUG
+  
+  #ifdef MODE_GENESIS_MOUSE
+  for(int i = 0; i < 3; ++i)
+    for(int j = 0; j < 8; ++j)
+      Serial.write((rawData[i] & (1 << j)) == 0 ? ZERO : ONE);
+  #else
   for (unsigned char i = 0; i < 13; ++i)
   {
     Serial.write (currentState & (1 << i) ? ONE : ZERO );
   }
+  #endif
   Serial.write( SPLIT );
   #else
   #ifdef MODE_SEGA
@@ -858,6 +868,13 @@ inline void sendRawSegaData()
       Serial.print("\n");
       lastState = currentState;
   } 
+  #endif
+  #ifdef MODE_GENESIS_MOUSE
+    for(int i = 0; i < 3; ++i)
+      for(int j = 0; j < 8; ++j)
+        Serial.print((rawData[i] & (1 << j)) == 0 ? "0" : "1");
+    
+    Serial.print("\n");
   #endif
   #endif
 }
@@ -1182,6 +1199,12 @@ inline void loop_Sega()
   sendRawSegaData();
 }
 
+inline void loop_Genesis_Mouse()
+{
+  segaController.getMouseState(rawData);
+  sendRawSegaData();
+}
+
 inline void loop_Classic()
 {
   currentState = classicController.getState();
@@ -1296,6 +1319,8 @@ void loop()
     loop_Intellivision();
 #elif defined CD32
     loop_CD32();
+#elif defined MODE_GENESIS_MOUSE
+    loop_Genesis_Mouse();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();

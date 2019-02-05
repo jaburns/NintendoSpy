@@ -22,6 +22,19 @@ namespace NintendoSpy.Readers
             return val;
         }
 
+        public static byte readByteBackwards(byte[] packet, int offset, byte numBits = 8, byte mask = 0x0F)
+        {
+            byte val = 0;
+            for (int i = 0; i < numBits; ++i)
+            {
+                if ((packet[i + offset] & mask) != 0)
+                {
+                    val |= (byte)(1 << i);
+                }
+            }
+            return val;
+        }
+
         public static void SetMouseProperties(float x, float y, ControllerStateBuilder state)
         {
             float y1 = y;

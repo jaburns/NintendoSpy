@@ -48,6 +48,11 @@ class SegaControllerSpy {
     public:
         SegaControllerSpy();
         word getState();
+        void getMouseState(byte data[3]);
+
+   private:
+      unsigned long last6buttonCheck;
+      bool sixButtonConnected;    
 };
 
 #endif
