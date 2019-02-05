@@ -94,7 +94,6 @@ KeyboardController keyboardController;
 #define ThreeDO_LATCH      2
 #define ThreeDO_DATA       4
 #define ThreeDO_CLOCK      3   
-#define ThreeDO_BITCOUNT  16
 
 #define ZERO  '\0'  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE    '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
@@ -325,6 +324,31 @@ void read_shiftRegister_reverse_clock( unsigned char bits )
     while( --bits > 0 );
 }
 
+template< unsigned char latch, unsigned char data, unsigned char clock >
+byte read_3do( )
+{
+    unsigned char *rawDataPtr = rawData;
+
+    byte numBitsToRead = 0;
+    byte bits = 0;
+    WAIT_FALLING_EDGE( latch );
+
+    do {
+        WAIT_LEADING_EDGE( clock );
+        *rawDataPtr = PIN_READ(data);
+        
+        if(bits == 0 && *rawDataPtr != 0)
+          numBitsToRead = bits = 32;
+        else if (bits == 0)
+         numBitsToRead = bits = 16;
+        
+        ++rawDataPtr;
+    }
+    while( --bits > 0 );
+
+    return numBitsToRead;
+}
+
 #define WAIT_LEADING_EDGE_PIN7 while( (PIND & 0b01000000) != 0){}; while( (PIND & 0b01000000) == 0){} ;
 
 void read_cd32_controller()
@@ -379,10 +403,13 @@ inline void sendRawData( unsigned char first, unsigned char count )
         Serial.print( rawData[i] ? "1" : "0" );
     }
     Serial.print("|");
+    int j = 0;
     for( unsigned char i = first ; i < first + count ; i++ ) {
-        Serial.print( rawData[i] ? "1" : "0" );
-        if (i % 8 == 0 && i != 0)
+
+        if (j % 8 == 0 && j != 0)
         Serial.print("|");
+        Serial.print( rawData[i] ? "1" : "0" );
+        ++j;
     }
     Serial.print("\n");
     #endif
@@ -1210,9 +1237,9 @@ inline void loop_NeoGeo()
 inline void loop_3DO()
 {
     noInterrupts();
-    read_shiftRegister_reverse_clock< ThreeDO_LATCH , ThreeDO_DATA , ThreeDO_CLOCK >( ThreeDO_BITCOUNT );
+    byte bits = read_3do< ThreeDO_LATCH , ThreeDO_DATA , ThreeDO_CLOCK >( );
     interrupts();
-    sendRawData( 0 , ThreeDO_BITCOUNT );
+    sendRawData( 0 , bits );
 }
 
 
