@@ -51,6 +51,10 @@ namespace NintendoSpy.Readers
         static public ControllerState ReadFromPacket_CD32(byte[] packet)
         {
             ControllerStateBuilder state = null;
+            if (packet.Length == 13)
+            {
+                return Classic.ReadFromPacket(packet);
+            }
             if (packet.Length == BUTTONS_CD32.Length)
             {
                 state = new ControllerStateBuilder();
@@ -71,7 +75,7 @@ namespace NintendoSpy.Readers
                 sbyte xVal = (sbyte)SignalTool.readByteBackwards(packet, 3);
                 sbyte yVal = (sbyte)SignalTool.readByteBackwards(packet, 11);
 
-                SignalTool.SetMouseProperties( xVal / 128.0f, yVal / -128.0f, state);
+                SignalTool.SetMouseProperties( xVal / -128.0f, yVal / 128.0f, state);
             }
 
             return state != null ? state.Build() : null;

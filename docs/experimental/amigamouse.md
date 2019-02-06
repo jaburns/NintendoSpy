@@ -70,10 +70,12 @@ Once the wiring is done, hook everything up to your game system and computer, no
 
 5. Select File->Open and open the ``DrivingController.ino`` file from the ``experimental/DrivingController`` folder of the unzipped RetroSpy release.
 
-6. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
+6. Uncomment either NTSC or PAL depending on your system.  Uncommenting neither will default to PAL.
+
+7. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/upload.png)
 
-7. Run ``RetroSpy.exe``.
+8. Run ``RetroSpy.exe``.
 
-8. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
+9. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.

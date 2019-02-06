@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Atari Joystick" author="chmaller" type="cd32">
+
+    <background name="Atari" image="atari.png" />
+
+    <button name="1" image="circle.png" x="21" y="20" width="26" height="26" />
+
+	<stick xname="x" yname="y" image="stick.png"
+	   x="58" y="69" width="35" height="35" xrange="12" yrange="12" yreverse="false" />
+	
+</skin>
