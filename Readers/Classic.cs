@@ -40,7 +40,7 @@ namespace NintendoSpy.Readers
 
                 if (y != 0 || x != 0)
                 {
-                    // Direction shows around the unit circle
+                    // point on the unit circle at the same angle
                     double radian = Math.Atan2(y, x);
                     float x1 = (float)Math.Cos(radian);
                     float y1 = (float)Math.Sin(radian);
