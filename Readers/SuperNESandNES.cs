@@ -50,7 +50,31 @@ namespace NintendoSpy.Readers
 
         static public ControllerState ReadFromPacket_CD32(byte[] packet)
         {
-            return readPacketButtons(packet, BUTTONS_CD32);
+            ControllerStateBuilder state = null;
+            if (packet.Length == BUTTONS_CD32.Length)
+            {
+                state = new ControllerStateBuilder();
+
+                for (int i = 0; i < BUTTONS_CD32.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(BUTTONS_CD32[i])) continue;
+                    state.SetButton(BUTTONS_CD32[i], packet[i] != 0x00);
+                }
+            }
+            else if (packet.Length == 19)
+            {
+                state = new ControllerStateBuilder();
+
+                state.SetButton("left", packet[0] != 0x00);
+                state.SetButton("right", packet[2] != 0x00);
+
+                sbyte xVal = (sbyte)SignalTool.readByteBackwards(packet, 3);
+                sbyte yVal = (sbyte)SignalTool.readByteBackwards(packet, 11);
+
+                SignalTool.SetMouseProperties( xVal / 128.0f, yVal / -128.0f, state);
+            }
+
+            return state != null ? state.Build() : null;
         }
 
         static public ControllerState ReadFromPacket_SNES (byte[] packet) {

@@ -11,7 +11,7 @@
 //#define MODE_SNES
 //#define MODE_NES
 //#define MODE_SEGA  // For Genesis. Use MODE_CLASSIC for Master System
-#define MODE_GENESIS_MOUSE
+//#define MODE_GENESIS_MOUSE
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
@@ -111,30 +111,61 @@ void setup()
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
     
-    #ifndef MODE_SEGA
-    #ifndef MODE_CLASSIC
-    PORTD = 0x00;
-    PORTB = 0x00;
-    DDRD  = 0x00;
-    #endif
-    #endif
-
-    #ifndef CD32
-    for(int i = 2; i <= 6; ++i)
-      pinMode(i, INPUT_PULLUP);
-    #else
-      for(int i = 2; i <= 8; ++i)
-      {
-        if (i != 5 && i != 7)
-          pinMode(i, INPUT_PULLUP);
-        else
-          pinMode(i, INPUT);
-      }
-    #endif
+#ifdef MODE_SEGA
+    sega_classic_pin_setup();
+#elif defined MODE_CLASSIC
+    sega_classic_pin_setup();
+#elif defined CD32    
+    cd32_pin_setup();
+#elif defined MODE_DETECT
+    if( !PINC_READ( MODEPIN_SEGA ) ) {
+        sega_classic_pin_setup();
+    } else if( !PINC_READ( MODEPIN_CLASSIC ) ) {
+        sega_classic_pin_setup();
+    } else if( !PINC_READ( MODEPIN_CD32 ) ) {
+        cd32_pin_setup();
+    } else {
+        common_pin_setup();
+    }
+#else
+    common_pin_setup();
+#endif
+ 
     lastState = -1;
     currentState = 0;
     
     Serial.begin( 115200 );
+}
+
+void sega_classic_pin_setup()
+{
+  for(int i = 2; i <= 6; ++i)
+    pinMode(i, INPUT_PULLUP);
+}
+
+void cd32_pin_setup()
+{
+  for(int i = 2; i <= 8; ++i)
+  {
+    PORTD = 0x00;
+    PORTB = 0x00;
+    DDRD  = 0x00;
+  
+    if (i != 5 && i != 7)
+      pinMode(i, INPUT_PULLUP);
+    else
+      pinMode(i, INPUT);
+  }
+}
+
+void common_pin_setup()
+{
+  PORTD = 0x00;
+  PORTB = 0x00;
+  DDRD  = 0x00;
+
+  for(int i = 2; i <= 6; ++i)
+    pinMode(i, INPUT_PULLUP);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -809,17 +840,10 @@ inline void sendRawTgData()
 inline void sendRawSegaData()
 {
   #ifndef DEBUG
-  
-  #ifdef MODE_GENESIS_MOUSE
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 8; ++j)
-      Serial.write((rawData[i] & (1 << j)) == 0 ? ZERO : ONE);
-  #else
   for (unsigned char i = 0; i < 13; ++i)
   {
     Serial.write (currentState & (1 << i) ? ONE : ZERO );
   }
-  #endif
   Serial.write( SPLIT );
   #else
   #ifdef MODE_SEGA
@@ -869,14 +893,21 @@ inline void sendRawSegaData()
       lastState = currentState;
   } 
   #endif
-  #ifdef MODE_GENESIS_MOUSE
+  #endif
+}
+
+inline void sendRawSegaMouseData()
+{
+  #ifndef DEBUG
+  for(int i = 0; i < 3; ++i)
+    for(int j = 0; j < 8; ++j)
+      Serial.write((rawData[i] & (1 << j)) == 0 ? ZERO : ONE);
+  #else
     for(int i = 0; i < 3; ++i)
       for(int j = 0; j < 8; ++j)
         Serial.print((rawData[i] & (1 << j)) == 0 ? "0" : "1");
-    
-    Serial.print("\n");
-  #endif
-  #endif
+  #endif   
+  Serial.print("\n");
 }
 
 // PORTD
@@ -1202,7 +1233,7 @@ inline void loop_Sega()
 inline void loop_Genesis_Mouse()
 {
   segaController.getMouseState(rawData);
-  sendRawSegaData();
+  sendRawSegaMouseData();
 }
 
 inline void loop_Classic()

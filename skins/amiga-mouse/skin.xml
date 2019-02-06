@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Amiga Tank Mouse" author="zoggins" type="mousetester">
+<skin name="Amiga Tank Mouse" author="zoggins" type="cd32">
 
     <background name="Default" image="commodore.png" />
 
