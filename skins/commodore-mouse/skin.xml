@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Commodore 1531" author="zoggins" type="mousetester">
+<skin name="Commodore 1531" author="zoggins" type="paddles">
 
     <background name="Default" image="commodore.png" />
 
