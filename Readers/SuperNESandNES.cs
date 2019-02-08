@@ -36,7 +36,7 @@ namespace NintendoSpy.Readers
 
         static readonly string[] BUTTONS_CD32 =
         {
-            "blue", "red", "yellow", "green", "forward", "backward", "pause", "up", "down", "left", "right"
+            null, null, "yellow", "green", "forward", "backward", "pause", null
         };
 
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
@@ -62,8 +62,16 @@ namespace NintendoSpy.Readers
                 for (int i = 0; i < BUTTONS_CD32.Length; ++i)
                 {
                     if (string.IsNullOrEmpty(BUTTONS_CD32[i])) continue;
-                    state.SetButton(BUTTONS_CD32[i], packet[i] != 0x00);
+                    state.SetButton(BUTTONS_CD32[i], (packet[i] & 0b10000000) == 0x00);
                 }
+
+                state.SetButton("blue", (packet[0] & 0b10000000) == 0);
+                state.SetButton("red", (packet[0] & 0b01000000) == 0);
+
+                state.SetButton("up", (packet[7] & 0b00000001) == 0);
+                state.SetButton("down", (packet[0] & 0b00000100) == 0);
+                state.SetButton("left", (packet[0] & 0b00001000) == 0);
+                state.SetButton("right", (packet[0]& 0b00010000) == 0);
             }
             else if (packet.Length == 19)
             {

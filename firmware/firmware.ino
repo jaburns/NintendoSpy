@@ -21,7 +21,8 @@
 //#define MODE_NEOGEO
 //#define MODE_3DO
 //#define INTELLIVISION
-//#define CD32
+//#define CD32_PAL
+//#define CD32_NTSC
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -115,7 +116,9 @@ void setup()
     sega_classic_pin_setup();
 #elif defined MODE_CLASSIC
     sega_classic_pin_setup();
-#elif defined CD32    
+#elif defined CD32_PAL    
+    cd32_pin_setup();
+#elif defined CD32_NTSC    
     cd32_pin_setup();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SEGA ) ) {
@@ -145,12 +148,13 @@ void sega_classic_pin_setup()
 
 void cd32_pin_setup()
 {
-  for(int i = 2; i <= 8; ++i)
-  {
-    PORTD = 0x00;
-    PORTB = 0x00;
-    DDRD  = 0x00;
+
+  PORTD = 0x00;
+  PORTB = 0x00;
+  DDRD  = 0x00;
   
+  for(int i = 2; i <= 8; ++i)
+  {  
     if (i != 5 && i != 7)
       pinMode(i, INPUT_PULLUP);
     else
@@ -383,43 +387,78 @@ byte read_3do( )
     return numBitsToRead;
 }
 
-#define WAIT_LEADING_EDGE_PIN7 while( (PIND & 0b01000000) != 0){}; while( (PIND & 0b01000000) == 0){} ;
+#define WAIT_LEADING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) != 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) == 0);
+#define WAIT_FALLING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) == 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) != 0);
 
-void read_cd32_controller()
+void read_cd32_controller_NTSC()
 {
-    unsigned char *rawDataPtr = rawData;
-
     WAIT_FALLING_EDGE(CD32_LATCH);
 
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[0] = PIND & 0b10000000 ? 0 : 1;
-      
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[1] = PIND & 0b10000000 ? 0 : 1;
-
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[2] = PIND & 0b10000000 ? 0 : 1;
+    WAIT_LEADING_EDGE_CD32_CLOCK(0);
     
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[3] = PIND & 0b10000000 ? 0 : 1;
+    WAIT_LEADING_EDGE_CD32_CLOCK(1);
 
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[4] = PIND & 0b10000000 ? 0 : 1;
-
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[5] = PIND & 0b10000000 ? 0 : 1;
+    WAIT_LEADING_EDGE_CD32_CLOCK(2);
     
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[6] = PIND & 0b10000000 ? 0 : 1;
+    WAIT_LEADING_EDGE_CD32_CLOCK(3);
 
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[7] = PIND & 0b10000000 ? 0 : 1;
+    WAIT_LEADING_EDGE_CD32_CLOCK(4);
 
-    rawData[7] =  (PINB & 0b00000001) == 0 ? 1 : 0;
-    rawData[8] =  (PIND & 0b00000100) == 0 ? 1 : 0;
-    rawData[9] =  (PIND & 0b00001000) == 0 ? 1 : 0;
-    rawData[10] = (PIND & 0b00010000) == 0 ? 1 : 0;
+    WAIT_LEADING_EDGE_CD32_CLOCK(5);
     
+    WAIT_LEADING_EDGE_CD32_CLOCK(6);
+
+    WAIT_LEADING_EDGE(CD32_LATCH);
+    rawData[0] = PIND;
+    rawData[7] = PINB;
+}
+
+void read_cd32_controller_PAL()
+{
+    WAIT_FALLING_EDGE(CD32_LATCH);
+
+    WAIT_FALLING_EDGE_CD32_CLOCK(0);
+    
+    WAIT_FALLING_EDGE_CD32_CLOCK(1);
+
+    WAIT_FALLING_EDGE_CD32_CLOCK(2);
+    
+    WAIT_FALLING_EDGE_CD32_CLOCK(3);
+
+    WAIT_FALLING_EDGE_CD32_CLOCK(4);
+
+    WAIT_FALLING_EDGE_CD32_CLOCK(5);
+    
+    WAIT_FALLING_EDGE_CD32_CLOCK(6);
+
+    WAIT_LEADING_EDGE(CD32_LATCH);
+    rawData[0] = PIND;
+    rawData[7] = PINB;
+    
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Sends a packet of controller data over the Arduino serial interface.
+inline void sendRawDataCd32( )
+{
+    #ifndef DEBUG
+    for( unsigned char i = 0 ; i < 8 ; i++ ) {
+        Serial.write( (rawData[i] & 0b11111101) );
+    }
+    Serial.write( SPLIT );
+    #else
+    Serial.print( (rawData[0] &  0b10000000) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b01000000) == 0 ? 0 : 1);
+    for( unsigned char i = 2 ; i < 9 ; i++ ) 
+    { 
+      Serial.print( (rawData[i] & 0b10000000) == 0 ? 0 : 1);
+    }
+    Serial.print( (rawData[7] &  0b00000001) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b00000100) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b00001000) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] & 0b00010000) == 0 ? 0 : 1);
+    Serial.print("\n");
+    #endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1308,12 +1347,20 @@ inline void loop_Intellivision()
       sendIntellivisionData_Raw();
 }
 
-inline void loop_CD32()
+inline void loop_CD32_PAL()
 {
     noInterrupts();
-    read_cd32_controller();
+    read_cd32_controller_PAL();
     interrupts();
-    sendRawData(0, CD32_BITCOUNT+4);
+    sendRawDataCd32();
+}
+
+inline void loop_CD32_NTSC()
+{
+    noInterrupts();
+    read_cd32_controller_NTSC();
+    interrupts();
+    sendRawDataCd32();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1348,8 +1395,10 @@ void loop()
     loop_3DO();
 #elif defined INTELLIVISION
     loop_Intellivision();
-#elif defined CD32
-    loop_CD32();
+#elif defined CD32_PAL
+    loop_CD32_PAL();
+#elif defined CD32_NTSC
+    loop_CD32_NTSC();
 #elif defined MODE_GENESIS_MOUSE
     loop_Genesis_Mouse();
 #elif defined MODE_DETECT
