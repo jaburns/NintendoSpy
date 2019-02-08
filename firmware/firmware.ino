@@ -21,8 +21,8 @@
 //#define MODE_NEOGEO
 //#define MODE_3DO
 //#define INTELLIVISION
-//#define CD32_PAL
-//#define CD32_NTSC
+//#define CD32        // WARNING: I have not gotten this work on my NTSC 500, but I am not sure if its just my computer or an NTSC issue.
+//#define CD32_HACK   // Try this one if you have problems on an NTSC machine, but the timings here may be specific to my machine.
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -116,9 +116,9 @@ void setup()
     sega_classic_pin_setup();
 #elif defined MODE_CLASSIC
     sega_classic_pin_setup();
-#elif defined CD32_PAL    
+#elif defined CD32
     cd32_pin_setup();
-#elif defined CD32_NTSC    
+#elif defined CD32_HACK
     cd32_pin_setup();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SEGA ) ) {
@@ -390,30 +390,87 @@ byte read_3do( )
 #define WAIT_LEADING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) != 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) == 0);
 #define WAIT_FALLING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) == 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) != 0);
 
-void read_cd32_controller_NTSC()
+void read_cd32_controller_HACK()
 {
     WAIT_FALLING_EDGE(CD32_LATCH);
 
-    WAIT_LEADING_EDGE_CD32_CLOCK(0);
-    
-    WAIT_LEADING_EDGE_CD32_CLOCK(1);
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS 
+    );
+    rawData[0] = PIND;
 
-    WAIT_LEADING_EDGE_CD32_CLOCK(2);
-    
-    WAIT_LEADING_EDGE_CD32_CLOCK(3);
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[1] = PIND;
 
-    WAIT_LEADING_EDGE_CD32_CLOCK(4);
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[2] = PIND;
 
-    WAIT_LEADING_EDGE_CD32_CLOCK(5);
-    
-    WAIT_LEADING_EDGE_CD32_CLOCK(6);
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[3] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS);
+    rawData[4] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[5] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[6] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[7] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[8] = PIND;
 
     WAIT_LEADING_EDGE(CD32_LATCH);
     rawData[0] = PIND;
     rawData[7] = PINB;
 }
 
-void read_cd32_controller_PAL()
+void read_cd32_controller()
 {
     WAIT_FALLING_EDGE(CD32_LATCH);
 
@@ -449,7 +506,7 @@ inline void sendRawDataCd32( )
     #else
     Serial.print( (rawData[0] &  0b10000000) == 0 ? 0 : 1);
     Serial.print( (rawData[0] &  0b01000000) == 0 ? 0 : 1);
-    for( unsigned char i = 2 ; i < 9 ; i++ ) 
+    for( unsigned char i = 2 ; i < 7 ; i++ ) 
     { 
       Serial.print( (rawData[i] & 0b10000000) == 0 ? 0 : 1);
     }
@@ -1347,18 +1404,18 @@ inline void loop_Intellivision()
       sendIntellivisionData_Raw();
 }
 
-inline void loop_CD32_PAL()
+inline void loop_CD32()
 {
     noInterrupts();
-    read_cd32_controller_PAL();
+    read_cd32_controller();
     interrupts();
     sendRawDataCd32();
 }
 
-inline void loop_CD32_NTSC()
+inline void loop_CD32_HACK()
 {
     noInterrupts();
-    read_cd32_controller_NTSC();
+    read_cd32_controller_HACK();
     interrupts();
     sendRawDataCd32();
 }
@@ -1395,10 +1452,10 @@ void loop()
     loop_3DO();
 #elif defined INTELLIVISION
     loop_Intellivision();
-#elif defined CD32_PAL
-    loop_CD32_PAL();
-#elif defined CD32_NTSC
-    loop_CD32_NTSC();
+#elif defined CD32
+    loop_CD32();
+#elif defined CD32_HACK
+    loop_CD32_HACK();
 #elif defined MODE_GENESIS_MOUSE
     loop_Genesis_Mouse();
 #elif defined MODE_DETECT
