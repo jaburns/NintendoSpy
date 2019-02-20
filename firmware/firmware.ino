@@ -656,7 +656,7 @@ inline void read_TgData()
 #define PS_CMD 5
 #define PS_DATA 6
 
-inline void read_Playstation2( )
+inline void read_Playstation( )
 {
   byte numBits = 0;
   WAIT_FALLING_EDGE(PS_ATT);
@@ -1152,7 +1152,7 @@ inline void loop_BoosterGrip()
 inline void loop_Playstation2()
 {
   noInterrupts();
-  read_Playstation2();
+  read_Playstation();
   interrupts();
   sendRawPs2Data();
 }
