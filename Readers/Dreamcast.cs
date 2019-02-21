@@ -14,6 +14,10 @@ namespace NintendoSpy.Readers
             "right2", "left2", "down2", "up2", "d", "x", "y", "z", "right", "left", "down", "up", "start", "a", "b", "c"    
         };
 
+        static readonly string[] MOUSE_BUTTONS = {
+            null, null, null, null, "start", "left", "right", "middle"
+        };
+
         static float readTrigger(byte input)
         {
             return (float)(input) / 256;
@@ -135,9 +139,69 @@ namespace NintendoSpy.Readers
                     state.SetAnalog("trig_r", readTrigger(rtrigger));
                     state.SetAnalog("trig_l", readTrigger(ltrigger));
 
-                    return state.Build();
-                }
 
+                }
+                else if (controllerType == 0x200)
+                {
+                    j += 24;
+
+                    int k = 0;
+                    for (int i = 0; i < MOUSE_BUTTONS.Length / 2; ++i)
+                    {
+                        if (!string.IsNullOrEmpty(MOUSE_BUTTONS[k]))
+                            state.SetButton(MOUSE_BUTTONS[k], (packet[j] & 0x2) == 0x0);
+                        if (!string.IsNullOrEmpty(MOUSE_BUTTONS[k + 1]))
+                            state.SetButton(MOUSE_BUTTONS[k + 1], (packet[j + 1] & 0x1) == 0x0);
+
+                        k += 2;
+                        j += 2;
+                    }
+
+                    ushort axis1 = 0;
+                    for (int i = 1; i >= 0; --i)
+                    {
+                        for (k = 0; k < 4; ++k)
+                        {
+                            axis1 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << ((7 - k * 2) + (i * 8)));
+                            axis1 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+                            j += 2;
+                        }
+                    }
+
+                    ushort axis2 = 0;
+                    for (int i = 1; i >= 0; --i)
+                    {
+                        for (k = 0; k < 4; ++k)
+                        {
+                            axis2 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << ((7 - k * 2) + (i * 8)));
+                            axis2 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+                            j += 2;
+                        }
+                    }
+
+                    j += 16;
+
+                    ushort axis3 = 0;
+                    for (int i = 1; i >= 0; --i)
+                    {
+                        for (k = 0; k < 4; ++k)
+                        {
+                            axis3 |= (ushort)(((packet[j] & 0x02) != 0 ? 1 : 0) << ((7 - k * 2) + (i * 8)));
+                            axis3 |= (ushort)(((packet[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+                            j += 2;
+                        }
+                    }
+
+                    float x = (axis2 - 512) / 512.0f;
+                    float y = -1 * (axis1 - 512) / 512.0f;
+                    
+                    SignalTool.SetMouseProperties(x, y, state);
+
+                    state.SetButton("scroll_up", axis3 < 512);
+                    state.SetButton("scroll_down", axis3 > 512);
+
+                }
+                return state.Build();
             }
 
             return null;

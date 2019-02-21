@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="3DO Mouse" author="zoggins" type="3do">
+
+  <background name="Default" image="3DO.png" />
+
+  <button name="left" image="circle.png" x="34" y="43" width="50" height="50" />
+  <button name="middle" image="circle.png" x="144" y="43" width="50" height="50" />
+  <button name="right" image="circle.png" x="274" y="43" width="50" height="50" />
+
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="183" y="388" xrange="140" yrange="140" height="30" width="30" yreverse="true"/>
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="183" y="388" xrange="140" yrange="140" height="30" width="30" yreverse="true"/>
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="183" y="388" xrange="140" yrange="140" height="30" width="30" yreverse="true"/>
+
+</skin>

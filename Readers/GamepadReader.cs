@@ -14,7 +14,7 @@ namespace NintendoSpy.Readers
         public event StateEventHandler ControllerStateChanged;
         public event EventHandler ControllerDisconnected;
 
-        const double TIMER_MS = 30;
+        const double TIMER_MS = 7;
         const int RANGE = 1000;
 
         DirectInput _dinput;

@@ -62,20 +62,23 @@ namespace NintendoSpy.Readers
             state.SetAnalog("wireless-analog_left", readAnalogButton(packet[8]));
             state.SetAnalog("wireless-analog_up", readAnalogButton(packet[6]));
             state.SetAnalog("wireless-analog_down", readAnalogButton(packet[7]));
-            
+
+            float x = 0;
+            float y = 0;
+
             if (packet[2] > 0)
-                state.SetAnalog("stick_x", -1*readAnalogButton(packet[2]));
+                x = -1*readAnalogButton(packet[2]);
             else if (packet[3] > 0)
-                state.SetAnalog("stick_x", readAnalogButton(packet[3]));
-            else
-                state.SetAnalog("stick_x", 0);
+                x = readAnalogButton(packet[3]);
 
             if (packet[0] > 0)
-                state.SetAnalog("stick_y", -1 * readAnalogButton(packet[0]));
+                y = readAnalogButton(packet[0]);
             else if (packet[1] > 0)
-                state.SetAnalog("stick_y", readAnalogButton(packet[1]));
-            else
-                state.SetAnalog("stick_y", 0);
+                y = -1 * readAnalogButton(packet[1]);
+
+            state.SetAnalog("stick_x", x);
+            state.SetAnalog("stick_y", y);
+            SignalTool.SetMouseProperties(x, y, state);
 
             return state.Build ();
         }
