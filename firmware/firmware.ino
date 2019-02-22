@@ -44,6 +44,8 @@ byte ssState2 = 0;
 byte ssState3 = 0;
 byte ssState4 = 0;
 
+bool seenGC2N64 = false;
+
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
 ClassicControllerSpy classicController(2, 3, 4, 5, 7, 8);
@@ -51,10 +53,6 @@ ClassicControllerSpy classicController(2, 3, 4, 5, 7, 8);
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
 BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
-
-#ifdef MODE_KEYBOARD_CONTROLLER
-KeyboardController keyboardController;
-#endif
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
@@ -72,15 +70,14 @@ KeyboardController keyboardController;
 #define MODEPIN_GC   2
 
 #define N64_PIN        2
-#define N64_PREFIX     9
 #define N64_BITCOUNT  32
 
-#define SNES_LATCH			     3
-#define SNES_DATA			       4
-#define SNES_CLOCK			     6
-#define SNES_BITCOUNT		    16
-#define SNES_BITCOUNT_EXT	  32
-#define NES_BITCOUNT		     8
+#define SNES_LATCH           3
+#define SNES_DATA            4
+#define SNES_CLOCK           6
+#define SNES_BITCOUNT       16
+#define SNES_BITCOUNT_EXT   32
+#define NES_BITCOUNT         8
 
 #define CD32_LATCH    5  // Digital Pin 5
 #define CD32_DATA     7  // Digital Pin 7
@@ -101,7 +98,7 @@ KeyboardController keyboardController;
 #define SPLIT '\n'  // Use a new-line character to split up the controller state packets.
 
 // Declare some space to store the bits we read from a controller.
-unsigned char rawData[ 256 ];
+unsigned char rawData[ 1024 ];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
@@ -116,6 +113,8 @@ void setup()
     DDRD  = 0x00;
     #endif
     #endif
+
+    seenGC2N64 = false;
 
     #ifndef CD32
     for(int i = 2; i <= 6; ++i)
@@ -162,20 +161,88 @@ read_loop:
     goto read_loop;
 }
 
+void read_N64( )
+{
+    unsigned short bits;
+    
+    unsigned char *rawDataPtr = &rawData[1];
+    byte bit7, bit6, bit5, bit4, bit3, bit2, bit1, bit0;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit7 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit6 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit5 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit4 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit3 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    bit2 = PIND & 0b00000100;
+    if (bit2 != 0)  // Controller Reset
+    {
+          WAIT_FALLING_EDGE( N64_PIN );
+          asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+          // bit1 = PIND & 0b00000100;
+          WAIT_FALLING_EDGE( N64_PIN );
+          asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+          // bit0 = PIND & 0b00000100;
+          bits = 25;
+          rawData[0] = 0xFF;
+          goto read_loop;
+    }
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    bit1 = PIND & 0b00000100;
+    if (bit1 != 0) // read or write to memory pack (this doesn't work correctly)
+    {
+          WAIT_FALLING_EDGE( N64_PIN );
+          asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+          // bit0 = PIND & 0b00000100;
+          bits = 281;
+          rawData[0] = 0x02;
+          goto read_loop;
+    }
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    bit0 = PIND & 0b00000100;
+    if (bit0 != 0) // controller poll
+    {
+          bits = 33;
+          rawData[0] = 0x01;
+          goto read_loop;
+    }
+    bits = 25;   // Get controller info
+    rawData[0] = 0x00;
+           
+read_loop:
+
+    // Wait for the line to go high then low.
+    WAIT_FALLING_EDGE( N64_PIN );
+
+    // Wait ~2us between line reads
+    
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+
+    // Read a bit from the line and store as a byte in "rawData"
+    *rawDataPtr = PIND & 0b00000100;
+    ++rawDataPtr;
+    if( --bits == 0 ) return;
+
+    goto read_loop;
+}
+
 // Verifies that the 9 bits prefixing N64 controller data in 'rawData'
 // are actually indicative of a controller state signal.
 inline bool checkPrefixN64 ()
 {
-    if( rawData[0] != 0 ) return false; // 0
-    if( rawData[1] != 0 ) return false; // 0
-    if( rawData[2] != 0 ) return false; // 0
-    if( rawData[3] != 0 ) return false; // 0
-    if( rawData[4] != 0 ) return false; // 0
-    if( rawData[5] != 0 ) return false; // 0
-    if( rawData[6] != 0 ) return false; // 0
-    if( rawData[7] == 0 ) return false; // 1
-    if( rawData[8] == 0 ) return false; // 1
-    return true;
+    return rawData[0] == 0x01;
 }
 
 inline bool checkPrefixGC ()
@@ -205,8 +272,75 @@ inline bool checkPrefixGC ()
     //if( rawData[22] != 0 ) return false; // 0 or 1
     if( rawData[23] != 0 ) return false; // 0
     if( rawData[24] == 0 ) return false; // 1
+    seenGC2N64 = false;
     return true;
 }
+
+inline bool checkBothGCPrefixOnRaphnet()
+{
+    if( rawData[0] != 0 ) return false; // 0
+    if( rawData[1] != 0 ) return false; // 0
+    if( rawData[2] != 0 ) return false; // 0
+    if( rawData[3] != 0 ) return false; // 0
+    if( rawData[4] != 0 ) return false; // 0
+    if( rawData[5] != 0 ) return false; // 0
+    if( rawData[6] != 0 ) return false; // 0
+    if( rawData[7] != 0 ) return false; // 0
+    if( rawData[8] == 0 ) return false; // 1
+    if( rawData[9] != 0 ) return false; // 0
+    if( rawData[10] != 0 ) return false; // 0
+    if( rawData[11] != 0 ) return false; // 0
+    if( rawData[12] != 0 ) return false; // 0
+    if( rawData[13] == 0 ) return false; // 1
+    if( rawData[14] != 0 ) return false; // 0
+    if( rawData[15] != 0 ) return false; // 0
+    if( rawData[16] == 0 ) return false; // 1
+    if( rawData[17] != 0 ) return false; // 0
+    if( rawData[18] != 0 ) return false; // 0
+    if( rawData[19] != 0 ) return false; // 0
+    if( rawData[20] != 0 ) return false; // 0
+    if( rawData[21] != 0 ) return false; // 0
+    if( rawData[22] != 0 ) return false; // 0
+    if( rawData[23] != 0 ) return false; // 0
+    if( rawData[24] != 0 ) return false; // 0
+    if( rawData[25] != 0 ) return false; // 0 
+    //if( rawData[26] != 0 ) return false; // 0 or 1
+    if( rawData[27] == 0 ) return false; // 1
+    if( rawData[28] != 0 ) return false; // 0
+    if( rawData[29] != 0 ) return false; // 0
+    if( rawData[30] != 0 ) return false; // 0
+    if( rawData[31] == 0 ) return false; // 1
+    if( rawData[32] == 0 ) return false; // 1
+    if( rawData[33] != 0 ) return false; // 0
+    if( rawData[34] != 0 ) return false; // 0
+    if( rawData[35] == 0 ) return false; // 1
+    if( rawData[36] != 0 ) return false; // 0
+    if( rawData[37] != 0 ) return false; // 0
+    if( rawData[38] != 0 ) return false; // 0
+    if( rawData[39] != 0 ) return false; // 0
+    if( rawData[40] != 0 ) return false; // 0
+    if( rawData[41] != 0 ) return false; // 0
+    if( rawData[42] != 0 ) return false; // 0
+    if( rawData[43] != 0 ) return false; // 0
+    if( rawData[44] != 0 ) return false; // 0
+    if( rawData[45] != 0 ) return false; // 0
+    if( rawData[46] != 0 ) return false; // 0
+    if( rawData[47] != 0 ) return false; // 0
+    if( rawData[48] == 0 ) return false; // 1
+    if( rawData[49] == 0 ) return false; // 1
+    if( rawData[50] != 0 ) return false; // 0
+    if( rawData[51] != 0 ) return false; // 0
+    if( rawData[52] != 0 ) return false; // 0
+    if( rawData[53] != 0 ) return false; // 0
+    if( rawData[54] != 0 ) return false; // 0
+    if( rawData[55] != 0 ) return false; // 0
+    if( rawData[56] != 0 ) return false; // 0 
+    if( rawData[57] != 0 ) return false; // 0
+    if( rawData[58] == 0 ) return false; // 1
+    seenGC2N64 = true;
+    return true;
+}
+
 
 inline bool checkPrefixGBA ()
 {
@@ -222,6 +356,7 @@ inline bool checkPrefixGBA ()
     if( rawData[9] != 0 ) return false; // 0
     if( rawData[10] != 0 ) return false; // 0
     if( rawData[11] == 0 ) return false; // 1
+    seenGC2N64 = false;
     return true;
 }
 
@@ -379,10 +514,34 @@ inline void sendRawData( unsigned char first, unsigned char count )
         Serial.print( rawData[i] ? "1" : "0" );
     }
     Serial.print("|");
+    int j = 0;
     for( unsigned char i = first ; i < first + count ; i++ ) {
-        Serial.print( rawData[i] ? "1" : "0" );
-        if (i % 8 == 0 && i != 0)
+
+        if (j % 8 == 0 && j != 0)
         Serial.print("|");
+        Serial.print( rawData[i] ? "1" : "0" );
+        ++j;
+    }
+    Serial.print("\n");
+    #endif
+}
+
+inline void sendN64Data( unsigned char first, unsigned char count )
+{
+    #ifndef DEBUG
+    for( unsigned char i = first ; i < first + count ; i++ ) {
+        Serial.write( rawData[i] ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else
+    Serial.print(rawData[0]);
+    Serial.print("|");
+    int j = 0;
+    for( unsigned char i = 0 ; i < 32; i++ ) {
+        if (j % 8 == 0 && j != 0)
+        Serial.print("|");
+                Serial.print( rawData[i+2] ? "1" : "0" );
+        j++;
     }
     Serial.print("\n");
     #endif
@@ -405,8 +564,8 @@ inline void sendRawGBAData()
   Serial.write(rawData[22] ? ONE : ZERO);
   Serial.write(rawData[18] ? ONE : ZERO);
   Serial.write(rawData[17] ? ONE : ZERO);
-  Serial.write(rawData[19] ? ONE : ZERO);
   Serial.write(rawData[20] ? ONE : ZERO);
+  Serial.write(rawData[19] ? ONE : ZERO);
   Serial.write(ONE);
   for(int i = 0; i < 7; ++i)
     Serial.write(ZERO );
@@ -439,8 +598,8 @@ inline void sendRawGBAData()
   Serial.print(rawData[22] ? "s" : "0");
   Serial.print(rawData[18] ? "u" : "0");
   Serial.print(rawData[17] ? "d" : "0");
-  Serial.print(rawData[19] ? "r" : "0");
   Serial.print(rawData[20] ? "l" : "0");
+  Serial.print(rawData[19] ? "r" : "0");
   Serial.print(128);
   Serial.print(128);
   Serial.print(128);
@@ -1085,25 +1244,45 @@ void sendIntellivisionData_Raw()
 
 inline void loop_GC()
 {
-    noInterrupts();
-    read_oneWire< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
-    interrupts();
-    if (checkPrefixGC() ) {
-      sendRawData( GC_PREFIX , GC_BITCOUNT );
+    if (!seenGC2N64)
+    {
+      noInterrupts();
+      read_oneWire< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
+      interrupts();
+      if (checkPrefixGC()) {
+        sendRawData( GC_PREFIX, GC_BITCOUNT );
+      }
+      else if (checkPrefixGBA() ) {
+        sendRawGBAData();
+      }
+      else if (checkBothGCPrefixOnRaphnet()) {
+         // Sets seenGC2N64RaphnetAdapter to true
+      }
     }
-    else if (checkPrefixGBA() ) {
-      sendRawGBAData();
+    else
+    {
+      noInterrupts();
+      read_oneWire< GC_PIN >( 34+GC_PREFIX + GC_BITCOUNT );
+      interrupts();
+      if (checkBothGCPrefixOnRaphnet())
+        sendRawData(34+GC_PREFIX, GC_BITCOUNT);
+      else if (checkPrefixGC())
+        sendRawData( GC_PREFIX, GC_BITCOUNT );
+      else if (checkPrefixGBA() )
+        sendRawGBAData();
     }
 }
 
 inline void loop_N64()
 {
     noInterrupts();
-    read_oneWire< N64_PIN >( N64_PREFIX + N64_BITCOUNT );
+    read_N64();
     interrupts();
     if( checkPrefixN64() ) {
-        sendRawData( N64_PREFIX , N64_BITCOUNT );
+        sendN64Data( 2 , N64_BITCOUNT);
     }
+    else  // This makes no sense, but its needed after command 0x0 or else you get garbage on the line
+      delay(2);
 }
 
 inline void loop_SNES()

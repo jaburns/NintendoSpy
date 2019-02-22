@@ -31,7 +31,6 @@
 #define MODEPIN_DREAMCAST   36
 
 #define N64_PIN        2
-#define N64_PREFIX     9
 #define N64_BITCOUNT  32
 
 #define SNES_LATCH           3
@@ -53,6 +52,7 @@
 byte rawData[16000];
 byte* p;
 int byteCount;
+bool seenGC2N64 = false;
 
 void dreamcast_setup()
 { 
@@ -97,6 +97,8 @@ void setup()
     common_pin_setup();
   #endif
 
+  seenGC2N64 = false;
+
   delay(5000);
   
   Serial.begin( 115200 );
@@ -129,20 +131,89 @@ read_loop:
     goto read_loop;
 }
 
+void read_N64( )
+{
+    unsigned short bits;
+    
+    unsigned char *rawDataPtr = &rawData[1];
+    byte bit7, bit6, bit5, bit4, bit3, bit2, bit1, bit0;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit7 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit6 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit5 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit4 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit3 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    bit2 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+    if (bit2 != 0)  // Controller Reset
+    {
+          WAIT_FALLING_EDGE( N64_PIN );
+          asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+          // bit1 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+          WAIT_FALLING_EDGE( N64_PIN );
+          asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+          // bit0 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+          bits = 25;
+          rawData[0] = 0xFF;
+          goto read_loop;
+    }
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    bit1 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+    if (bit1 != 0) // read or write to memory pack (this doesn't work correctly)
+    {
+          WAIT_FALLING_EDGE( N64_PIN );
+          asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+          // bit0 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+          bits = 281;
+          rawData[0] = 0x02;
+          goto read_loop;
+    }
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    bit0 = (GPIOD_PDIR & 0xFF) & 0b00000100;
+    if (bit0 != 0) // controller poll
+    {
+          bits = 33;
+          rawData[0] = 0x01;
+          goto read_loop;
+    }
+    bits = 25;   // Get controller info
+    rawData[0] = 0x00;
+           
+read_loop:
+
+    // Wait for the line to go high then low.
+    WAIT_FALLING_EDGE( N64_PIN );
+
+    // Wait ~2us between line reads
+    
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+
+    // Read a bit from the line and store as a byte in "rawData"
+    *rawDataPtr = (GPIOD_PDIR & 0xFF) & 0b00000100;
+    ++rawDataPtr;
+    if( --bits == 0 ) return;
+
+    goto read_loop;
+}
+
+
 // Verifies that the 9 bits prefixing N64 controller data in 'rawData'
 // are actually indicative of a controller state signal.
 inline bool checkPrefixN64 ()
 {
-    if( rawData[0] != 0 ) return false; // 0
-    if( rawData[1] != 0 ) return false; // 0
-    if( rawData[2] != 0 ) return false; // 0
-    if( rawData[3] != 0 ) return false; // 0
-    if( rawData[4] != 0 ) return false; // 0
-    if( rawData[5] != 0 ) return false; // 0
-    if( rawData[6] != 0 ) return false; // 0
-    if( rawData[7] == 0 ) return false; // 1
-    if( rawData[8] == 0 ) return false; // 1
-    return true;
+    return rawData[0] == 0x01;
 }
 
 inline bool checkPrefixGC ()
@@ -172,8 +243,75 @@ inline bool checkPrefixGC ()
     //if( rawData[22] != 0 ) return false; // 0 or 1
     if( rawData[23] != 0 ) return false; // 0
     if( rawData[24] == 0 ) return false; // 1
+    seenGC2N64 = false;
     return true;
 }
+
+inline bool checkBothGCPrefixOnRaphnet()
+{
+    if( rawData[0] != 0 ) return false; // 0
+    if( rawData[1] != 0 ) return false; // 0
+    if( rawData[2] != 0 ) return false; // 0
+    if( rawData[3] != 0 ) return false; // 0
+    if( rawData[4] != 0 ) return false; // 0
+    if( rawData[5] != 0 ) return false; // 0
+    if( rawData[6] != 0 ) return false; // 0
+    if( rawData[7] != 0 ) return false; // 0
+    if( rawData[8] == 0 ) return false; // 1
+    if( rawData[9] != 0 ) return false; // 0
+    if( rawData[10] != 0 ) return false; // 0
+    if( rawData[11] != 0 ) return false; // 0
+    if( rawData[12] != 0 ) return false; // 0
+    if( rawData[13] == 0 ) return false; // 1
+    if( rawData[14] != 0 ) return false; // 0
+    if( rawData[15] != 0 ) return false; // 0
+    if( rawData[16] == 0 ) return false; // 1
+    if( rawData[17] != 0 ) return false; // 0
+    if( rawData[18] != 0 ) return false; // 0
+    if( rawData[19] != 0 ) return false; // 0
+    if( rawData[20] != 0 ) return false; // 0
+    if( rawData[21] != 0 ) return false; // 0
+    if( rawData[22] != 0 ) return false; // 0
+    if( rawData[23] != 0 ) return false; // 0
+    if( rawData[24] != 0 ) return false; // 0
+    if( rawData[25] != 0 ) return false; // 0 
+    //if( rawData[26] != 0 ) return false; // 0 or 1
+    if( rawData[27] == 0 ) return false; // 1
+    if( rawData[28] != 0 ) return false; // 0
+    if( rawData[29] != 0 ) return false; // 0
+    if( rawData[30] != 0 ) return false; // 0
+    if( rawData[31] == 0 ) return false; // 1
+    if( rawData[32] == 0 ) return false; // 1
+    if( rawData[33] != 0 ) return false; // 0
+    if( rawData[34] != 0 ) return false; // 0
+    if( rawData[35] == 0 ) return false; // 1
+    if( rawData[36] != 0 ) return false; // 0
+    if( rawData[37] != 0 ) return false; // 0
+    if( rawData[38] != 0 ) return false; // 0
+    if( rawData[39] != 0 ) return false; // 0
+    if( rawData[40] != 0 ) return false; // 0
+    if( rawData[41] != 0 ) return false; // 0
+    if( rawData[42] != 0 ) return false; // 0
+    if( rawData[43] != 0 ) return false; // 0
+    if( rawData[44] != 0 ) return false; // 0
+    if( rawData[45] != 0 ) return false; // 0
+    if( rawData[46] != 0 ) return false; // 0
+    if( rawData[47] != 0 ) return false; // 0
+    if( rawData[48] == 0 ) return false; // 1
+    if( rawData[49] == 0 ) return false; // 1
+    if( rawData[50] != 0 ) return false; // 0
+    if( rawData[51] != 0 ) return false; // 0
+    if( rawData[52] != 0 ) return false; // 0
+    if( rawData[53] != 0 ) return false; // 0
+    if( rawData[54] != 0 ) return false; // 0
+    if( rawData[55] != 0 ) return false; // 0
+    if( rawData[56] != 0 ) return false; // 0 
+    if( rawData[57] != 0 ) return false; // 0
+    if( rawData[58] == 0 ) return false; // 1
+    seenGC2N64 = true;
+    return true;
+}
+
 
 inline bool checkPrefixGBA ()
 {
@@ -189,6 +327,7 @@ inline bool checkPrefixGBA ()
     if( rawData[9] != 0 ) return false; // 0
     if( rawData[10] != 0 ) return false; // 0
     if( rawData[11] == 0 ) return false; // 1
+    seenGC2N64 = false;
     return true;
 }
 
@@ -260,24 +399,42 @@ inline void loop_SNES()
 inline void loop_N64()
 {
     noInterrupts();
-    read_oneWire< N64_PIN >( N64_PREFIX + N64_BITCOUNT );
+    read_N64();
     interrupts();
     if( checkPrefixN64() ) {
-        sendRawData( N64_PREFIX , N64_BITCOUNT );
+        sendN64Data( 2 , N64_BITCOUNT);
     }
     delay(5);
 }
 
 inline void loop_GC()
 {
-    noInterrupts();
-    read_oneWire< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
-    interrupts();
-    if (checkPrefixGC() ) {
-      sendRawData( GC_PREFIX , GC_BITCOUNT );
+    if (!seenGC2N64)
+    {
+      noInterrupts();
+      read_oneWire< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
+      interrupts();
+      if (checkPrefixGC()) {
+        sendRawData( GC_PREFIX, GC_BITCOUNT );
+      }
+      else if (checkPrefixGBA() ) {
+        sendRawGBAData();
+      }
+      else if (checkBothGCPrefixOnRaphnet()) {
+         // Sets seenGC2N64RaphnetAdapter to true
+      }
     }
-    else if (checkPrefixGBA() ) {
-      sendRawGBAData();
+    else
+    {
+      noInterrupts();
+      read_oneWire< GC_PIN >( 34+GC_PREFIX + GC_BITCOUNT );
+      interrupts();
+      if (checkBothGCPrefixOnRaphnet())
+        sendRawData(34+GC_PREFIX, GC_BITCOUNT);
+      else if (checkPrefixGC())
+        sendRawData( GC_PREFIX, GC_BITCOUNT );
+      else if (checkPrefixGBA() )
+        sendRawGBAData();
     }
     delay(5);
 }
@@ -591,6 +748,28 @@ inline void sendRawData( unsigned char first, unsigned char count )
         Serial.print( rawData[i] ? "1" : "0" );
         if (i % 8 == 0 && i != 0)
         Serial.print("|");
+    }
+    Serial.print("\n");
+    #endif
+}
+
+
+inline void sendN64Data( unsigned char first, unsigned char count )
+{
+    #ifndef DEBUG
+    for( unsigned char i = first ; i < first + count ; i++ ) {
+        Serial.write( rawData[i] ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else
+    Serial.print(rawData[0]);
+    Serial.print("|");
+    int j = 0;
+    for( unsigned char i = 0 ; i < 32; i++ ) {
+        if (j % 8 == 0 && j != 0)
+        Serial.print("|");
+                Serial.print( rawData[i+2] ? "1" : "0" );
+        j++;
     }
     Serial.print("\n");
     #endif
