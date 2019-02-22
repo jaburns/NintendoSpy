@@ -10,7 +10,8 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
-//#define MODE_SEGA
+//#define MODE_SEGA  // For Genesis. Use MODE_CLASSIC for Master System
+//#define MODE_GENESIS_MOUSE
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
@@ -20,7 +21,8 @@
 //#define MODE_NEOGEO
 //#define MODE_3DO
 //#define INTELLIVISION
-//#define CD32
+//#define CD32        // WARNING: I have not gotten this work on my NTSC 500, but I am not sure if its just my computer or an NTSC issue.
+//#define CD32_HACK   // Try this one if you have problems on an NTSC machine, but the timings here may be specific to my machine.
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -91,7 +93,7 @@ BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
 #define ThreeDO_LATCH      2
 #define ThreeDO_DATA       4
 #define ThreeDO_CLOCK      3   
-#define ThreeDO_BITCOUNT  16
+#define ThreeDO_BITCOUNT  32
 
 #define ZERO  '\0'  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE    '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
@@ -104,34 +106,68 @@ unsigned char rawData[ 1024 ];
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
-    #ifndef MODE_SEGA
-    #ifndef MODE_CLASSIC
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
-    PORTD = 0x00;
-    PORTB = 0x00;
-    DDRD  = 0x00;
-    #endif
-    #endif
-
-    seenGC2N64 = false;
-
-    #ifndef CD32
-    for(int i = 2; i <= 6; ++i)
-      pinMode(i, INPUT_PULLUP);
-    #else
-      for(int i = 2; i <= 8; ++i)
-      {
-        if (i != 5 && i != 7)
-          pinMode(i, INPUT_PULLUP);
-        else
-          pinMode(i, INPUT);
-      }
-    #endif
+  
+#ifdef MODE_SEGA
+    sega_classic_pin_setup();
+#elif defined MODE_CLASSIC
+    sega_classic_pin_setup();
+#elif defined CD32
+    cd32_pin_setup();
+#elif defined CD32_HACK
+    cd32_pin_setup();
+#elif defined MODE_DETECT
+    if( !PINC_READ( MODEPIN_SEGA ) ) {
+        sega_classic_pin_setup();
+    } else if( !PINC_READ( MODEPIN_CLASSIC ) ) {
+        sega_classic_pin_setup();
+    } else if( !PINC_READ( MODEPIN_CD32 ) ) {
+        cd32_pin_setup();
+    } else {
+        common_pin_setup();
+    }
+#else
+    common_pin_setup();
+#endif
+  
     lastState = -1;
     currentState = 0;
-    
+    seenGC2N64 = false;
+  
     Serial.begin( 115200 );
+}
+
+void sega_classic_pin_setup()
+{
+  for(int i = 2; i <= 6; ++i)
+    pinMode(i, INPUT_PULLUP);
+}
+
+void cd32_pin_setup()
+{
+
+  PORTD = 0x00;
+  PORTB = 0x00;
+  DDRD  = 0x00;
+  
+  for(int i = 2; i <= 8; ++i)
+  {  
+    if (i != 5 && i != 7)
+      pinMode(i, INPUT_PULLUP);
+    else
+      pinMode(i, INPUT);
+  }
+}
+
+void common_pin_setup()
+{
+  PORTD = 0x00;
+  PORTB = 0x00;
+  DDRD  = 0x00;
+
+  for(int i = 2; i <= 6; ++i)
+    pinMode(i, INPUT_PULLUP);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -434,7 +470,7 @@ unsigned char read_shiftRegister_SNES()
     {
       bits = 0;
       do {
-          WAIT_FALLING_EDGE( clock );
+	      WAIT_FALLING_EDGE( clock );
           rawData[position++] = !PIN_READ(data);
       }
       while( ++bits <= SNES_BITCOUNT );
@@ -460,43 +496,160 @@ void read_shiftRegister_reverse_clock( unsigned char bits )
     while( --bits > 0 );
 }
 
-#define WAIT_LEADING_EDGE_PIN7 while( (PIND & 0b01000000) != 0){}; while( (PIND & 0b01000000) == 0){} ;
-
-void read_cd32_controller()
+template< unsigned char latch, unsigned char data, unsigned char clock >
+byte read_3do( )
 {
     unsigned char *rawDataPtr = rawData;
 
+    byte numBitsToRead = 0;
+    byte bits = 0;
+    WAIT_FALLING_EDGE( latch );
+
+    do {
+        WAIT_LEADING_EDGE( clock );
+        *rawDataPtr = PIN_READ(data);
+        
+        if(bits == 0 && *rawDataPtr != 0)
+          numBitsToRead = bits = 32;
+        else if (bits == 0)
+         numBitsToRead = bits = 16;
+        
+        ++rawDataPtr;
+    }
+    while( --bits > 0 );
+
+    return numBitsToRead;
+}
+
+#define WAIT_LEADING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) != 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) == 0);
+#define WAIT_FALLING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) == 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) != 0);
+
+void read_cd32_controller_HACK()
+{
     WAIT_FALLING_EDGE(CD32_LATCH);
 
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[0] = PIND & 0b10000000 ? 0 : 1;
-      
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[1] = PIND & 0b10000000 ? 0 : 1;
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS 
+    );
+    rawData[0] = PIND;
 
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[2] = PIND & 0b10000000 ? 0 : 1;
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[1] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[2] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[3] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS);
+    rawData[4] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[5] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[6] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[7] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[8] = PIND;
+
+    WAIT_LEADING_EDGE(CD32_LATCH);
+    rawData[0] = PIND;
+    rawData[7] = PINB;
+}
+
+void read_cd32_controller()
+{
+    WAIT_FALLING_EDGE(CD32_LATCH);
+
+    WAIT_FALLING_EDGE_CD32_CLOCK(0);
     
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[3] = PIND & 0b10000000 ? 0 : 1;
+    WAIT_FALLING_EDGE_CD32_CLOCK(1);
 
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[4] = PIND & 0b10000000 ? 0 : 1;
-
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[5] = PIND & 0b10000000 ? 0 : 1;
+    WAIT_FALLING_EDGE_CD32_CLOCK(2);
     
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[6] = PIND & 0b10000000 ? 0 : 1;
+    WAIT_FALLING_EDGE_CD32_CLOCK(3);
 
-    WAIT_LEADING_EDGE_PIN7;
-    rawData[7] = PIND & 0b10000000 ? 0 : 1;
+    WAIT_FALLING_EDGE_CD32_CLOCK(4);
 
-    rawData[7] =  (PINB & 0b00000001) == 0 ? 1 : 0;
-    rawData[8] =  (PIND & 0b00000100) == 0 ? 1 : 0;
-    rawData[9] =  (PIND & 0b00001000) == 0 ? 1 : 0;
-    rawData[10] = (PIND & 0b00010000) == 0 ? 1 : 0;
+    WAIT_FALLING_EDGE_CD32_CLOCK(5);
     
+    WAIT_FALLING_EDGE_CD32_CLOCK(6);
+
+    WAIT_LEADING_EDGE(CD32_LATCH);
+    rawData[0] = PIND;
+    rawData[7] = PINB;
+    
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Sends a packet of controller data over the Arduino serial interface.
+inline void sendRawDataCd32( )
+{
+    #ifndef DEBUG
+    for( unsigned char i = 0 ; i < 8 ; i++ ) {
+        Serial.write( (rawData[i] & 0b11111101) );
+    }
+    Serial.write( SPLIT );
+    #else
+    Serial.print( (rawData[0] &  0b10000000) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b01000000) == 0 ? 0 : 1);
+    for( unsigned char i = 2 ; i < 7 ; i++ ) 
+    { 
+      Serial.print( (rawData[i] & 0b10000000) == 0 ? 0 : 1);
+    }
+    Serial.print( (rawData[7] &  0b00000001) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b00000100) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b00001000) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] & 0b00010000) == 0 ? 0 : 1);
+    Serial.print("\n");
+    #endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -518,7 +671,7 @@ inline void sendRawData( unsigned char first, unsigned char count )
     for( unsigned char i = first ; i < first + count ; i++ ) {
 
         if (j % 8 == 0 && j != 0)
-        Serial.print("|");
+          Serial.print("|");
         Serial.print( rawData[i] ? "1" : "0" );
         ++j;
     }
@@ -539,8 +692,8 @@ inline void sendN64Data( unsigned char first, unsigned char count )
     int j = 0;
     for( unsigned char i = 0 ; i < 32; i++ ) {
         if (j % 8 == 0 && j != 0)
-        Serial.print("|");
-                Serial.print( rawData[i+2] ? "1" : "0" );
+          Serial.print("|");
+        Serial.print( rawData[i+2] ? "1" : "0" );
         j++;
     }
     Serial.print("\n");
@@ -729,9 +882,15 @@ inline void read_SS3DData()
       rawData[numBits++] = PIN_READ(SS_DATA0);
   }
 
+  int numBytes = 0;
+  if (rawData[2] != 0 && rawData[3] != 0)
+    numBytes = 1;
+  else if (rawData[3] != 0)
+    numBytes = 4;
+
   if (rawData[3] != 0)
   {
-    for(int i = 0; i < 4; ++i)
+    for(int i = 0; i < numBytes; ++i)
     {
       WAIT_FALLING_EDGE(SS_REQ);
     
@@ -740,7 +899,7 @@ inline void read_SS3DData()
       rawData[numBits++] = PIN_READ(SS_DATA3);
       rawData[numBits++] = PIN_READ(SS_DATA2);
       rawData[numBits++] = PIN_READ(SS_DATA1);    
-      rawData[numBits++] = PIN_READ(SS_DATA0);
+            rawData[numBits++] = PIN_READ(SS_DATA0);
   
       WAIT_LEADING_EDGE(SS_REQ);
       
@@ -847,7 +1006,7 @@ inline void read_Playstation( )
   while( ++bits < 16 );
 
   //Read analog sticks for Analog Controller in Red Mode
-  if (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x73*/)
+  if (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x73 (DualShock 1)*/)
   {
     for(int i = 0; i < 4; ++i)
     {
@@ -858,8 +1017,20 @@ inline void read_Playstation( )
       }
       while( ++bits < 8 );
     }
+  }  
+  else if (rawData[0] == 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] == 0  && rawData[6] == 0 && rawData[7] == 0 /*controllerType == 0x12 (mouse)*/)
+  {
+    for(int i = 0; i < 2; ++i)
+    {
+      bits = 0;
+      do {
+          WAIT_LEADING_EDGE(PS_CLOCK);
+          rawData[numBits++] = PIN_READ(PS_DATA);
+      }
+      while( ++bits < 8 );
+    }  
   }
-  else if (rawData[0] != 0 && rawData[1] == 0 && rawData[2] == 0 && rawData[3] != 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x79*/)
+  else if (rawData[0] != 0 && rawData[1] == 0 && rawData[2] == 0 && rawData[3] != 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x79 (DualShock 2)*/)
   {
     for(int i = 0; i < 16; ++i)
     {
@@ -974,6 +1145,20 @@ inline void sendRawSegaData()
   } 
   #endif
   #endif
+}
+
+inline void sendRawSegaMouseData()
+{
+  #ifndef DEBUG
+  for(int i = 0; i < 3; ++i)
+    for(int j = 0; j < 8; ++j)
+      Serial.write((rawData[i] & (1 << j)) == 0 ? ZERO : ONE);
+  #else
+    for(int i = 0; i < 3; ++i)
+      for(int j = 0; j < 8; ++j)
+        Serial.print((rawData[i] & (1 << j)) == 0 ? "0" : "1");
+  #endif   
+  Serial.print("\n");
 }
 
 // PORTD
@@ -1316,6 +1501,12 @@ inline void loop_Sega()
   sendRawSegaData();
 }
 
+inline void loop_Genesis_Mouse()
+{
+  segaController.getMouseState(rawData);
+  sendRawSegaMouseData();
+}
+
 inline void loop_Classic()
 {
   currentState = classicController.getState();
@@ -1371,9 +1562,9 @@ inline void loop_NeoGeo()
 inline void loop_3DO()
 {
     noInterrupts();
-    read_shiftRegister_reverse_clock< ThreeDO_LATCH , ThreeDO_DATA , ThreeDO_CLOCK >( ThreeDO_BITCOUNT );
+    byte bits = read_3do< ThreeDO_LATCH , ThreeDO_DATA , ThreeDO_CLOCK >( );
     interrupts();
-    sendRawData( 0 , ThreeDO_BITCOUNT );
+    sendRawData( 0 , bits );
 }
 
 
@@ -1393,7 +1584,15 @@ inline void loop_CD32()
     noInterrupts();
     read_cd32_controller();
     interrupts();
-    sendRawData(0, CD32_BITCOUNT+4);
+    sendRawDataCd32();
+}
+
+inline void loop_CD32_HACK()
+{
+    noInterrupts();
+    read_cd32_controller_HACK();
+    interrupts();
+    sendRawDataCd32();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1430,6 +1629,10 @@ void loop()
     loop_Intellivision();
 #elif defined CD32
     loop_CD32();
+#elif defined CD32_HACK
+    loop_CD32_HACK();
+#elif defined MODE_GENESIS_MOUSE
+    loop_Genesis_Mouse();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();

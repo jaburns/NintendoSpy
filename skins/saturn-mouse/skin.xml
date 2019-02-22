@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Saturn Shuttle Mouse" author="zoggins" type="saturn">
+
+  <background name="Default" image="saturn.png" />
+
+  <button name="left" image="circle.png" x="40" y="97" width="75" height="75" />
+  <button name="middle" image="circle.png" x="151" y="41" width="75" height="75" />
+  <button name="right" image="circle.png" x="290" y="97" width="75" height="75" />
+
+  <button name="start" image="circle.png" x="140" y="172" width="130" height="50" />
+
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="195" y="427" xrange="140" yrange="140" height="30" width="30"/>
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="195" y="427" xrange="140" yrange="140" height="30" width="30" />
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="195" y="427" xrange="140" yrange="140" height="30" width="30" />
+
+
+</skin>

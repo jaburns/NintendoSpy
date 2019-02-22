@@ -24,6 +24,27 @@ namespace NintendoSpy.Readers
             return (float)(input - 128) / 128;
         }
 
+        static float readMouse(bool over, byte data)
+        {
+            float val = 0;
+            if (over)
+            {
+                if (data >= 128)
+                    val = -1.0f;
+                else
+                    val = 1.0f;
+            }
+            else
+            {
+                if (data >= 128)
+                    val = (-1.0f * (255 - data)) / 127.0f;
+                else
+                    val = data / 127.0f;
+            }
+
+            return val;
+        }
+
         static public ControllerState ReadFromPacket(byte[] packet)
         {
             if (packet.Length < PACKET_SIZE) return null;
@@ -41,15 +62,18 @@ namespace NintendoSpy.Readers
                 polishedPacket[i + 1] = packet[i + 8];
             }
 
+            int nextNumBytes = 0;
             if (polishedPacket[0] == 0x73 || polishedPacket[0] == 0x79)
+                nextNumBytes = 4;
+            else if (polishedPacket[0] == 0x12)
+                nextNumBytes = 2;
+
+            for (int i = 0; i < nextNumBytes; ++i)
             {
-                for (int i = 0; i < 4; ++i)
+                polishedPacket[17 + i] = 0;
+                for (byte j = 0; j < 8; ++j)
                 {
-                    polishedPacket[17 + i] = 0;
-                    for (byte j = 0; j < 8; ++j)
-                    {
-                        polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8 + j)] == 0 ? 0 : 1) << j);
-                    }
+                    polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8 + j)] == 0 ? 0 : 1) << j);
                 }
             }
 
@@ -67,7 +91,7 @@ namespace NintendoSpy.Readers
 
             if (polishedPacket.Length < POLISHED_PACKET_SIZE) return null;
 
-            if (polishedPacket[0] != 0x41 && polishedPacket[0] != 0x73 && polishedPacket[0] != 0x79) return null;
+            if (polishedPacket[0] != 0x41 && polishedPacket[0] != 0x73 && polishedPacket[0] != 0x79 && polishedPacket[0] != 0x12) return null;
 
             var state = new ControllerStateBuilder();
 
@@ -125,6 +149,17 @@ namespace NintendoSpy.Readers
                 state.SetAnalog("analog_r1", (float)(polishedPacket[12] != 0x00 ? 1.0 : 0.0));
                 state.SetAnalog("analog_l2", (float)(polishedPacket[9] != 0x00 ? 1.0 : 0.0));
                 state.SetAnalog("analog_r2", (float)(polishedPacket[10] != 0x00 ? 1.0 : 0.0));
+            }
+
+            if (polishedPacket[0] == 0x12)
+            {
+                float x = readMouse(polishedPacket[10] == 0x00, polishedPacket[17]);
+                float y = readMouse(polishedPacket[9] == 0x00, polishedPacket[18]);
+                SignalTool.SetMouseProperties(x, y, state);
+            }
+            else
+            {
+                SignalTool.SetMouseProperties(0, 0, state);
             }
 
             return state.Build();

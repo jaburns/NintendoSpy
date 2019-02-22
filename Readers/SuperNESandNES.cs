@@ -36,7 +36,7 @@ namespace NintendoSpy.Readers
 
         static readonly string[] BUTTONS_CD32 =
         {
-            "blue", "red", "yellow", "green", "forward", "backward", "pause", "up", "down", "left", "right"
+            null, null, "yellow", "green", "forward", "backward", "pause", null
         };
 
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
@@ -45,22 +45,71 @@ namespace NintendoSpy.Readers
         }
 
         static public ControllerState ReadFromPacket_NES (byte[] packet) {
-            return readPacketButtons (packet, BUTTONS_NES);
+            return readPacketButtons(packet, BUTTONS_NES);
         }
 
         static public ControllerState ReadFromPacket_CD32(byte[] packet)
         {
-            return readPacketButtons(packet, BUTTONS_CD32);
+            ControllerStateBuilder state = null;
+            if (packet.Length == 13)
+            {
+                return Classic.ReadFromPacket(packet);
+            }
+            if (packet.Length == BUTTONS_CD32.Length)
+            {
+                state = new ControllerStateBuilder();
+
+                for (int i = 0; i < BUTTONS_CD32.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(BUTTONS_CD32[i])) continue;
+                    state.SetButton(BUTTONS_CD32[i], (packet[i] & 0b10000000) == 0x00);
+                }
+
+                state.SetButton("blue", (packet[0] & 0b10000000) == 0);
+                state.SetButton("red", (packet[0] & 0b01000000) == 0);
+
+                state.SetButton("up", (packet[7] & 0b00000001) == 0);
+                state.SetButton("down", (packet[0] & 0b00000100) == 0);
+                state.SetButton("left", (packet[0] & 0b00001000) == 0);
+                state.SetButton("right", (packet[0]& 0b00010000) == 0);
+            }
+            else if (packet.Length == 19)
+            {
+                state = new ControllerStateBuilder();
+
+                state.SetButton("left", packet[0] != 0x00);
+                state.SetButton("right", packet[2] != 0x00);
+
+                sbyte xVal = (sbyte)SignalTool.readByteBackwards(packet, 3);
+                sbyte yVal = (sbyte)SignalTool.readByteBackwards(packet, 11);
+
+                SignalTool.SetMouseProperties( xVal / -128.0f, yVal / 128.0f, state);
+            }
+
+            return state != null ? state.Build() : null;
         }
 
         static public ControllerState ReadFromPacket_SNES (byte[] packet) {
-            var controllerState = readPacketButtons (packet, BUTTONS_SNES);
-            if (controllerState != null && packet[15] != 0x00)
+            if (packet.Length < BUTTONS_SNES.Length) return null;
+
+            var state = new ControllerStateBuilder();
+
+            for (int i = 0; i < BUTTONS_SNES.Length; ++i)
             {
-                // We have extended data do something with it
+                if (string.IsNullOrEmpty(BUTTONS_SNES[i])) continue;
+                state.SetButton(BUTTONS_SNES[i], packet[i] != 0x00);
             }
 
-            return controllerState;
+            if (state != null && packet.Length == 32 && packet[15] != 0x00)
+            {
+                float y = (float)(SignalTool.readByte(packet, 17, 7, 0x1) * ((packet[16] & 0x1) != 0 ? 1 : -1)) / 127;
+                float x = (float)(SignalTool.readByte(packet, 25, 7, 0x1) * ((packet[24] & 0x1) != 0 ? -1 : 1)) / 127;
+                SignalTool.SetMouseProperties(x, y, state);
+
+            }
+
+            return state.Build();
         }
+
     }
 }

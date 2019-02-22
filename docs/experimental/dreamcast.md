@@ -23,7 +23,7 @@ Dreamcast controller support is experimental because it requires a newer faster 
 1. [The latest Arduino software](http://arduino.cc/en/Main/Software)
 2. [The latest Teensyduino software](https://www.pjrc.com/teensy/td_download.html)
 3. Firmware for the Teensy
-4. PC software to connect to the Arduino and display the controller
+4. PC software to connect to the Teensy and display the controller
 
 \#3 is included in the release package of RetroSpy.  The firmware is located in the ``experimenta\dreamcast`` folder and is called ``dreamcast.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 

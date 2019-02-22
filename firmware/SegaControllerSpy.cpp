@@ -38,6 +38,9 @@ SegaControllerSpy::SegaControllerSpy()
     {
         pinMode(i, INPUT_PULLUP);
     }
+
+    last6buttonCheck = millis();
+    sixButtonConnected = false;
 }
 
 #define MASK_PINS_FOUR_AND_FIVE 0x30
@@ -69,44 +72,98 @@ SegaControllerSpy::SegaControllerSpy()
 #define STATE_SEVEN (PINB & 1) == 1 && (PIND & MASK_PINS_TWO_THREE_FOUR_FIVE) != 0
 #define WAIT_FOR_STATE_SEVEN (PINB & 1) != 1 || (PIND & MASK_PINS_TWO_THREE_FOUR_FIVE) == 0
 
+#define TH 0  // Pin 8, 0 on PINB
+#define TR 7  // Pin 7
+#define TL 6  // Pin 6 
+
+#define PIN_READ( pin )  (PIND&(1<<(pin)))
+#define PINB_READ( pin ) (PINB&(1<<(pin)))
+
+#define WAIT_FALLING_EDGE( pin ) while( !PIN_READ(pin) ); while( PIN_READ(pin) );
+#define WAIT_LEADING_EDGE( pin ) while( PIN_READ(pin) ); while( !PIN_READ(pin) );
+
+#define WAIT_FALLING_EDGEB( pin ) while( !PINB_READ(pin) ); while( PINB_READ(pin) );
+#define WAIT_LEADING_EDGEB( pin ) while( PINB_READ(pin) ); while( !PINB_READ(pin) );
+
+void SegaControllerSpy::getMouseState(byte data[3])
+{
+  unsigned long reads = 0;
+
+  noInterrupts();
+
+  WAIT_FALLING_EDGEB (TH);
+  WAIT_FALLING_EDGE (TL);
+
+  while(reads != 3)
+  {
+    data[reads] = 0;
+    WAIT_FALLING_EDGE (TL);
+    data[reads] |= ((PIND & 0b00111100) << 2);
+    WAIT_LEADING_EDGE (TL);
+    data[reads] |= ((PIND & 0b00111100) >> 2);
+    ++reads;
+  }
+
+  // This makes no sense.  
+  // Its like if there is no data the low nibble of the Y axis isn't sent.
+  if (data[2] == 0b00001011) 
+    data[2] &= 0;
+    
+  interrupts();
+}
+
 word SegaControllerSpy::getState()
 {
     word currentState = 0xFFFF;
-	
+    bool check6 = false;
+    unsigned long currentTime = millis();
+    if (!sixButtonConnected && (currentTime - last6buttonCheck) > 100)
+    {
+      check6 = true;
+      last6buttonCheck  = currentTime;
+    }
+
     noInterrupts();
 
-	do {
-	} while (WAIT_FOR_STATE_TWO);
-	currentState &= SHIFT_A_AND_START;
-
-	do {
-	} while (WAIT_FOR_STATE_THREE);
-	currentState &= SHIFT_UDLRBC;
- 
-	// Six Button
- 	do {
-	} while (WAIT_FOR_STATE_FOUR_OR_SIX);
-	
-	if (NOT_STATE_SIX)
-	{
-		currentState &= SHIFT_A_AND_START;
-
-		do {
-		} while (WAIT_FOR_STATE_THREE);
-		currentState &= SHIFT_UDLRBC;
-			
-		do { 
-		} while (WAIT_FOR_STATE_FOUR_OR_SIX);
-	}
-	
-	if (STATE_SIX)
-	{
-		do {
-		} while (WAIT_FOR_STATE_SEVEN);		
-		currentState &= SHIFT_ZYXM;
-	}
+  	do {
+  	} while (WAIT_FOR_STATE_TWO);
+  	currentState &= SHIFT_A_AND_START;
+  
+  	do {
+  	} while (WAIT_FOR_STATE_THREE);
+  	currentState &= SHIFT_UDLRBC;
+  
+    if ( sixButtonConnected || check6)
+    {
+    	// Six Button
+     	do {
+    	} while (WAIT_FOR_STATE_FOUR_OR_SIX);
     
+    	if (NOT_STATE_SIX)
+    	{  
+    		//currentState &= SHIFT_A_AND_START;
+    		do {
+    		} while (WAIT_FOR_STATE_THREE);
+    		//currentState &= SHIFT_UDLRBC;
+    			
+    		do { 
+    		} while (WAIT_FOR_STATE_FOUR_OR_SIX);
+    	}
+    }
+    
+  	if (STATE_SIX)
+  	{
+  		do {
+  		} while (WAIT_FOR_STATE_SEVEN);		
+  		currentState &= SHIFT_ZYXM;
+      sixButtonConnected = true;
+  	}
+    else
+    {
+      sixButtonConnected = false;
+    }
+      
     interrupts();
-
+  
     return ~currentState;
 }
