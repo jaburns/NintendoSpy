@@ -69,6 +69,10 @@ namespace NintendoSpy
                 {
                     updateBeagleList();
                 }
+                else if (_vm.Sources.SelectedItem == InputSource.WII)
+                {
+                    updateBeagleI2CList();
+                }
             };
             _xiAndGamepadListUpdateTimer.Start();
 
@@ -105,6 +109,11 @@ namespace NintendoSpy
             _vm.XIAndGamepad.UpdateContents(XboxReader.GetDevices());
         }
 
+        void updateBeagleI2CList()
+        {
+            _vm.XIAndGamepad.UpdateContents(WiiReaderV1.GetDevices());
+        }
+
         void goButton_Click (object sender, RoutedEventArgs e) 
         {
             this.Hide ();
@@ -125,6 +134,10 @@ namespace NintendoSpy
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.XBOX)
+                {
+                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
+                }
+                else if (_vm.Sources.SelectedItem == InputSource.WII)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }
@@ -159,6 +172,7 @@ namespace NintendoSpy
             updateXIList();
             updatePortList();
             updateBeagleList();
+            updateBeagleI2CList();
             _vm.Skins.UpdateContents (_skins.Where (x => x.Type == _vm.Sources.SelectedItem));
             _vm.Skins.SelectFirst ();
             if(_vm.Sources.GetSelectedId() == Properties.Settings.Default.Source)
