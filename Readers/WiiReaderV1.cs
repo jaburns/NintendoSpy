@@ -297,6 +297,9 @@ namespace NintendoSpy.Readers
                             else
                             {
                                 var outState = new ControllerStateBuilder();
+
+                                outState.SetButton("disconnect", true);
+
                                 reader.ControllerStateChanged?.Invoke(reader, outState.Build());
                             }
                         }

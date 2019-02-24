@@ -19,4 +19,6 @@
     <button name="left" image="circle.png" x="32" y="55" width="16" height="16" />
     <button name="right" image="circle.png" x="60" y="55" width="16" height="16" />
 
+    <button name="disconnect" image="disconnect.png" x="70" y="11" width="500" height="500" />
+
 </skin>

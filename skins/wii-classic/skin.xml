@@ -28,5 +28,7 @@
 	   
 	<stick xname="rstick_x" yname="rstick_y" image="right-stick.png"
 	   x="677" y="350" width="130" height="130" xrange="25" yrange="25" />
+
+  <button name="disconnect" image="disconnect.png" x="350" y="83" width="500" height="500" />
 	   
 </skin>
