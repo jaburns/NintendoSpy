@@ -248,6 +248,8 @@ namespace NintendoSpy.Readers
                                 outState.SetAnalog("stick_x", (stickX - 128.0f) / 128.0f);
                                 outState.SetAnalog("stick_y", (stickY - 128.0f) / 128.0f);
 
+                                outState.SetButton("disconnect", false);
+
                                 reader.ControllerStateChanged?.Invoke(reader, outState.Build());
                             }
                             else if (reader.controllerType == 1) // Classic Controller
@@ -290,6 +292,8 @@ namespace NintendoSpy.Readers
                                 outState.SetAnalog("lstick_y", (leftY - 32.0f) / 32.0f);
                                 outState.SetAnalog("rstick_x", (rightX - 15.0f) / 15.0f);
                                 outState.SetAnalog("rstick_y", (rightY - 15.0f) / 15.0f);
+
+                                outState.SetButton("disconnect", false);
 
                                 reader.ControllerStateChanged?.Invoke(reader, outState.Build());
 
