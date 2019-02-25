@@ -6,21 +6,23 @@
 
 
 // ---------- Uncomment one of these options to select operation mode --------------
-//#define MODE_GC				// for Gamecube
-//#define MODE_N64				// for Nintendo 64
-//#define MODE_SNES				// for SNES
-//#define MODE_SUPER_GAMEBOY	// for SNES Super Game Boy
-//#define MODE_NES				// for NES
-//#define MODE_SEGA				// for Sega Genesis
-//#define MODE_CLASSIC			// for Sega Master System & Atari/Commodore Digital Joysticks
-//#define MODE_BOOSTER_GRIP		// for Atari 2600 Omega Race Booster Grip controller
-//#define MODE_PLAYSTATION		// for Sony Playstation 1
-//#define MODE_PLAYSTATION2		// for Sony Playstation 2
-//#define MODE_TG16				// for Turbografx 16/PC-Engine
-//#define MODE_SATURN			// for Sega Saturn digital gamepads
-//#define MODE_SATURN3D			// for Sega Saturn 3D Controller (both digital and analog modes)
-//#define MODE_NEOGEO			// for NeoGeo
-//#define MODE_3DO				// for 3DO
+//#define MODE_GC
+//#define MODE_N64
+//#define MODE_SNES
+//#define MODE_NES
+//#define MODE_SEGA  // For Genesis. Use MODE_CLASSIC for Master System
+//#define MODE_GENESIS_MOUSE
+//#define MODE_CLASSIC
+//#define MODE_BOOSTER_GRIP
+//#define MODE_PLAYSTATION
+//#define MODE_TG16
+//#define MODE_SATURN
+//#define MODE_SATURN3D
+//#define MODE_NEOGEO
+//#define MODE_3DO
+//#define INTELLIVISION
+//#define CD32        // WARNING: I have not gotten this work on my NTSC 500, but I am not sure if its just my computer or an NTSC issue.
+//#define CD32_HACK   // Try this one if you have problems on an NTSC machine, but the timings here may be specific to my machine.
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -32,9 +34,9 @@
 // Uncomment this for serial debugging output
 //#define DEBUG
 
-#include <SegaControllerSpy.h>
-#include <ClassicControllerSpy.h>
-#include <BoosterGripSpy.h>
+#include "SegaControllerSpy.h"
+#include "ClassicControllerSpy.h"
+#include "BoosterGripSpy.h"
 
 SegaControllerSpy segaController;
 word currentState = 0;
@@ -44,6 +46,8 @@ byte ssState2 = 0;
 byte ssState3 = 0;
 byte ssState4 = 0;
 
+bool seenGC2N64 = false;
+
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
 ClassicControllerSpy classicController(2, 3, 4, 5, 7, 8);
@@ -51,10 +55,6 @@ ClassicControllerSpy classicController(2, 3, 4, 5, 7, 8);
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
 BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
-
-#ifdef MODE_KEYBOARD_CONTROLLER
-KeyboardController keyboardController;
-#endif
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
@@ -72,15 +72,19 @@ KeyboardController keyboardController;
 #define MODEPIN_GC   2
 
 #define N64_PIN        2
-#define N64_PREFIX     9
 #define N64_BITCOUNT  32
 
-#define SNES_LATCH      3
-#define SNES_DATA       4
-#define SNES_CLOCK      6
-#define SNES_BITCOUNT  16
-#define SGB_BITCOUNT   32
-#define NES_BITCOUNT    8
+#define SNES_LATCH           3
+#define SNES_DATA            4
+#define SNES_CLOCK           6
+#define SNES_BITCOUNT       16
+#define SNES_BITCOUNT_EXT   32
+#define NES_BITCOUNT         8
+
+#define CD32_LATCH    5  // Digital Pin 5
+#define CD32_DATA     7  // Digital Pin 7
+#define CD32_CLOCK    6  // Digital Pin 6
+#define CD32_BITCOUNT 7
 
 #define GC_PIN        5
 #define GC_PREFIX    25
@@ -89,36 +93,81 @@ KeyboardController keyboardController;
 #define ThreeDO_LATCH      2
 #define ThreeDO_DATA       4
 #define ThreeDO_CLOCK      3   
-#define ThreeDO_BITCOUNT  16
+#define ThreeDO_BITCOUNT  32
 
 #define ZERO  '\0'  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE    '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
 #define SPLIT '\n'  // Use a new-line character to split up the controller state packets.
 
 // Declare some space to store the bits we read from a controller.
-unsigned char rawData[ 256 ];
+unsigned char rawData[ 1024 ];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
-    #ifndef MODE_SEGA
-    #ifndef MODE_CLASSIC
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
-    PORTD = 0x00;
-    PORTB = 0x00;
-    DDRD  = 0x00;
-    #endif
-    #endif
-
-    for(int i = 2; i <= 6; ++i)
-      pinMode(i, INPUT_PULLUP);
-
+  
+#ifdef MODE_SEGA
+    sega_classic_pin_setup();
+#elif defined MODE_CLASSIC
+    sega_classic_pin_setup();
+#elif defined CD32
+    cd32_pin_setup();
+#elif defined CD32_HACK
+    cd32_pin_setup();
+#elif defined MODE_DETECT
+    if( !PINC_READ( MODEPIN_SEGA ) ) {
+        sega_classic_pin_setup();
+    } else if( !PINC_READ( MODEPIN_CLASSIC ) ) {
+        sega_classic_pin_setup();
+    } else if( !PINC_READ( MODEPIN_CD32 ) ) {
+        cd32_pin_setup();
+    } else {
+        common_pin_setup();
+    }
+#else
+    common_pin_setup();
+#endif
+  
     lastState = -1;
     currentState = 0;
-    
+    seenGC2N64 = false;
+  
     Serial.begin( 115200 );
+}
+
+void sega_classic_pin_setup()
+{
+  for(int i = 2; i <= 6; ++i)
+    pinMode(i, INPUT_PULLUP);
+}
+
+void cd32_pin_setup()
+{
+
+  PORTD = 0x00;
+  PORTB = 0x00;
+  DDRD  = 0x00;
+  
+  for(int i = 2; i <= 8; ++i)
+  {  
+    if (i != 5 && i != 7)
+      pinMode(i, INPUT_PULLUP);
+    else
+      pinMode(i, INPUT);
+  }
+}
+
+void common_pin_setup()
+{
+  PORTD = 0x00;
+  PORTB = 0x00;
+  DDRD  = 0x00;
+
+  for(int i = 2; i <= 6; ++i)
+    pinMode(i, INPUT_PULLUP);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,20 +197,88 @@ read_loop:
     goto read_loop;
 }
 
+void read_N64( )
+{
+    unsigned short bits;
+    
+    unsigned char *rawDataPtr = &rawData[1];
+    byte bit7, bit6, bit5, bit4, bit3, bit2, bit1, bit0;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit7 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit6 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit5 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit4 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    // bit3 = PIND & 0b00000100;
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    bit2 = PIND & 0b00000100;
+    if (bit2 != 0)  // Controller Reset
+    {
+          WAIT_FALLING_EDGE( N64_PIN );
+          asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+          // bit1 = PIND & 0b00000100;
+          WAIT_FALLING_EDGE( N64_PIN );
+          asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+          // bit0 = PIND & 0b00000100;
+          bits = 25;
+          rawData[0] = 0xFF;
+          goto read_loop;
+    }
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    bit1 = PIND & 0b00000100;
+    if (bit1 != 0) // read or write to memory pack (this doesn't work correctly)
+    {
+          WAIT_FALLING_EDGE( N64_PIN );
+          asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+          // bit0 = PIND & 0b00000100;
+          bits = 281;
+          rawData[0] = 0x02;
+          goto read_loop;
+    }
+    WAIT_FALLING_EDGE( N64_PIN );
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+    bit0 = PIND & 0b00000100;
+    if (bit0 != 0) // controller poll
+    {
+          bits = 33;
+          rawData[0] = 0x01;
+          goto read_loop;
+    }
+    bits = 25;   // Get controller info
+    rawData[0] = 0x00;
+           
+read_loop:
+
+    // Wait for the line to go high then low.
+    WAIT_FALLING_EDGE( N64_PIN );
+
+    // Wait ~2us between line reads
+    
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
+
+    // Read a bit from the line and store as a byte in "rawData"
+    *rawDataPtr = PIND & 0b00000100;
+    ++rawDataPtr;
+    if( --bits == 0 ) return;
+
+    goto read_loop;
+}
+
 // Verifies that the 9 bits prefixing N64 controller data in 'rawData'
 // are actually indicative of a controller state signal.
 inline bool checkPrefixN64 ()
 {
-    if( rawData[0] != 0 ) return false; // 0
-    if( rawData[1] != 0 ) return false; // 0
-    if( rawData[2] != 0 ) return false; // 0
-    if( rawData[3] != 0 ) return false; // 0
-    if( rawData[4] != 0 ) return false; // 0
-    if( rawData[5] != 0 ) return false; // 0
-    if( rawData[6] != 0 ) return false; // 0
-    if( rawData[7] == 0 ) return false; // 1
-    if( rawData[8] == 0 ) return false; // 1
-    return true;
+    return rawData[0] == 0x01;
 }
 
 inline bool checkPrefixGC ()
@@ -191,8 +308,75 @@ inline bool checkPrefixGC ()
     //if( rawData[22] != 0 ) return false; // 0 or 1
     if( rawData[23] != 0 ) return false; // 0
     if( rawData[24] == 0 ) return false; // 1
+    seenGC2N64 = false;
     return true;
 }
+
+inline bool checkBothGCPrefixOnRaphnet()
+{
+    if( rawData[0] != 0 ) return false; // 0
+    if( rawData[1] != 0 ) return false; // 0
+    if( rawData[2] != 0 ) return false; // 0
+    if( rawData[3] != 0 ) return false; // 0
+    if( rawData[4] != 0 ) return false; // 0
+    if( rawData[5] != 0 ) return false; // 0
+    if( rawData[6] != 0 ) return false; // 0
+    if( rawData[7] != 0 ) return false; // 0
+    if( rawData[8] == 0 ) return false; // 1
+    if( rawData[9] != 0 ) return false; // 0
+    if( rawData[10] != 0 ) return false; // 0
+    if( rawData[11] != 0 ) return false; // 0
+    if( rawData[12] != 0 ) return false; // 0
+    if( rawData[13] == 0 ) return false; // 1
+    if( rawData[14] != 0 ) return false; // 0
+    if( rawData[15] != 0 ) return false; // 0
+    if( rawData[16] == 0 ) return false; // 1
+    if( rawData[17] != 0 ) return false; // 0
+    if( rawData[18] != 0 ) return false; // 0
+    if( rawData[19] != 0 ) return false; // 0
+    if( rawData[20] != 0 ) return false; // 0
+    if( rawData[21] != 0 ) return false; // 0
+    if( rawData[22] != 0 ) return false; // 0
+    if( rawData[23] != 0 ) return false; // 0
+    if( rawData[24] != 0 ) return false; // 0
+    if( rawData[25] != 0 ) return false; // 0 
+    //if( rawData[26] != 0 ) return false; // 0 or 1
+    if( rawData[27] == 0 ) return false; // 1
+    if( rawData[28] != 0 ) return false; // 0
+    if( rawData[29] != 0 ) return false; // 0
+    if( rawData[30] != 0 ) return false; // 0
+    if( rawData[31] == 0 ) return false; // 1
+    if( rawData[32] == 0 ) return false; // 1
+    if( rawData[33] != 0 ) return false; // 0
+    if( rawData[34] != 0 ) return false; // 0
+    if( rawData[35] == 0 ) return false; // 1
+    if( rawData[36] != 0 ) return false; // 0
+    if( rawData[37] != 0 ) return false; // 0
+    if( rawData[38] != 0 ) return false; // 0
+    if( rawData[39] != 0 ) return false; // 0
+    if( rawData[40] != 0 ) return false; // 0
+    if( rawData[41] != 0 ) return false; // 0
+    if( rawData[42] != 0 ) return false; // 0
+    if( rawData[43] != 0 ) return false; // 0
+    if( rawData[44] != 0 ) return false; // 0
+    if( rawData[45] != 0 ) return false; // 0
+    if( rawData[46] != 0 ) return false; // 0
+    if( rawData[47] != 0 ) return false; // 0
+    if( rawData[48] == 0 ) return false; // 1
+    if( rawData[49] == 0 ) return false; // 1
+    if( rawData[50] != 0 ) return false; // 0
+    if( rawData[51] != 0 ) return false; // 0
+    if( rawData[52] != 0 ) return false; // 0
+    if( rawData[53] != 0 ) return false; // 0
+    if( rawData[54] != 0 ) return false; // 0
+    if( rawData[55] != 0 ) return false; // 0
+    if( rawData[56] != 0 ) return false; // 0 
+    if( rawData[57] != 0 ) return false; // 0
+    if( rawData[58] == 0 ) return false; // 1
+    seenGC2N64 = true;
+    return true;
+}
+
 
 inline bool checkPrefixGBA ()
 {
@@ -208,6 +392,7 @@ inline bool checkPrefixGBA ()
     if( rawData[9] != 0 ) return false; // 0
     if( rawData[10] != 0 ) return false; // 0
     if( rawData[11] == 0 ) return false; // 1
+    seenGC2N64 = false;
     return true;
 }
 
@@ -264,7 +449,36 @@ void read_shiftRegister( unsigned char bits )
         *rawDataPtr = !PIN_READ(data);
         ++rawDataPtr;
     }
-    while( --bits > 0 );
+    while( --bits > 0 );    
+}
+
+template< unsigned char latch, unsigned char data, unsigned char clock >
+unsigned char read_shiftRegister_SNES()
+{
+    unsigned char position = 0;
+    unsigned char bits = 0;
+
+    WAIT_FALLING_EDGE( latch );
+
+    do {
+        WAIT_FALLING_EDGE( clock );
+        rawData[position++] = !PIN_READ(data);
+    }
+    while( ++bits <= SNES_BITCOUNT );    
+
+    if (rawData[15] != 0x0)
+    {
+      bits = 0;
+      do {
+	      WAIT_FALLING_EDGE( clock );
+          rawData[position++] = !PIN_READ(data);
+      }
+      while( ++bits <= SNES_BITCOUNT );
+
+      return SNES_BITCOUNT_EXT;
+    }
+
+    return SNES_BITCOUNT;
 }
 
 template< unsigned char latch, unsigned char data, unsigned char clock >
@@ -282,6 +496,162 @@ void read_shiftRegister_reverse_clock( unsigned char bits )
     while( --bits > 0 );
 }
 
+template< unsigned char latch, unsigned char data, unsigned char clock >
+byte read_3do( )
+{
+    unsigned char *rawDataPtr = rawData;
+
+    byte numBitsToRead = 0;
+    byte bits = 0;
+    WAIT_FALLING_EDGE( latch );
+
+    do {
+        WAIT_LEADING_EDGE( clock );
+        *rawDataPtr = PIN_READ(data);
+        
+        if(bits == 0 && *rawDataPtr != 0)
+          numBitsToRead = bits = 32;
+        else if (bits == 0)
+         numBitsToRead = bits = 16;
+        
+        ++rawDataPtr;
+    }
+    while( --bits > 0 );
+
+    return numBitsToRead;
+}
+
+#define WAIT_LEADING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) != 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) == 0);
+#define WAIT_FALLING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) == 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) != 0);
+
+void read_cd32_controller_HACK()
+{
+    WAIT_FALLING_EDGE(CD32_LATCH);
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS 
+    );
+    rawData[0] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[1] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[2] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[3] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS);
+    rawData[4] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[5] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[6] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[7] = PIND;
+
+    asm volatile (
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
+      MICROSECOND_NOPS MICROSECOND_NOPS
+    );
+    rawData[8] = PIND;
+
+    WAIT_LEADING_EDGE(CD32_LATCH);
+    rawData[0] = PIND;
+    rawData[7] = PINB;
+}
+
+void read_cd32_controller()
+{
+    WAIT_FALLING_EDGE(CD32_LATCH);
+
+    WAIT_FALLING_EDGE_CD32_CLOCK(0);
+    
+    WAIT_FALLING_EDGE_CD32_CLOCK(1);
+
+    WAIT_FALLING_EDGE_CD32_CLOCK(2);
+    
+    WAIT_FALLING_EDGE_CD32_CLOCK(3);
+
+    WAIT_FALLING_EDGE_CD32_CLOCK(4);
+
+    WAIT_FALLING_EDGE_CD32_CLOCK(5);
+    
+    WAIT_FALLING_EDGE_CD32_CLOCK(6);
+
+    WAIT_LEADING_EDGE(CD32_LATCH);
+    rawData[0] = PIND;
+    rawData[7] = PINB;
+    
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Sends a packet of controller data over the Arduino serial interface.
+inline void sendRawDataCd32( )
+{
+    #ifndef DEBUG
+    for( unsigned char i = 0 ; i < 8 ; i++ ) {
+        Serial.write( (rawData[i] & 0b11111101) );
+    }
+    Serial.write( SPLIT );
+    #else
+    Serial.print( (rawData[0] &  0b10000000) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b01000000) == 0 ? 0 : 1);
+    for( unsigned char i = 2 ; i < 7 ; i++ ) 
+    { 
+      Serial.print( (rawData[i] & 0b10000000) == 0 ? 0 : 1);
+    }
+    Serial.print( (rawData[7] &  0b00000001) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b00000100) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b00001000) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] & 0b00010000) == 0 ? 0 : 1);
+    Serial.print("\n");
+    #endif
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sends a packet of controller data over the Arduino serial interface.
 inline void sendRawData( unsigned char first, unsigned char count )
@@ -297,10 +667,34 @@ inline void sendRawData( unsigned char first, unsigned char count )
         Serial.print( rawData[i] ? "1" : "0" );
     }
     Serial.print("|");
+    int j = 0;
     for( unsigned char i = first ; i < first + count ; i++ ) {
+
+        if (j % 8 == 0 && j != 0)
+          Serial.print("|");
         Serial.print( rawData[i] ? "1" : "0" );
-        if (i % 8 == 0 && i != 0)
-        Serial.print("|");
+        ++j;
+    }
+    Serial.print("\n");
+    #endif
+}
+
+inline void sendN64Data( unsigned char first, unsigned char count )
+{
+    #ifndef DEBUG
+    for( unsigned char i = first ; i < first + count ; i++ ) {
+        Serial.write( rawData[i] ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else
+    Serial.print(rawData[0]);
+    Serial.print("|");
+    int j = 0;
+    for( unsigned char i = 0 ; i < 32; i++ ) {
+        if (j % 8 == 0 && j != 0)
+          Serial.print("|");
+        Serial.print( rawData[i+2] ? "1" : "0" );
+        j++;
     }
     Serial.print("\n");
     #endif
@@ -323,8 +717,8 @@ inline void sendRawGBAData()
   Serial.write(rawData[22] ? ONE : ZERO);
   Serial.write(rawData[18] ? ONE : ZERO);
   Serial.write(rawData[17] ? ONE : ZERO);
-  Serial.write(rawData[19] ? ONE : ZERO);
   Serial.write(rawData[20] ? ONE : ZERO);
+  Serial.write(rawData[19] ? ONE : ZERO);
   Serial.write(ONE);
   for(int i = 0; i < 7; ++i)
     Serial.write(ZERO );
@@ -357,8 +751,8 @@ inline void sendRawGBAData()
   Serial.print(rawData[22] ? "s" : "0");
   Serial.print(rawData[18] ? "u" : "0");
   Serial.print(rawData[17] ? "d" : "0");
-  Serial.print(rawData[19] ? "r" : "0");
   Serial.print(rawData[20] ? "l" : "0");
+  Serial.print(rawData[19] ? "r" : "0");
   Serial.print(128);
   Serial.print(128);
   Serial.print(128);
@@ -461,49 +855,6 @@ inline void sendRawSSDataV2()
     #endif
 }
 
-inline void sendRawSSData()
-{
-    #ifndef DEBUG
-    Serial.write ((ssState1 & 0b00000100) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b00010000) ? ONE : ZERO );
-    Serial.write ((ssState1 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write ((ssState2 & 0b00000100) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b00010000) ? ONE : ZERO );
-    Serial.write ((ssState2 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write ((ssState3 & 0b00000100) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b00001000) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b00010000) ? ONE : ZERO );
-    Serial.write ((ssState3 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write ((ssState4 & 0b00100000) ? ONE : ZERO );
-
-    Serial.write( SPLIT );
-    #else 
-    Serial.print((ssState1 & 0b00000100)    ? "Z" : "0");
-    Serial.print((ssState1 & 0b00001000)    ? "Y" : "0");
-    Serial.print((ssState1 & 0b00010000)    ? "X" : "0");
-    Serial.print((ssState1 & 0b00100000)    ? "R" : "0");
-
-    Serial.print((ssState2 & 0b00000100)    ? "B" : "0");
-    Serial.print((ssState2 & 0b00001000)    ? "C" : "0");
-    Serial.print((ssState2 & 0b00010000)    ? "A" : "0");
-    Serial.print((ssState2 & 0b00100000)    ? "S" : "0");
-
-    Serial.print((ssState3 & 0b00000100)    ? "u" : "0");
-    Serial.print((ssState3 & 0b00001000)    ? "d" : "0");
-    Serial.print((ssState3 & 0b00010000)    ? "l" : "0");
-    Serial.print((ssState3 & 0b00100000)    ? "r" : "0");
-    
-    Serial.print((ssState4 & 0b00100000)    ? "L" : "0");
- 
-    Serial.print("\n");
-    #endif
-}
-
 inline void read_SS3DData()
 {
   byte numBits = 0;
@@ -531,9 +882,15 @@ inline void read_SS3DData()
       rawData[numBits++] = PIN_READ(SS_DATA0);
   }
 
+  int numBytes = 0;
+  if (rawData[2] != 0 && rawData[3] != 0)
+    numBytes = 1;
+  else if (rawData[3] != 0)
+    numBytes = 4;
+
   if (rawData[3] != 0)
   {
-    for(int i = 0; i < 4; ++i)
+    for(int i = 0; i < numBytes; ++i)
     {
       WAIT_FALLING_EDGE(SS_REQ);
     
@@ -542,7 +899,7 @@ inline void read_SS3DData()
       rawData[numBits++] = PIN_READ(SS_DATA3);
       rawData[numBits++] = PIN_READ(SS_DATA2);
       rawData[numBits++] = PIN_READ(SS_DATA1);    
-      rawData[numBits++] = PIN_READ(SS_DATA0);
+            rawData[numBits++] = PIN_READ(SS_DATA0);
   
       WAIT_LEADING_EDGE(SS_REQ);
       
@@ -619,94 +976,6 @@ inline void read_TgData()
 
 inline void read_Playstation( )
 {
-  WAIT_FALLING_EDGE(PS_ATT);
-
-  unsigned char bits = 8;
-  do {
-     WAIT_LEADING_EDGE(PS_CLOCK);
-  }
-  while( --bits > 0 );
-
-  byte controllerType = 0;
-  bits = 0;
-  do {
-      WAIT_LEADING_EDGE(PS_CLOCK);
-      controllerType |= ((PIN_READ(PS_DATA) == 0 ? 0 : 1) << bits);
-  }
-  while( ++bits < 8 );
-  rawData[0] = controllerType;
-  
-  bits = 0;
-  do {
-      WAIT_LEADING_EDGE(PS_CLOCK);
-  }
-  while( ++bits < 8 );
-  
-  bits = 0;
-  do {
-      WAIT_LEADING_EDGE(PS_CLOCK);
-      rawData[bits+1] = !PIN_READ(PS_DATA);
-  }
-  while( ++bits < 16 );
-
-  // Read analog sticks for Analog Controller in Red Mode
-  if (controllerType == 0x73)
-  {
-    for(int i = 0; i < 4; ++i)
-    {
-      bits = 0;
-      rawData[17+i] = 0;
-      do {
-          WAIT_LEADING_EDGE(PS_CLOCK);
-          rawData[17+i] |= ((PIN_READ(PS_DATA) == 0 ? 0 : 1) << bits);
-      }
-      while( ++bits < 8 );
-    }
-  }
-}
-
-inline void sendRawPsData()
-{
-    #ifndef DEBUG
-    Serial.write( rawData[0] );
-    for (unsigned char i = 1; i < 17; ++i)
-    {
-      Serial.write( rawData[i] ? ONE : ZERO );
-    }
-    Serial.write( rawData[17] );
-    Serial.write( rawData[18] );
-    Serial.write( rawData[19] );
-    Serial.write( rawData[20] );
-    Serial.write( SPLIT );
-    #else
-    Serial.print(rawData[0]);
-    Serial.print(" ");
-    Serial.print(rawData[1] != 0 ? "S" : "0");
-    Serial.print(rawData[2] != 0 ? "5" : "0");
-    Serial.print(rawData[3] != 0 ? "6" : "0");
-    Serial.print(rawData[4] != 0 ? "T" : "0");
-    Serial.print(rawData[5] != 0 ? "U" : "0");
-    Serial.print(rawData[6] != 0 ? "R" : "0");
-    Serial.print(rawData[7] != 0 ? "D" : "0");
-    Serial.print(rawData[8] != 0 ? "L" : "0");
-    Serial.print(rawData[9] != 0 ? "1" : "0");
-    Serial.print(rawData[10] != 0 ? "2" : "0");
-    Serial.print(rawData[11] != 0 ? "3" : "0");
-    Serial.print(rawData[12] != 0 ? "4" : "0");
-    Serial.print(rawData[13] != 0 ? "/" : "0");
-    Serial.print(rawData[14] != 0 ? "O" : "0");
-    Serial.print(rawData[15] != 0 ? "X" : "0");
-    Serial.print(rawData[16] != 0 ? "Q" : "0");
-    Serial.print(rawData[17]);
-    Serial.print(rawData[18]);
-    Serial.print(rawData[19]);
-    Serial.print(rawData[20]);
-    Serial.print("\n");
-    #endif
-}
-
-inline void read_Playstation2( )
-{
   byte numBits = 0;
   WAIT_FALLING_EDGE(PS_ATT);
 
@@ -737,7 +1006,7 @@ inline void read_Playstation2( )
   while( ++bits < 16 );
 
   //Read analog sticks for Analog Controller in Red Mode
-  if (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x73*/)
+  if (rawData[0] != 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x73 (DualShock 1)*/)
   {
     for(int i = 0; i < 4; ++i)
     {
@@ -748,8 +1017,20 @@ inline void read_Playstation2( )
       }
       while( ++bits < 8 );
     }
+  }  
+  else if (rawData[0] == 0 && rawData[1] != 0 && rawData[2] == 0 && rawData[3] == 0 && rawData[4] != 0 && rawData[5] == 0  && rawData[6] == 0 && rawData[7] == 0 /*controllerType == 0x12 (mouse)*/)
+  {
+    for(int i = 0; i < 2; ++i)
+    {
+      bits = 0;
+      do {
+          WAIT_LEADING_EDGE(PS_CLOCK);
+          rawData[numBits++] = PIN_READ(PS_DATA);
+      }
+      while( ++bits < 8 );
+    }  
   }
-  else if (rawData[0] != 0 && rawData[1] == 0 && rawData[2] == 0 && rawData[3] != 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x79*/)
+  else if (rawData[0] != 0 && rawData[1] == 0 && rawData[2] == 0 && rawData[3] != 0 && rawData[4] != 0 && rawData[5] != 0  && rawData[6] != 0 && rawData[7] == 0 /*controllerType == 0x79 (DualShock 2)*/)
   {
     for(int i = 0; i < 16; ++i)
     {
@@ -866,6 +1147,20 @@ inline void sendRawSegaData()
   #endif
 }
 
+inline void sendRawSegaMouseData()
+{
+  #ifndef DEBUG
+  for(int i = 0; i < 3; ++i)
+    for(int j = 0; j < 8; ++j)
+      Serial.write((rawData[i] & (1 << j)) == 0 ? ZERO : ONE);
+  #else
+    for(int i = 0; i < 3; ++i)
+      for(int j = 0; j < 8; ++j)
+        Serial.print((rawData[i] & (1 << j)) == 0 ? "0" : "1");
+  #endif   
+  Serial.print("\n");
+}
+
 // PORTD
 #define NEOGEO_SELECT 2
 #define NEOGEO_D 3
@@ -910,50 +1205,282 @@ inline void sendNeoGeoData()
     #endif
 }
 
+//PORT D PINS
+#define INTPIN1 2  // Digital Pin 2
+#define INTPIN2 3  // Digital Pin 3
+#define INTPIN3 4  // Digital Pin 4
+#define INTPIN4 5  // Digital Pin 5
+#define INTPIN5 NA // Not Connected
+#define INTPIN6 7  // Digital Pin 7
+// PORT B PINS
+#define INTPIN7 2  // Digital Pin 10
+#define INTPIN8 3  // Digital Pin 11
+#define INTPIN9 0  // Digital Pin 8
+
+// The raw output of an Intellivision controller when
+// multiple buttons is pressed is very strange and 
+// no likely what you want to see, but set this to false
+// if you do want the strange behavior
+#define INT_SANE_BEHAVIOR true
+
+byte intRawData;
+
+void read_IntellivisionData()
+{
+    intRawData = 0x00;
+
+    intRawData |= PIN_READ(INTPIN1) == 0 ? 0x080 : 0x00;
+    intRawData |= PIN_READ(INTPIN2) == 0 ? 0x040 : 0x00;
+    intRawData |= PIN_READ(INTPIN3) == 0 ? 0x020 : 0x00;
+    intRawData |= PIN_READ(INTPIN4) == 0 ? 0x010 : 0x00;
+    intRawData |= PIN_READ(INTPIN6) == 0 ? 0x008 : 0x00;
+    intRawData |= PINB_READ(INTPIN7) == 0 ? 0x004 : 0x00;
+    intRawData |= PINB_READ(INTPIN8) == 0 ? 0x002 : 0x00;
+    intRawData |= PINB_READ(INTPIN9) == 0 ? 0x001 : 0x00;
+}
+
+void writeIntellivisionDataToSerial()
+{
+    #ifndef DEBUG
+    for (unsigned char i = 0; i < 32; ++i)
+    {
+      Serial.write( rawData[i] );
+    }
+    Serial.write( SPLIT );
+    #else
+    Serial.print(intRawData);
+    Serial.print("|");
+    for(int i = 0; i < 16; ++i)
+    {
+      Serial.print(rawData[i]);
+    }
+    Serial.print("|");
+    for(int i = 0; i < 12; ++i)
+    {
+      Serial.print(rawData[i+16]);
+    }
+    Serial.print("|");   
+    for(int i = 0; i < 4; ++i)
+    {
+      Serial.print(rawData[i+28]);
+    }
+    Serial.print("\n");
+    #endif
+}
+
+void sendIntellivisionData_Sane()
+{
+  // This is an interpretted display method that tries to emulate what most
+  // games would actually do.
+
+  // If a shoulder button is pressed, keypad is ignored
+  // 1 shoulder button and 1 disc direction can be hit at the same time
+  // 2 or 3 shoulder buttons at the same time basically negates all pushes 
+  // keypad pressed ignores disc
+
+    // Check shoulder buttons first
+    rawData[28] = rawData[29] = (intRawData & 0b00001010) == 0b00001010 ? 1 : 0;
+    rawData[30] = (intRawData & 0b00000110) == 0b00000110 ? 1 : 0;
+    rawData[31] = (intRawData & 0b00001100) == 0b00001100 ? 1 : 0;
+
+    byte numPushed = 0;
+    for(int i = 29; i < 32; ++i)
+    {
+      if (rawData[i])
+        numPushed++;
+    }
+
+    if (numPushed > 1)
+    {
+      for(int i = 0; i < 32; ++i)
+        rawData[i] = 0;
+    }
+    else
+    {
+      bool keyPadPushed = false;
+      if (numPushed == 0)
+      {
+        rawData[16] = (intRawData & 0b00011000) == 0b00011000 ? 1 : 0;
+        rawData[17] = (intRawData & 0b00010100) == 0b00010100 ? 1 : 0;
+        rawData[18] = (intRawData & 0b00010010) == 0b00010010 ? 1 : 0;
+        rawData[19] = (intRawData & 0b00101000) == 0b00101000 ? 1 : 0;
+        rawData[20] = (intRawData & 0b00100100) == 0b00100100 ? 1 : 0;
+        rawData[21] = (intRawData & 0b00100010) == 0b00100010 ? 1 : 0;
+        rawData[22] = (intRawData & 0b01001000) == 0b01001000 ? 1 : 0;
+        rawData[23] = (intRawData & 0b01000100) == 0b01000100 ? 1 : 0;
+        rawData[24] = (intRawData & 0b01000010) == 0b01000010 ? 1 : 0;
+        rawData[25] = (intRawData & 0b10001000) == 0b10001000 ? 1 : 0;
+        rawData[26] = (intRawData & 0b10000100) == 0b10000100 ? 1 : 0;
+        rawData[27] = (intRawData & 0b10000010) == 0b10000010 ? 1 : 0;
+  
+        for(int i = 16; i < 28; ++i)
+          if (rawData[i])
+          {
+            keyPadPushed = true;
+            break;
+          }
+      }
+      else
+      {
+        for(int i = 16; i < 28; ++i)
+        rawData[i] = 0;      
+      }
+  
+      if (!keyPadPushed)
+      {
+        byte mask = 0b11110001;
+      
+        rawData[0]  = (intRawData & mask) == 0b01000000 ? 1 : 0;
+        rawData[1]  = (intRawData & mask) == 0b01000001 ? 1 : 0;
+        rawData[2]  = (intRawData & mask) == 0b01100001 ? 1 : 0;
+        rawData[3]  = (intRawData & mask) == 0b01100000 ? 1 : 0;
+        rawData[4]  = (intRawData & mask) == 0b00100000 ? 1 : 0;
+        rawData[5]  = (intRawData & mask) == 0b00100001 ? 1 : 0;
+        rawData[6]  = (intRawData & mask) == 0b00110001 ? 1 : 0;
+        rawData[7]  = (intRawData & mask) == 0b00110000 ? 1 : 0;
+        rawData[8]  = (intRawData & mask) == 0b00010000 ? 1 : 0;
+        rawData[9]  = (intRawData & mask) == 0b00010001 ? 1 : 0;
+        rawData[10] = (intRawData & mask) == 0b10010001 ? 1 : 0;
+        rawData[11] = (intRawData & mask) == 0b10010000 ? 1 : 0;
+        rawData[12] = (intRawData & mask) == 0b10000000 ? 1 : 0;
+        rawData[13] = (intRawData & mask) == 0b10000001 ? 1 : 0;
+        rawData[14] = (intRawData & mask) == 0b11000001 ? 1 : 0;
+        rawData[15] = (intRawData & mask) == 0b11000000 ? 1 : 0;  
+      }
+      else
+      {
+        for(int i = 0; i < 16; ++i)
+          rawData[i] = 0;          
+      }
+    }
+
+    writeIntellivisionDataToSerial();
+}
+
+void sendIntellivisionData_Raw()
+{
+    // The raw behavior of multiple buttons pushes is completely bizarre.
+    // I am trying to replicate how bizare it is!
+    
+    // Check shoulder buttons first
+    rawData[28] = rawData[29] = (intRawData & 0b00001010) == 0b00001010 ? 1 : 0;
+    rawData[30] = (intRawData & 0b00000110) == 0b00000110 ? 1 : 0;
+    rawData[31] = (intRawData & 0b00001100) == 0b00001100 ? 1 : 0;
+
+    bool shouldersPushed = false;
+    if (rawData[28] == 1 || rawData[30] == 1 || rawData[31] == 1)
+      shouldersPushed = true;
+
+    rawData[16] = (intRawData & 0b00011000) == 0b00011000 ? 1 : 0;
+    rawData[17] = (intRawData & 0b00010100) == 0b00010100 ? 1 : 0;
+    rawData[18] = (intRawData & 0b00010010) == 0b00010010 ? 1 : 0;
+    rawData[19] = (intRawData & 0b00101000) == 0b00101000 ? 1 : 0;
+    rawData[20] = (intRawData & 0b00100100) == 0b00100100 ? 1 : 0;
+    rawData[21] = (intRawData & 0b00100010) == 0b00100010 ? 1 : 0;
+    rawData[22] = (intRawData & 0b01001000) == 0b01001000 ? 1 : 0;
+    rawData[23] = (intRawData & 0b01000100) == 0b01000100 ? 1 : 0;
+    rawData[24] = (intRawData & 0b01000010) == 0b01000010 ? 1 : 0;
+    rawData[25] = (intRawData & 0b10001000) == 0b10001000 ? 1 : 0;
+    rawData[26] = (intRawData & 0b10000100) == 0b10000100 ? 1 : 0;
+    rawData[27] = (intRawData & 0b10000010) == 0b10000010 ? 1 : 0;
+
+    // Keypad takes precedent, as long as all pushed buttons are in
+    // the same column and shoulders are not "active"
+    bool keypadPressed = false;
+    if ((rawData[16] && rawData[19] && rawData[22] && rawData[25])
+        || (rawData[17] && rawData[20] && rawData[23] && rawData[26])
+        || (rawData[18] && rawData[21] && rawData[24] && rawData[27]))
+      keypadPressed = !shouldersPushed;
+    
+    if (!keypadPressed)
+    {
+      // If shoulders are pushed its a bit check, if shoulders
+      // are not active its a full equal check.
+      byte mask = shouldersPushed ? 0b11110001 : 0xFF;
+    
+      rawData[0]  = (intRawData & mask) == 0b01000000 ? 1 : 0;
+      rawData[1]  = (intRawData & mask) == 0b01000001 ? 1 : 0;
+      rawData[2]  = (intRawData & mask) == 0b01100001 ? 1 : 0;
+      rawData[3]  = (intRawData & mask) == 0b01100000 ? 1 : 0;
+      rawData[4]  = (intRawData & mask) == 0b00100000 ? 1 : 0;
+      rawData[5]  = (intRawData & mask) == 0b00100001 ? 1 : 0;
+      rawData[6]  = (intRawData & mask) == 0b00110001 ? 1 : 0;
+      rawData[7]  = (intRawData & mask) == 0b00110000 ? 1 : 0;
+      rawData[8]  = (intRawData & mask) == 0b00010000 ? 1 : 0;
+      rawData[9]  = (intRawData & mask) == 0b00010001 ? 1 : 0;
+      rawData[10] = (intRawData & mask) == 0b10010001 ? 1 : 0;
+      rawData[11] = (intRawData & mask) == 0b10010000 ? 1 : 0;
+      rawData[12] = (intRawData & mask) == 0b10000000 ? 1 : 0;
+      rawData[13] = (intRawData & mask) == 0b10000001 ? 1 : 0;
+      rawData[14] = (intRawData & mask) == 0b11000001 ? 1 : 0;
+      rawData[15] = (intRawData & mask) == 0b11000000 ? 1 : 0;  
+    }
+    else  // disk is inactive on a "typical" keypad push
+    {
+      for(int i = 0; i < 16; ++i)
+        rawData[i] = 0;
+    }
+
+    writeIntellivisionDataToSerial();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update loop definitions for the various console modes.
 
 inline void loop_GC()
 {
-    noInterrupts();
-    read_oneWire< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
-    interrupts();
-    if (checkPrefixGC() ) {
-      sendRawData( GC_PREFIX , GC_BITCOUNT );
+    if (!seenGC2N64)
+    {
+      noInterrupts();
+      read_oneWire< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
+      interrupts();
+      if (checkPrefixGC()) {
+        sendRawData( GC_PREFIX, GC_BITCOUNT );
+      }
+      else if (checkPrefixGBA() ) {
+        sendRawGBAData();
+      }
+      else if (checkBothGCPrefixOnRaphnet()) {
+         // Sets seenGC2N64RaphnetAdapter to true
+      }
     }
-    else if (checkPrefixGBA() ) {
-      sendRawGBAData();
+    else
+    {
+      noInterrupts();
+      read_oneWire< GC_PIN >( 34+GC_PREFIX + GC_BITCOUNT );
+      interrupts();
+      if (checkBothGCPrefixOnRaphnet())
+        sendRawData(34+GC_PREFIX, GC_BITCOUNT);
+      else if (checkPrefixGC())
+        sendRawData( GC_PREFIX, GC_BITCOUNT );
+      else if (checkPrefixGBA() )
+        sendRawGBAData();
     }
 }
 
 inline void loop_N64()
 {
     noInterrupts();
-    read_oneWire< N64_PIN >( N64_PREFIX + N64_BITCOUNT );
+    read_N64();
     interrupts();
     if( checkPrefixN64() ) {
-        sendRawData( N64_PREFIX , N64_BITCOUNT );
+        sendN64Data( 2 , N64_BITCOUNT);
     }
+    else  // This makes no sense, but its needed after command 0x0 or else you get garbage on the line
+      delay(2);
 }
 
 inline void loop_SNES()
 {
     noInterrupts();
+    unsigned char bytesToReturn = SNES_BITCOUNT;
 #ifdef MODE_2WIRE_SNES
     read_shiftRegister_2wire< SNES_LATCH , SNES_DATA , false >( SNES_BITCOUNT );
 #else
-    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( SNES_BITCOUNT );
+    bytesToReturn = read_shiftRegister_SNES< SNES_LATCH , SNES_DATA , SNES_CLOCK >();
 #endif
     interrupts();
-    sendRawData( 0 , SNES_BITCOUNT );
-}
-
-inline void loop_SGB()
-{
-    noInterrupts();
-    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( SGB_BITCOUNT );
-    interrupts();
-    sendRawData( 0 , SNES_BITCOUNT );
+    sendRawData( 0 , bytesToReturn );
 }
 
 inline void loop_NES()
@@ -974,6 +1501,12 @@ inline void loop_Sega()
   sendRawSegaData();
 }
 
+inline void loop_Genesis_Mouse()
+{
+  segaController.getMouseState(rawData);
+  sendRawSegaMouseData();
+}
+
 inline void loop_Classic()
 {
   currentState = classicController.getState();
@@ -986,19 +1519,10 @@ inline void loop_BoosterGrip()
   sendRawSegaData();
 }
 
-inline void loop_Playstation()
-{
-  noInterrupts();
-  read_Playstation();
-  interrupts();
-  sendRawPsData();
-}
-
-
 inline void loop_Playstation2()
 {
   noInterrupts();
-  read_Playstation2();
+  read_Playstation();
   interrupts();
   sendRawPs2Data();
 }
@@ -1038,9 +1562,37 @@ inline void loop_NeoGeo()
 inline void loop_3DO()
 {
     noInterrupts();
-    read_shiftRegister_reverse_clock< ThreeDO_LATCH , ThreeDO_DATA , ThreeDO_CLOCK >( ThreeDO_BITCOUNT );
+    byte bits = read_3do< ThreeDO_LATCH , ThreeDO_DATA , ThreeDO_CLOCK >( );
     interrupts();
-    sendRawData( 0 , ThreeDO_BITCOUNT );
+    sendRawData( 0 , bits );
+}
+
+
+inline void loop_Intellivision()
+{
+    noInterrupts();
+    read_IntellivisionData();
+    interrupts();
+    if(INT_SANE_BEHAVIOR)
+      sendIntellivisionData_Sane();
+    else
+      sendIntellivisionData_Raw();
+}
+
+inline void loop_CD32()
+{
+    noInterrupts();
+    read_cd32_controller();
+    interrupts();
+    sendRawDataCd32();
+}
+
+inline void loop_CD32_HACK()
+{
+    noInterrupts();
+    read_cd32_controller_HACK();
+    interrupts();
+    sendRawDataCd32();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1053,8 +1605,6 @@ void loop()
     loop_N64();
 #elif defined MODE_SNES
     loop_SNES();
-#elif defined MODE_SUPER_GAMEBOY
-    loop_SGB();
 #elif defined MODE_NES
     loop_NES();
 #elif defined MODE_SEGA
@@ -1064,8 +1614,6 @@ void loop()
 #elif defined MODE_BOOSTER_GRIP
     loop_BoosterGrip();
 #elif defined MODE_PLAYSTATION
-    loop_Playstation();
-#elif defined MODE_PLAYSTATION2
     loop_Playstation2();
 #elif defined MODE_TG16
     loop_TG16();
@@ -1077,6 +1625,14 @@ void loop()
     loop_NeoGeo();
 #elif defined MODE_3DO
     loop_3DO();
+#elif defined INTELLIVISION
+    loop_Intellivision();
+#elif defined CD32
+    loop_CD32();
+#elif defined CD32_HACK
+    loop_CD32_HACK();
+#elif defined MODE_GENESIS_MOUSE
+    loop_Genesis_Mouse();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();

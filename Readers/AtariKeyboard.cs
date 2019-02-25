@@ -23,7 +23,7 @@ namespace NintendoSpy.Readers
             for (int i = 0; i < BUTTONS.Length; ++i)
             {
                 if (string.IsNullOrEmpty(BUTTONS[i])) continue;
-                state.SetButton(BUTTONS[i], i == packet[0]);
+                state.SetButton(BUTTONS[i], (i + 65) == packet[0]);
             }
 
             return state.Build();

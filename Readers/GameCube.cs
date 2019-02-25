@@ -24,7 +24,7 @@ namespace NintendoSpy.Readers
 
         static public ControllerState ReadFromPacket (byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE) return null;
+            if (packet.Length != PACKET_SIZE) return null;
 
             var state = new ControllerStateBuilder ();
 

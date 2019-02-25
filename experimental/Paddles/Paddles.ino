@@ -22,10 +22,6 @@ int nominal_left_min = 87;
 int nominal_right_min = 110;
 int nominal_left_max = 1007;
 int nominal_right_max = 1009;
-int left_min_threshold = 5;
-int right_min_threshold = 5;
-int left_max_threshold = 253;
-int right_max_threshold = 253;
 
 int EMA_Sl = 0;          //initialization of EMA S left
 int EMA_Sr = 0;          //initialization of EMA S right

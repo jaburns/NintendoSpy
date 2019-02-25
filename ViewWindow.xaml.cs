@@ -252,7 +252,16 @@ namespace NintendoSpy
 
         void reader_ControllerDisconnected (object sender, EventArgs e)
         {
-            Close ();
+            if (this.Dispatcher.CheckAccess())
+                Close();
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    Close();
+                });
+            }
+           
         }
 
         void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e)
@@ -268,11 +277,72 @@ namespace NintendoSpy
         {
             newState = _blinkFilter.Process (newState);
 
-            foreach (var button in _buttonsWithImages) 
+            // This assumes you can't press left/right and up/down at the same time.  The code gets more complicated otherwise.
+            var compassDirectionStates = new Dictionary<string, bool>();
+            if (newState.Buttons.ContainsKey("up") && newState.Buttons.ContainsKey("left") && newState.Buttons.ContainsKey("right") && newState.Buttons.ContainsKey("down"))
             {
-                if (!newState.Buttons.ContainsKey (button.Item1.Name)) continue;
+                string[] compassDirections= { "north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest" };
 
-                button.Item2.Visibility = newState.Buttons [button.Item1.Name] ? Visibility.Visible : Visibility.Hidden ;
+                var compassDirectionStatesTemp = new bool[8];
+                compassDirectionStatesTemp[0] = newState.Buttons["up"];
+                compassDirectionStatesTemp[2] = newState.Buttons["right"];
+                compassDirectionStatesTemp[4] = newState.Buttons["down"];
+                compassDirectionStatesTemp[6] = newState.Buttons["left"];
+
+                if (compassDirectionStatesTemp[0] && compassDirectionStatesTemp[2])
+                {
+                    compassDirectionStatesTemp[1] = true;
+                    compassDirectionStatesTemp[0] = compassDirectionStatesTemp[2] = false;
+                }
+                else if (compassDirectionStatesTemp[2] && compassDirectionStatesTemp[4])
+                {
+                    compassDirectionStatesTemp[3] = true;
+                    compassDirectionStatesTemp[2] = compassDirectionStatesTemp[4] = false;
+                }
+                else if (compassDirectionStatesTemp[4] && compassDirectionStatesTemp[6])
+                {
+                    compassDirectionStatesTemp[5] = true;
+                    compassDirectionStatesTemp[4] = compassDirectionStatesTemp[6] = false;
+                }
+                else if (compassDirectionStatesTemp[6] && compassDirectionStatesTemp[0])
+                {
+                    compassDirectionStatesTemp[7] = true;
+                    compassDirectionStatesTemp[6] = compassDirectionStatesTemp[0] = false;
+                }
+
+                for(int i = 0; i < compassDirections.Length; ++i)
+                {
+                    compassDirectionStates[compassDirections[i]] = compassDirectionStatesTemp[i];
+                }
+            }
+
+            foreach (var button in _buttonsWithImages)
+            {
+                if (newState.Buttons.ContainsKey(button.Item1.Name))
+                {
+                    if (button.Item2.Dispatcher.CheckAccess())
+                        button.Item2.Visibility = newState.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                    else
+                    {
+                        button.Item2.Dispatcher.Invoke(() =>
+                        {
+                            button.Item2.Visibility = newState.Buttons[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                        });
+                    }
+                }
+                else if (compassDirectionStates.ContainsKey(button.Item1.Name))
+                {
+                    if (button.Item2.Dispatcher.CheckAccess())
+                        button.Item2.Visibility = compassDirectionStates[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                    else
+                    {
+                        button.Item2.Dispatcher.Invoke(() =>
+                        {
+                            button.Item2.Visibility = compassDirectionStates[button.Item1.Name] ? Visibility.Visible : Visibility.Hidden;
+                        });
+                    }
+                }
+
             }
 
             foreach (var button in _rangeButtonsWithImages) 
@@ -281,8 +351,7 @@ namespace NintendoSpy
 
                 var value = newState.Analogs [button.Item1.Name];
                 var visible = button.Item1.From <= value && value <= button.Item1.To;
-
-                button.Item2.Visibility = visible ? Visibility.Visible : Visibility.Hidden ;
+                button.Item2.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
             }
 
             foreach (var stick in _sticksWithImages)
@@ -300,8 +369,16 @@ namespace NintendoSpy
                 var y = newState.Analogs.ContainsKey (skin.YName)
                       ? skin.Config.Y + yrange * newState.Analogs [skin.YName]
                       : skin.Config.Y ;
-                
-                image.Margin = new Thickness (x,y,0,0);
+
+                if (image.Dispatcher.CheckAccess())
+                    image.Margin = new Thickness(x, y, 0, 0);
+                else
+                {
+                    image.Dispatcher.Invoke(() =>
+                    {
+                        image.Margin = new Thickness(x, y, 0, 0);
+                    });
+                }
             }
             
             foreach (var trigger in _triggersWithGridImages)
@@ -318,26 +395,86 @@ namespace NintendoSpy
                 switch (skin.Direction) 
                 {
                     case Skin.AnalogTrigger.DirectionValue.Right:
-                        grid.Width = skin.Config.Width * val;
+                        if (grid.Dispatcher.CheckAccess())
+                        {
+                            grid.Width = skin.Config.Width * val;
+                        }
+                        else
+                        {
+                            grid.Dispatcher.Invoke(() =>
+                            {
+                                grid.Width = skin.Config.Width * val;
+                            });
+                        }
                         break;
 
                     case Skin.AnalogTrigger.DirectionValue.Left:
                         var width = skin.Config.Width * val;
                         var offx = skin.Config.Width - width;
-                        grid.Margin = new Thickness (skin.Config.X + offx, skin.Config.Y, 0, 0);
-                        grid.Width = width;
+                        if (grid.Dispatcher.CheckAccess())
+                        {
+                            grid.Margin = new Thickness(skin.Config.X + offx, skin.Config.Y, 0, 0);
+                            grid.Width = width;
+                        }
+                        else
+                        {
+                            grid.Dispatcher.Invoke(() =>
+                            {
+                                grid.Margin = new Thickness(skin.Config.X + offx, skin.Config.Y, 0, 0);
+                                grid.Width = width;
+                            });
+                        }
                         break;
 
                     case Skin.AnalogTrigger.DirectionValue.Down:
-                        grid.Height = skin.Config.Height * val;
+                        if (grid.Dispatcher.CheckAccess())
+                        {
+                            grid.Height = skin.Config.Height * val;
+                        }
+                        else
+                        {
+                            grid.Dispatcher.Invoke(() =>
+                            {
+                                grid.Height = skin.Config.Height * val;
+                            });
+                        }
                         break;
 
                     case Skin.AnalogTrigger.DirectionValue.Up:
                         var height = skin.Config.Height * val;
                         var offy = skin.Config.Height - height;
-                        grid.Margin = new Thickness (skin.Config.X, skin.Config.Y + offy, 0, 0);
-                        grid.Height = height;
+                        if (grid.Dispatcher.CheckAccess())
+                        {
+                            grid.Margin = new Thickness(skin.Config.X, skin.Config.Y + offy, 0, 0);
+                            grid.Height = height;
+                        }
+                        else
+                        {
+                            grid.Dispatcher.Invoke(() =>
+                            {
+                                grid.Margin = new Thickness(skin.Config.X, skin.Config.Y + offy, 0, 0);
+                                grid.Height = height;
+                            });
+                        }
                         break;
+                    case Skin.AnalogTrigger.DirectionValue.Fade:
+                        if (grid.Dispatcher.CheckAccess())
+                        {
+                            grid.Height = skin.Config.Height;
+                            grid.Width = skin.Config.Width;
+                            grid.Opacity = val;
+                        }
+                        else
+                        {
+                            grid.Dispatcher.Invoke(() =>
+                            {
+                                grid.Height = skin.Config.Height;
+                                grid.Width = skin.Config.Width;
+                                grid.Opacity = val;
+                            });
+                        }
+                        break;
+
                 }
             }
         }

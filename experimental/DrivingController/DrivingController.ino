@@ -113,8 +113,8 @@ void loop() {
   Serial.print(currentEncoderValue);
   Serial.print("\n");
 #else
-  Serial.write(currentState[0]); 
-  Serial.write(currentState[1]); 
+  Serial.write(currentState[0]);
+  Serial.write(currentState[1]+(byte)65); 
   Serial.write('\n'); 
 #endif
 #endif

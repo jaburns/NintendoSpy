@@ -20,7 +20,7 @@ namespace NintendoSpy.Readers
 
         static public ControllerState ReadFromPacket (byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE) return null;
+            if (packet.Length != PACKET_SIZE) return null;
 
             var state = new ControllerStateBuilder ();
 
@@ -29,8 +29,12 @@ namespace NintendoSpy.Readers
                 state.SetButton (BUTTONS[i], packet[i] != 0x00);
             }
 
-            state.SetAnalog ("stick_x", readStick (SignalTool.readByte (packet, BUTTONS.Length    )));
-            state.SetAnalog ("stick_y", readStick (SignalTool.readByte (packet, BUTTONS.Length + 8)));
+            float x = readStick(SignalTool.readByte(packet, BUTTONS.Length    ));
+            float y = readStick(SignalTool.readByte(packet, BUTTONS.Length + 8));
+            state.SetAnalog ("stick_x", x);
+            state.SetAnalog ("stick_y", y);
+
+            SignalTool.SetMouseProperties(x, y, state);
 
             return state.Build ();
         }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="CD-i Gamepad" author="zoggins" type="cdi">
+
+    <background name="Default" image="cdicont.png" />
+
+    <button name="wired-1of3" image="circle2.png" x="483" y="83" width="55" height="55" />
+    <button name="wired-1aof3" image="circle2.png" x="486" y="183" width="55" height="55" />
+    <button name="wired-2of3" image="circle2.png" x="539" y="133" width="55" height="55" />
+    <button name="wired-3of3" image="circle2.png" x="417" y="129" width="55" height="55" />
+
+  <button name="wireless-1" image="circle2.png" x="483" y="83" width="55" height="55" />
+  <button name="wireless-1a" image="circle2.png" x="486" y="183" width="55" height="55" />
+  <button name="wireless-2" image="circle2.png" x="539" y="133" width="55" height="55" />
+
+    <button name="wired-up" image="circle2.png" x="111" y="61" width="30" height="30" />
+    <button name="wired-down" image="circle2.png" x="105" y="136" width="30" height="30" />
+    <button name="wired-left" image="circle2.png" x="68" y="102" width="30" height="30" />
+    <button name="wired-right" image="circle2.png" x="148" y="104" width="30" height="30" />
+
+  <button name="wireless-up" image="circle2.png" x="111" y="61" width="30" height="30" />
+  <button name="wireless-down" image="circle2.png" x="105" y="136" width="30" height="30" />
+  <button name="wireless-left" image="circle2.png" x="68" y="102" width="30" height="30" />
+  <button name="wireless-right" image="circle2.png" x="148" y="104" width="30" height="30" />
+  
+</skin>

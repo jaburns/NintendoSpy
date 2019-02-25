@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="SNES Mouse" author="zoggins" type="snes">
+
+  <background name="Default" image="snes.png" />
+
+  <button name="x" image="circle.png" x="81" y="49" width="50" height="50" />
+  <button name="a" image="circle.png" x="170" y="49" width="50" height="50" />
+
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="130" y="269" xrange="90" yrange="90" height="30" width="30"/>
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="130" y="269" width="30" height="30" xrange="0" yrange="0"/>
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="130" y="269" xrange="90" yrange="90" height="30" width="30"/>
+
+</skin>

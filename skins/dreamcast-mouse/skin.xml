@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Dreamcast Mouse" author="zoggins" type="dreamcast">
+
+    <background name="Default" image="dreamcast.png" />
+
+    <button name="left" image="circle.png" x="69" y="48" width="50" height="50" />
+    <button name="right" image="circle.png" x="185" y="48" width="50" height="50" />
+
+  <button name="start" image="circle.png" x="15" y="112" width="30" height="80" />
+
+  <button name="scroll_up" image="circle.png" x="140" y="23" width="25" height="25" />
+  <button name="scroll_down" image="circle.png" x="142" y="103" width="25" height="25" />
+
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="130" y="300" xrange="110" yrange="110" height="30" width="30" />
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="130" y="300" xrange="110" yrange="110" height="30" width="30" />
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="130" y="300" xrange="110" yrange="110" height="30" width="30" />
+
+</skin>
