@@ -11,7 +11,8 @@ void setup(void)
   cleanData[1] = -1;
   cleanData[46] = '\n';
   Serial.begin(115200);
-  while (!Serial);
+  delay(5);
+  //while (!Serial);
 }
 
 
