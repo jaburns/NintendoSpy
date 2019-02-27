@@ -95,9 +95,9 @@ void loop(void)
 
       if (rawData[8] != 0) return;
 
-      bool isWrite = rawData[7] == 0;
+      bool isWrite = rawData[7] == 0; 
 
-      if (tempData[0] != 0x52) return;
+      if (tempData[0] != 0x52) return; // ACK of address and R/W
 
 
       int i = 9;
@@ -114,11 +114,11 @@ void loop(void)
 
         if (!isWrite && i + 8 == i2c_index - 1)
         {
-          if (rawData[i + 8] == 0) return;
+          if (rawData[i + 8] == 0) return;  // Last byte of read ends with NACK
         }
         else
         {
-          if (rawData[i + 8] != 0) return;
+          if (rawData[i + 8] != 0) return; // Every other byte ends with ACK
         }
         i += 9;
       }
