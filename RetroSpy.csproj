@@ -107,6 +107,7 @@
     <Compile Include="Keybindings.cs" />
     <Compile Include="Readers\DrivingController.cs" />
     <Compile Include="Readers\MouseTester.cs" />
+    <Compile Include="Readers\WiiReaderV2.cs" />
     <Compile Include="Readers\WiiReaderV1.cs" />
     <Compile Include="Readers\XboxReader.cs" />
     <Compile Include="Readers\NeoGeo.cs" />
@@ -887,6 +888,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\AmigaMouse\AmigaMouse.ino">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="experimental\Wii\Wii.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\Settings.settings">

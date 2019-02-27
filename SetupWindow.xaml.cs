@@ -69,10 +69,10 @@ namespace NintendoSpy
                 {
                     updateBeagleList();
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.WII)
-                {
-                    updateBeagleI2CList();
-                }
+                //else if (_vm.Sources.SelectedItem == InputSource.WII)
+                //{
+                //    updateBeagleI2CList();
+                //}
             };
             _xiAndGamepadListUpdateTimer.Start();
 
@@ -137,10 +137,10 @@ namespace NintendoSpy
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.WII)
-                {
-                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
-                }
+                //else if (_vm.Sources.SelectedItem == InputSource.WII)
+                //{
+                //    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
+                //}
                 else {
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.Ports.SelectedItem);
                 }
