@@ -39,6 +39,7 @@ namespace NintendoSpy.Readers
                 var outState = new ControllerStateBuilder();
 
                 outState.SetButton("disconnect", true);
+                outState.SetButton("lock", false);
 
                 return outState.Build();
             }
@@ -66,7 +67,8 @@ namespace NintendoSpy.Readers
                 {
                     var outState = new ControllerStateBuilder();
 
-                    outState.SetButton("disconnect", true);
+                    outState.SetButton("lock", true);
+                    outState.SetButton("disconnect", false);
 
                     return outState.Build();
                 }
@@ -100,6 +102,7 @@ namespace NintendoSpy.Readers
                 outState.SetAnalog("stick_y", (stickY - 128.0f) / 128.0f);
 
                 outState.SetButton("disconnect", false);
+                outState.SetButton("lock", false);
 
                 return outState.Build();
             }
@@ -145,6 +148,7 @@ namespace NintendoSpy.Readers
                 outState.SetAnalog("rstick_y", (rightY - 15.0f) / 15.0f);
 
                 outState.SetButton("disconnect", false);
+                outState.SetButton("lock", false);
 
                 return outState.Build();
 
