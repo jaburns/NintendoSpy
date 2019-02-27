@@ -1,4 +1,16 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RetroSpy Wii Extension Controller Firmware for Teensy 3.5
+// Tested Settings: Teensy 3.5, 168 MHz (overclock), Fastest + pure-code with LTO, US English
+// v1.0
+// RetroSpy written by zoggins
+//
+// This code was based off of this: https://forum.pjrc.com/threads/28737-My-i2c-sniffer
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// ---------- Uncomment this for debugging ouput --------------
+//#define DEBUG
+// ---------- Uncomment this for a mostly complete general purpose I2C sniffer  --------------
+//#define ANALYZE
 
 byte rawData[1024];
 byte cleanData[274];
@@ -12,9 +24,7 @@ void setup(void)
   cleanData[46] = '\n';
   Serial.begin(115200);
   delay(5);
-  //while (!Serial);
 }
-
 
 uint8_t   current_portb = 0;
 uint8_t   last_portb;
@@ -23,9 +33,6 @@ bool      isControllerPoll = false;
 bool      isControllerID = false;
 bool      isEncrypted = false;
 byte      encryptionKeySet = 0;
-
-//#define ANALYZE
-//#define DEBUG
 
 void loop(void)
 {
@@ -39,7 +46,6 @@ void loop(void)
 
   if (bDataReady)
   {
-    bool sendOutput = false;
     if ((last_portb == 0xC) && (current_portb == 0x8))
     {
       // START

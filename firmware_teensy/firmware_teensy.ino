@@ -10,6 +10,7 @@
 //#define MODE_SNES
 //#define MODE_NES
 //#define MODE_DREAMCAST
+//#define MODE_WII
 
 //Bridge one of the GND to the right ping IN to enable your selected mode
 //#define MODE_DETECT
@@ -29,6 +30,7 @@
 #define MODEPIN_N64         34
 #define MODEPIN_GC          35
 #define MODEPIN_DREAMCAST   36
+#define MODEPIN_WII         37
 
 #define N64_PIN        2
 #define N64_BITCOUNT  32
@@ -49,10 +51,18 @@
 #define SPLIT '\n'  // Use a new-line character to split up the controller state packets.
 
 // Declare some space to store the bits we read from a controller.
-byte rawData[16000];
-byte* p;
-int byteCount;
-bool seenGC2N64 = false;
+byte      rawData[16000];
+byte      cleanData[274];
+byte*     p;
+int       byteCount;
+bool      seenGC2N64 = false;
+uint8_t   current_portb = 0;
+uint8_t   last_portb;
+int       i2c_index  = 0;
+bool      isControllerPoll = false;
+bool      isControllerID = false;
+bool      isEncrypted = false;
+byte      encryptionKeySet = 0;
 
 void dreamcast_setup()
 { 
@@ -60,6 +70,12 @@ void dreamcast_setup()
   pinMode(14, INPUT);
 
   p = &rawData[6];
+}
+
+void wii_setup()
+{ 
+  pinMode(19, INPUT);
+  pinMode(18, INPUT);
 }
 
 void common_pin_setup()
@@ -76,7 +92,7 @@ void common_pin_setup()
   
   // GPIOB_PDIR & 0xF;
   pinMode(16, INPUT_PULLUP);
-  pinMode(17, INPUT_PULLUP);
+  pinMode(17, INPUT_PULLUP);  
   pinMode(19, INPUT_PULLUP);
   pinMode(18, INPUT_PULLUP); 
 }
@@ -84,18 +100,31 @@ void common_pin_setup()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
-{    
+{  
+
+  // for MODE_DETECT
+  for(int i = 33; i < 40; ++i)
+    pinMode(i, INPUT_PULLUP);
+    
   #ifdef MODE_DREAMCAST
     dreamcast_setup();
+  #elif MODE_WII
+    wii_setup();
   #elif defined MODE_DETECT
     if( !digitalReadFast( MODEPIN_DREAMCAST ) ) {
         dreamcast_setup();
+    else if( !digitalReadFast( MODEPIN_WII ) ) {
+        wii_setup();
     } else {
         common_pin_setup();
     }
   #else
     common_pin_setup();
   #endif
+
+  cleanData[0] = 2;
+  cleanData[1] = -1;
+  cleanData[46] = '\n';
 
   seenGC2N64 = false;
 
@@ -136,7 +165,7 @@ void read_N64( )
     unsigned short bits;
     
     unsigned char *rawDataPtr = &rawData[1];
-    byte bit7, bit6, bit5, bit4, bit3, bit2, bit1, bit0;
+    byte /*bit7, bit6, bit5, bit4, bit3, */bit2, bit1, bit0;
     WAIT_FALLING_EDGE( N64_PIN );
     asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
     // bit7 = (GPIOD_PDIR & 0xFF) & 0b00000100;
@@ -491,8 +520,41 @@ state5:                             // Phase 1
 state7:
   interrupts();
 #ifndef DEBUG
-  rawData[byteCount++] = '\n';
-  Serial.write(p, byteCount-6);    
+  int j = 0;
+  byte numFrames = 0;
+  for(int i = 0; i < 4; ++i)
+  {
+    numFrames |= ((p[j] & 0x02) != 0 ? 1 : 0) << (7-(i*2));
+    numFrames |= ((p[j+1] & 0x01) != 0 ? 1 : 0) << (6-(i*2));
+    j += 2;
+  }
+  j += 16;
+  byte dcCommand = 0;
+  for (int i = 0; i < 4; ++i)
+  {
+    dcCommand |= (byte)(((p[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+    dcCommand |= (byte)(((p[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+    j += 2;
+  }
+  if (dcCommand == 8 && numFrames >= 1)
+  {
+    uint controllerType = 0;
+    for (int i = 0; i < 2; i++)
+    {
+        for (int k = 0; k < 4; ++k)
+        {
+            controllerType |= (uint)(((p[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
+            controllerType |= (uint)(((p[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+            j += 2;
+        }
+    }
+
+    if ((controllerType == 1 && numFrames == 3) || (controllerType ==  0x200 && numFrames == 6))
+    {
+      rawData[byteCount++] = '\n';
+      Serial.write(p, byteCount-6);    
+    }
+  }
 #else
   int j = 0;
 
@@ -729,6 +791,181 @@ state7:
   goto start_state;
 }
 
+void loop_wii(void)
+{
+
+  last_portb = current_portb;
+  noInterrupts();
+  current_portb = GPIOB_PDIR & 12;
+  interrupts();
+  bool bDataReady = current_portb != last_portb;
+
+
+  if (bDataReady)
+  {
+    if ((last_portb == 0xC) && (current_portb == 0x8))
+    {
+      // START
+      i2c_index = 0;
+    }
+    else if ((last_portb == 0x8) && (current_portb == 0xC))
+    {
+      // STOP
+      i2c_index -= (i2c_index % 9);
+
+      byte tempData[128];
+      tempData[0] = 0;
+      for (int i = 0; i < 7; ++i)
+      {
+        if (rawData[i] != 0)
+          tempData[0] |= 1 << (6 - i);
+      }
+
+      if (rawData[8] != 0) return;
+
+      bool isWrite = rawData[7] == 0; 
+
+      if (tempData[0] != 0x52) return; // ACK of address and R/W
+
+
+      int i = 9;
+      byte numbytes = 1;
+      while (i < i2c_index)
+      {
+        tempData[numbytes] = 0;
+        for (int j = 0; j < 8; ++j)
+        {
+          if (rawData[j + i] != 0)
+            tempData[numbytes] |= 1 << (7 - j);
+        }
+        ++numbytes;
+
+        if (!isWrite && i + 8 == i2c_index - 1)
+        {
+          if (rawData[i + 8] == 0) return;  // Last byte of read ends with NACK
+        }
+        else
+        {
+          if (rawData[i + 8] != 0) return; // Every other byte ends with ACK
+        }
+        i += 9;
+      }
+
+      if (isWrite)
+      {
+
+        if (numbytes == 2 && tempData[1] == 0)
+        {
+          isControllerPoll = true;
+        }
+        else if (numbytes == 3 && tempData[1] == 0xF0 && tempData[2] == 0x55)
+        {
+          isEncrypted = false;
+          cleanData[1] = -1;
+        }
+        else if (numbytes == 2 && tempData[1] == 0xFA)
+        {
+          isControllerID = true;
+        }
+        else if (numbytes == 8 && tempData[1] == 0x40)
+        {
+          int j = 2;
+          for (int i = 0; i < 6; i++)
+          {
+            cleanData[j] = (tempData[2 + i] & 0xF0);
+            cleanData[j + 1] = ((tempData[2 + i] & 0x0F) << 4);
+            j += 2;
+          }
+        }
+        else if (numbytes == 8 && tempData[1] == 0x46)
+        {
+          int j = 14;
+          for (int i = 0; i < 6; i++)
+          {
+            cleanData[j] = (tempData[2 + i] & 0xF0);
+            cleanData[j + 1] = ((tempData[2 + i] & 0x0F) << 4);
+            j += 2;
+          }
+        }
+        else if (numbytes == 6 && tempData[1] == 0x4C)
+        {
+
+          int j = 26;
+          for (int i = 0; i < 4; i++)
+          {
+            cleanData[j] = (tempData[2 + i] & 0xF0);
+            cleanData[j + 1] = ((tempData[2 + i] & 0x0F) << 4);
+            j += 2;
+          }
+          isEncrypted = true;
+          encryptionKeySet = (encryptionKeySet + 1) % 255;
+          if (encryptionKeySet == 10)
+            encryptionKeySet = 11;
+          cleanData[1] = encryptionKeySet;
+        }
+      }
+      else
+      {
+        if (isControllerID && (numbytes == 7 || numbytes == 9))
+        {
+          if (tempData[numbytes - 2] == 0 && tempData[numbytes - 1] == 0)
+          {
+            cleanData[0] = 0;
+          }
+          else if (tempData[numbytes - 2] == 1 && tempData[numbytes - 1] == 1)
+          {
+            cleanData[0] = 1;
+          }
+          else
+            cleanData[0] = 2;
+
+          isControllerID = false;
+
+        }
+        else if (isControllerPoll && (numbytes == 7 || numbytes == 17))
+        {
+
+          int j = 34;
+          for (int i = 0; i < 6; i++)
+          {
+            cleanData[j] = (tempData[1 + i] & 0xF0);
+            cleanData[j + 1] = (tempData[1 + i] << 4);
+            j += 2;
+          }
+          isControllerPoll = false;
+#ifdef DEBUG
+          Serial.print(cleanData[0]);
+          Serial.print(' ');
+          Serial.print(cleanData[1]);
+          Serial.print(' ');
+          j = 2;
+          for (int i = 0; i < 22; ++i)
+          {
+            byte data = (cleanData[j] | (cleanData[j + 1] >> 4));
+            Serial.print(data);
+            Serial.print(' ');
+            j += 2;
+          }
+          Serial.print('\n');
+#else
+          Serial.write(cleanData, 47);
+#endif
+        }
+      }
+    }
+    else if ((last_portb == 0x4) && (current_portb == 0xC))
+    {
+      // ONE
+      rawData[i2c_index++] = 1;
+    }
+    else if ((last_portb == 0x0) && (current_portb == 0x8))
+    {
+      // ZERO
+      rawData[i2c_index++] = 0;
+    }
+  }
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sends a packet of controller data over the Arduino serial interface.
 inline void sendRawData( unsigned char first, unsigned char count )
@@ -852,6 +1089,8 @@ void loop()
     loop_NES();
 #elif defined MODE_DREAMCAST
   loop_Dreamcast();
+#elif defined MODE_WII
+  loop_Wii();
 #elif defined MODE_DETECT
     if( !digitalReadFast( MODEPIN_SNES ) ) {
         loop_SNES();
@@ -861,6 +1100,8 @@ void loop()
         loop_GC();
     } else if( !digitalReadFast( MODEPIN_DREAMCAST ) ) {
         loop_Dreamcast();
+    } else if( !digitalReadFast( MODEPIN_WII ) ) {
+        loop_Wii();
     } else {
         loop_NES();
     }

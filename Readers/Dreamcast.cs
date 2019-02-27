@@ -141,7 +141,7 @@ namespace NintendoSpy.Readers
 
 
                 }
-                else if (controllerType == 0x200)
+                else if (controllerType == 0x200 && numWords == 6)
                 {
                     j += 24;
 

@@ -95,10 +95,17 @@ void printRawData()
   Serial.print(wireless_xaxis);
   Serial.print("\n");
 #else
+  int j = 0;
   for(int i = 0; i < 6; ++i)
-    Serial.write(wired_rawData[i]);
+  {
+    Serial.write(wired_rawData[i] & 0x0F);
+    Serial.write((wired_rawData[i] & 0xF0) << 4);
+  }
   for(int i = 0; i < 6; ++i)
-    Serial.write(wireless_rawData[i]);
+  {
+    Serial.write(wiredless_rawData[i] & 0xF0);
+    Serial.write((wiredless_rawData[i] & 0x0F) << 4);
+  }
   Serial.write("\n");
 #endif
 }
