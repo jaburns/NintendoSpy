@@ -34,16 +34,6 @@ namespace NintendoSpy.Readers
             byte[] data = new byte[1024];
             byte[] unencryptedData = new byte[1024];
 
-            if (packet[0] == 0x02)
-            {
-                var outState = new ControllerStateBuilder();
-
-                outState.SetButton("disconnect", true);
-                outState.SetButton("lock", false);
-
-                return outState.Build();
-            }
-
             int j = 2;
             int numBytes = 0;
             for(int i = 0; i < 22; ++i)
@@ -108,6 +98,9 @@ namespace NintendoSpy.Readers
             }
             else if (packet[0] == 1) // Classic Controller
             {
+                if ((unencryptedData[4] & 0b00000001) == 0)
+                    return null;
+
                 var outState = new ControllerStateBuilder();
 
                 byte rightTrigger = (byte)(unencryptedData[3] & 0b00011111);
@@ -149,6 +142,65 @@ namespace NintendoSpy.Readers
 
                 outState.SetButton("disconnect", false);
                 outState.SetButton("lock", false);
+
+                return outState.Build();
+
+            }
+            else if (packet[0] == 2) // Unknown and its 6 ny
+            {
+                var outState = new ControllerStateBuilder();
+
+                byte rightTrigger = (byte)(unencryptedData[3] & 0b00011111);
+                byte leftTrigger = (byte)(((unencryptedData[3] & 0b11100000) >> 5) | ((unencryptedData[2] & 0b01100000) >> 2));
+
+                byte leftX = (byte)(unencryptedData[0] & 0b00111111);
+                byte leftY = (byte)(unencryptedData[1] & 0b00111111);
+
+                byte rightX = (byte)(((unencryptedData[2] & 0b10000000) >> 7) | ((unencryptedData[1] & 0b11000000) >> 5) | ((unencryptedData[0] & 0b11000000) >> 3));
+                byte rightY = (byte)(unencryptedData[2] & 0b00011111);
+
+                outState.SetButton("up", (unencryptedData[5] & ~0xFE) == 0);
+                outState.SetButton("right", (unencryptedData[4] & ~0x7F) == 0);
+                outState.SetButton("down", (unencryptedData[4] & ~0xBF) == 0);
+                outState.SetButton("left", (unencryptedData[5] & ~0xFD) == 0);
+
+                outState.SetButton("b", (unencryptedData[5] & ~0xBF) == 0);
+                outState.SetButton("a", (unencryptedData[5] & ~0xEF) == 0);
+                outState.SetButton("y", (unencryptedData[5] & 0b00100000) == 0);
+                outState.SetButton("x", (unencryptedData[5] & 0b00001000) == 0);
+
+                outState.SetButton("select", (unencryptedData[4] & ~0xEF) == 0);
+                outState.SetButton("home", (unencryptedData[4] & 0b00001000) == 0);
+                outState.SetButton("start", (unencryptedData[4] & ~0xFB) == 0);
+
+                outState.SetButton("l", (unencryptedData[4] & 0b00100000) == 0);
+                outState.SetButton("r", (unencryptedData[4] & 0b00000010) == 0);
+
+                outState.SetAnalog("l_trig", leftTrigger / 31.0f);
+                outState.SetAnalog("r_trig", rightTrigger / 31.0f);
+
+                outState.SetButton("zl", (unencryptedData[5] & 0b10000000) == 0);
+                outState.SetButton("zr", (unencryptedData[5] & 0b00000100) == 0);
+
+                outState.SetAnalog("lstick_x", (leftX - 32.0f) / 32.0f);
+                outState.SetAnalog("lstick_y", (leftY - 32.0f) / 32.0f);
+                outState.SetAnalog("rstick_x", (rightX - 15.0f) / 15.0f);
+                outState.SetAnalog("rstick_y", (rightY - 15.0f) / 15.0f);
+
+                outState.SetButton("disconnect", false);
+                outState.SetButton("lock", false);
+
+                byte stickX = unencryptedData[0];
+                byte stickY = unencryptedData[1];
+                ushort aX = (ushort)((unencryptedData[2] << 2) | ((unencryptedData[5] & 0b0000000000001100) >> 2));
+                ushort ay = (ushort)((unencryptedData[3] << 2) | ((unencryptedData[5] & 0b0000000000110000) >> 2));
+                ushort az = (ushort)((unencryptedData[4] << 2) | ((unencryptedData[5] & 0b0000000011000000) >> 2));
+
+                outState.SetButton("c", (unencryptedData[5] & 0b00000010) == 0);
+                outState.SetButton("z", (unencryptedData[5] & 0b00000001) == 0);
+
+                outState.SetAnalog("stick_x", (stickX - 128.0f) / 128.0f);
+                outState.SetAnalog("stick_y", (stickY - 128.0f) / 128.0f);
 
                 return outState.Build();
 
