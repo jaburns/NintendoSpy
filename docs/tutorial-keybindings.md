@@ -1,4 +1,4 @@
-﻿**Keybindings**
+**Keybindings**
 =====
 One of RetroSpy's great features allows you to configure a button or button combination to a keystroke or keystroke combination. This is called keybindings. Every release of RetroSpy includes a *keybindings.xml* file. This is where you can setup your keybindings settings. The default file has a nice example of what a keybind looks like:
 
@@ -23,6 +23,7 @@ You can find the button names for the input buttons in the *skin.xml* that is pa
 
 ## output-key
 The following is a list of all possible keys to set as a keybind. Not that these are not case sensitive:
+
 | Keyboard           | output-key                | 
 |:------------------:|:-------------------------:|
 |    Enter           |    enter                  |
