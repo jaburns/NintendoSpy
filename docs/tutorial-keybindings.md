@@ -76,9 +76,3 @@ The following is a list of all possible keys to set as a keybind. Not that these
 |    Add             |    add, +                 |
 |    Subtract        |    subtract, -            |
 |    Divide          |    divide, /              |
-
-
-
-
-
- Written with [StackEdit](https://stackedit.io/).
