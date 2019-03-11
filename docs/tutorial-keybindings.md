@@ -2,24 +2,24 @@
 =====
 One of RetroSpy's great features allows you to configure a button or button combination to a keystroke or keystroke combination. This is called keybindings. Every release of RetroSpy includes a *keybindings.xml* file. This is where you can setup your keybindings settings. The default file has a nice example of what a keybind looks like:
 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/example.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/example.png)
 
 You'll see in the commented example that with this configuration, if *l* and *r* were pressed on the controller at the same time, the *Home* key on the keyboard would be pressed. The only thing stopping us from being able to use this is removing the comments and info text. Save the file, open RetroSpy and it's set. Remember that like any other .xml asset in RetroSpy, you must save the file with RetroSpy closed, or reboot RetroSpy for the changes to take place. 
 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/1binding.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/1binding.png)
 
 You can also set multiple bindings like so:
 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/2binding.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/2binding.png)
 
 To turn off a keybinding, you'll need to comment the inner part of the tree. Commenting the whole tree will result in an error in RetroSpy.
 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/comment.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/comment.png)
 
 ## input button
 You can find the button names for the input buttons in the *skin.xml* that is paired with whichever controller mode you are using. Note that these are case sensitive.
 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/buttonname.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/keybindings-tutorial/buttonname.png)
 
 ## output-key
 The following is a list of all possible keys to set as a keybind. Not that these are not case sensitive:
