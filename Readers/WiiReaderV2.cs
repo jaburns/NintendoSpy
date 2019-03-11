@@ -146,7 +146,7 @@ namespace NintendoSpy.Readers
                 return outState.Build();
 
             }
-            else if (packet[0] == 2) // Unknown and its 6 ny
+            else if (packet[0] == 2) // Unknown and its 6 bytes
             {
                 var outState = new ControllerStateBuilder();
 
