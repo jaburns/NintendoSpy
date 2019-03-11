@@ -1,3 +1,0 @@
-
-Keyboard binding documentation
-===
