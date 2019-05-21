@@ -33,10 +33,11 @@ namespace NintendoSpy
         static public readonly InputSource DREAMCAST = new InputSource("dreamcast", "Sega Dreamcast", true, false, port => new SerialControllerReader(port, Dreamcast.ReadFromPacket));
         static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
         //static public readonly InputSource MOUSETESTER = new InputSource("mousetester", "Mouse Tester", true, false, port => new MouseTester(port));
-
+        //static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", false, true, controllerId => new WiiReaderV1(int.Parse(controllerId)));
+        static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", true, false, port => new SerialControllerReader(port, WiiReaderV2.ReadFromPacket));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION2, TG16, SATURN3D, NEOGEO, ATARIKEYBOARD, PADDLES, DRIVINGCONTROLLER, THREEDO, CDI, INTELLIVISION, CD32, DREAMCAST, XBOX
+            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION2, TG16, SATURN3D, NEOGEO, ATARIKEYBOARD, PADDLES, DRIVINGCONTROLLER, THREEDO, CDI, INTELLIVISION, CD32, DREAMCAST, XBOX, WII
         };
 
         static public readonly InputSource DEFAULT = NES;
