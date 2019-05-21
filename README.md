@@ -31,6 +31,7 @@ Additionally, RetroSpy has experimental support for:
  - [CD-i Infrared Remotes & Wired Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/cdi.md)
  - [Dreamcast Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/dreamcast.md)
  - [Amiga Mice](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/amigamouse.md)
+ - [Wii Extension Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/wii.md)
 ## Documentation
 
 The rest of the README will explain how to get RetroSpy up and running on an Arduino Uno. If you want to run RetroSpy on a Teensy 3.5 continue [here](https://github.com/zoggins/RetroSpy/blob/master/docs/README-TEENSY.md).  For more specific tutorials, check out the [docs](https://github.com/zoggins/RetroSpy/blob/master/docs/) folder in the repository.
