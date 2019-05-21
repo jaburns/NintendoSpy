@@ -35,8 +35,6 @@ bool      isEncrypted = false;
 byte      encryptionKeySet = 0;
 bool      isKeyThing = false;
 byte      keyThing[8];
-//#define ANALYZE
-//#define DEBUG
 
 void loop(void)
 {
@@ -46,7 +44,6 @@ void loop(void)
   current_portb = GPIOB_PDIR & 12;
   interrupts();
   bool bDataReady = current_portb != last_portb;
-
 
   if (bDataReady)
   {
