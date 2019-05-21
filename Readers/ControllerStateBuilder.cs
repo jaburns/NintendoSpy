@@ -13,6 +13,8 @@ namespace NintendoSpy.Readers
 
         public void SetButton (string name, bool value) {
             _buttons [name] = value;
+            _buttons[name.ToLower()] = value;
+            _buttons[name.ToUpper()] = value;
         }
 
         public void SetAnalog (string name, float value) {

@@ -10,7 +10,7 @@ In addition to the normal set of equipment needed for RetroSpy, all you need is 
 
 Open up RetroSpy's firmware in the Arduino IDE, and scroll down just past the list of modes to uncomment, and you will see a few defined variables called ``MODEPIN``. 
 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/readme/docs/tutorial-images/mode_detect-tutorial/MODEPIN.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/mode_detect-tutorial/MODEPIN.png)
 
 This will be our list of defined analog pins. In the example above, analog pin 0 has been defined as ``MODEPIN_SNES``. This means that our intention is, if analog pin 0 is grounded, the firmware will initialize the SNES mode. The name of the variable doesn't matter, but to avoid confusion, you should name it something related to the mode you want to activate. The Arduino UNO has 6 analog pins, so you may define pins 0-5.
 
@@ -28,5 +28,5 @@ This means that if ``MODEPIN_SNES`` is grounded, which we defined as A0, then th
 
 Now that our ``MODE_DETECT`` loop is setup, uncomment ``MODE_DETECT`` at the top, and upload your firmware. The firmware will now run the mode based on which, if any analog pins are grounded. Just connect one end of your wire in a GND pin on the POWER section of the board, and the other end to your desired analog pin. Note that upon switching analog pins, you will need to reset the board.
 
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/readme/docs/tutorial-images/mode_detect-tutorial/UNCOMMENT.png)
-![](https://raw.githubusercontent.com/sk84uhlivin/RetroSpy/readme/docs/tutorial-images/mode_detect-tutorial/WIRE.jpg)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/mode_detect-tutorial/UNCOMMENT.png)
+![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/mode_detect-tutorial/WIRE.jpg)

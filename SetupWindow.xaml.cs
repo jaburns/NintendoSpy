@@ -77,7 +77,7 @@ namespace NintendoSpy
             _xiAndGamepadListUpdateTimer.Start();
 
             updatePortList ();
-            _vm.Ports.SelectFirst ();
+            _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
             _vm.XIAndGamepad.SelectFirst();
             _vm.Sources.SelectId(Properties.Settings.Default.Source);
             _vm.Skins.SelectId(Properties.Settings.Default.Skin);
@@ -117,6 +117,7 @@ namespace NintendoSpy
         void goButton_Click (object sender, RoutedEventArgs e) 
         {
             this.Hide ();
+            Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
             Properties.Settings.Default.Source = _vm.Sources.GetSelectedId();
             Properties.Settings.Default.Skin = _vm.Skins.GetSelectedId();
             Properties.Settings.Default.Delay = _vm.DelayInMilliseconds;
@@ -227,6 +228,12 @@ namespace NintendoSpy
                 {
                     SelectFirst();
                 }
+            }
+
+            public void SelectIdFromText(T text)
+            {
+                int index = _items.IndexOf(text);
+                SelectId(index);
             }
 
             public int GetSelectedId()
