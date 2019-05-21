@@ -118,18 +118,30 @@ void setup()
 #elif defined CD32_HACK
     cd32_pin_setup();
 #elif defined MODE_DETECT
+	#ifdef MODEPIN_SEGA
     if( !PINC_READ( MODEPIN_SEGA ) ) {
         sega_classic_pin_setup();
-    } else if( !PINC_READ( MODEPIN_CLASSIC ) ) {
-        sega_classic_pin_setup();
-    } else if( !PINC_READ( MODEPIN_CD32 ) ) {
-        cd32_pin_setup();
-    } else {
-        common_pin_setup();
+		goto setup1;
     }
-#else
-    common_pin_setup();
+	#endif 
+	#ifdef MODEPIN_CLASSIC
+	if( !PINC_READ( MODEPIN_CLASSIC ) ) {
+        sega_classic_pin_setup();
+		goto setup1;
+    }
+	#endif
+	#ifdef MODEPIN_CD32
+	if( !PINC_READ( MODEPIN_CD32 ) ) {
+        cd32_pin_setup();
+		goto setup1;
+    }	
+	#endif
+     
 #endif
+
+    common_pin_setup();
+
+setup1:
   
     lastState = -1;
     currentState = 0;
