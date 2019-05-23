@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Generic N64 USB" author="tomg404" type="generic">
+<skin name="Generic N64 USB Default" author="tomg404" type="generic">
 
-	<background name="Chroma key background (OBS)" image="pad_ck.png"/>
-	<background name="Black background" image="pad.png"/>
+	<background name="White" image="n64-default.png"/>
+	<background name="Blue" image="n64-default-blue.png"/>
+	<background name="Green" image="n64-default-green.png"/>
+	<background name="Magenta" image="n64-default-magenta.png"/>
 	
 	/// A and B buttons
 	<button name="b6" image="red_circle.png" x="403" y="219" width="30" height="30" />
@@ -24,8 +26,8 @@
 	<button name="left"  image="square.png" x="57" y="167" width="30" height="30" />
 
 	/// L and R
-	<button name="b4" image="square.png" x="80" y="51" width="60" height="20" />
-	<button name="b5" image="square.png" x="413" y="51" width="60" height="20" />
+	<button name="b4" image="L-button.png" x="50" y="51"/>
+	<button name="b5" image="R-button.png" x="385" y="51"/>
 
 	// Z button
 	<button name="b7" image="square.png" x="260" y="0" width="40" height="40" />
