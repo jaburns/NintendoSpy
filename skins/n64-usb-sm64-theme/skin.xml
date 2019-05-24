@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Generic N64 USB (SM64 Theme)" author="tomg404" type="generic">
+	
+	<background name="White" image="n64-sm64-theme.png"/>
+	<background name="Blue" image="n64-sm64-theme-blue.png"/>
+	<background name="Green" image="n64-sm64-theme-green.png"/>
+	<background name="Magenta" image="n64-sm64-theme-magenta.png"/>
+	
+	/// A and B buttons
+	<button name="b6" image="..\\n64-usb\\red_circle.png" x="403" y="219" width="30" height="30" />
+    <button name="b8" image="..\\n64-usb\\red_circle.png" x="364" y="181" width="30" height="30" />
+	
+	/// START button
+	<button name="b9" image="..\\n64-usb\\green_circle.png" x="258" y="181" width="34" height="34" />
+	
+	//// C buttons
+	<button name="b0" image="..\\n64-usb\\green_circle.png" x="446" y="114" width="30" height="30" />
+	<button name="b1" image="..\\n64-usb\\green_circle.png" x="480" y="146" width="30" height="30" />
+	<button name="b2" image="..\\n64-usb\\green_circle.png" x="446" y="178" width="30" height="30" />
+	<button name="b3" image="..\\n64-usb\\green_circle.png" x="413" y="146" width="30" height="30" />
+
+	/// D-pad
+	<button name="up"    image="..\\n64-usb\\square.png" x="86" y="138" width="30" height="30" />
+	<button name="right" image="..\\n64-usb\\square.png" x="116" y="167" width="30" height="30" />
+	<button name="down"  image="..\\n64-usb\\square.png" x="85" y="195" width="30" height="30" />
+	<button name="left"  image="..\\n64-usb\\square.png" x="57" y="167" width="30" height="30" />
+
+	/// L and R
+	<button name="b4" image="..\\n64-usb\\L-button.png" x="50" y="51"/>
+	<button name="b5" image="..\\n64-usb\\R-button.png" x="385" y="51"/>
+
+	// Z button
+	<button name="b7" image="..\\n64-usb\\square.png" x="260" y="0" width="40" height="40" />
+	
+	/// Stick
+	<stick xname="x" yname="y" image="..\\n64-usb\\stick.png"
+           x="249" y="284" xrange="15" yrange="15" yreverse="true" />
+</skin>
