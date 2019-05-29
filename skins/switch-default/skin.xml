@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="Switch Pro Controller" author="floraline" type="generic">
 
-    <background name="Default" image="pad.png" color="#7FFF00" />
+    <background name="Default" color="#7FFF00" image="pad.png" />
 
     <button name="b3" image="btn_X.png" x="263" y="96" width="22" height="23" />
     <button name="b2" image="btn_Y.png" x="238" y="117" width="22" height="23" />
@@ -27,11 +27,11 @@
     <button name="b4" image="shoulder_Left.png" x="67" y="62" width="72" height="24" />
     <button name="b5" image="shoulder_Right.png" x="239" y="62" width="74" height="25" />
 
-    <button name="b4" image="shoulder_Left_Back.png" x="69" y="4" width="73" height="27" />
-    <button name="b5" image="shoulder_Right_Back.png" x="239" y="1" width="72" height="30" />
+    <button name="b4" image="shoulder_Left_Back.png" x="69" y="23" width="73" height="27" />
+    <button name="b5" image="shoulder_Right_Back.png" x="239" y="23" width="72" height="30" />
 
-    <button name="b6" image="trigger_Left.png" x="70" y="22" width="57" height="27" />
-    <button name="b7" image="trigger_Right.png" x="253" y="22" width="58" height="27" />
+    <button name="b6" image="trigger_Left.png" x="70" y="5" width="57" height="27" />
+    <button name="b7" image="trigger_Right.png" x="253" y="5" width="58" height="27" />
 
     <button name="b10" image="ring.png" x="78" y="105" width="49" height="48" />
     <button name="b11" image="ring.png" x="207" y="148" width="49" height="48" />
