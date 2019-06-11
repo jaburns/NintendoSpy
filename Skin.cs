@@ -50,6 +50,7 @@ namespace NintendoSpy
             public ElementConfig Config;
             public string XName, YName;
             public uint XRange, YRange;
+            public uint OriginalXRange, OriginalYRange;
             public bool XReverse, YReverse;
         }
 
@@ -183,7 +184,9 @@ namespace NintendoSpy
                     XName = readStringAttr (elem, "xname"),
                     YName = readStringAttr (elem, "yname"),
                     XRange = readUintAttr (elem, "xrange"),
-                    YRange = readUintAttr (elem, "yrange"),
+                    OriginalXRange = readUintAttr(elem, "xrange"),
+                    YRange = readUintAttr(elem, "yrange"),
+                    OriginalYRange = readUintAttr(elem, "yrange"),
                     XReverse = readBoolAttr (elem, "xreverse"),
                     YReverse = readBoolAttr (elem, "yreverse")
                 });

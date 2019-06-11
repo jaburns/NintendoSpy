@@ -19,93 +19,8 @@ using System.Runtime.InteropServices;
 
 namespace NintendoSpy
 {
-    static public class ViewWindowUtility
-    {
-        public static Rect GetAbsolutePlacement(this FrameworkElement element, bool relativeToScreen = false)
-        {
-            var absolutePos = element.PointToScreen(new System.Windows.Point(0, 0));
-            if (relativeToScreen)
-            {
-                return new Rect(absolutePos.X, absolutePos.Y, element.ActualWidth, element.ActualHeight);
-            }
-            var posMW = Application.Current.MainWindow.PointToScreen(new System.Windows.Point(0, 0));
-            absolutePos = new System.Windows.Point(absolutePos.X - posMW.X, absolutePos.Y - posMW.Y);
-            return new Rect(absolutePos.X, absolutePos.Y, element.ActualWidth, element.ActualHeight);
-        }
-    };
-
     public partial class ViewWindow : Window, INotifyPropertyChanged
     {
-      
-        internal class WindowAspectRatio
-        {
-            private double _ratio;
-            private ViewWindow _window;
-            private bool _calculatedMagic;
-
-            private WindowAspectRatio(ViewWindow window)
-            {
-                _calculatedMagic = false;
-                _window = window;
-                _ratio = window.Width / window.Height;
-                ((HwndSource)HwndSource.FromVisual(window)).AddHook(DragHook);
-            }
-
-            public static void Register(ViewWindow window)
-            {
-                new WindowAspectRatio(window);
-            }
-
-            internal enum WM
-            {
-                WINDOWPOSCHANGING = 0x0046,
-            }
-
-            [Flags()]
-            public enum SWP
-            {
-                NoMove = 0x2,
-            }
-
-            [StructLayout(LayoutKind.Sequential)]
-            internal struct WINDOWPOS
-            {
-                public IntPtr hwnd;
-                public IntPtr hwndInsertAfter;
-                public int x;
-                public int y;
-                public int cx;
-                public int cy;
-                public int flags;
-            }
-
-            private IntPtr DragHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handeled)
-            {
-                if (!_calculatedMagic)
-                {
-                    _window.calculateMagic();
-                    _calculatedMagic = true;
-                }
-
-                if ((WM)msg == WM.WINDOWPOSCHANGING)
-                {
-                    WINDOWPOS position = (WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
-
-                    if ((position.flags & (int)SWP.NoMove) != 0 ||
-                        HwndSource.FromHwnd(hwnd).RootVisual == null) return IntPtr.Zero;
-
-                    position.cx = (int)(position.cy * _ratio);
-
-                    Marshal.StructureToPtr(position, lParam, true);
-                    handeled = true;
-
-                    _window.AdjustControllerElements();
-                }
-
-                return IntPtr.Zero;
-            }
-        }
-
         public void calculateMagic()
         {
             _magicHeight = Height - _originalHeight;
@@ -155,8 +70,8 @@ namespace NintendoSpy
         {
             ControllerGrid.Width = ((Image)ControllerGrid.Children[0]).Width = GetWidth();
             ControllerGrid.Height = ((Image)ControllerGrid.Children[0]).Height = GetHeight();
-            xRatio = GetWidth() / _originalWidth;
-            yRatio = GetHeight() / _originalHeight;
+            double xRatio = GetWidth() / _originalWidth;
+            double yRatio = GetHeight() / _originalHeight;
 
 
             foreach (var detail in _detailsWithImages)
@@ -182,6 +97,8 @@ namespace NintendoSpy
             foreach (var stick in _sticksWithImages)
             {
                 AdjustImage(stick.Item1.Config, stick.Item2, xRatio, yRatio);
+                stick.Item1.XRange = (uint)(stick.Item1.OriginalXRange * xRatio);
+                stick.Item1.YRange = (uint)(stick.Item1.OriginalYRange * yRatio);
             }
         }
 
@@ -194,8 +111,6 @@ namespace NintendoSpy
         private double _originalWidth;
         private double _magicWidth;
         private double _magicHeight;
-        private double xRatio;
-        private double yRatio;
 
         Skin _skin;
         IControllerReader _reader;
@@ -256,9 +171,6 @@ namespace NintendoSpy
             _reader = reader;
 
             Title = skin.Name;
-
-            xRatio = 1.0;
-            yRatio = 1.0;
 
             ControllerGrid.Width = Width = _originalWidth = skinBackground.Width;
             ControllerGrid.Height = Height = _originalHeight = skinBackground.Height;
@@ -667,8 +579,75 @@ namespace NintendoSpy
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged (string propertyName) {
             if (PropertyChanged != null) PropertyChanged (this, new PropertyChangedEventArgs(propertyName));
+        }  
+    }
+
+    internal class WindowAspectRatio
+    {
+        private double _ratio;
+        private ViewWindow _window;
+        private bool _calculatedMagic;
+
+        private WindowAspectRatio(ViewWindow window)
+        {
+            _calculatedMagic = false;
+            _window = window;
+            _ratio = window.Width / window.Height;
+            ((HwndSource)HwndSource.FromVisual(window)).AddHook(DragHook);
         }
 
-        
+        public static void Register(ViewWindow window)
+        {
+            new WindowAspectRatio(window);
+        }
+
+        internal enum WM
+        {
+            WINDOWPOSCHANGING = 0x0046,
+        }
+
+        [Flags()]
+        public enum SWP
+        {
+            NoMove = 0x2,
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct WINDOWPOS
+        {
+            public IntPtr hwnd;
+            public IntPtr hwndInsertAfter;
+            public int x;
+            public int y;
+            public int cx;
+            public int cy;
+            public int flags;
+        }
+
+        private IntPtr DragHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handeled)
+        {
+            if (!_calculatedMagic)
+            {
+                _window.calculateMagic();
+                _calculatedMagic = true;
+            }
+
+            if ((WM)msg == WM.WINDOWPOSCHANGING)
+            {
+                WINDOWPOS position = (WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
+
+                if ((position.flags & (int)SWP.NoMove) != 0 ||
+                    HwndSource.FromHwnd(hwnd).RootVisual == null) return IntPtr.Zero;
+
+                position.cx = (int)(position.cy * _ratio);
+
+                Marshal.StructureToPtr(position, lParam, true);
+                handeled = true;
+
+                _window.AdjustControllerElements();
+            }
+
+            return IntPtr.Zero;
+        }
     }
 }
