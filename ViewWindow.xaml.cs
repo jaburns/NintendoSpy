@@ -14,11 +14,74 @@ using System.ComponentModel;
 using System.Windows.Shapes;
 
 using NintendoSpy.Readers;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 
 namespace NintendoSpy
 {
     public partial class ViewWindow : Window, INotifyPropertyChanged
     {
+        //double so division keeps decimal points
+        double widthRatio = 300;
+        double heightRatio = 217;
+        double heightBorder = 31;
+
+        const int WM_SIZING = 0x214;
+        const int WMSZ_LEFT = 1;
+        const int WMSZ_RIGHT = 2;
+        const int WMSZ_TOP = 3;
+        const int WMSZ_BOTTOM = 6;
+
+        public struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
+            source.AddHook(WndProc);
+        }
+
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == WM_SIZING)
+            {
+                RECT rc = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
+                int res = wParam.ToInt32();
+                if (res == WMSZ_LEFT || res == WMSZ_RIGHT)
+                {
+                    //Left or right resize -> adjust height (bottom)
+                    rc.Bottom = rc.Top + (int)(heightRatio * this.Width / widthRatio);
+                }
+                else if (res == WMSZ_TOP || res == WMSZ_BOTTOM)
+                {
+                    //Up or down resize -> adjust width (right)
+                    rc.Right = rc.Left + (int)(widthRatio * this.Height / heightRatio);
+                }
+                else if (res == WMSZ_RIGHT + WMSZ_BOTTOM)
+                { 
+                    //Lower-right corner resize -> adjust height (could have been width)
+                    rc.Bottom = (int)heightBorder + rc.Top + (int)(heightRatio * this.Width / widthRatio);
+                    ControllerGrid.
+                    //ControllerGrid.Width = this.Width;
+                    //ControllerGrid.Height = (int)(heightRatio * this.Width / widthRatio);
+                }
+                else if (res == WMSZ_LEFT + WMSZ_TOP)
+                {
+                    //Upper-left corner -> adjust width (could have been height)
+                    rc.Left = rc.Right - (int)(widthRatio * this.Height / heightRatio);
+                }
+                Marshal.StructureToPtr(rc, lParam, true);
+            }
+
+            return IntPtr.Zero;
+        }
+
         Skin _skin;
         IControllerReader _reader;
         Keybindings _keybindings;
@@ -69,6 +132,7 @@ namespace NintendoSpy
 
         public ViewWindow (Skin skin, Skin.Background skinBackground, IControllerReader reader)
         {
+            
             InitializeComponent ();
             DataContext = this;
 
@@ -81,17 +145,18 @@ namespace NintendoSpy
             ControllerGrid.Height = skinBackground.Height;
             var brush = new SolidColorBrush(skinBackground.Color);
             ControllerGrid.Background = brush;
-
+            ControllerGrid.ClipToBounds = true;
             if (skinBackground.Image != null)
             {
                 var img = new Image();
                 img.VerticalAlignment = VerticalAlignment.Top;
                 img.HorizontalAlignment = HorizontalAlignment.Left;
                 img.Source = skinBackground.Image;
-                img.Stretch = Stretch.Uniform;
+                img.Stretch = Stretch.;
                 img.Margin = new Thickness(0, 0, 0, 0);
-                img.Width = skinBackground.Image.PixelWidth;
-                img.Height = skinBackground.Image.PixelHeight;
+                //img.Width = skinBackground.Image.PixelWidth;
+                //img.Height = skinBackground.Image.PixelHeight;
+
                 ControllerGrid.Children.Add(img);
             }
 
@@ -252,15 +317,15 @@ namespace NintendoSpy
 
         void reader_ControllerDisconnected (object sender, EventArgs e)
         {
-            if (this.Dispatcher.CheckAccess())
-                Close();
-            else
-            {
-                this.Dispatcher.Invoke(() =>
-                {
-                    Close();
-                });
-            }
+            //if (this.Dispatcher.CheckAccess())
+            //    Close();
+            //else
+            //{
+            //    this.Dispatcher.Invoke(() =>
+            //    {
+            //        Close();
+            //    });
+            //}
            
         }
 
