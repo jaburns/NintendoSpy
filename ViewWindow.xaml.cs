@@ -19,14 +19,29 @@ namespace NintendoSpy
             _magicWidth = Width - _originalWidth;
         }
 
-        private double GetHeight()
+        public double GetMagicHeight()
+        {
+            return _magicHeight;
+        }
+
+        public double GetMagicWidth()
+        {
+            return _magicWidth;
+        }
+
+        public double GetHeight()
         {
             return Height - _magicHeight;
         }
 
-        private double GetWidth()
+        public double GetWidth()
         {
             return Width - _magicWidth;
+        }
+
+        public double GetRatio()
+        {
+            return _originalWidth / _originalHeight;
         }
 
         private void AdjustImage(Skin.ElementConfig config, Image image, double xRatio, double yRatio)
@@ -94,8 +109,21 @@ namespace NintendoSpy
             }
         }
 
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+        private const int WS_MAXIMIZEBOX = 0x10000;
+
         private void Window_SourceInitialized(object sender, EventArgs ea)
-        {
+        {   
+            var hwnd = new WindowInteropHelper((Window)sender).Handle;
+            var value = GetWindowLong(hwnd, GWL_STYLE);
+            SetWindowLong(hwnd, GWL_STYLE, (int)(value & ~WS_MAXIMIZEBOX));
+       
             WindowAspectRatio.Register((ViewWindow)sender);
         }
 
@@ -261,7 +289,7 @@ namespace NintendoSpy
             img.VerticalAlignment = VerticalAlignment.Top;
             img.HorizontalAlignment = HorizontalAlignment.Left;
             img.Source = config.Image;
-            img.Stretch = Stretch.Fill;
+            img.Stretch = Stretch.Uniform;
             img.Margin = new Thickness (config.X, config.Y, 0, 0);
             img.Width = config.Width;
             img.Height = config.Height;
@@ -583,7 +611,7 @@ namespace NintendoSpy
         {
             _calculatedMagic = false;
             _window = window;
-            _ratio = window.Width / window.Height;
+            _ratio = window.GetRatio();
             ((HwndSource)HwndSource.FromVisual(window)).AddHook(DragHook);
         }
 
@@ -625,12 +653,16 @@ namespace NintendoSpy
 
             if ((WM)msg == WM.WINDOWPOSCHANGING)
             {
+
                 WINDOWPOS position = (WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
 
                 if ((position.flags & (int)SWP.NoMove) != 0 ||
                     HwndSource.FromHwnd(hwnd).RootVisual == null) return IntPtr.Zero;
 
-                position.cx = (int)(position.cy * _ratio);
+                double magicWidth = _window.GetMagicWidth();
+                double magicHeight = _window.GetMagicHeight();
+
+                position.cx = (int)( magicWidth + ((position.cy-magicHeight) * _ratio));
 
                 Marshal.StructureToPtr(position, lParam, true);
                 handeled = true;
