@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.ComponentModel;
-using System.Windows.Shapes;
 
 using NintendoSpy.Readers;
 using System.Windows.Interop;
@@ -269,7 +261,7 @@ namespace NintendoSpy
             img.VerticalAlignment = VerticalAlignment.Top;
             img.HorizontalAlignment = HorizontalAlignment.Left;
             img.Source = config.Image;
-            img.Stretch = Stretch.Uniform;
+            img.Stretch = Stretch.Fill;
             img.Margin = new Thickness (config.X, config.Y, 0, 0);
             img.Width = config.Width;
             img.Height = config.Height;
@@ -348,16 +340,15 @@ namespace NintendoSpy
 
         void reader_ControllerDisconnected (object sender, EventArgs e)
         {
-            //if (this.Dispatcher.CheckAccess())
-            //    Close();
-            //else
-            //{
-            //    this.Dispatcher.Invoke(() =>
-            //    {
-            //        Close();
-            //    });
-            //}
-           
+            if (this.Dispatcher.CheckAccess())
+                Close();
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    Close();
+                });
+            }
         }
 
         void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e)
