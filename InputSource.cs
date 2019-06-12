@@ -9,35 +9,47 @@ namespace NintendoSpy
 {
     public class InputSource
     {
-        static public readonly InputSource NES = new InputSource ("nes", "NES", true, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_NES));
-        static public readonly InputSource SNES = new InputSource ("snes", "Super NES", true, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_SNES));
-        static public readonly InputSource N64 = new InputSource ("n64", "Nintendo 64", true, false, port => new SerialControllerReader (port, Nintendo64.ReadFromPacket));
-        static public readonly InputSource GAMECUBE = new InputSource ("gamecube", "GameCube", true, false, port => new SerialControllerReader (port, GameCube.ReadFromPacket));
-        static public readonly InputSource PC360 = new InputSource ("pc360", "PC 360", false, true, controllerId => new XInputReader (uint.Parse(controllerId)));
-        static public readonly InputSource PAD = new InputSource ("generic", "Generic PC Gamepad", false, true, controllerId => new GamepadReader (int.Parse(controllerId)));
-        static public readonly InputSource PADATOD = new InputSource ("genericanalogtodpad", "Generic PC Gamepad AnalogToDPad", false, true, controllerId => new GamepadReaderAnalogToDPad (int.Parse(controllerId)));
-        static public readonly InputSource SEGA = new InputSource("sega", "Sega Genesis", true, false, port => new SerialControllerReader(port, Sega.ReadFromPacket));
-        static public readonly InputSource CLASSIC = new InputSource("classic", "Atari/SMS", true, false, port => new SerialControllerReader(port, Classic.ReadFromPacket));
-        static public readonly InputSource ATARIKEYBOARD = new InputSource("atarikeyboard", "Atari Keyboard Controller", true, false, port => new SerialControllerReader(port, AtariKeyboard.ReadFromPacket));
-        //static public readonly InputSource PLAYSTATION = new InputSource("playstation", "Playstation", true, false, port => new SerialControllerReader(port, Playstation.ReadFromPacket));
-        static public readonly InputSource PLAYSTATION2 = new InputSource("playstation", "Playstation", true, false, port => new SerialControllerReader(port, Playstation2.ReadFromPacket));
-        static public readonly InputSource TG16 = new InputSource("tg16", "Turbographx 16", true, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
-        static public readonly InputSource PADDLES = new InputSource("paddles", "Atari Paddles", true, false, port => new SerialControllerReader(port, Paddles.ReadFromPacket));
+        static public readonly InputSource CLASSIC = new InputSource("classic", "Atari/Commodore/SMS Controller", true, false, port => new SerialControllerReader(port, Classic.ReadFromPacket));
         static public readonly InputSource DRIVINGCONTROLLER = new InputSource("drivingcontroller", "Atari Driving Controller", true, false, port => new SerialControllerReader(port, DrivingController.ReadFromPacket));
-        static public readonly InputSource SATURN3D = new InputSource("saturn", "Sega Saturn", true, false, port => new SerialControllerReader(port, SS3D.ReadFromPacket));
-        static public readonly InputSource NEOGEO = new InputSource("neogeo", "NeoGeo", true, false, port => new SerialControllerReader(port, NeoGeo.ReadFromPacket));
-        static public readonly InputSource THREEDO = new InputSource("3do", "3DO", true, false, port => new SerialControllerReader(port, ThreeDO.ReadFromPacket));
-        static public readonly InputSource CDI = new InputSource("cdi", "CD-i", true, false, port => new SerialControllerReader(port, CDi.ReadFromPacket));
-        static public readonly InputSource INTELLIVISION = new InputSource("intellivision", "Intellivision", true, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_Intellivision));
-        static public readonly InputSource CD32 = new InputSource("cd32", "Amiga", true, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_CD32));
-        static public readonly InputSource DREAMCAST = new InputSource("dreamcast", "Sega Dreamcast", true, false, port => new SerialControllerReader(port, Dreamcast.ReadFromPacket));
+        static public readonly InputSource ATARIKEYBOARD = new InputSource("atarikeyboard", "Atari Keyboard Controller", true, false, port => new SerialControllerReader(port, AtariKeyboard.ReadFromPacket));
+        static public readonly InputSource PADDLES = new InputSource("paddles", "Atari Paddles", true, false, port => new SerialControllerReader(port, Paddles.ReadFromPacket));
+
+        static public readonly InputSource CD32 = new InputSource("cd32", "Commodore Amiga CD32", true, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_CD32));
+
+        static public readonly InputSource INTELLIVISION = new InputSource("intellivision", "Mattel Intellivision", true, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_Intellivision));
+
         static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
-        //static public readonly InputSource MOUSETESTER = new InputSource("mousetester", "Mouse Tester", true, false, port => new MouseTester(port));
-        //static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", false, true, controllerId => new WiiReaderV1(int.Parse(controllerId)));
+
+        static public readonly InputSource TG16 = new InputSource("tg16", "NEC Turbographx 16", true, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
+
+        static public readonly InputSource NES = new InputSource ("nes", "Nintendo NES", true, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_NES));
+        static public readonly InputSource SNES = new InputSource ("snes", "Nintendo SNES", true, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_SNES));
+        static public readonly InputSource N64 = new InputSource ("n64", "Nintendo 64", true, false, port => new SerialControllerReader (port, Nintendo64.ReadFromPacket));
+        static public readonly InputSource GAMECUBE = new InputSource ("gamecube", "Nintendo GameCube", true, false, port => new SerialControllerReader (port, GameCube.ReadFromPacket));
         static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", true, false, port => new SerialControllerReader(port, WiiReaderV2.ReadFromPacket));
 
+        static public readonly InputSource THREEDO = new InputSource("3do", "Panasonic 3DO", true, false, port => new SerialControllerReader(port, ThreeDO.ReadFromPacket));
+
+        static public readonly InputSource PC360 = new InputSource ("pc360", "PC 360 Controller", false, true, controllerId => new XInputReader (uint.Parse(controllerId)));
+        static public readonly InputSource PAD = new InputSource ("generic", "PC Generic Gamepad", false, true, controllerId => new GamepadReader (int.Parse(controllerId)));
+        static public readonly InputSource PADATOD = new InputSource ("genericanalogtodpad", "PC Generic Gamepad with AnalogToDPad", false, true, controllerId => new GamepadReaderAnalogToDPad (int.Parse(controllerId)));
+
+        static public readonly InputSource CDI = new InputSource("cdi", "Phillips CD-i", true, false, port => new SerialControllerReader(port, CDi.ReadFromPacket));
+
+        static public readonly InputSource SEGA = new InputSource("sega", "Sega Genesis", true, false, port => new SerialControllerReader(port, Sega.ReadFromPacket));
+        static public readonly InputSource SATURN3D = new InputSource("saturn", "Sega Saturn", true, false, port => new SerialControllerReader(port, SS3D.ReadFromPacket));
+        static public readonly InputSource DREAMCAST = new InputSource("dreamcast", "Sega Dreamcast", true, false, port => new SerialControllerReader(port, Dreamcast.ReadFromPacket));
+
+        static public readonly InputSource NEOGEO = new InputSource("neogeo", "SNK NeoGeo", true, false, port => new SerialControllerReader(port, NeoGeo.ReadFromPacket));
+
+        static public readonly InputSource PLAYSTATION2 = new InputSource("playstation", "Sony Playstation 1/2", true, false, port => new SerialControllerReader(port, Playstation2.ReadFromPacket));
+        
+        //static public readonly InputSource PLAYSTATION = new InputSource("playstation", "Playstation", true, false, port => new SerialControllerReader(port, Playstation.ReadFromPacket));
+        //static public readonly InputSource MOUSETESTER = new InputSource("mousetester", "Mouse Tester", true, false, port => new MouseTester(port));
+        //static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", false, true, controllerId => new WiiReaderV1(int.Parse(controllerId)));
+
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            NES, SNES, N64, GAMECUBE, PC360, PAD, PADATOD, SEGA, CLASSIC, PLAYSTATION2, TG16, SATURN3D, NEOGEO, ATARIKEYBOARD, PADDLES, DRIVINGCONTROLLER, THREEDO, CDI, INTELLIVISION, CD32, DREAMCAST, XBOX, WII
+            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, CD32, INTELLIVISION, XBOX, TG16, NES, SNES, N64, GAMECUBE, WII, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, NEOGEO, PLAYSTATION2
         };
 
         static public readonly InputSource DEFAULT = NES;

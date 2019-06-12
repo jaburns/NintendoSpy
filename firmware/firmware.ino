@@ -214,7 +214,7 @@ void read_N64( )
     unsigned short bits;
     
     unsigned char *rawDataPtr = &rawData[1];
-    byte bit7, bit6, bit5, bit4, bit3, bit2, bit1, bit0;
+    byte /*bit7, bit6, bit5, bit4, bit3, */bit2, bit1, bit0;
     WAIT_FALLING_EDGE( N64_PIN );
     asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS );
     // bit7 = PIND & 0b00000100;
@@ -986,6 +986,8 @@ inline void read_TgData()
 #define PS_CMD 5
 #define PS_DATA 6
 
+byte playstationCommand[8];
+
 inline void read_Playstation( )
 {
   byte numBits = 0;
@@ -1000,7 +1002,10 @@ inline void read_Playstation( )
   bits = 0;
   do {
       WAIT_LEADING_EDGE(PS_CLOCK);
-      rawData[numBits++] = PIN_READ(PS_DATA);
+      byte pins = PIND;
+      
+      rawData[numBits] = pins & 0b01000000;
+      playstationCommand[numBits++] = pins & 0b00100000;
   }
   while( ++bits < 8 );
   
@@ -1063,11 +1068,14 @@ inline void read_Playstation( )
 inline void sendRawPs2Data()
 {
     #ifndef DEBUG
-    for (unsigned char i = 0; i < 152; ++i)
+    if (playstationCommand[0] == 0 && playstationCommand[1] != 0 && playstationCommand[2] == 0 && playstationCommand[3] == 0 && playstationCommand[4] == 0 && playstationCommand[5] == 0  && playstationCommand[6] != 0 && playstationCommand[7] == 0 /*playstationCommand=0x42 (Controller Poll)*/)
     {
-      Serial.write( rawData[i] ? ONE : ZERO );
+      for (unsigned char i = 0; i < 152; ++i)
+      {
+        Serial.write( rawData[i] ? ONE : ZERO );
+      }
+      Serial.write( SPLIT );
     }
-    Serial.write( SPLIT );
     #else
     for(int i = 0; i < 152; ++i)
     {
