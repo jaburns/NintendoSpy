@@ -33,28 +33,31 @@ namespace NintendoSpy.Readers
 
         public GamepadReader (int id = 0)
         {
-            //_dinput = new DirectInput();
- 
-            //var devices = _dinput.GetDevices (DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly);
-            //if (devices.Count - 1 < id) {
-            //    throw new IOException ("GamepadReader could not find a connected gamepad with the given id.");
-            //}
-            //_joystick = new Joystick (_dinput, devices[id].InstanceGuid);
- 
-            //foreach (var obj in _joystick.GetObjects()) {
-            //    if ((obj.ObjectId.Flags & DeviceObjectTypeFlags.Axis) != 0) {
-            //        _joystick.GetObjectPropertiesById(obj.ObjectId).Range = new InputRange(-RANGE, RANGE);
-            //    }
-            //}
+            _dinput = new DirectInput();
 
-            //try
-            //{
-            //    _joystick.Acquire();
-            //}
-            //catch(Exception)
-            //{ 
-            //    throw new IOException ("Connected gamepad could not be acquired.");
-            //}
+            var devices = _dinput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.AttachedOnly);
+            if (devices.Count - 1 < id)
+            {
+                throw new IOException("GamepadReader could not find a connected gamepad with the given id.");
+            }
+            _joystick = new Joystick(_dinput, devices[id].InstanceGuid);
+
+            foreach (var obj in _joystick.GetObjects())
+            {
+                if ((obj.ObjectId.Flags & DeviceObjectTypeFlags.Axis) != 0)
+                {
+                    _joystick.GetObjectPropertiesById(obj.ObjectId).Range = new InputRange(-RANGE, RANGE);
+                }
+            }
+
+            try
+            {
+                _joystick.Acquire();
+            }
+            catch (Exception)
+            {
+                throw new IOException("Connected gamepad could not be acquired.");
+            }
 
             _timer = new DispatcherTimer ();
             _timer.Interval = TimeSpan.FromMilliseconds (TIMER_MS);
