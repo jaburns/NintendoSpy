@@ -97,6 +97,16 @@ Only 1 GND from the GCN controller is required.
 |     Sense     |    Not Connected    |
 |   Data pin 5  |          14         |
 
+### Wii
+
+|   Wii         | Teensy Digital Pin |
+|:-------------:|:-------------------:|
+|      3.3V     |    Not Connected    |
+|      SCL      |         18          |
+|      3.3V     |    Not Connected    |
+|      SDA      |         19          |
+|      GND      |         GND         |
+
 
 ## Software and Setup
 

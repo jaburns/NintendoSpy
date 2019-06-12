@@ -76,8 +76,41 @@ state5:                             // Phase 1
 state7:
   interrupts();
 #ifndef DEBUG
-  rawData[byteCount++] = '\n';
-  Serial.write(p, byteCount-6);    
+  int j = 0;
+  byte numFrames = 0;
+  for(int i = 0; i < 4; ++i)
+  {
+    numFrames |= ((p[j] & 0x02) != 0 ? 1 : 0) << (7-(i*2));
+    numFrames |= ((p[j+1] & 0x01) != 0 ? 1 : 0) << (6-(i*2));
+    j += 2;
+  }
+  j += 16;
+  byte dcCommand = 0;
+  for (int i = 0; i < 4; ++i)
+  {
+    dcCommand |= (byte)(((p[j] & 0x02) != 0 ? 1 : 0) << (7 - (i * 2)));
+    dcCommand |= (byte)(((p[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (i * 2)));
+    j += 2;
+  }
+  if (dcCommand == 8 && numFrames >= 1)
+  {
+    uint controllerType = 0;
+    for (int i = 0; i < 2; i++)
+    {
+        for (int k = 0; k < 4; ++k)
+        {
+            controllerType |= (uint)(((p[j] & 0x02) != 0 ? 1 : 0) << (7 - (k * 2) + (i * 8)));
+            controllerType |= (uint)(((p[j + 1] & 0x01) != 0 ? 1 : 0) << (6 - (k * 2) + (i * 8)));
+            j += 2;
+        }
+    }
+
+    if ((controllerType == 1 && numFrames == 3) || (controllerType ==  0x200 && numFrames == 6))
+    {
+      rawData[byteCount++] = '\n';
+      Serial.write(p, byteCount-6);    
+    }
+  }
 #else
   int j = 0;
 
