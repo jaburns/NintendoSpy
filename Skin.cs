@@ -16,7 +16,7 @@ namespace NintendoSpy
     {
         public class ElementConfig {
             public BitmapImage Image;
-            public uint X, Y, Width, Height;
+            public uint X, Y, OriginalX, OriginalY, Width, Height, OriginalWidth, OriginalHeight;
             public List<string> TargetBackgrounds { get; set; }
             public List<string> IgnoreBackgrounds { get; set; }
         }
@@ -325,7 +325,7 @@ namespace NintendoSpy
             var ignoreBgs = getArrayAttr(elem, "ignore", false);
 
             return new ElementConfig {
-                X = x, Y = y, Image = image, Width = width, Height = height, TargetBackgrounds = targetBgs, IgnoreBackgrounds = ignoreBgs
+                X = x, Y = y, OriginalX = x, OriginalY = y, Image = image, Width = width, OriginalWidth = width, Height = height, OriginalHeight = height, TargetBackgrounds = targetBgs, IgnoreBackgrounds = ignoreBgs
             };
         }
 

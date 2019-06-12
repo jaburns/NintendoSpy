@@ -46,8 +46,8 @@ namespace NintendoSpy
 
         private void AdjustImage(Skin.ElementConfig config, Image image, double xRatio, double yRatio)
         {
-            int newX = (int)Math.Round(config.X * xRatio);
-            int newY = (int)Math.Round(config.Y * yRatio);
+            uint newX = config.X = (uint)Math.Round(config.OriginalX * xRatio);
+            uint newY = config.Y = (uint)Math.Round(config.OriginalY * yRatio);
 
             int newWidth = (int)Math.Round(config.Width * xRatio);
             int newHeight = (int)Math.Round(config.Height * yRatio);
@@ -59,11 +59,11 @@ namespace NintendoSpy
 
         private void AdjustGrid(Skin.ElementConfig config, Grid grid, double xRatio, double yRatio)
         {
-            int newX = (int)Math.Round(config.X * xRatio);
-            int newY = (int)Math.Round(config.Y * yRatio);
+            uint newX = config.X = (uint)Math.Round(config.OriginalX * xRatio);
+            uint newY = config.Y = (uint)Math.Round(config.OriginalY * yRatio);
 
-            int newWidth = (int)Math.Round(config.Width * xRatio);
-            int newHeight = (int)Math.Round(config.Height * yRatio);
+            uint newWidth = config.Width = (uint)Math.Round(config.OriginalWidth * xRatio);
+            uint newHeight = config.Height = (uint)Math.Round(config.OriginalHeight * yRatio);
 
             ((Image)grid.Children[0]).Width = newWidth;
             ((Image)grid.Children[0]).Height = newHeight;
@@ -474,16 +474,16 @@ namespace NintendoSpy
                 var skin = stick.Item1;
                 var image = stick.Item2;
 
-                float xrange = (skin.XReverse ? -1 :  1) * skin.XRange;
-                float yrange = (skin.YReverse ?  1 : -1) * skin.YRange;
+                float xrange = (skin.XReverse ? -1 : 1) * skin.XRange;
+                float yrange = (skin.YReverse ? 1 : -1) * skin.YRange;
 
-                var x = newState.Analogs.ContainsKey (skin.XName)
-                      ? skin.Config.X + xrange * newState.Analogs [skin.XName]
-                      : skin.Config.X ;
+                var x = newState.Analogs.ContainsKey(skin.XName)
+                      ? skin.Config.X + xrange * newState.Analogs[skin.XName]
+                      : skin.Config.X;
 
-                var y = newState.Analogs.ContainsKey (skin.YName)
-                      ? skin.Config.Y + yrange * newState.Analogs [skin.YName]
-                      : skin.Config.Y ;
+                var y = newState.Analogs.ContainsKey(skin.YName)
+                      ? skin.Config.Y + yrange * newState.Analogs[skin.YName]
+                      : skin.Config.Y;
 
                 if (image.Dispatcher.CheckAccess())
                     image.Margin = new Thickness(x, y, 0, 0);
@@ -495,7 +495,7 @@ namespace NintendoSpy
                     });
                 }
             }
-            
+
             foreach (var trigger in _triggersWithGridImages)
             {
                 var skin = trigger.Item1;
