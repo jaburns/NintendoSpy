@@ -11,7 +11,7 @@
 //#define MODE_NES
 //#define MODE_DREAMCAST
 //#define MODE_WII
-#define MODE_CD32
+//#define MODE_CD32
 
 //Bridge one of the GND to the right ping IN to enable your selected mode
 //#define MODE_DETECT
@@ -136,21 +136,37 @@ void setup()
     
   #ifdef MODE_DREAMCAST
     dreamcast_setup();
+    goto setup1;
   #elif defined MODE_CD32
     cd32_setup();
+    goto setup1;
   #elif defined MODE_WII
     wii_setup();
+    goto setup1;
   #elif defined MODE_DETECT
+    #ifdef MODEPIN_DREAMCAST 
     if( !digitalReadFast( MODEPIN_DREAMCAST ) ) {
         dreamcast_setup();
-    else if( !digitalReadFast( MODEPIN_WII ) ) {
-        wii_setup();
-    } else {
-        common_pin_setup();
+        goto setup1;
     }
-  #else
-    common_pin_setup();
-  #endif
+    #endif
+    #ifdef MODEPIN_CD32
+    if( !digitalReadFast( MODEPIN_CD32 ) ) {
+        cd32_setup();
+        goto setup1;
+    }
+    #endif
+    #ifdef MODEPIN_WII
+      else if( !digitalReadFast( MODEPIN_WII ) ) {
+          wii_setup();
+          goto setup1;        
+      } 
+    #endif  
+  #endif  
+
+  common_pin_setup();
+
+setup1:
 
   cleanData[0] = 2;
   cleanData[1] = -1;
@@ -445,30 +461,20 @@ inline void loop_NES()
     delay(5);
 }
 
-#define WAIT_LEADING_EDGE_CD32_CLOCK(i) while( ((GPIOD_PDIR & 0xFF) & 0b01000000) != 0); do { rawData[i] = (GPIOD_PDIR & 0xFF); } while( (rawData[i] & 0b01000000) == 0);
-#define WAIT_FALLING_EDGE_CD32_CLOCK(i) while( ((GPIOD_PDIR & 0xFF) & 0b01000000) == 0); do { rawData[i] = (GPIOD_PDIR & 0xFF); } while( (rawData[i] & 0b01000000) != 0);
-
 void read_cd32_controller()
 {
+
     WAIT_FALLING_EDGE(CD32_LATCH);
+    rawData[1] = (GPIOD_PDIR & 0xFF);
 
-    WAIT_FALLING_EDGE(CD32_CLOCK);
-    
-    WAIT_FALLING_EDGE(CD32_CLOCK);
+    for(int i = 2; i < 8; ++i)
+    {
+      WAIT_FALLING_EDGE(CD32_CLOCK);
+      rawData[i] = (GPIOD_PDIR & 0xFF);
+    }
 
-    WAIT_FALLING_EDGE_CD32_CLOCK(2);
-    
-    WAIT_FALLING_EDGE_CD32_CLOCK(3);
-
-    WAIT_FALLING_EDGE_CD32_CLOCK(4);
-
-    WAIT_FALLING_EDGE_CD32_CLOCK(5);
-    
-    WAIT_FALLING_EDGE_CD32_CLOCK(6);
-
-    WAIT_LEADING_EDGE(CD32_LATCH);
     rawData[0] = (GPIOD_PDIR & 0xFF);
-    rawData[7] = (GPIOB_PDIR & 0xFF);
+    rawData[8] = (GPIOB_PDIR & 0xFF);
     
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -476,18 +482,16 @@ void read_cd32_controller()
 inline void sendRawDataCd32( )
 {
     #ifndef DEBUG
-    for( unsigned char i = 0 ; i < 8 ; i++ ) {
+    for( unsigned char i = 0 ; i < 9 ; i++ ) {
         Serial.write( (rawData[i] & 0b11111101) );
     }
     Serial.write( SPLIT );
     #else
-    Serial.print( (rawData[0] &  0b10000000) == 0 ? 0 : 1);
-    Serial.print( (rawData[0] &  0b01000000) == 0 ? 0 : 1);
-    for( unsigned char i = 2 ; i < 7 ; i++ ) 
+    for( unsigned char i = 1 ; i < 8 ; i++ ) 
     { 
       Serial.print( (rawData[i] & 0b10000000) == 0 ? 0 : 1);
     }
-    Serial.print( (rawData[7] &  0b00000001) == 0 ? 0 : 1);
+    Serial.print( (rawData[8] &  0b00000001) == 0 ? 0 : 1);
     Serial.print( (rawData[0] &  0b00000100) == 0 ? 0 : 1);
     Serial.print( (rawData[0] &  0b00001000) == 0 ? 0 : 1);
     Serial.print( (rawData[0] & 0b00010000) == 0 ? 0 : 1);
