@@ -11,7 +11,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - NES
  - Sega Master System
  - Commodore 64/128/+4/Vic-20
- - Commodore Amiga/CD32
+ - Commodore Amiga (non-CD32 controllers)
  - Sega Genesis
  - TurboGraphx-16
  - Neo-Geo 
@@ -34,7 +34,7 @@ Additionally, RetroSpy has experimental support for:
  - [Wii Extension Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/wii.md)
 ## Documentation
 
-The rest of the README will explain how to get RetroSpy up and running on an Arduino Uno. If you want to run RetroSpy on a Teensy 3.5 continue [here](https://github.com/zoggins/RetroSpy/blob/master/docs/README-TEENSY.md).  For more specific tutorials, check out the [docs](https://github.com/zoggins/RetroSpy/blob/master/docs/) folder in the repository.
+The rest of the README will explain how to get RetroSpy up and running on an Arduino Uno. If you want to run RetroSpy on a Teensy 3.5 continue [here](https://github.com/zoggins/RetroSpy/blob/master/docs/README-TEENSY.md) (this is required for Wii, Dreamcast and Amiga CD32).  For more specific tutorials, check out the [docs](https://github.com/zoggins/RetroSpy/blob/master/docs/) folder in the repository.
 
 The general design of RetroSpy involves splicing a controller extension cable, and attaching the appropriate signal wires to an Arduino.  Then you just need to install the Arduino firmware packaged in the RetroSpy release, and run the display software.
 
