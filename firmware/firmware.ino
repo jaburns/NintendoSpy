@@ -30,7 +30,7 @@
 //#define MODE_2WIRE_SNES
 // ---------------------------------------------------------------------------------
 // Uncomment this for serial debugging output
-#define DEBUG
+//#define DEBUG
 
 #include "SegaControllerSpy.h"
 #include "ClassicControllerSpy.h"
