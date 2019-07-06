@@ -1,29 +1,143 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.ComponentModel;
-using System.Windows.Shapes;
 
 using NintendoSpy.Readers;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 
 namespace NintendoSpy
 {
     public partial class ViewWindow : Window, INotifyPropertyChanged
     {
+        public void calculateMagic()
+        {
+            _magicHeight = Height - _originalHeight;
+            _magicWidth = Width - _originalWidth;
+        }
+
+        public double GetMagicHeight()
+        {
+            return _magicHeight;
+        }
+
+        public double GetMagicWidth()
+        {
+            return _magicWidth;
+        }
+
+        public double GetHeight()
+        {
+            return Height - _magicHeight;
+        }
+
+        public double GetWidth()
+        {
+            return Width - _magicWidth;
+        }
+
+        public double GetRatio()
+        {
+            return _originalWidth / _originalHeight;
+        }
+
+        private void AdjustImage(Skin.ElementConfig config, Image image, double xRatio, double yRatio)
+        {
+            uint newX = config.X = (uint)Math.Round(config.OriginalX * xRatio);
+            uint newY = config.Y = (uint)Math.Round(config.OriginalY * yRatio);
+
+            int newWidth = (int)Math.Round(config.Width * xRatio);
+            int newHeight = (int)Math.Round(config.Height * yRatio);
+
+            image.Margin = new Thickness(newX, newY, 0, 0);
+            image.Width = newWidth;
+            image.Height = newHeight;
+        }
+
+        private void AdjustGrid(Skin.ElementConfig config, Grid grid, double xRatio, double yRatio)
+        {
+            uint newX = config.X = (uint)Math.Round(config.OriginalX * xRatio);
+            uint newY = config.Y = (uint)Math.Round(config.OriginalY * yRatio);
+
+            uint newWidth = config.Width = (uint)Math.Round(config.OriginalWidth * xRatio);
+            uint newHeight = config.Height = (uint)Math.Round(config.OriginalHeight * yRatio);
+
+            ((Image)grid.Children[0]).Width = newWidth;
+            ((Image)grid.Children[0]).Height = newHeight;
+
+            grid.Margin = new Thickness(newX, newY, 0, 0);
+            grid.Width = newWidth;
+            grid.Height = newHeight;
+        }
+
+        public void AdjustControllerElements()
+        {
+            ControllerGrid.Width = ((Image)ControllerGrid.Children[0]).Width = GetWidth();
+            ControllerGrid.Height = ((Image)ControllerGrid.Children[0]).Height = GetHeight();
+            double xRatio = GetWidth() / _originalWidth;
+            double yRatio = GetHeight() / _originalHeight;
+
+
+            foreach (var detail in _detailsWithImages)
+            {
+                AdjustImage(detail.Item1.Config, detail.Item2, xRatio, yRatio);
+            }
+
+            foreach (var trigger in _triggersWithGridImages)
+            {
+                AdjustGrid(trigger.Item1.Config, trigger.Item2, xRatio, yRatio);
+            }
+
+            foreach (var button in _buttonsWithImages)
+            {
+                AdjustImage(button.Item1.Config, button.Item2, xRatio, yRatio);
+            }
+
+            foreach (var button in _rangeButtonsWithImages)
+            {
+                AdjustImage(button.Item1.Config, button.Item2, xRatio, yRatio);
+            }
+
+            foreach (var stick in _sticksWithImages)
+            {
+                AdjustImage(stick.Item1.Config, stick.Item2, xRatio, yRatio);
+                stick.Item1.XRange = (uint)(stick.Item1.OriginalXRange * xRatio);
+                stick.Item1.YRange = (uint)(stick.Item1.OriginalYRange * yRatio);
+            }
+        }
+
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+        private const int WS_MAXIMIZEBOX = 0x10000;
+
+        private void Window_SourceInitialized(object sender, EventArgs ea)
+        {   
+            var hwnd = new WindowInteropHelper((Window)sender).Handle;
+            var value = GetWindowLong(hwnd, GWL_STYLE);
+            SetWindowLong(hwnd, GWL_STYLE, (int)(value & ~WS_MAXIMIZEBOX));
+       
+            WindowAspectRatio.Register((ViewWindow)sender);
+        }
+
+        private double _originalHeight;
+        private double _originalWidth;
+        private double _magicWidth;
+        private double _magicHeight;
+
         Skin _skin;
         IControllerReader _reader;
         Keybindings _keybindings;
         BlinkReductionFilter _blinkFilter = new BlinkReductionFilter ();
 
+        List<Tuple<Skin.Detail, Image>> _detailsWithImages = new List<Tuple<Skin.Detail, Image>>();
         List <Tuple <Skin.Button,Image>> _buttonsWithImages = new List <Tuple <Skin.Button,Image>> ();
         List <Tuple <Skin.RangeButton,Image>> _rangeButtonsWithImages = new List <Tuple <Skin.RangeButton,Image>> ();
         List <Tuple <Skin.AnalogStick,Image>> _sticksWithImages = new List <Tuple <Skin.AnalogStick,Image>> ();
@@ -69,6 +183,7 @@ namespace NintendoSpy
 
         public ViewWindow (Skin skin, Skin.Background skinBackground, IControllerReader reader)
         {
+            
             InitializeComponent ();
             DataContext = this;
 
@@ -77,8 +192,8 @@ namespace NintendoSpy
 
             Title = skin.Name;
 
-            ControllerGrid.Width = skinBackground.Width;
-            ControllerGrid.Height = skinBackground.Height;
+            ControllerGrid.Width = Width = _originalWidth = skinBackground.Width;
+            ControllerGrid.Height = Height = _originalHeight = skinBackground.Height;
             var brush = new SolidColorBrush(skinBackground.Color);
             ControllerGrid.Background = brush;
 
@@ -88,10 +203,11 @@ namespace NintendoSpy
                 img.VerticalAlignment = VerticalAlignment.Top;
                 img.HorizontalAlignment = HorizontalAlignment.Left;
                 img.Source = skinBackground.Image;
-                img.Stretch = Stretch.Uniform;
+                img.Stretch = Stretch.Fill;
                 img.Margin = new Thickness(0, 0, 0, 0);
                 img.Width = skinBackground.Image.PixelWidth;
                 img.Height = skinBackground.Image.PixelHeight;
+
                 ControllerGrid.Children.Add(img);
             }
 
@@ -99,8 +215,8 @@ namespace NintendoSpy
             {
                 if (bgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
                 {
-                    
                     var image = getImageForElement(detail.Config);
+                    _detailsWithImages.Add(new Tuple<Skin.Detail, Image>(detail, image));
                     ControllerGrid.Children.Add(image);
                 }
             }
@@ -173,7 +289,7 @@ namespace NintendoSpy
             img.VerticalAlignment = VerticalAlignment.Top;
             img.HorizontalAlignment = HorizontalAlignment.Left;
             img.Source = config.Image;
-            img.Stretch = Stretch.Fill;
+            img.Stretch = Stretch.Uniform;
             img.Margin = new Thickness (config.X, config.Y, 0, 0);
             img.Width = config.Width;
             img.Height = config.Height;
@@ -261,7 +377,6 @@ namespace NintendoSpy
                     Close();
                 });
             }
-           
         }
 
         void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e)
@@ -359,16 +474,16 @@ namespace NintendoSpy
                 var skin = stick.Item1;
                 var image = stick.Item2;
 
-                float xrange = (skin.XReverse ? -1 :  1) * skin.XRange;
-                float yrange = (skin.YReverse ?  1 : -1) * skin.YRange;
+                float xrange = (skin.XReverse ? -1 : 1) * skin.XRange;
+                float yrange = (skin.YReverse ? 1 : -1) * skin.YRange;
 
-                var x = newState.Analogs.ContainsKey (skin.XName)
-                      ? skin.Config.X + xrange * newState.Analogs [skin.XName]
-                      : skin.Config.X ;
+                var x = newState.Analogs.ContainsKey(skin.XName)
+                      ? skin.Config.X + xrange * newState.Analogs[skin.XName]
+                      : skin.Config.X;
 
-                var y = newState.Analogs.ContainsKey (skin.YName)
-                      ? skin.Config.Y + yrange * newState.Analogs [skin.YName]
-                      : skin.Config.Y ;
+                var y = newState.Analogs.ContainsKey(skin.YName)
+                      ? skin.Config.Y + yrange * newState.Analogs[skin.YName]
+                      : skin.Config.Y;
 
                 if (image.Dispatcher.CheckAccess())
                     image.Margin = new Thickness(x, y, 0, 0);
@@ -380,7 +495,7 @@ namespace NintendoSpy
                     });
                 }
             }
-            
+
             foreach (var trigger in _triggersWithGridImages)
             {
                 var skin = trigger.Item1;
@@ -483,8 +598,79 @@ namespace NintendoSpy
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged (string propertyName) {
             if (PropertyChanged != null) PropertyChanged (this, new PropertyChangedEventArgs(propertyName));
+        }  
+    }
+
+    internal class WindowAspectRatio
+    {
+        private double _ratio;
+        private ViewWindow _window;
+        private bool _calculatedMagic;
+
+        private WindowAspectRatio(ViewWindow window)
+        {
+            _calculatedMagic = false;
+            _window = window;
+            _ratio = window.GetRatio();
+            ((HwndSource)HwndSource.FromVisual(window)).AddHook(DragHook);
         }
 
-        
+        public static void Register(ViewWindow window)
+        {
+            new WindowAspectRatio(window);
+        }
+
+        internal enum WM
+        {
+            WINDOWPOSCHANGING = 0x0046,
+        }
+
+        [Flags()]
+        public enum SWP
+        {
+            NoMove = 0x2,
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct WINDOWPOS
+        {
+            public IntPtr hwnd;
+            public IntPtr hwndInsertAfter;
+            public int x;
+            public int y;
+            public int cx;
+            public int cy;
+            public int flags;
+        }
+
+        private IntPtr DragHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handeled)
+        {
+            if (!_calculatedMagic)
+            {
+                _window.calculateMagic();
+                _calculatedMagic = true;
+            }
+
+            if ((WM)msg == WM.WINDOWPOSCHANGING)
+            {
+
+                WINDOWPOS position = (WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
+
+                if ((position.flags & (int)SWP.NoMove) != 0 ||
+                    HwndSource.FromHwnd(hwnd).RootVisual == null) return IntPtr.Zero;
+
+                double magicWidth = _window.GetMagicWidth();
+                double magicHeight = _window.GetMagicHeight();
+
+                position.cx = (int)( magicWidth + ((position.cy-magicHeight) * _ratio));
+
+                Marshal.StructureToPtr(position, lParam, true);
+                handeled = true;
+
+                _window.AdjustControllerElements();
+            }
+
+            return IntPtr.Zero;
+        }
     }
 }
