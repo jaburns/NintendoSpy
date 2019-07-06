@@ -21,8 +21,6 @@
 //#define MODE_NEOGEO
 //#define MODE_3DO
 //#define INTELLIVISION
-//#define CD32        // WARNING: I have not gotten this work on my NTSC 500, but I am not sure if its just my computer or an NTSC issue.
-//#define CD32_HACK   // Try this one if you have problems on an NTSC machine, but the timings here may be specific to my machine.
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -81,11 +79,6 @@ BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
 #define SNES_BITCOUNT_EXT   32
 #define NES_BITCOUNT         8
 
-#define CD32_LATCH    5  // Digital Pin 5
-#define CD32_DATA     7  // Digital Pin 7
-#define CD32_CLOCK    6  // Digital Pin 6
-#define CD32_BITCOUNT 7
-
 #define GC_PIN        5
 #define GC_PREFIX    25
 #define GC_BITCOUNT  64
@@ -109,37 +102,28 @@ void setup()
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
   
-#ifdef MODE_SEGA
-    sega_classic_pin_setup();
-#elif defined MODE_CLASSIC
-    sega_classic_pin_setup();
-#elif defined CD32
-    cd32_pin_setup();
-#elif defined CD32_HACK
-    cd32_pin_setup();
-#elif defined MODE_DETECT
-	#ifdef MODEPIN_SEGA
-    if( !PINC_READ( MODEPIN_SEGA ) ) {
-        sega_classic_pin_setup();
-		goto setup1;
-    }
-	#endif 
-	#ifdef MODEPIN_CLASSIC
-	if( !PINC_READ( MODEPIN_CLASSIC ) ) {
-        sega_classic_pin_setup();
-		goto setup1;
-    }
-	#endif
-	#ifdef MODEPIN_CD32
-	if( !PINC_READ( MODEPIN_CD32 ) ) {
-        cd32_pin_setup();
-		goto setup1;
-    }	
-	#endif
-     
-#endif
+  #ifdef MODE_SEGA
+      sega_classic_pin_setup();
+      goto setup1;
+  #elif defined MODE_CLASSIC
+      sega_classic_pin_setup();
+      goto setup1;
+  #elif defined MODE_DETECT
+  	#ifdef MODEPIN_SEGA
+      if( !PINC_READ( MODEPIN_SEGA ) ) {
+          sega_classic_pin_setup();
+  		    goto setup1;
+      }
+  	#endif 
+  	#ifdef MODEPIN_CLASSIC
+  	if( !PINC_READ( MODEPIN_CLASSIC ) ) {
+          sega_classic_pin_setup();
+  		    goto setup1;
+      }
+  	#endif
+  #endif
 
-    common_pin_setup();
+  common_pin_setup();
 
 setup1:
   
@@ -154,22 +138,6 @@ void sega_classic_pin_setup()
 {
   for(int i = 2; i <= 6; ++i)
     pinMode(i, INPUT_PULLUP);
-}
-
-void cd32_pin_setup()
-{
-
-  PORTD = 0x00;
-  PORTB = 0x00;
-  DDRD  = 0x00;
-  
-  for(int i = 2; i <= 8; ++i)
-  {  
-    if (i != 5 && i != 7)
-      pinMode(i, INPUT_PULLUP);
-    else
-      pinMode(i, INPUT);
-  }
 }
 
 void common_pin_setup()
@@ -531,137 +499,6 @@ byte read_3do( )
     while( --bits > 0 );
 
     return numBitsToRead;
-}
-
-#define WAIT_LEADING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) != 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) == 0);
-#define WAIT_FALLING_EDGE_CD32_CLOCK(i) while( (PIND & 0b01000000) == 0); do { rawData[i] = PIND; } while( (rawData[i] & 0b01000000) != 0);
-
-void read_cd32_controller_HACK()
-{
-    WAIT_FALLING_EDGE(CD32_LATCH);
-
-    asm volatile (
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS 
-    );
-    rawData[0] = PIND;
-
-    asm volatile (
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS
-    );
-    rawData[1] = PIND;
-
-    asm volatile (
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS
-    );
-    rawData[2] = PIND;
-
-    asm volatile (
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS
-    );
-    rawData[3] = PIND;
-
-    asm volatile (
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS);
-    rawData[4] = PIND;
-
-    asm volatile (
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS
-    );
-    rawData[5] = PIND;
-
-    asm volatile (
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS
-    );
-    rawData[6] = PIND;
-
-    asm volatile (
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS
-    );
-    rawData[7] = PIND;
-
-    asm volatile (
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS 
-      MICROSECOND_NOPS MICROSECOND_NOPS
-    );
-    rawData[8] = PIND;
-
-    WAIT_LEADING_EDGE(CD32_LATCH);
-    rawData[0] = PIND;
-    rawData[7] = PINB;
-}
-
-void read_cd32_controller()
-{
-    WAIT_FALLING_EDGE(CD32_LATCH);
-
-    WAIT_FALLING_EDGE_CD32_CLOCK(0);
-    
-    WAIT_FALLING_EDGE_CD32_CLOCK(1);
-
-    WAIT_FALLING_EDGE_CD32_CLOCK(2);
-    
-    WAIT_FALLING_EDGE_CD32_CLOCK(3);
-
-    WAIT_FALLING_EDGE_CD32_CLOCK(4);
-
-    WAIT_FALLING_EDGE_CD32_CLOCK(5);
-    
-    WAIT_FALLING_EDGE_CD32_CLOCK(6);
-
-    WAIT_LEADING_EDGE(CD32_LATCH);
-    rawData[0] = PIND;
-    rawData[7] = PINB;
-    
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Sends a packet of controller data over the Arduino serial interface.
-inline void sendRawDataCd32( )
-{
-    #ifndef DEBUG
-    for( unsigned char i = 0 ; i < 8 ; i++ ) {
-        Serial.write( (rawData[i] & 0b11111101) );
-    }
-    Serial.write( SPLIT );
-    #else
-    Serial.print( (rawData[0] &  0b10000000) == 0 ? 0 : 1);
-    Serial.print( (rawData[0] &  0b01000000) == 0 ? 0 : 1);
-    for( unsigned char i = 2 ; i < 7 ; i++ ) 
-    { 
-      Serial.print( (rawData[i] & 0b10000000) == 0 ? 0 : 1);
-    }
-    Serial.print( (rawData[7] &  0b00000001) == 0 ? 0 : 1);
-    Serial.print( (rawData[0] &  0b00000100) == 0 ? 0 : 1);
-    Serial.print( (rawData[0] &  0b00001000) == 0 ? 0 : 1);
-    Serial.print( (rawData[0] & 0b00010000) == 0 ? 0 : 1);
-    Serial.print("\n");
-    #endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1599,22 +1436,6 @@ inline void loop_Intellivision()
       sendIntellivisionData_Raw();
 }
 
-inline void loop_CD32()
-{
-    noInterrupts();
-    read_cd32_controller();
-    interrupts();
-    sendRawDataCd32();
-}
-
-inline void loop_CD32_HACK()
-{
-    noInterrupts();
-    read_cd32_controller_HACK();
-    interrupts();
-    sendRawDataCd32();
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -1647,10 +1468,6 @@ void loop()
     loop_3DO();
 #elif defined INTELLIVISION
     loop_Intellivision();
-#elif defined CD32
-    loop_CD32();
-#elif defined CD32_HACK
-    loop_CD32_HACK();
 #elif defined MODE_GENESIS_MOUSE
     loop_Genesis_Mouse();
 #elif defined MODE_DETECT

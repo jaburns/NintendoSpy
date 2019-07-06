@@ -11,6 +11,7 @@
 //#define MODE_NES
 //#define MODE_DREAMCAST
 //#define MODE_WII
+//#define MODE_CD32
 
 //Bridge one of the GND to the right ping IN to enable your selected mode
 //#define MODE_DETECT
@@ -23,6 +24,7 @@
 #define MICROSECOND_NOPS "nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n"
 
 #define WAIT_FALLING_EDGE( pin ) while( !PIN_READ(pin) ); while( PIN_READ(pin) );
+#define WAIT_LEADING_EDGE( pin ) while( PIN_READ(pin) ); while( !PIN_READ(pin) );
 
 #define DETECT_FALLING_EDGE rawData[byteCount] = (GPIOD_PDIR & 0x3); do { prevPin = rawData[byteCount]; rawData[byteCount] = (GPIOD_PDIR & 0x3); } while( rawData[byteCount] >= prevPin);
 
@@ -45,6 +47,11 @@
 #define GC_PIN        5
 #define GC_PREFIX    25
 #define GC_BITCOUNT  64
+
+#define CD32_LATCH    5  // Digital Pin 5
+#define CD32_DATA     7  // Digital Pin 7
+#define CD32_CLOCK    6  // Digital Pin 6
+#define CD32_BITCOUNT 7
 
 #define ZERO  '\0'  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE    '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
@@ -72,6 +79,25 @@ void dreamcast_setup()
   pinMode(14, INPUT);
 
   p = &rawData[6];
+}
+
+void cd32_setup()
+{ 
+  // GPIOD_PDIR & 0xFF;
+  pinMode(2, INPUT_PULLUP);
+  pinMode(14, INPUT_PULLUP);
+  pinMode(7, INPUT_PULLUP);      
+  pinMode(8, INPUT_PULLUP);
+  pinMode(6, INPUT_PULLUP);
+  pinMode(20, INPUT);
+  pinMode(21, INPUT_PULLUP);
+  pinMode(5, INPUT);
+
+  // GPIOB_PDIR & 0xF;
+  pinMode(16, INPUT_PULLUP);
+  pinMode(17, INPUT_PULLUP);  
+  pinMode(19, INPUT_PULLUP);
+  pinMode(18, INPUT_PULLUP); 
 }
 
 void wii_setup()
@@ -110,19 +136,37 @@ void setup()
     
   #ifdef MODE_DREAMCAST
     dreamcast_setup();
-  #elif MODE_WII
+    goto setup1;
+  #elif defined MODE_CD32
+    cd32_setup();
+    goto setup1;
+  #elif defined MODE_WII
     wii_setup();
+    goto setup1;
   #elif defined MODE_DETECT
+    #ifdef MODEPIN_DREAMCAST 
     if( !digitalReadFast( MODEPIN_DREAMCAST ) ) {
         dreamcast_setup();
-    else if( !digitalReadFast( MODEPIN_WII ) ) {
-        wii_setup();
-    } else {
-        common_pin_setup();
+        goto setup1;
     }
-  #else
-    common_pin_setup();
-  #endif
+    #endif
+    #ifdef MODEPIN_CD32
+    if( !digitalReadFast( MODEPIN_CD32 ) ) {
+        cd32_setup();
+        goto setup1;
+    }
+    #endif
+    #ifdef MODEPIN_WII
+      else if( !digitalReadFast( MODEPIN_WII ) ) {
+          wii_setup();
+          goto setup1;        
+      } 
+    #endif  
+  #endif  
+
+  common_pin_setup();
+
+setup1:
 
   cleanData[0] = 2;
   cleanData[1] = -1;
@@ -415,6 +459,44 @@ inline void loop_NES()
     interrupts();
     sendRawData( 0 , NES_BITCOUNT );
     delay(5);
+}
+
+void read_cd32_controller()
+{
+
+    WAIT_FALLING_EDGE(CD32_LATCH);
+    rawData[1] = (GPIOD_PDIR & 0xFF);
+
+    for(int i = 2; i < 8; ++i)
+    {
+      WAIT_FALLING_EDGE(CD32_CLOCK);
+      rawData[i] = (GPIOD_PDIR & 0xFF);
+    }
+
+    rawData[0] = (GPIOD_PDIR & 0xFF);
+    rawData[8] = (GPIOB_PDIR & 0xFF);
+    
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Sends a packet of controller data over the Arduino serial interface.
+inline void sendRawDataCd32( )
+{
+    #ifndef DEBUG
+    for( unsigned char i = 0 ; i < 9 ; i++ ) {
+        Serial.write( (rawData[i] & 0b11111101) );
+    }
+    Serial.write( SPLIT );
+    #else
+    for( unsigned char i = 1 ; i < 8 ; i++ ) 
+    { 
+      Serial.print( (rawData[i] & 0b10000000) == 0 ? 0 : 1);
+    }
+    Serial.print( (rawData[8] &  0b00000001) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b00000100) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] &  0b00001000) == 0 ? 0 : 1);
+    Serial.print( (rawData[0] & 0b00010000) == 0 ? 0 : 1);
+    Serial.print("\n");
+    #endif
 }
 
 inline void loop_SNES()
@@ -1035,6 +1117,15 @@ void loop_wii(void)
   }
 }
 
+inline void loop_CD32()
+{
+    noInterrupts();
+    read_cd32_controller();
+    interrupts();
+    sendRawDataCd32();
+    delay(5);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sends a packet of controller data over the Arduino serial interface.
 inline void sendRawData( unsigned char first, unsigned char count )
@@ -1160,6 +1251,8 @@ void loop()
   loop_Dreamcast();
 #elif defined MODE_WII
   loop_Wii();
+#elif defined MODE_CD32
+  loop_CD32();
 #elif defined MODE_DETECT
     if( !digitalReadFast( MODEPIN_SNES ) ) {
         loop_SNES();
