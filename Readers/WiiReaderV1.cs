@@ -6,7 +6,7 @@ using System.Threading;
 using TotalPhase;
 using System.Linq;
 
-namespace NintendoSpy.Readers
+namespace RetroSpy.Readers
 {
     sealed public class WiiReaderV1 : IControllerReader
     {

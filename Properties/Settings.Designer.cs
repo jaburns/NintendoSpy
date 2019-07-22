@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NintendoSpy.Properties {
+namespace RetroSpy.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

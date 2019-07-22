@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NintendoSpy
+namespace RetroSpy
 {
     public class ConfigParseException : Exception {
         public ConfigParseException()

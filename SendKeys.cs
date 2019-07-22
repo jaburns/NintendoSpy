@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NintendoSpy
+namespace RetroSpy
 {
     // Keycodes: http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
     // Letter keys map to 0x41.. etc. (i.e. capital ASCII letters)

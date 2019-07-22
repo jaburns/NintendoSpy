@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Threading;
 
-namespace NintendoSpy.Readers
+namespace RetroSpy.Readers
 {
     sealed public class MouseTester : IControllerReader
     {
