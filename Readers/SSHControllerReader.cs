@@ -14,11 +14,11 @@ namespace NintendoSpy.Readers
         Func <byte[], ControllerState> _packetParser;
         SSHMonitor _serialMonitor;
 
-        public SSHControllerReader(string hostname, Func <byte[], ControllerState> packetParser) 
+        public SSHControllerReader(string hostname, string arguments, Func <byte[], ControllerState> packetParser) 
         {
             _packetParser = packetParser;
 
-            _serialMonitor = new SSHMonitor(hostname);
+            _serialMonitor = new SSHMonitor(hostname, arguments);
             _serialMonitor.PacketReceived += serialMonitor_PacketReceived;
             _serialMonitor.Disconnected += serialMonitor_Disconnected;
             _serialMonitor.Start ();

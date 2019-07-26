@@ -20,14 +20,16 @@ namespace NintendoSpy
         SshClient _client;
         ShellStream _data;
         List <byte> _localBuffer;
+        string _arguments;
 
         DispatcherTimer _timer;
 
-        public SSHMonitor(string hostname)
+        public SSHMonitor(string hostname, string arguments)
         {
             _localBuffer = new List <byte> ();
             //_datPort = new SerialPort (portName, BAUD_RATE);
-            _client = new SshClient(hostname, "debian", "temppwd");
+            _client = new SshClient(hostname, "retrospy", "retrospy");
+            _arguments = arguments;
         }
 
         public void Start ()
@@ -38,8 +40,8 @@ namespace NintendoSpy
             //_datPort.Open ();
             _client.Connect();
             _data = _client.CreateShellStream("", 0, 0, 0, 0, 0);
-            _data.WriteLine("sudo usb-mitm -x");
-            _data.WriteLine("temppwd");
+            _data.WriteLine("sudo pkill -9 usb-mitm");
+            _data.WriteLine("sudo usb-mitm " + _arguments);
 
             _timer = new DispatcherTimer ();
             _timer.Interval = TimeSpan.FromMilliseconds (TIMER_MS); 

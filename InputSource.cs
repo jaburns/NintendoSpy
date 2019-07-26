@@ -19,7 +19,7 @@ namespace NintendoSpy
         static public readonly InputSource INTELLIVISION = new InputSource("intellivision", "Mattel Intellivision", true, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_Intellivision));
 
         //static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
-        static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, false, true, hostname => new SSHControllerReader(hostname, XboxReaderV2.ReadFromPacket));
+        static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, false, true, hostname => new SSHControllerReader(hostname, "-x", XboxReaderV2.ReadFromPacket));
 
         static public readonly InputSource TG16 = new InputSource("tg16", "NEC Turbographx 16", true, false, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
 

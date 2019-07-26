@@ -40,15 +40,23 @@ namespace NintendoSpy.Readers
 
             byte[] binaryPacket = new byte[20];
 
-            for(int i = 0; i < str.Length; i+=2)
+            try
             {
-                binaryPacket[i/2] = Convert.ToByte(str.Substring(i, 2), 16);
+                for (int i = 0; i < str.Length; i += 2)
+                {
+                    binaryPacket[i / 2] = Convert.ToByte(str.Substring(i, 2), 16);
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
 
             var outState = new ControllerStateBuilder();
 
             for (int i = 0; i < 8; ++i)
             {
+
                 outState.SetButton(BUTTONS[i], (binaryPacket[2] & (1 << i)) != 0);
             }
 
