@@ -133,5 +133,20 @@ namespace NintendoSpy.Properties {
                 this["TopMost"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Hostname
+        {
+            get
+            {
+                return ((string)(this["Hostname"]));
+            }
+            set
+            {
+                this["Hostname"] = value;
+            }
+        }
     }
 }

@@ -65,10 +65,10 @@ namespace NintendoSpy
                 {
                     updateXIList();
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.XBOX)
-                {
-                    updateBeagleList();
-                }
+                //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
+                //{
+                //    updateBeagleList();
+                //}
                 //else if (_vm.Sources.SelectedItem == InputSource.WII)
                 //{
                 //    updateBeagleI2CList();
@@ -81,6 +81,7 @@ namespace NintendoSpy
             _vm.XIAndGamepad.SelectFirst();
             _vm.Sources.SelectId(Properties.Settings.Default.Source);
             _vm.Skins.SelectId(Properties.Settings.Default.Skin);
+            _vm.Hostname = Properties.Settings.Default.Hostname;
         }
 
         void showSkinParseErrors (List <string> errs) {
@@ -122,6 +123,7 @@ namespace NintendoSpy
             Properties.Settings.Default.Skin = _vm.Skins.GetSelectedId();
             Properties.Settings.Default.Delay = _vm.DelayInMilliseconds;
             Properties.Settings.Default.Background = _vm.Backgrounds.GetSelectedId();
+            Properties.Settings.Default.Hostname = _vm.Hostname;
             Properties.Settings.Default.Save();
 
             try {
@@ -136,8 +138,12 @@ namespace NintendoSpy
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.XBOX)
                 {
-                    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
+                    reader = _vm.Sources.SelectedItem.BuildReader(txtHostname.Text);
                 }
+                //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
+                //{
+                //    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
+                //}
                 //else if (_vm.Sources.SelectedItem == InputSource.WII)
                 //{
                 //    reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
@@ -169,6 +175,7 @@ namespace NintendoSpy
             if (_vm.Sources.SelectedItem == null) return;
             _vm.ComPortOptionVisibility = _vm.Sources.SelectedItem.RequiresComPort ? Visibility.Visible : Visibility.Hidden;
             _vm.XIAndGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresId ? Visibility.Visible : Visibility.Hidden;
+            _vm.SSHOptionVisibility = _vm.Sources.SelectedItem.RequiresHostname ? Visibility.Visible : Visibility.Hidden;
             updateGamepadList();
             updateXIList();
             updatePortList();
@@ -252,6 +259,7 @@ namespace NintendoSpy
         public ListView <Skin.Background> Backgrounds { get; set; }
         public ListView <InputSource> Sources { get; set; }
         public int DelayInMilliseconds { get; set; }
+        public string Hostname { get; set; }
 
         Visibility _comPortOptionVisibility;
         public Visibility ComPortOptionVisibility {
@@ -270,6 +278,17 @@ namespace NintendoSpy
             {
                 _XIAndGamepadOptionVisibility = value;
                 NotifyPropertyChanged("XIAndGamepadOptionVisibility");
+            }
+        }
+
+        Visibility _SSHOptionVisibility;
+        public Visibility SSHOptionVisibility
+        {
+            get { return _SSHOptionVisibility; }
+            set
+            {
+                _SSHOptionVisibility = value;
+                NotifyPropertyChanged("SSHOptionVisibility");
             }
         }
 
