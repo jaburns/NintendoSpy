@@ -136,7 +136,8 @@ namespace NintendoSpy
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.XBOX || _vm.Sources.SelectedItem == InputSource.PSCLASSIC)
+                else if (_vm.Sources.SelectedItem == InputSource.XBOX || _vm.Sources.SelectedItem == InputSource.PSCLASSIC ||
+                         _vm.Sources.SelectedItem == InputSource.SWITCH)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(txtHostname.Text);
                 }
