@@ -12,7 +12,7 @@ namespace NintendoSpy.Readers
         const int POLISHED_PACKET_SIZE = 18;
 
         static readonly string[] BUTTONS = {
-            "up", "down", "right", "left", "start", "back", "l3", "r3", "lb", "rb", "xbox", null, "a", "b", "x", "y"
+            "up", "down", "left", "right", "start", "back", "l3", "r3", "lb", "rb", "xbox", null, "a", "b", "x", "y"
         };
 
         static float readTrigger(byte input)
