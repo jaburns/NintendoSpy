@@ -20,6 +20,7 @@ namespace NintendoSpy
 
         //static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
         static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, false, true, hostname => new SSHControllerReader(hostname, "-x", XboxReaderV2.ReadFromPacket));
+        static public readonly InputSource XBOX360 = new InputSource("xbox360", "Microsoft Xbox 360", false, false, true, hostname => new SSHControllerReader(hostname, "-b", Xbox360Reader.ReadFromPacket));
 
         static public readonly InputSource TG16 = new InputSource("tg16", "NEC Turbographx 16", true, false, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
 
@@ -52,7 +53,7 @@ namespace NintendoSpy
         //static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", false, true, controllerId => new WiiReaderV1(int.Parse(controllerId)));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, CD32, INTELLIVISION, XBOX, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, NEOGEO, PLAYSTATION2, PSCLASSIC
+            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, CD32, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, NEOGEO, PLAYSTATION2, PSCLASSIC
         };
 
         static public readonly InputSource DEFAULT = NES;
