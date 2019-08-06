@@ -4,7 +4,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Windows.Threading;
 
-namespace NintendoSpy
+namespace RetroSpy
 {
     public delegate void PacketEventHandler (object sender, byte[] packet);
 

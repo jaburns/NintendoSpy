@@ -8,12 +8,12 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-using NintendoSpy.Readers;
+using RetroSpy.Readers;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
 
-namespace NintendoSpy
+namespace RetroSpy
 {
     public partial class SetupWindow : Window
     {

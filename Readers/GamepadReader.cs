@@ -7,7 +7,7 @@ using System.Windows.Threading;
 using System.IO;
 using SharpDX.DirectInput;
 
-namespace NintendoSpy.Readers
+namespace RetroSpy.Readers
 {
     sealed public class GamepadReader : IControllerReader
     {

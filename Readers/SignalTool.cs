@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NintendoSpy.Readers
+namespace RetroSpy.Readers
 {
     static internal class SignalTool
     {

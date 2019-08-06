@@ -5,11 +5,11 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.ComponentModel;
 
-using NintendoSpy.Readers;
+using RetroSpy.Readers;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 
-namespace NintendoSpy
+namespace RetroSpy
 {
     public partial class ViewWindow : Window, INotifyPropertyChanged
     {

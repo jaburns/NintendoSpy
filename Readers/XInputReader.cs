@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace NintendoSpy.Readers
+namespace RetroSpy.Readers
 {
     sealed public class XInputReader : IControllerReader
     {

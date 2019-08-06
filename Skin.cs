@@ -10,7 +10,7 @@ using System.Xml.Linq;
 using System.Windows.Media.Imaging;
 using System.Xml;
 
-namespace NintendoSpy
+namespace RetroSpy
 {
     public class Skin
     {

@@ -1,7 +1,7 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:RuntimeBinder="clr-namespace:Microsoft.CSharp.RuntimeBinder;assembly=Microsoft.CSharp" x:Class="NintendoSpy.SetupWindow"
+        xmlns:RuntimeBinder="clr-namespace:Microsoft.CSharp.RuntimeBinder;assembly=Microsoft.CSharp" x:Class="RetroSpy.SetupWindow"
         Title="RetroSpy" Height="419.966" Width="602" Foreground="White" Background="#FF252526">
     <Grid>
         <ComboBox Margin="145,17,10,0" SelectedIndex="0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 

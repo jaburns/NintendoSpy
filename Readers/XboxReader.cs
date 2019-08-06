@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 using TotalPhase;
 
-namespace NintendoSpy.Readers
+namespace RetroSpy.Readers
 {
     sealed public class XboxReader : IControllerReader
     {
