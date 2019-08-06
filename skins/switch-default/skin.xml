@@ -3,26 +3,26 @@
 
   <background name="Default" image="switchpro-background.png" />
 
-  <analog name="a" image="circle2.png" x="950" y="205" width="80" height="80" direction="fade"/>
-  <analog name="b" image="circle2.png" x="771" y="205" width="80" height="80" direction="fade"/>
-  <analog name="x" image="circle2.png" x="861" y="117" width="80" height="80" direction="fade"/>
-  <analog name="y" image="circle2.png" x="861" y="300" width="80" height="80" direction="fade"/>
+  <button name="a" image="circle2.png" x="950" y="205" width="80" height="80"/>
+  <button name="b" image="circle2.png" x="771" y="205" width="80" height="80"/>
+  <button name="x" image="circle2.png" x="861" y="117" width="80" height="80"/>
+  <button name="y" image="circle2.png" x="861" y="300" width="80" height="80"/>
 
-  <analog name="up" image="circle2.png" x="170" y="5" width="150" height="30" direction="fade"/>
-  <analog name="down" image="circle2.png" x="825" y="5" width="150" height="30" direction="fade"/>
-  <analog name="left" image="circle2.png" x="30" y="10" width="80" height="80" direction="fade"/>
-  <analog name="right" image="circle2.png" x="1020" y="10" width="80" height="80" direction="fade"/>
-	
+  <button name="up" image="circle2.png" x="170" y="5" width="150" height="30"/>
+  <button name="down" image="circle2.png" x="825" y="5" width="150" height="30"/>
+  <button name="left" image="circle2.png" x="30" y="10" width="80" height="80"/>
+  <button name="right" image="circle2.png" x="1020" y="10" width="80" height="80"/>
+
   <button name="plus" image="circle2.png" x="620" y="225" width="80" height="50" />
   <button name="minus" image="circle2.png" x="420" y="225" width="80" height="50" />
 
   <button name="home" image="circle2.png" x="620" y="225" width="80" height="50" />
   <button name="capture" image="circle2.png" x="420" y="225" width="80" height="50" />
-	
-  <analog name="l" image="circle2.png" x="187" y="150" width="80" height="80" direction="fade"/>
-  <analog name="r" image="circle2.png" x="120" y="210" width="80" height="80" direction="fade"/>
-  <analog name="zl" image="circle2.png" x="187" y="275" width="80" height="80" direction="fade"/>
-  <analog name="zr" image="circle2.png" x="250" y="210" width="80" height="80" direction="fade"/>
+
+  <button name="l" image="circle2.png" x="187" y="150" width="80" height="80"/>
+  <button name="r" image="circle2.png" x="120" y="210" width="80" height="80"/>
+  <button name="zl" image="circle2.png" x="187" y="275" width="80" height="80"/>
+  <button name="zr" image="circle2.png" x="250" y="210" width="80" height="80"/>
 	
   <button name="ls" image="circle2.png" x="300" y="328" width="180" height="180" />
   <button name="rs" image="circle2.png" x="645" y="330" width="180" height="180" />
