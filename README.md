@@ -34,7 +34,7 @@ Additionally, RetroSpy has experimental support for:
  - [Wii Extension Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/wii.md)
 ## Documentation
 
-The rest of the README will explain how to get RetroSpy up and running on an Arduino Uno. If you want to run RetroSpy on a Teensy 3.5 continue [here](https://github.com/zoggins/RetroSpy/blob/master/docs/README-TEENSY.md) (this is required for Wii, Dreamcast and Amiga CD32).  For more specific tutorials, check out the [docs](https://github.com/zoggins/RetroSpy/blob/master/docs/) folder in the repository.
+The rest of the README will explain how to get RetroSpy up and running on an Arduino Uno. If you want to run RetroSpy on a Teensy 3.5 continue [here](https://github.com/zoggins/RetroSpy/blob/master/docs/README-TEENSY.md) (this is required for Wii, Dreamcast and Amiga CD32). If you want to run RetroSpy for USB-based controllers go [here](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started).  For more specific tutorials, check out the [docs](https://github.com/zoggins/RetroSpy/blob/master/docs/) folder in the repository.
 
 The general design of RetroSpy involves splicing a controller extension cable, and attaching the appropriate signal wires to an Arduino.  Then you just need to install the Arduino firmware packaged in the RetroSpy release, and run the display software.
 
