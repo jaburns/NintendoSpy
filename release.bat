@@ -41,6 +41,8 @@ cd ..\..\..
 ;"C:\Program Files\7-Zip\7z.exe" a ..\..\RetroSpy-release.zip SharpDX.DirectInput.dll
 ;cd ..\..
 
+;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip Renci.SshNet.dll
+
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip beagle.dll
 
 ;"C:\Program Files\7-Zip\7z.exe" a RetroSpy-release.zip skins

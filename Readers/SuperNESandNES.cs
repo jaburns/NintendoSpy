@@ -22,6 +22,21 @@ namespace RetroSpy.Readers
             return state.Build();
         }
 
+
+        static ControllerState readPacketButtons_ascii(byte[] packet, string[] buttons)
+        {
+            if (packet.Length < buttons.Length) return null;
+
+            var state = new ControllerStateBuilder();
+
+            for (int i = 0; i < buttons.Length; ++i)
+            {
+                if (string.IsNullOrEmpty(buttons[i])) continue;
+                state.SetButton(buttons[i], packet[i] != '0');
+            }
+
+            return state.Build();
+        }
         static readonly string[] BUTTONS_NES = {
             "a", "b", "select", "start", "up", "down", "left", "right"
         };
@@ -39,6 +54,11 @@ namespace RetroSpy.Readers
             null, "blue", "red", "yellow", "green", "forward", "backward", "pause", null
         };
 
+        static readonly string[] BUTTONS_PSCLASSIC =
+        {
+            "r1", "l1", "r2", "l2", "square", "x", "circle", "triangle", null, null, "down", "up", "right", "left", "start", "select"
+        };
+
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
         {
             return readPacketButtons(packet, BUTTONS_INTELLIVISION);
@@ -46,6 +66,10 @@ namespace RetroSpy.Readers
 
         static public ControllerState ReadFromPacket_NES (byte[] packet) {
             return readPacketButtons(packet, BUTTONS_NES);
+        }
+
+        static public ControllerState ReadFromPacket_PSClassic(byte[] packet) {
+                return readPacketButtons_ascii(packet, BUTTONS_PSCLASSIC);
         }
 
         static public ControllerState ReadFromPacket_CD32(byte[] packet)

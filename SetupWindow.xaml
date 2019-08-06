@@ -14,6 +14,8 @@
                Visibility="{Binding ComPortOptionVisibility}" />
         <Label Name="ControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="59,45,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
                Visibility="{Binding XIAndGamepadOptionVisibility}" />
+        <Label Name="HostnameLabel" Content="Hostname:" HorizontalAlignment="Left" Margin="59,45,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
+               Visibility="{Binding SSHOptionVisibility}" />
         <ComboBox Name="ComPortCombo" Margin="145,51,10,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
                   ItemsSource="{Binding Ports.Items}"
                   SelectedValue="{Binding Ports.SelectedItem}" 
@@ -22,6 +24,7 @@
                   ItemsSource="{Binding XIAndGamepad.Items}"
                   SelectedValue="{Binding XIAndGamepad.SelectedItem}" 
                   Visibility="{Binding XIAndGamepadOptionVisibility}" />
+        <TextBox Name="txtHostname" Margin="145,51,10,0" VerticalAlignment="Top" Height="24" Text="{Binding Hostname}" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" Visibility="{Binding SSHOptionVisibility}" />
         <Label Content="Viewer Skin:" HorizontalAlignment="Left" Margin="10,111,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
         <ListBox Margin="10,146,265.2,47.4" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"
                  SelectedIndex="0"

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Playstation Classic" author="zoggins" type="psclassic">
+
+    <background name="Default" image="playstation-digital.png" />
+
+    <button name="circle" image="circle2.png" x="1164" y="251" width="100" height="100" />
+    <button name="square" image="circle2.png" x="944" y="251" width="100" height="100" />
+    <button name="triangle" image="circle2.png" x="1055" y="142" width="100" height="100" />
+    <button name="x" image="circle2.png" x="1055" y="366" width="100" height="100" />
+
+    <button name="l1" image="circle.png" x="215" y="5" width="150" height="30" />
+    <button name="r1" image="circle.png" x="1020" y="5" width="150" height="30" />
+    <button name="l2" image="shoulder2.png" x="22" y="24" width="126" height="95" />
+    <button name="r2" image="shoulder2.png" x="1238" y="24" width="126" height="95" />
+	
+    <button name="start" image="start.png" x="732" y="347" width="82" height="60" />
+    <button name="select" image="select.png" x="565" y="355" width="74" height="50" />
+
+    <button name="up" image="up.png" x="235" y="190" width="100" height="100" />
+    <button name="left" image="left.png" x="161" y="261" width="100" height="100" />
+	<button name="down" image="down.png" x="234" y="323" width="100" height="100" />
+    <button name="right" image="right.png" x="294" y="261" width="100" height="100" />
+
+</skin>
