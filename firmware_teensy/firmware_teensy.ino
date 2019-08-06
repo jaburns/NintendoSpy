@@ -467,6 +467,8 @@ void read_cd32_controller()
     WAIT_FALLING_EDGE(CD32_LATCH);
     rawData[1] = (GPIOD_PDIR & 0xFF);
 
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS);
+
     for(int i = 2; i < 8; ++i)
     {
       WAIT_FALLING_EDGE(CD32_CLOCK);
