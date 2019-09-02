@@ -87,31 +87,57 @@ namespace RetroSpy.Readers
                 {
                     case 0:
                         outState.SetButton("up", true);
+                        outState.SetButton("down", false);
+                        outState.SetButton("left", false);
+                        outState.SetButton("right", false);
                         break;
                     case 1:
                         outState.SetButton("up", true);
                         outState.SetButton("right", true);
+                        outState.SetButton("down", false);
+                        outState.SetButton("left", false);
                         break;
                     case 2:
                         outState.SetButton("right", true);
+                        outState.SetButton("down", false);
+                        outState.SetButton("left", false);
+                        outState.SetButton("up", false);
                         break;
                     case 3:
                         outState.SetButton("right", true);
                         outState.SetButton("down", true);
+                        outState.SetButton("up", false);
+                        outState.SetButton("left", false);
                         break;
                     case 4:
                         outState.SetButton("down", true);
+                        outState.SetButton("up", false);
+                        outState.SetButton("left", false);
+                        outState.SetButton("right", false);
                         break;
                     case 5:
                         outState.SetButton("left", true);
                         outState.SetButton("down", true);
+                        outState.SetButton("right", false);
+                        outState.SetButton("up", false);
                         break;
                     case 6:
-                        outState.SetButton("right", true);
+                        outState.SetButton("right", false);
+                        outState.SetButton("down", false);
+                        outState.SetButton("up", false);
+                        outState.SetButton("left", true);
                         break;
                     case 7:
                         outState.SetButton("up", true);
-                        outState.SetButton("right", true);
+                        outState.SetButton("left", true);
+                        outState.SetButton("right", false);
+                        outState.SetButton("down", false);
+                        break;
+                    default:
+                        outState.SetButton("up", false);
+                        outState.SetButton("left", false);
+                        outState.SetButton("right", false);
+                        outState.SetButton("down", false);
                         break;
                 }
 
