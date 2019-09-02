@@ -123,6 +123,7 @@ namespace RetroSpy.Readers
                 return outState.Build();
             }
 
+            return null;
         }
     }
 }
