@@ -70,9 +70,9 @@ namespace RetroSpy.Readers
                     polishedPacket[i] = (byte)((packet[i] == 0x31) ? 1 : 0);
 
                 packet[10] = 0;
-                for (byte j = 0; j < 8; ++j)
+                for (byte j = 0; j < 4; ++j)
                 {
-                    polishedPacket[10] |= (byte)((packet[16 + (8 + j)] == 0x30 ? 0 : 1) << j);
+                    polishedPacket[10] |= (byte)((packet[16 + j] == 0x30 ? 0 : 1) << j);
                 }
 
                 var outState = new ControllerStateBuilder();
