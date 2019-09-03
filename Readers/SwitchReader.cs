@@ -17,7 +17,7 @@ namespace RetroSpy.Readers
         };
 
         static readonly string[] POKKEN_BUTTONS = {
-            "y", "b", "a", "x", "l", "r", "zl", "zr", "-", "+"
+            "y", "b", "a", "x", "l", "r", "zl", "zr", "-", "+", null, null, "home", "capture"
         };
 
 
@@ -66,13 +66,22 @@ namespace RetroSpy.Readers
             }
             else if (packet.Length == POKKEN_PACKET_SIZE)
             {
-                for (int i = 0; i < 10; ++i)
+                for (int i = 0; i < 16; ++i)
                     polishedPacket[i] = (byte)((packet[i] == 0x31) ? 1 : 0);
 
-                packet[10] = 0;
+                packet[16] = 0;
                 for (byte j = 0; j < 4; ++j)
                 {
-                    polishedPacket[10] |= (byte)((packet[16 + j] == 0x30 ? 0 : 1) << j);
+                    polishedPacket[16] |= (byte)((packet[16 + j] == 0x30 ? 0 : 1) << j);
+                }
+
+                for (int i = 0; i < 4; ++i)
+                {
+                    packet[17 + i] = 0;
+                    for (byte j = 0; j < 8; ++j)
+                    {
+                        polishedPacket[24 + i] |= (byte)((packet[17 + (i * 8 + j)] == 0x30 ? 0 : 1) << j);
+                    }
                 }
 
                 var outState = new ControllerStateBuilder();
@@ -82,6 +91,7 @@ namespace RetroSpy.Readers
                     if (string.IsNullOrEmpty(POKKEN_BUTTONS[i])) continue;
                     outState.SetButton(POKKEN_BUTTONS[i], polishedPacket[i] != 0x00);
                 }
+
 
                 switch(polishedPacket[10])
                 {
@@ -141,10 +151,10 @@ namespace RetroSpy.Readers
                         break;
                 }
 
-                outState.SetAnalog("rstick_x", 0);
-                outState.SetAnalog("rstick_y", 0);
-                outState.SetAnalog("lstick_x", 0);
-                outState.SetAnalog("lstick_y", 0);
+                outState.SetAnalog("rstick_x", readStick(polishedPacket[19]));
+                outState.SetAnalog("rstick_y", readStick(polishedPacket[20]));
+                outState.SetAnalog("lstick_x", readStick(polishedPacket[17]));
+                outState.SetAnalog("lstick_y", readStick(polishedPacket[18]));
 
                 return outState.Build();
             }
