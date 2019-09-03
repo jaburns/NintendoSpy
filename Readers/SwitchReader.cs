@@ -9,7 +9,7 @@ namespace RetroSpy.Readers
     static public class SwitchReader
     {
         const int PRO_PACKET_SIZE = 57;
-        const int POKKEN_PACKET_SIZE = 25;
+        const int POKKEN_PACKET_SIZE = 58;
         const int POLISHED_PACKET_SIZE = 28;
 
         static readonly string[] PRO_BUTTONS = {
@@ -29,9 +29,15 @@ namespace RetroSpy.Readers
             return (float)(255-input) / -128;
         }
 
+        static float readPokkenStick(byte input, bool invert)
+        {
+            return invert ? -1.0f*((float)(input - 128) / 128) : (float)(input - 128) / 128;
+        }
+
+
         static public ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < POKKEN_PACKET_SIZE) return null;
+            if (packet.Length < PRO_PACKET_SIZE) return null;
 
             byte[] polishedPacket = new byte[POLISHED_PACKET_SIZE];
 
@@ -42,7 +48,7 @@ namespace RetroSpy.Readers
 
                 for (int i = 0; i < 4; ++i)
                 {
-                    packet[24 + i] = 0;
+                    polishedPacket[24 + i] = 0;
                     for (byte j = 0; j < 8; ++j)
                     {
                         polishedPacket[24 + i] |= (byte)((packet[24 + (i * 8 + j)] == 0x30 ? 0 : 1) << j);
@@ -69,7 +75,7 @@ namespace RetroSpy.Readers
                 for (int i = 0; i < 16; ++i)
                     polishedPacket[i] = (byte)((packet[i] == 0x31) ? 1 : 0);
 
-                packet[16] = 0;
+                polishedPacket[16] = 0;
                 for (byte j = 0; j < 4; ++j)
                 {
                     polishedPacket[16] |= (byte)((packet[16 + j] == 0x30 ? 0 : 1) << j);
@@ -77,13 +83,13 @@ namespace RetroSpy.Readers
 
                 for (int i = 0; i < 4; ++i)
                 {
-                    packet[17 + i] = 0;
+                    polishedPacket[17 + i] = 0;
                     for (byte j = 0; j < 8; ++j)
                     {
-                        polishedPacket[24 + i] |= (byte)((packet[17 + (i * 8 + j)] == 0x30 ? 0 : 1) << j);
+                        polishedPacket[17 + i] |= (byte)((packet[24 + (i * 8 + j)] == 0x30 ? 0 : 1) << j);
                     }
                 }
-
+                
                 var outState = new ControllerStateBuilder();
 
                 for (int i = 0; i < POKKEN_BUTTONS.Length; ++i)
@@ -92,8 +98,8 @@ namespace RetroSpy.Readers
                     outState.SetButton(POKKEN_BUTTONS[i], polishedPacket[i] != 0x00);
                 }
 
-
-                switch(polishedPacket[10])
+                
+                switch(polishedPacket[16])
                 {
                     case 0:
                         outState.SetButton("up", true);
@@ -151,11 +157,11 @@ namespace RetroSpy.Readers
                         break;
                 }
 
-                outState.SetAnalog("rstick_x", readStick(polishedPacket[19]));
-                outState.SetAnalog("rstick_y", readStick(polishedPacket[20]));
-                outState.SetAnalog("lstick_x", readStick(polishedPacket[17]));
-                outState.SetAnalog("lstick_y", readStick(polishedPacket[18]));
-
+                outState.SetAnalog("lstick_x", readPokkenStick(polishedPacket[17], false));
+                outState.SetAnalog("lstick_y", readPokkenStick(polishedPacket[18], true));
+                outState.SetAnalog("rstick_x", readPokkenStick(polishedPacket[19], false));
+                outState.SetAnalog("rstick_y", readPokkenStick(polishedPacket[20], true));
+                
                 return outState.Build();
             }
 
