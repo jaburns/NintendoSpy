@@ -10,7 +10,7 @@
 //#define MODE_SNES
 //#define MODE_NES
 //#define MODE_DREAMCAST
-#define MODE_WII
+//#define MODE_WII
 //#define MODE_CD32
 
 //Bridge one of the GND to the right ping IN to enable your selected mode
