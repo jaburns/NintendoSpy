@@ -10,7 +10,7 @@
 // ---------- Uncomment this for debugging ouput --------------
 //#define DEBUG
 // ---------- Uncomment this for a mostly complete general purpose I2C sniffer  --------------
-//#define ANALYZE
+#define ANALYZE
 
 byte rawData[1024];
 byte cleanData[274];
