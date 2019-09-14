@@ -10,7 +10,7 @@
 //#define MODE_SNES
 //#define MODE_NES
 //#define MODE_DREAMCAST
-//#define MODE_WII
+#define MODE_WII
 //#define MODE_CD32
 
 //Bridge one of the GND to the right ping IN to enable your selected mode
@@ -171,6 +171,7 @@ setup1:
   cleanData[0] = 2;
   cleanData[1] = -1;
   cleanData[46] = '\n';
+  cleanData[50] = '\n';
 
   seenGC2N64 = false;
 
@@ -877,7 +878,7 @@ state7:
   goto start_state;
 }
 
-void loop_wii(void)
+void loop_Wii(void)
 {
   last_portb = current_portb;
   noInterrupts();
@@ -1076,14 +1077,27 @@ void loop_wii(void)
           }
  
           int j = 34;
-          // NES/SNES Classic return 22 bytes and have the data offset by 2 bytes
-          int offset = numbytes == 22 ? 3 : 1;
-          for (int i = 0; i < 6; i++)
+          if (numbytes == 11)
           {
-            cleanData[j] = (tempData[offset + i] & 0xF0);
-            cleanData[j + 1] = (tempData[offset + i] << 4);
-            j += 2;
-          }             
+            cleanData[0] = 3;
+            for (int i = 0; i < 8; i++)
+            {
+              cleanData[j] = (tempData[1 + i] & 0xF0);
+              cleanData[j + 1] = (tempData[1 + i] << 4);
+              j += 2;
+            }                         
+          }
+          else
+          {
+            // NES/SNES Classic return 22 bytes and have the data offset by 2 bytes
+            int offset = numbytes == 22 ? 3 : 1;
+            for (int i = 0; i < 6; i++)
+            {
+              cleanData[j] = (tempData[offset + i] & 0xF0);
+              cleanData[j + 1] = (tempData[offset + i] << 4);
+              j += 2;
+            }
+          }                       
 
 #ifdef DEBUG
           Serial.print(cleanData[0]);
@@ -1091,7 +1105,12 @@ void loop_wii(void)
           Serial.print(cleanData[1]);
           Serial.print(' ');
           j = 2;
-          for (int i = 0; i < 22; ++i)
+          int toPrint = 22;
+          if (cleanData[0] == 3)
+          {
+            toPrint = 26;
+          }
+          for (int i = 0; i < toPrint; ++i)
           {
             byte data = (cleanData[j] | (cleanData[j + 1] >> 4));
             Serial.print(data);
@@ -1100,7 +1119,10 @@ void loop_wii(void)
           }
           Serial.print('\n');
 #else
-          Serial.write(cleanData, 47);
+          if (cleanData[0] == 3)
+            Serial.write(cleanData, 51);
+          else
+            Serial.write(cleanData, 47);
 #endif
         }
       }

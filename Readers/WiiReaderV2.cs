@@ -9,7 +9,7 @@ namespace RetroSpy.Readers
     static public class WiiReaderV2
     {
         static readonly string[] CLASSIC_BUTTONS = {
-            "right", "down", "l", "select", "home", "start", "r", null, "zl", "b", "y", "a", "x", "xr", "left", "up"
+            "right", "down", "l", "select", "home", "start", "r", null, "zl", "b", "y", "a", "x", "zr", "left", "up"
         };
 
         static private byte encryptionKeySet = 255;
@@ -29,14 +29,14 @@ namespace RetroSpy.Readers
 
         static public ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length != 46) return null;
+            if (packet.Length != 46 && packet.Length != 50) return null;
 
             byte[] data = new byte[1024];
             byte[] unencryptedData = new byte[1024];
 
             int j = 2;
             int numBytes = 0;
-            for(int i = 0; i < 22; ++i)
+            for(int i = 0; i < (packet.Length/2) - 1; ++i)
             {
                 numBytes++;
                 data[i] = (byte)(packet[j] | (packet[j + 1] >> 4));
@@ -204,6 +204,55 @@ namespace RetroSpy.Readers
 
                 return outState.Build();
 
+            }
+            else if (packet[0] == 3) //8BitDo GBros. Adapter
+            {
+                if ((unencryptedData[6] & 0b00000001) == 0)
+                    return null;
+
+                var outState = new ControllerStateBuilder();
+
+                byte rightTrigger = unencryptedData[5];
+                byte leftTrigger = unencryptedData[4];
+
+                byte leftX = unencryptedData[0];
+                byte leftY = unencryptedData[2];
+
+                byte rightX = unencryptedData[1];
+                byte rightY = unencryptedData[3];
+
+                outState.SetButton("up", (unencryptedData[7] & ~0xFE) == 0);
+                outState.SetButton("right", (unencryptedData[6] & ~0x7F) == 0);
+                outState.SetButton("down", (unencryptedData[6] & ~0xBF) == 0);
+                outState.SetButton("left", (unencryptedData[7] & ~0xFD) == 0);
+
+                outState.SetButton("b", (unencryptedData[7] & ~0xBF) == 0);
+                outState.SetButton("a", (unencryptedData[7] & ~0xEF) == 0);
+                outState.SetButton("y", (unencryptedData[7] & 0b00100000) == 0);
+                outState.SetButton("x", (unencryptedData[7] & 0b00001000) == 0);
+
+                outState.SetButton("select", (unencryptedData[6] & ~0xEF) == 0);
+                outState.SetButton("home", (unencryptedData[6] & 0b00001000) == 0);
+                outState.SetButton("start", (unencryptedData[6] & ~0xFB) == 0);
+
+                outState.SetButton("l", (unencryptedData[6] & 0b00100000) == 0);
+                outState.SetButton("r", (unencryptedData[6] & 0b00000010) == 0);
+
+                outState.SetAnalog("l_trig", leftTrigger / 255.0f);
+                outState.SetAnalog("r_trig", rightTrigger / 255.0f);
+
+                outState.SetButton("zl", (unencryptedData[7] & 0b10000000) == 0);
+                outState.SetButton("zr", (unencryptedData[7] & 0b00000100) == 0);
+
+                outState.SetAnalog("lstick_x", (leftX - 128.0f) / 128.0f);
+                outState.SetAnalog("lstick_y", (leftY - 128.0f) / 128.0f);
+                outState.SetAnalog("rstick_x", (rightX - 128.0f) / 128.0f);
+                outState.SetAnalog("rstick_y", (rightY - 128.0f) / 128.0f);
+
+                outState.SetButton("disconnect", false);
+                outState.SetButton("lock", false);
+
+                return outState.Build();
             }
 
             return null;
