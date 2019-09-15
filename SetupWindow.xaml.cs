@@ -37,10 +37,6 @@ namespace RetroSpy
             var results = Skin.LoadAllSkinsFromParentFolder ("skins");
             _skins = results.SkinsLoaded;
 
-            if (results.ParseErrors.Count > 0) {
-                showSkinParseErrors (results.ParseErrors);
-            }
-
             _vm.Skins.UpdateContents (_skins.Where (x => x.Type == InputSource.DEFAULT));
             
             _vm.Sources.UpdateContents (InputSource.ALL);
@@ -82,6 +78,11 @@ namespace RetroSpy
             _vm.Sources.SelectId(Properties.Settings.Default.Source);
             _vm.Skins.SelectId(Properties.Settings.Default.Skin);
             _vm.Hostname = Properties.Settings.Default.Hostname;
+
+            if (results.ParseErrors.Count > 0)
+            {
+                showSkinParseErrors(results.ParseErrors);
+            }
         }
 
         void showSkinParseErrors (List <string> errs) {

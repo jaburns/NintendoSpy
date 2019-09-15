@@ -95,7 +95,8 @@ namespace RetroSpy
             var skinPath = Path.Combine (Environment.CurrentDirectory, folder);
 
             if (! File.Exists (Path.Combine (skinPath, "skin.xml"))) {
-                throw new ConfigParseException ("Could not find skin.xml for skin at '"+folder+"'.");
+                //throw new ConfigParseException ("Could not find skin.xml for skin at '"+folder+"'.");
+                return;
             }
             var doc = XDocument.Load (Path.Combine (skinPath, "skin.xml"));
 
@@ -344,20 +345,39 @@ namespace RetroSpy
             public List <string> ParseErrors;
         }
 
+        static public void LoadAllSkinsFromSubFolder(string path, List<Skin> skins, List<string> errs)
+        {
+            foreach (var skinDir in Directory.GetDirectories(path))
+            {
+                try
+                {
+                    Skin skin;
+                    try
+                    {
+                        skin = new Skin(skinDir);
+                    }
+                    catch (Exception e)
+                    {
+                        errs.Add(skinDir + " :: " + e.Message);
+                        continue;
+                    }
+                    skins.Add(skin);
+                }
+                catch (ConfigParseException e)
+                {
+                    errs.Add(skinDir + " :: " + e.Message);
+                }
+                LoadAllSkinsFromSubFolder(skinDir, skins, errs);
+            }
+            
+        }
+
         static public LoadResults LoadAllSkinsFromParentFolder (string path)
         {
             var skins = new List <Skin> ();
             var errs = new List <string> ();
 
-            foreach (var skinDir in Directory.GetDirectories(path)) {
-                try {
-                    var skin = new Skin (skinDir);
-                    skins.Add (skin);
-                }
-                catch (ConfigParseException e) {
-                    errs.Add (skinDir + " :: " + e.Message);
-                }
-            }
+            LoadAllSkinsFromSubFolder(path, skins, errs);
 
             return new LoadResults {
                 SkinsLoaded = skins,
