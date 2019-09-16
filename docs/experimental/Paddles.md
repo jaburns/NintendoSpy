@@ -2,11 +2,9 @@
 RetroSpy Setup for Atari Paddles
 ======
 
-## Why Experimental?
+# Why Experimental?
 
 Atari paddle support is experimental because the current output sucks.  The technical details of how Atari handles the paddles is beyond the scope of this document, but implementation causes the output to jitter pretty badly. I have tried to do some amount of smoothing, but the jitter still exists.  Additionally, the parameters for the smoothing code are very likely specific paddle dependent.
-
-## Components and Equipment needed for a cable
 
 # What You Need
 1. [Arduino Uno](http://www.amazon.com/Arduino-UNO-board-DIP-ATmega328P/dp/B006H06TVG)
@@ -82,14 +80,12 @@ Once the wiring is done and everything is hooked up to your game system and comp
 
 5. Select File->Open and open the ``Paddles.ino`` file from the ``experimental/Paddles folder`` of the unzipped RetroSpy release.
 
-6. Now uncomment the option for `MODE_CLASSIC`. Note that `MODE_SNES` is uncommented in this image. 
-
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/uncomment.png)
 
-7. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
+6. Hit the upload button (right pointing arrow) located just under the 'Edit' menu, this will upload and run the software on the Arduino. It should look like the following image. Once successfully uploaded, you won't have to upload software again to the Arduino again unless you want to change controller modes. 
 
 ![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/readme_images/upload.png)
 
-8. Run ``RetroSpy.exe``.
+7. Run ``RetroSpy.exe``.
 
-9. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
+8. The selection here should be pretty straightforward, select the 'COMX' port that the Arduino is on, select the controller you are using, select a skin, and hit 'Go'. If everything is hooked up correctly you should see your controller and inputs displaying.
