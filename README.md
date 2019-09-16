@@ -6,7 +6,7 @@ RetroSpy
 
 A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is designed to present controller inputs from a console or computer in a display window.  This allows you to show your controller inputs for things like speedrunning, game tutorials, and more.  You can also convert controller presses into keystrokes to control programs on your computer such as LiveSplit and OBS.  RetroSpy supports the following systems and their regional equivalents:
 
- - Atari 2600 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started), [Omega Race Booster Grip](https://github.com/zoggins/RetroSpy/wiki/Atari-Omega-Race-Booster-Grip-on-Arduino-Getting-Started)
+ - Atari 2600 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started), [Driving controllers](https://github.com/zoggins/RetroSpy/wiki/Atari-Driving-Controller-on-Arduino-Getting-Started), [Omega Race Booster Grip](https://github.com/zoggins/RetroSpy/wiki/Atari-Omega-Race-Booster-Grip-on-Arduino-Getting-Started)
  - [Intellivision](https://github.com/zoggins/RetroSpy/wiki/Intellivision-on-Arduino-Getting-Started)
  - [NES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - [Sega Master System](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
