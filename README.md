@@ -13,7 +13,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Commodore 64/128/+4/Vic-20
  - Commodore Amiga (non-CD32 controllers)
  - Sega Genesis
- - TurboGraphx-16
+ - [TurboGraphx-16](https://github.com/zoggins/RetroSpy/wiki/TurboGrafx-16-PC-Engine-on-Arduino-Getting-Started)
  - Neo-Geo 
  - [SNES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - 3DO
