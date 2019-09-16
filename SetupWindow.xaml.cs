@@ -44,6 +44,8 @@ namespace RetroSpy
 
             _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
 
+            _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
+
             _portListUpdateTimer = new DispatcherTimer ();
             _portListUpdateTimer.Interval = TimeSpan.FromSeconds (1);
             _portListUpdateTimer.Tick += (sender, e) => updatePortList ();
@@ -125,6 +127,7 @@ namespace RetroSpy
             Properties.Settings.Default.Delay = _vm.DelayInMilliseconds;
             Properties.Settings.Default.Background = _vm.Backgrounds.GetSelectedId();
             Properties.Settings.Default.Hostname = _vm.Hostname;
+            Properties.Settings.Default.StaticViewerWindowName = _vm.StaticViewerWindowName;
             Properties.Settings.Default.Save();
 
             try {
@@ -158,7 +161,7 @@ namespace RetroSpy
 
                 new ViewWindow (_vm.Skins.SelectedItem,
                                 _vm.Backgrounds.SelectedItem, 
-                                reader)
+                                reader, _vm.StaticViewerWindowName)
                     .ShowDialog ();
             }
 #if DEBUG
@@ -261,6 +264,7 @@ namespace RetroSpy
         public ListView <Skin.Background> Backgrounds { get; set; }
         public ListView <InputSource> Sources { get; set; }
         public int DelayInMilliseconds { get; set; }
+        public bool StaticViewerWindowName { get; set; }
         public string Hostname { get; set; }
 
         Visibility _comPortOptionVisibility;
