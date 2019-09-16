@@ -15,13 +15,13 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Sega Genesis
  - TurboGraphx-16
  - Neo-Geo 
- - SNES
+ - [SNES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - 3DO
  - Sega Saturn
- - PlayStation
- - Nintendo 64
- - PlayStation 2
- - GameCube 
+ - [PlayStation](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
+ - [Nintendo 64](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
+ - [PlayStation 2](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
+ - [GameCube](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection) 
 
 Additionally, RetroSpy has experimental support for:
 
