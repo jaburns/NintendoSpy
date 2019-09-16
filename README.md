@@ -14,7 +14,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Commodore Amiga (non-CD32) [controllers](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
  - [Sega Genesis](https://github.com/zoggins/RetroSpy/wiki/Genesis-on-Arduino-Getting-Started)
  - [TurboGraphx-16](https://github.com/zoggins/RetroSpy/wiki/TurboGrafx-16-PC-Engine-on-Arduino-Getting-Started)
- - Neo-Geo 
+ - [Neo-Geo](https://github.com/zoggins/RetroSpy/wiki/Neo-Geo-on-Arduino-Getting-Started)
  - [SNES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - [3DO](https://github.com/zoggins/RetroSpy/wiki/3DO-on-Arduino-Getting-Started)
  - [Sega Saturn](https://github.com/zoggins/RetroSpy/wiki/Saturn-on-Arduino-Getting-Started)
