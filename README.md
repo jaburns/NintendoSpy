@@ -17,7 +17,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Neo-Geo 
  - [SNES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - 3DO
- - Sega Saturn
+ - [Sega Saturn](https://github.com/zoggins/RetroSpy/wiki/Saturn-on-Arduino-Getting-Started)
  - [PlayStation](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
  - [Nintendo 64](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - [PlayStation 2](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
