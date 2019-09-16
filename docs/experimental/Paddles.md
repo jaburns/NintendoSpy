@@ -22,16 +22,6 @@ Atari paddle support is experimental because the current output sucks.  The tech
 
 #2 and #3 above are included in the release package of RetroSpy. The firmware is located in the ``experimental/Paddles`` folder and is called ``Paddles.ino``.   Just run ``RetroSpy.exe`` to launch the display software.
 
-## Instructions for Atari Paddles cable
-
-### Wiring
-
-It is possible to solder jumper wires onto each wire of the extension cable, but since Atari use a standard DB9 port, we can build a cable with no soldering required.
-
-1.  Take the Atari extension cable, wires, DB9 Breakout Board, DB9 Y cable and optional headers you have acquired and put them together in this configuration:
-
-![](https://raw.githubusercontent.com/zoggins/RetroSpy/master/docs/tutorial-images/ataricable.jpg)
-
 # Instructions
 
 ## Wiring
