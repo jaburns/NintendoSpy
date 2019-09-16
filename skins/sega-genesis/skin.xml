@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Generic Genesis" author="chmaller" type="sega">
+<skin name="Generic Genesis" author="chmaller" type="genesis">
 
     <background name="Genesis" image="sega_genesis.png" />
 

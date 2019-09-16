@@ -39,7 +39,7 @@ namespace RetroSpy
 
         static public readonly InputSource CDI = new InputSource("cdi", "Phillips CD-i", true, false, false, port => new SerialControllerReader(port, CDi.ReadFromPacket));
 
-        static public readonly InputSource SEGA = new InputSource("sega", "Sega Genesis", true, false, false, port => new SerialControllerReader(port, Sega.ReadFromPacket));
+        static public readonly InputSource SEGA = new InputSource("genesis", "Sega Genesis", true, false, false, port => new SerialControllerReader(port, Sega.ReadFromPacket));
         static public readonly InputSource SATURN3D = new InputSource("saturn", "Sega Saturn", true, false, false, port => new SerialControllerReader(port, SS3D.ReadFromPacket));
         static public readonly InputSource DREAMCAST = new InputSource("dreamcast", "Sega Dreamcast", true, false, false, port => new SerialControllerReader(port, Dreamcast.ReadFromPacket));
 
