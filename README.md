@@ -12,27 +12,24 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [Sega Master System](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
  - [Commodore 64/128/+4/Vic-20](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
  - Commodore Amiga (non-CD32) [controllers](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started) and [mice](https://github.com/zoggins/RetroSpy/wiki/Amiga-Mice-on-Arduino-Getting-Started)
+  - [Amiga CD32](https://github.com/zoggins/RetroSpy/wiki/Amiga-CD32-on-Teensy-Getting-Started)
  - [Sega Genesis](https://github.com/zoggins/RetroSpy/wiki/Genesis-on-Arduino-Getting-Started)
  - [TurboGraphx-16](https://github.com/zoggins/RetroSpy/wiki/TurboGrafx-16-PC-Engine-on-Arduino-Getting-Started)
  - [Neo-Geo](https://github.com/zoggins/RetroSpy/wiki/Neo-Geo-on-Arduino-Getting-Started)
  - [SNES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - [3DO](https://github.com/zoggins/RetroSpy/wiki/3DO-on-Arduino-Getting-Started)
+ - [CD-i](https://github.com/zoggins/RetroSpy/wiki/CDi-on-Arduino-Getting-Started)
  - [Sega Saturn](https://github.com/zoggins/RetroSpy/wiki/Saturn-on-Arduino-Getting-Started)
  - [PlayStation](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
  - [Nintendo 64](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - [PlayStation 2](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
+ - [Dreamcast](https://github.com/zoggins/RetroSpy/wiki/Dreamcast-on-Teensy-Getting-Started)
  - [GameCube](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection) 
-
+ - [Wii](https://github.com/zoggins/RetroSpy/wiki/Wii-on-Teensy-Getting-Started)
+ 
 Additionally, RetroSpy has experimental support for:
 
  - [Atari Paddles](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/Paddles.md)
- - [Atari Driving Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/driving.md)
- - [Atari Keyboard, Kid's & Video Touch Pad Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/keyboard.md)
- - [CD-i Infrared Remotes & Wired Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/cdi.md)
- - [Dreamcast Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/dreamcast.md)
- - [Amiga Mice](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/amigamouse.md)
- - [Wii Extension Controllers](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/wii.md)
- - [Wired Switch Controllers](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
  
 ## Documentation
 
