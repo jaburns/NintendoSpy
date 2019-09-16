@@ -8,7 +8,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
 
  - Atari 2600
  - Intellivision
- - NES
+ - [NES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - Sega Master System
  - Commodore 64/128/+4/Vic-20
  - Commodore Amiga (non-CD32 controllers)
