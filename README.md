@@ -16,7 +16,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [TurboGraphx-16](https://github.com/zoggins/RetroSpy/wiki/TurboGrafx-16-PC-Engine-on-Arduino-Getting-Started)
  - Neo-Geo 
  - [SNES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
- - 3DO
+ - [3DO](https://github.com/zoggins/RetroSpy/wiki/3DO-on-Arduino-Getting-Started)
  - [Sega Saturn](https://github.com/zoggins/RetroSpy/wiki/Saturn-on-Arduino-Getting-Started)
  - [PlayStation](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
  - [Nintendo 64](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
