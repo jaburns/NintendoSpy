@@ -11,7 +11,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [NES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - [Sega Master System](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
  - [Commodore 64/128/+4/Vic-20](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
- - Commodore Amiga (non-CD32) [controllers](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
+ - Commodore Amiga (non-CD32) [controllers](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started) and [mice](https://github.com/zoggins/RetroSpy/wiki/Amiga-Mice-on-Arduino-Getting-Started)
  - [Sega Genesis](https://github.com/zoggins/RetroSpy/wiki/Genesis-on-Arduino-Getting-Started)
  - [TurboGraphx-16](https://github.com/zoggins/RetroSpy/wiki/TurboGrafx-16-PC-Engine-on-Arduino-Getting-Started)
  - [Neo-Geo](https://github.com/zoggins/RetroSpy/wiki/Neo-Geo-on-Arduino-Getting-Started)
