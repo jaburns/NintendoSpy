@@ -4,7 +4,9 @@
     <background name="Default" image="controller.png" />
 
   <button name="blue" image="circle2.png" x="613" y="248" width="45" height="45" />
+  <button name="2" image="circle2.png" x="613" y="248" width="45" height="45" />
   <button name="red" image="circle2.png" x="533" y="285" width="45" height="45" />
+  <button name="1" image="circle2.png" x="533" y="285" width="45" height="45" />
   <button name="yellow" image="circle2.png" x="584" y="168" width="45" height="45" />
   <button name="green" image="circle2.png" x="499" y="206" width="45" height="45" />
 

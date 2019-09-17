@@ -4,7 +4,9 @@
     <background name="Default" image="commodore.png" />
 
     <button name="left" image="circle.png" x="66" y="44" width="50" height="50" />
+    <button name="1" image="circle.png" x="66" y="44" width="50" height="50" />
     <button name="right" image="circle.png" x="165" y="44" width="50" height="50" />
+    <button name="2" image="circle.png" x="165" y="44" width="50" height="50" />
 
   <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="125" y="300" xrange="110" yrange="110" height="30" width="30"/>
   <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="125" y="300" xrange="110" yrange="110" height="30" width="30"/>

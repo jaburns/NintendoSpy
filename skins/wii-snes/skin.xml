@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="SNES Controller" author="jaburns" type="wii">
+<skin name="SNES Controller" author="jaburns" type="wii;snes">
 
     <background name="Default" image="snes.png" />
 
@@ -12,7 +12,9 @@
     <button name="r" image="circle.png" x="159" y="7" width="44" height="14" />
 
     <button name="start" image="circle.png" x="113" y="62" width="28" height="17" />
+    <button name="+" image="circle.png" x="113" y="62" width="28" height="17" />
     <button name="select" image="circle.png" x="83" y="62" width="28" height="17" />
+    <button name="-" image="circle.png" x="83" y="62" width="28" height="17" />
 
     <button name="up" image="circle.png" x="46" y="41" width="16" height="16" />
     <button name="down" image="circle.png" x="46" y="69" width="16" height="16" />
