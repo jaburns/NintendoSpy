@@ -488,40 +488,40 @@
     <Content Include="skins\playstation-mouse\playstation.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\circle.png">
+    <Content Include="skins\playstation-dualshock2-analog\circle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\circle2.png">
+    <Content Include="skins\playstation-dualshock2-analog\circle2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\down.png">
+    <Content Include="skins\playstation-dualshock2-analog\down.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\left.png">
+    <Content Include="skins\playstation-dualshock2-analog\left.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\playstation-analog-stick.png">
+    <Content Include="skins\playstation-dualshock2-analog\playstation-analog-stick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\playstation2-analog.png">
+    <Content Include="skins\playstation-dualshock2-analog\playstation2-analog.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\right.png">
+    <Content Include="skins\playstation-dualshock2-analog\right.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\select.png">
+    <Content Include="skins\playstation-dualshock2-analog\select.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\shoulder2.png">
+    <Content Include="skins\playstation-dualshock2-analog\shoulder2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\skin.xml">
+    <Content Include="skins\playstation-dualshock2-analog\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\start.png">
+    <Content Include="skins\playstation-dualshock2-analog\start.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\playstation-dualshock2analog\up.png">
+    <Content Include="skins\playstation-dualshock2-analog\up.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\gamecube-gbasp\abbutton.png">
@@ -831,25 +831,25 @@
     <Content Include="skins\wii-nunchuck\stick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\xbox-dukeanalog\circle.png">
+    <Content Include="skins\xbox-duke-analog\circle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\xbox-dukeanalog\lstick.png">
+    <Content Include="skins\xbox-duke-analog\lstick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\xbox-dukeanalog\pad.png">
+    <Content Include="skins\xbox-duke-analog\pad.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\xbox-dukeanalog\rstick.png">
+    <Content Include="skins\xbox-duke-analog\rstick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\xbox-dukeanalog\skin.xml">
+    <Content Include="skins\xbox-duke-analog\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\xbox-dukeanalog\trig-l.png">
+    <Content Include="skins\xbox-duke-analog\trig-l.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\xbox-dukeanalog\trig-r.png">
+    <Content Include="skins\xbox-duke-analog\trig-r.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\xbox-duke\circle.png">
