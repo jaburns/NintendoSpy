@@ -9,12 +9,12 @@ namespace RetroSpy
 {
     public class InputSource
     {
-        static public readonly InputSource CLASSIC = new InputSource("classic", "Atari/Commodore/SMS Controller", true, false, false, port => new SerialControllerReader(port, Classic.ReadFromPacket));
+        static public readonly InputSource CLASSIC = new InputSource("classic", "Atari/Commodore/SMS", true, false, false, port => new SerialControllerReader(port, Classic.ReadFromPacket));
         static public readonly InputSource DRIVINGCONTROLLER = new InputSource("drivingcontroller", "Atari Driving Controller", true, false, false, port => new SerialControllerReader(port, DrivingController.ReadFromPacket));
         static public readonly InputSource ATARIKEYBOARD = new InputSource("atarikeyboard", "Atari Keyboard Controller", true, false, false, port => new SerialControllerReader(port, AtariKeyboard.ReadFromPacket));
         static public readonly InputSource PADDLES = new InputSource("paddles", "Atari Paddles", true, false, false, port => new SerialControllerReader(port, Paddles.ReadFromPacket));
 
-        static public readonly InputSource CD32 = new InputSource("cd32", "Commodore Amiga CD32", true, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_CD32));
+        static public readonly InputSource CD32 = new InputSource("cd32", "Commodore Amiga", true, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_CD32));
 
         static public readonly InputSource INTELLIVISION = new InputSource("intellivision", "Mattel Intellivision", true, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_Intellivision));
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Star Raiders Overlay" author="chmaller" type="atarikeyboard">
+
+    <background name="Default" image="starraiders.png" />
+
+  <button name="1" image="button.png" x="44" y="158" width="120" height="81" />
+  <button name="2" image="button.png" x="204" y="158" width="120" height="81" />
+  <button name="3" image="button.png" x="366" y="158" width="120" height="81" />
+  
+  <button name="4" image="button.png" x="44" y="322" width="120" height="81" />
+  <button name="5" image="button.png" x="204" y="322" width="120" height="81" />
+  <button name="6" image="button.png" x="366" y="322" width="120" height="81" />
+  
+  <button name="7" image="button.png" x="44" y="485" width="120" height="81" />
+  <button name="8" image="button.png" x="204" y="485" width="120" height="81" />
+  <button name="9" image="button.png" x="366" y="485" width="120" height="81" />
+  
+  <button name="star" image="button.png" x="44" y="648" width="120" height="81" />
+  <button name="0" image="button.png" x="204" y="648" width="120" height="81" />
+  <button name="pound" image="button.png" x="366" y="648" width="120" height="81" />
+  
+</skin>

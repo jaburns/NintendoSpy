@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Sega Saturn Digital Controller" author="zoggins" type="saturn">
+
+  <background name="Default" image="saturn.png" />
+
+  <button name="A" image="circle2.png" x="750" y="410" width="100" height="100" />
+  <button name="B" image="circle2.png" x="855" y="335" width="100" height="100" />
+  <button name="C" image="circle2.png" x="980" y="280" width="100" height="100" />
+    
+	<button name="X" image="circle2.png" x="725" y="295" width="70" height="70" />
+	<button name="Y" image="circle2.png" x="825" y="230" width="60" height="60" />
+	<button name="Z" image="circle2.png" x="925" y="195" width="60" height="60" />
+
+	<button name="L" image="circle2.png" x="250" y="50" width="160" height="80" />
+	<button name="R" image="circle2.png" x="725" y="50" width="160" height="80" />
+	
+	<button name="start" image="circle2.png" x="555" y="435" width="80" height="30" />
+	
+  <button name="up" image="circle2.png" x="255" y="250" width="50" height="50" />
+  <button name="left" image="circle2.png" x="170" y="325" width="50" height="50" />
+  <button name="down" image="circle2.png" x="250" y="400" width="50" height="50" />
+  <button name="right" image="circle2.png" x="330" y="325" width="50" height="50" />
+</skin>

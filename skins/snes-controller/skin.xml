@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="SNES Controller" author="jaburns" type="wii">
+<skin name="SNES Controller" author="jaburns" type="snes">
 
     <background name="Default" image="snes.png" />
 
@@ -18,8 +18,5 @@
     <button name="down" image="circle.png" x="46" y="69" width="16" height="16" />
     <button name="left" image="circle.png" x="32" y="55" width="16" height="16" />
     <button name="right" image="circle.png" x="60" y="55" width="16" height="16" />
-
-    <button name="disconnect" image="disconnect.png" x="70" y="11" width="100" height="100" />
-    <button name="lock" image="lock100.png" x="70" y="11" width="100" height="100" />
 
 </skin>

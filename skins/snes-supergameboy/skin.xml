@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Super Gameboy SNES" author="zoggins" type="snes">
+<skin name="Super Gameboy" author="zoggins" type="snes">
 
-  <background name="Super Gameboy" image="gameboy.png" />
+  <background name="Default" image="gameboy.png" />
 
   <button name="a" image="circle.png" x="530" y="615" width="70" height="70" />
   <button name="b" image="circle.png" x="440" y="650" width="70" height="70" />
