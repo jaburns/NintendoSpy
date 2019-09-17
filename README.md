@@ -8,7 +8,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
 
  - Atari 2600 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started), [Driving controllers](https://github.com/zoggins/RetroSpy/wiki/Atari-Driving-Controller-on-Arduino-Getting-Started), [Keyboard Controllers](https://github.com/zoggins/RetroSpy/wiki/Atari-Keyboard-Controller-on-Arduino-Getting-Started) and the [Omega Race Booster Grip](https://github.com/zoggins/RetroSpy/wiki/Atari-Omega-Race-Booster-Grip-on-Arduino-Getting-Started)
  - [Mattell Intellivision](https://github.com/zoggins/RetroSpy/wiki/Intellivision-on-Arduino-Getting-Started)
- - [Commodore 64/128/+4/Vic-20](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
+ - Commodore 64/128/+4/Vic-20 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
  - [NES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - Commodore Amiga (non-CD32) [controllers](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started) and [mice](https://github.com/zoggins/RetroSpy/wiki/Amiga-Mice-on-Arduino-Getting-Started)
  - [Sega Master System](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
@@ -35,5 +35,16 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  
 Additionally, RetroSpy has experimental support for:
 
- - [Atari Paddles](https://github.com/zoggins/RetroSpy/blob/master/docs/experimental/Paddles.md)
- 
+ - Atari 2600 [Paddles](https://github.com/zoggins/RetroSpy/wiki/Atari-Paddles-on-Arduino-Getting-Started)
+
+Wishlist:
+
+ - Coleco ColecoVision
+ - Commodore 64 mice and paddles
+ - Commodore CDTV wireless remote
+ - Atari Jaguar
+ - PS/2 Keyboards
+ - Sega Saturn Keyboard
+ - Dreamcast Keyboard
+ - Sega Genesis Mini
+ - TurboGrafx-16 Mini
