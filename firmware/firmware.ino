@@ -20,7 +20,9 @@
 //#define MODE_SATURN3D
 //#define MODE_NEOGEO
 //#define MODE_3DO
-//#define INTELLIVISION
+//#define MODE_INTELLIVISION
+//#define MODE_JAGUAR
+#define MODE_COLECOVISION
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -38,6 +40,7 @@
 
 SegaControllerSpy segaController;
 word currentState = 0;
+unsigned int uiCurrentState = 0;
 word lastState = 0;
 byte ssState1 = 0;
 byte ssState2 = 0;
@@ -1281,6 +1284,110 @@ void sendIntellivisionData_Raw()
     writeIntellivisionDataToSerial();
 }
 
+#define AJ_COLUMN1   8
+#define AJ_COLUMN2   9
+#define AJ_COLUMN3  10
+#define AJ_COLUMN4  11
+
+inline void read_JaguarData()
+{
+  uiCurrentState = 0;
+  
+  while((PINB & 0b00001000) != 0){}    
+  asm volatile(
+        "nop\nnop\n");
+  uiCurrentState |= ((PIND & 0b11111100) >> 2);
+
+  while((PINB & 0b00000100) != 0){}    
+  asm volatile(
+        "nop\nnop\n");
+  uiCurrentState |= ((PIND & 0b11111000) << 4);
+
+  while((PINB & 0b00000010) != 0){}    
+  asm volatile(
+        "nop\nnop\n");
+  uiCurrentState |= ((PIND & 0b11111000) << 9);
+
+  while((PINB & 0b00000001) != 0){}    
+  asm volatile(
+        "nop\nnop\n");
+  uiCurrentState |= ((PIND & 0b11111000) << 16);
+}
+
+inline void read_ColecoVisionData()
+{
+  currentState = 0x0000;
+  while((PINB & 0b00000110) != 0x02){}    
+  asm volatile(
+        "nop\nnop\n");
+  currentState |= ((PIND & 0b11111100) >> 2);
+  currentState |= ((PINB & 0b00000001) << 6);
+
+  while((PINB & 0b00000110) != 0x01){}     
+    asm volatile(
+        "nop\nnop\n");
+  currentState |= ((PIND & 0b01111100) << 4);
+}
+
+inline void sendRawJaguarData()
+{
+    #ifndef DEBUG
+    for (unsigned char i = 0; i < 12; ++i)
+    {
+      Serial.write (uiCurrentState & (1 << i) ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else 
+    Serial.print((currentState & 0b00000000000000000000000000000001) == 0  ? "P" : "0");
+    Serial.print((currentState & 0b00000000000000000000000000000010) == 0  ? "A" : "0");
+    Serial.print((currentState & 0b00000000000000000000000000000100) == 0  ? "R" : "0");
+    Serial.print((currentState & 0b00000000000000000000000000001000) == 0  ? "L" : "0");
+    Serial.print((currentState & 0b00000000000000000000000000010000) == 0  ? "D" : "0");
+    Serial.print((currentState & 0b00000000000000000000000000100000) == 0  ? "U" : "0");
+    Serial.print((currentState & 0b00000000000000000000000001000000) == 0  ? "B" : "0");
+    Serial.print((currentState & 0b00000000000000000000000010000000) == 0  ? "1" : "0");
+    Serial.print((currentState & 0b00000000000000000000000100000000) == 0  ? "4" : "0");
+    Serial.print((currentState & 0b00000000000000000000001000000000) == 0  ? "7" : "0");
+    Serial.print((currentState & 0b00000000000000000000010000000000) == 0  ? "*" : "0");
+    Serial.print((currentState & 0b00000000000000000000100000000000) == 0  ? "C" : "0");
+    Serial.print((currentState & 0b00000000000000000001000000000000) == 0  ? "2" : "0");
+    Serial.print((currentState & 0b00000000000000000010000000000000) == 0  ? "5" : "0");
+    Serial.print((currentState & 0b00000000000000000100000000000000) == 0  ? "8" : "0");
+    Serial.print((currentState & 0b00000000000000001000000000000000) == 0  ? "0" : "0");
+    Serial.print((currentState & 0b00000000000000010000000000000000) == 0  ? "O" : "0");
+    Serial.print((currentState & 0b00000000000000100000000000000000) == 0  ? "3" : "0");
+    Serial.print((currentState & 0b00000000000001000000000000000000) == 0  ? "6" : "0");
+    Serial.print((currentState & 0b00000000000010000000000000000000) == 0  ? "9" : "0");
+    Serial.print((currentState & 0b00000000000100000000000000000000) == 0  ? "#" : "0");
+    Serial.print("\n");
+    #endif
+}
+
+inline void sendRawColecoVisionData()
+{
+    #ifndef DEBUG
+    for (unsigned char i = 0; i < 12; ++i)
+    {
+      Serial.write (uiCurrentState & (1 << i) ? ONE : ZERO );
+    }
+    Serial.write( SPLIT );
+    #else 
+    Serial.print((currentState & 0b0000000000000001)    ? "U" : "0");
+    Serial.print((currentState & 0b0000000000000010)    ? "D" : "0");
+    Serial.print((currentState & 0b0000000000000100)    ? "L" : "0");
+    Serial.print((currentState & 0b0000000000001000)    ? "R" : "0");
+    Serial.print((currentState & 0b0000000000010000)    ? "1" : "0");
+    Serial.print((currentState & 0b0000000000100000)    ? "X" : "0");
+    Serial.print((currentState & 0b0000000001000000)    ? "X" : "0");
+    Serial.print((currentState & 0b0000000010000000)    ? "A" : "0")
+    Serial.print((currentState & 0b0000000100000000)    ? "B" : "0")
+    Serial.print((currentState & 0b0000001000000000)    ? "C" : "0")
+    Serial.print((currentState & 0b0000010000000000)    ? "D" : "0")
+    Serial.print((currentState & 0b0000100000000000)    ? "2" : "0")
+    Serial.print("\n");
+    #endif
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update loop definitions for the various console modes.
 
@@ -1436,6 +1543,22 @@ inline void loop_Intellivision()
       sendIntellivisionData_Raw();
 }
 
+inline void loop_Jaguar()
+{
+  noInterrupts();
+  read_JaguarData();
+  interrupts();
+  sendRawJaguarData();
+}
+
+inline void loop_ColecoVision()
+{
+  noInterrupts();
+  read_ColecoVisionData();
+  interrupts();
+  sendRawColecoVisionData();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -1466,10 +1589,14 @@ void loop()
     loop_NeoGeo();
 #elif defined MODE_3DO
     loop_3DO();
-#elif defined INTELLIVISION
+#elif defined MODE_INTELLIVISION
     loop_Intellivision();
 #elif defined MODE_GENESIS_MOUSE
     loop_Genesis_Mouse();
+#elif defined MODE_JAGUAR
+    loop_Jaguar();
+#elif defined MODE_COLLECOVISION
+    loop_ColecoVision();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
