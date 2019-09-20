@@ -41,7 +41,7 @@ namespace RetroSpy
             _client.Connect();
             _data = _client.CreateShellStream("", 0, 0, 0, 0, 0);
             _data.WriteLine("sudo pkill -9 usb-mitm");
-            _data.WriteLine("sudo usb-mitm " + _arguments);
+            _data.WriteLine("sudo usb-mitm 2> /dev/null" + _arguments);
 
             _timer = new DispatcherTimer ();
             _timer.Interval = TimeSpan.FromMilliseconds (TIMER_MS); 
