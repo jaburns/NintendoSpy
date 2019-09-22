@@ -109,6 +109,7 @@
     <Compile Include="InputSource.cs" />
     <Compile Include="Keybindings.cs" />
     <Compile Include="Readers\DrivingController.cs" />
+    <Compile Include="Readers\C64mini.cs" />
     <Compile Include="Readers\MouseTester.cs" />
     <Compile Include="Readers\SSHControllerReader.cs" />
     <Compile Include="Readers\GenesisMiniReader.cs" />
