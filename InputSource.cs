@@ -42,6 +42,7 @@ namespace RetroSpy
         static public readonly InputSource SEGA = new InputSource("genesis", "Sega Genesis", true, false, false, port => new SerialControllerReader(port, Sega.ReadFromPacket));
         static public readonly InputSource SATURN3D = new InputSource("saturn", "Sega Saturn", true, false, false, port => new SerialControllerReader(port, SS3D.ReadFromPacket));
         static public readonly InputSource DREAMCAST = new InputSource("dreamcast", "Sega Dreamcast", true, false, false, port => new SerialControllerReader(port, Dreamcast.ReadFromPacket));
+        static public readonly InputSource GENMINI = new InputSource("genesismini", "Sega Genesis Mini", false, false, true, hostname => new SSHControllerReader(hostname, "-z", GenesisMiniReader.ReadFromPacket));
 
         static public readonly InputSource NEOGEO = new InputSource("neogeo", "SNK NeoGeo", true, false, false, port => new SerialControllerReader(port, NeoGeo.ReadFromPacket));
 
@@ -52,8 +53,8 @@ namespace RetroSpy
         //static public readonly InputSource MOUSETESTER = new InputSource("mousetester", "Mouse Tester", true, false, port => new MouseTester(port));
         //static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", false, true, controllerId => new WiiReaderV1(int.Parse(controllerId)));
 
-        static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, CD32, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, NEOGEO, PLAYSTATION2, PSCLASSIC
+        static public readonly IReadOnlyList<InputSource> ALL = new List<InputSource> {
+            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, CD32, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, PLAYSTATION2, PSCLASSIC
         };
 
         static public readonly InputSource DEFAULT = NES;

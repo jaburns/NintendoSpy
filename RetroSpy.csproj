@@ -111,6 +111,7 @@
     <Compile Include="Readers\DrivingController.cs" />
     <Compile Include="Readers\MouseTester.cs" />
     <Compile Include="Readers\SSHControllerReader.cs" />
+    <Compile Include="Readers\GenesisMiniReader.cs" />
     <Compile Include="Readers\Xbox360Reader.cs" />
     <Compile Include="Readers\SwitchReader.cs" />
     <Compile Include="Readers\XboxReaderV2.cs" />
