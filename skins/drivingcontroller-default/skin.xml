@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Atari Driving Controller" author="chmaller" type="drivingcontroller">
+
+  <background name="Default" image="drivingcontroller.png" />
+
+  <button name="fire" image="circle2.png" x="4" y="40" width="30" height="120" />
+  
+  <button name="0" image="circle3.png" x="154" y="122" width="40" height="40" />
+  <button name="1" image="circle3.png" x="194" y="130" width="40" height="40" />
+  <button name="2" image="circle3.png" x="228" y="153" width="40" height="40" />
+  <button name="3" image="circle3.png" x="251" y="187" width="40" height="40" />
+  <button name="4" image="circle3.png" x="259" y="227" width="40" height="40" />
+  <button name="5" image="circle3.png" x="251" y="267" width="40" height="40" />
+  <button name="6" image="circle3.png" x="228" y="301" width="40" height="40" />
+  <button name="7" image="circle3.png" x="194" y="324" width="40" height="40" />
+  <button name="8" image="circle3.png" x="154" y="332" width="40" height="40" />
+  <button name="9" image="circle3.png" x="114" y="324" width="40" height="40" />
+  <button name="10" image="circle3.png" x="80" y="301" width="40" height="40" />
+  <button name="11" image="circle3.png" x="57" y="267" width="40" height="40" />
+  <button name="12" image="circle3.png" x="49" y="227" width="40" height="40" />
+  <button name="13" image="circle3.png" x="57" y="187" width="40" height="40" />
+  <button name="14" image="circle3.png" x="80" y="153" width="40" height="40" />
+  <button name="15" image="circle3.png" x="114" y="130" width="40" height="40" />
+  
+</skin>

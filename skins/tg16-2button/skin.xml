@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="TG16 2 Button Controller" author="zoggins" type="tg16">
+
+    <background name="Default" image="tg16.png" />
+
+    <button name="1" image="circle.png" x="615" y="230" width="60" height="60" />
+    <button name="2" image="circle.png" x="530" y="230" width="60" height="60" />
+
+    <button name="run" image="circle.png" x="400" y="250" width="50" height="20" />
+    <button name="select" image="circle.png" x="315" y="250" width="50" height="20" />
+
+    <button name="up" image="circle.png" x="115" y="180" width="30" height="30" />
+    <button name="down" image="circle.png" x="115" y="265" width="30" height="30" />
+    <button name="left" image="circle.png" x="70" y="220" width="30" height="30" />
+    <button name="right" image="circle.png" x="158" y="220" width="30" height="30" />
+
+</skin>

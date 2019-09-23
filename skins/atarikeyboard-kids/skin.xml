@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Kid's Controller" author="chmaller" type="atarikeyboard">
+
+    <background name="Default" image="kidscontroller.png" />
+
+  <button name="1" image="circle2.png" x="88" y="98" width="25" height="25" />
+  <button name="2" image="circle2.png" x="126" y="98" width="25" height="25" />
+  <button name="3" image="circle2.png" x="159" y="98" width="25" height="25" />
+  
+  <button name="4" image="circle2.png" x="88" y="133" width="25" height="25" />
+  <button name="5" image="circle2.png" x="126" y="133" width="25" height="25" />
+  <button name="6" image="circle2.png" x="159" y="133" width="25" height="25" />
+  
+  <button name="7" image="circle2.png" x="88" y="168" width="25" height="25" />
+  <button name="8" image="circle2.png" x="126" y="168" width="25" height="25" />
+  <button name="9" image="circle2.png" x="159" y="168" width="25" height="25" />
+  
+  <button name="star" image="circle2.png" x="88" y="203" width="25" height="25" />
+  <button name="0" image="circle2.png" x="126" y="203" width="25" height="25" />
+  <button name="pound" image="circle2.png" x="159" y="203" width="25" height="25" />
+  
+</skin>
