@@ -134,13 +134,13 @@ namespace RetroSpy
                 else
                     TempSkin = new Skin();
 
-                LoadSkin(TempSkin, Name, Author, inputSource, doc, skinPath);
+                TempSkin.LoadSkin(Name, Author, inputSource, doc, skinPath);
                 generatedSkins.Add(TempSkin);
             }
             
         }
 
-        public void LoadSkin(Skin skin, string name, string author, InputSource type, XDocument doc, string skinPath)
+        public void LoadSkin(string name, string author, InputSource type, XDocument doc, string skinPath)
         {
             Name = name;
             Author = author;

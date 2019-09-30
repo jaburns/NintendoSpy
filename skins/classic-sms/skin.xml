@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Generic SMS" author="chmaller" type="classic">
+<skin name="SMS Controller" author="chmaller" type="classic;cd32;c64mini">
 
-    <background name="SMS" image="sms.png" />
+    <background name="Default" image="sms.png" />
 
     <button name="1" image="circle.png" x="145" y="85" width="23" height="23" />
+  <button name="red" image="circle.png" x="145" y="85" width="23" height="23" />
 	<button name="2" image="circle.png" x="179" y="85" width="23" height="23" />
-
+  <button name="blue" image="circle.png" x="179" y="85" width="23" height="23" />
+  
   <button name="up" image="circle.png" x="63" y="65" width="15" height="15" />
   <button name="down" image="circle.png" x="63" y="95" width="15" height="15" />
   <button name="left" image="circle.png" x="49" y="79" width="15" height="15" />

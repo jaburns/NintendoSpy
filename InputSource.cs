@@ -9,7 +9,7 @@ namespace RetroSpy
 {
     public class InputSource
     {
-        static public readonly InputSource CLASSIC = new InputSource("classic", "Atari/Commodore/SMS Controller", true, false, false, port => new SerialControllerReader(port, Classic.ReadFromPacket));
+        static public readonly InputSource CLASSIC = new InputSource("classic", "Atari/Commodore/SMS", true, false, false, port => new SerialControllerReader(port, Classic.ReadFromPacket));
         static public readonly InputSource DRIVINGCONTROLLER = new InputSource("drivingcontroller", "Atari Driving Controller", true, false, false, port => new SerialControllerReader(port, DrivingController.ReadFromPacket));
         static public readonly InputSource ATARIKEYBOARD = new InputSource("atarikeyboard", "Atari Keyboard Controller", true, false, false, port => new SerialControllerReader(port, AtariKeyboard.ReadFromPacket));
         static public readonly InputSource PADDLES = new InputSource("paddles", "Atari Paddles", true, false, false, port => new SerialControllerReader(port, Paddles.ReadFromPacket));
@@ -17,6 +17,7 @@ namespace RetroSpy
         static public readonly InputSource COLECOVISION = new InputSource("colecovision", "ColecoVision", true, false, false, port => new SerialControllerReader(port, ColecoVision.ReadFromPacket));
 
         static public readonly InputSource CD32 = new InputSource("cd32", "Commodore Amiga CD32", true, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_CD32));
+        static public readonly InputSource C64MINI = new InputSource("c64mini", "The C64 Mini", false, false, true, hostname => new SSHControllerReader(hostname, "-z", C64mini.ReadFromPacket));
 
         static public readonly InputSource INTELLIVISION = new InputSource("intellivision", "Mattel Intellivision", true, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_Intellivision));
 
@@ -44,8 +45,10 @@ namespace RetroSpy
         static public readonly InputSource SEGA = new InputSource("genesis", "Sega Genesis", true, false, false, port => new SerialControllerReader(port, Sega.ReadFromPacket));
         static public readonly InputSource SATURN3D = new InputSource("saturn", "Sega Saturn", true, false, false, port => new SerialControllerReader(port, SS3D.ReadFromPacket));
         static public readonly InputSource DREAMCAST = new InputSource("dreamcast", "Sega Dreamcast", true, false, false, port => new SerialControllerReader(port, Dreamcast.ReadFromPacket));
+        static public readonly InputSource GENMINI = new InputSource("genesismini", "Sega Genesis Mini", false, false, true, hostname => new SSHControllerReader(hostname, "-z", GenesisMiniReader.ReadFromPacket));
 
         static public readonly InputSource NEOGEO = new InputSource("neogeo", "SNK NeoGeo", true, false, false, port => new SerialControllerReader(port, NeoGeo.ReadFromPacket));
+        static public readonly InputSource NEOGEOMINI = new InputSource("neogeomini", "SNK NeoGeo Mini", false, false, true, hostname => new SSHControllerReader(hostname, "-g", NeoGeoMini.ReadFromPacket));
 
         static public readonly InputSource PLAYSTATION2 = new InputSource("playstation", "Sony Playstation 1/2", true, false, false, port => new SerialControllerReader(port, Playstation2.ReadFromPacket));
         static public readonly InputSource PSCLASSIC = new InputSource("psclassic", "Sony PlayStation Classic", false, false, true, hostname => new SSHControllerReader(hostname, "-y", SuperNESandNES.ReadFromPacket_PSClassic));
@@ -55,7 +58,7 @@ namespace RetroSpy
         //static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", false, true, controllerId => new WiiReaderV1(int.Parse(controllerId)));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, COLECOVISION, CD32, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, NEOGEO, PLAYSTATION2, PSCLASSIC
+            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, COLECOVISION, CD32, C64MINI, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, NEOGEO, PLAYSTATION2, PSCLASSIC
         };
 
         static public readonly InputSource DEFAULT = NES;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="CD-i Remote - Analog" author="zoggins" type="cdi">
+<skin name="CD-i Remote - Analog Buttons" author="zoggins" type="cdi">
 
     <background name="Default" image="cdiremote.png" />
 

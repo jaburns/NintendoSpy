@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Glossy GameCube Skins" author="StarkNebula" type="gamecube">
+<skin name="Glossy GameCube Controller" author="StarkNebula" type="gamecube">
   
   	<!-- Load Controller images - Menu name, file path + name, read in order -->
   	<!-- Any new image/skin you make must have it's own entry in here! -->
