@@ -292,7 +292,7 @@ namespace RetroSpy
             img.VerticalAlignment = VerticalAlignment.Top;
             img.HorizontalAlignment = HorizontalAlignment.Left;
             img.Source = config.Image;
-            img.Stretch = Stretch.Uniform;
+            img.Stretch = Stretch.Fill;
             img.Margin = new Thickness (config.X, config.Y, 0, 0);
             img.Width = config.Width;
             img.Height = config.Height;

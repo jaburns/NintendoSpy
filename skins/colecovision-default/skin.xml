@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Generic ColecoVision" author="chmaller" type="colecovision">
+
+	<background name="ColecoVision" image="colecovision-background.png" />
+
+	<button name="L" image="circle2.png" x="9" y="284" width="40" height="90" />
+	<button name="R" image="circle2.png" x="346" y="284" width="40" height="90" />
+
+	<button name="1" image="circle2.png" x="51" y="442" width="90" height="90" />
+	<button name="2" image="circle2.png" x="151" y="442" width="90" height="90" />
+	<button name="3" image="circle2.png" x="264" y="442" width="90" height="90" />
+
+	<button name="4" image="circle2.png" x="51" y="547" width="90" height="90" />
+	<button name="5" image="circle2.png" x="151" y="547" width="90" height="90" />
+	<button name="6" image="circle2.png" x="264" y="547" width="90" height="90" />
+
+	<button name="7" image="circle2.png" x="51" y="657" width="90" height="90" />
+	<button name="8" image="circle2.png" x="151" y="657" width="90" height="90" />
+	<button name="9" image="circle2.png" x="264" y="657" width="90" height="90" />
+
+	<button name="star" image="circle2.png" x="51" y="766" width="90" height="90" />
+	<button name="0" image="circle2.png" x="151" y="766" width="90" height="90" />
+	<button name="pound" image="circle2.png" x="264" y="766" width="90" height="90" />
+
+	<stick xname="x" yname="y" image="colecovision-knob.png" x="104" y="43" width="200" height="200" xrange="25" yrange="25" yreverse="false" />
+	
+</skin>
