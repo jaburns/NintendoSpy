@@ -39,5 +39,6 @@
         	DisplayMemberPath="Name"
         	SelectedValue="{Binding Backgrounds.SelectedItem}" HorizontalAlignment="Right" Width="250" />
         <Label x:Name="DelayLabel" Content="Delay (ms):" HorizontalAlignment="Left" Margin="54,81,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
+        <CheckBox x:Name="staticViewerNameCheckbox" Content="Static View Window Name&#xD;&#xA;" IsChecked="{Binding StaticViewerWindowName}" HorizontalAlignment="Left" Margin="382,120,0,0" VerticalAlignment="Top" Width="202" Foreground="White" FontSize="16" FontFamily="Calibri" Height="24"/>
     </Grid>
 </Window>

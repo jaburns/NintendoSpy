@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Sega Saturn 3D" author="zoggins" type="saturn">
+<skin name="Sega Saturn 3D Controller" author="zoggins" type="saturn">
 
   <background name="Default" image="ss3d-background.png" />
 

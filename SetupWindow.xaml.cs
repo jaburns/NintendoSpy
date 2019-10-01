@@ -37,16 +37,14 @@ namespace RetroSpy
             var results = Skin.LoadAllSkinsFromParentFolder ("skins");
             _skins = results.SkinsLoaded;
 
-            if (results.ParseErrors.Count > 0) {
-                showSkinParseErrors (results.ParseErrors);
-            }
-
             _vm.Skins.UpdateContents (_skins.Where (x => x.Type == InputSource.DEFAULT));
             
             _vm.Sources.UpdateContents (InputSource.ALL);
             
 
             _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
+
+            _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
 
             _portListUpdateTimer = new DispatcherTimer ();
             _portListUpdateTimer.Interval = TimeSpan.FromSeconds (1);
@@ -82,6 +80,11 @@ namespace RetroSpy
             _vm.Sources.SelectId(Properties.Settings.Default.Source);
             _vm.Skins.SelectId(Properties.Settings.Default.Skin);
             _vm.Hostname = Properties.Settings.Default.Hostname;
+
+            if (results.ParseErrors.Count > 0)
+            {
+                showSkinParseErrors(results.ParseErrors);
+            }
         }
 
         void showSkinParseErrors (List <string> errs) {
@@ -124,6 +127,7 @@ namespace RetroSpy
             Properties.Settings.Default.Delay = _vm.DelayInMilliseconds;
             Properties.Settings.Default.Background = _vm.Backgrounds.GetSelectedId();
             Properties.Settings.Default.Hostname = _vm.Hostname;
+            Properties.Settings.Default.StaticViewerWindowName = _vm.StaticViewerWindowName;
             Properties.Settings.Default.Save();
 
             try {
@@ -137,7 +141,9 @@ namespace RetroSpy
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.XBOX || _vm.Sources.SelectedItem == InputSource.PSCLASSIC ||
-                         _vm.Sources.SelectedItem == InputSource.SWITCH || _vm.Sources.SelectedItem == InputSource.XBOX360)
+                         _vm.Sources.SelectedItem == InputSource.SWITCH || _vm.Sources.SelectedItem == InputSource.XBOX360 || 
+                         _vm.Sources.SelectedItem == InputSource.GENMINI || _vm.Sources.SelectedItem == InputSource.C64MINI ||
+                         _vm.Sources.SelectedItem == InputSource.NEOGEOMINI)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(txtHostname.Text);
                 }
@@ -157,7 +163,7 @@ namespace RetroSpy
 
                 new ViewWindow (_vm.Skins.SelectedItem,
                                 _vm.Backgrounds.SelectedItem, 
-                                reader)
+                                reader, _vm.StaticViewerWindowName)
                     .ShowDialog ();
             }
 #if DEBUG
@@ -260,6 +266,7 @@ namespace RetroSpy
         public ListView <Skin.Background> Backgrounds { get; set; }
         public ListView <InputSource> Sources { get; set; }
         public int DelayInMilliseconds { get; set; }
+        public bool StaticViewerWindowName { get; set; }
         public string Hostname { get; set; }
 
         Visibility _comPortOptionVisibility;

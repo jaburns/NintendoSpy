@@ -181,7 +181,7 @@ namespace RetroSpy
             }
         }
 
-        public ViewWindow (Skin skin, Skin.Background skinBackground, IControllerReader reader)
+        public ViewWindow (Skin skin, Skin.Background skinBackground, IControllerReader reader, bool staticViewerWindowName)
         {
             
             InitializeComponent ();
@@ -190,7 +190,10 @@ namespace RetroSpy
             _skin = skin;
             _reader = reader;
 
-            Title = skin.Name;
+            if (staticViewerWindowName)
+                Title = "RetroSpy Viewer";
+            else
+                Title = skin.Name;
 
             ControllerGrid.Width = Width = _originalWidth = skinBackground.Width;
             ControllerGrid.Height = Height = _originalHeight = skinBackground.Height;
@@ -289,7 +292,7 @@ namespace RetroSpy
             img.VerticalAlignment = VerticalAlignment.Top;
             img.HorizontalAlignment = HorizontalAlignment.Left;
             img.Source = config.Image;
-            img.Stretch = Stretch.Uniform;
+            img.Stretch = Stretch.Fill;
             img.Margin = new Thickness (config.X, config.Y, 0, 0);
             img.Width = config.Width;
             img.Height = config.Height;

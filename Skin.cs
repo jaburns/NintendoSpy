@@ -88,37 +88,79 @@ namespace RetroSpy
         public IReadOnlyList <AnalogTrigger> AnalogTriggers { get { return _analogTriggers; } }
 
 
-    // ----------------------------------------------------------------------------------------------------------------
+        // ----------------------------------------------------------------------------------------------------------------
 
-        Skin (string folder)
+        private Skin()
+        { }
+
+        Skin (string folder, List<Skin> generatedSkins)
         {
             var skinPath = Path.Combine (Environment.CurrentDirectory, folder);
 
             if (! File.Exists (Path.Combine (skinPath, "skin.xml"))) {
-                throw new ConfigParseException ("Could not find skin.xml for skin at '"+folder+"'.");
+                //throw new ConfigParseException ("Could not find skin.xml for skin at '"+folder+"'.");
+                return;
             }
             var doc = XDocument.Load (Path.Combine (skinPath, "skin.xml"));
 
             Name = readStringAttr (doc.Root, "name");
             Author = readStringAttr (doc.Root, "author");
-            Type = InputSource.ALL.First (x => x.TypeTag == readStringAttr (doc.Root, ("type")));
 
-            if (Type == null) {
-                throw new ConfigParseException ("Illegal value specified for skin attribute 'type'.");
+            var typeStr = readStringAttr(doc.Root, ("type"));
+            var typesVec = typeStr.Split(';');
+
+            List<InputSource> types = new List<InputSource>();
+
+            foreach (var type in typesVec)
+            {
+                var TempType = InputSource.ALL.First(x => x.TypeTag == type);
+
+                if (TempType == null)
+                {
+                    throw new ConfigParseException("Illegal value specified for skin attribute 'type'.");
+                }
+                types.Add(TempType);
             }
 
-            var bgElems = doc.Root.Elements ("background");
+            int i = 0;
+            foreach (var inputSource in types)
+            {
+                Skin TempSkin = null;
+                if (i == 0)
+                {
+                    TempSkin = this;
+                    i++;
+                }
+                else
+                    TempSkin = new Skin();
 
-            if (bgElems.Count() < 1) {
-                throw new ConfigParseException ("Skin must contain at least one background.");
+                TempSkin.LoadSkin(Name, Author, inputSource, doc, skinPath);
+                generatedSkins.Add(TempSkin);
+            }
+            
+        }
+
+        public void LoadSkin(string name, string author, InputSource type, XDocument doc, string skinPath)
+        {
+            Name = name;
+            Author = author;
+            Type = type;
+            
+            var bgElems = doc.Root.Elements("background");
+
+            if (bgElems.Count() < 1)
+            {
+                throw new ConfigParseException("Skin must contain at least one background.");
             }
 
-            foreach (var elem in bgElems) {
+            foreach (var elem in bgElems)
+            {
                 var imgPath = readStringAttr(elem, "image", false);
                 BitmapImage image = null;
                 uint width = 0;
                 uint height = 0;
-                if (!string.IsNullOrEmpty(imgPath)) {
+                if (!string.IsNullOrEmpty(imgPath))
+                {
                     image = loadImage(skinPath, imgPath);
                     width = (uint)image.PixelWidth;
                     var widthAttr = elem.Attributes("width");
@@ -133,12 +175,13 @@ namespace RetroSpy
                     if (widthAttr.Count() > 0) width = uint.Parse(widthAttr.First().Value);
                     var heightAttr = elem.Attributes("height");
                     if (heightAttr.Count() > 0) height = uint.Parse(heightAttr.First().Value);
-                    if(width == 0 || height == 0)
+                    if (width == 0 || height == 0)
                     {
                         throw new ConfigParseException("Element 'background' should either define 'image' with optionally 'width' and 'height' or both 'width' and 'height'.");
                     }
                 }
-                _backgrounds.Add(new Background {
+                _backgrounds.Add(new Background
+                {
                     Name = readStringAttr(elem, "name"),
                     Image = image,
                     Color = readColorAttr(elem, "color", false),
@@ -156,64 +199,71 @@ namespace RetroSpy
                 });
             }
 
-            foreach (var elem in doc.Root.Elements ("button")) {
-                _buttons.Add (new Button {
-                    Config = parseStandardConfig (skinPath, elem),
-                    Name = readStringAttr (elem, "name")
+            foreach (var elem in doc.Root.Elements("button"))
+            {
+                _buttons.Add(new Button
+                {
+                    Config = parseStandardConfig(skinPath, elem),
+                    Name = readStringAttr(elem, "name")
                 });
             }
 
-            foreach (var elem in doc.Root.Elements ("rangebutton"))
+            foreach (var elem in doc.Root.Elements("rangebutton"))
             {
-                var from = readFloatConfig (elem, "from");
-                var to = readFloatConfig (elem, "to");
+                var from = readFloatConfig(elem, "from");
+                var to = readFloatConfig(elem, "to");
 
-                if (from > to) throw new ConfigParseException ("Rangebutton 'from' field cannot be greater than 'to' field.");
+                if (from > to) throw new ConfigParseException("Rangebutton 'from' field cannot be greater than 'to' field.");
 
-                _rangeButtons.Add (new RangeButton {
-                    Config = parseStandardConfig (skinPath, elem),
-                    Name = readStringAttr (elem, "name"),
+                _rangeButtons.Add(new RangeButton
+                {
+                    Config = parseStandardConfig(skinPath, elem),
+                    Name = readStringAttr(elem, "name"),
                     From = from,
                     To = to
                 });
             }
 
-            foreach (var elem in doc.Root.Elements ("stick")) {
-                _analogSticks.Add (new AnalogStick {
-                    Config = parseStandardConfig (skinPath, elem),
-                    XName = readStringAttr (elem, "xname"),
-                    YName = readStringAttr (elem, "yname"),
-                    XRange = readUintAttr (elem, "xrange"),
+            foreach (var elem in doc.Root.Elements("stick"))
+            {
+                _analogSticks.Add(new AnalogStick
+                {
+                    Config = parseStandardConfig(skinPath, elem),
+                    XName = readStringAttr(elem, "xname"),
+                    YName = readStringAttr(elem, "yname"),
+                    XRange = readUintAttr(elem, "xrange"),
                     OriginalXRange = readUintAttr(elem, "xrange"),
                     YRange = readUintAttr(elem, "yrange"),
                     OriginalYRange = readUintAttr(elem, "yrange"),
-                    XReverse = readBoolAttr (elem, "xreverse"),
-                    YReverse = readBoolAttr (elem, "yreverse")
+                    XReverse = readBoolAttr(elem, "xreverse"),
+                    YReverse = readBoolAttr(elem, "yreverse")
                 });
             }
 
-            foreach (var elem in doc.Root.Elements ("analog"))
+            foreach (var elem in doc.Root.Elements("analog"))
             {
-                var directionAttrs = elem.Attributes ("direction");
-                if (directionAttrs.Count() < 1) throw new ConfigParseException ("Element 'analog' needs attribute 'direction'.");
+                var directionAttrs = elem.Attributes("direction");
+                if (directionAttrs.Count() < 1) throw new ConfigParseException("Element 'analog' needs attribute 'direction'.");
 
                 AnalogTrigger.DirectionValue dir;
 
-                switch (directionAttrs.First().Value) {
+                switch (directionAttrs.First().Value)
+                {
                     case "up": dir = AnalogTrigger.DirectionValue.Up; break;
                     case "down": dir = AnalogTrigger.DirectionValue.Down; break;
                     case "left": dir = AnalogTrigger.DirectionValue.Left; break;
                     case "right": dir = AnalogTrigger.DirectionValue.Right; break;
                     case "fade": dir = AnalogTrigger.DirectionValue.Fade; break;
-                    default: throw new ConfigParseException ("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right', 'fade'.");
+                    default: throw new ConfigParseException("Element 'analog' attribute 'direction' has illegal value. Valid values are 'up', 'down', 'left', 'right', 'fade'.");
                 }
 
-                _analogTriggers.Add (new AnalogTrigger {
-                    Config = parseStandardConfig (skinPath, elem),
-                    Name = readStringAttr (elem, "name"),
+                _analogTriggers.Add(new AnalogTrigger
+                {
+                    Config = parseStandardConfig(skinPath, elem),
+                    Name = readStringAttr(elem, "name"),
                     Direction = dir,
-                    IsReversed = readBoolAttr (elem, "reverse"),
-                    UseNegative = readBoolAttr (elem, "usenegative")
+                    IsReversed = readBoolAttr(elem, "reverse"),
+                    UseNegative = readBoolAttr(elem, "usenegative")
                 });
             }
         }
@@ -344,20 +394,41 @@ namespace RetroSpy
             public List <string> ParseErrors;
         }
 
+        static public void LoadAllSkinsFromSubFolder(string path, List<Skin> skins, List<string> errs)
+        {
+            foreach (var skinDir in Directory.GetDirectories(path))
+            {
+                try
+                {
+                    List<Skin> generatedSkins = new List<Skin>();
+                    Skin skin;
+                    try
+                    {
+                        skin = new Skin(skinDir, generatedSkins);
+                    }
+                    catch (Exception e)
+                    {
+                        errs.Add(skinDir + " :: " + e.Message);
+                        continue;
+                    }
+                    foreach (var generatedSkin in generatedSkins)
+                        skins.Add(generatedSkin);
+                }
+                catch (ConfigParseException e)
+                {
+                    errs.Add(skinDir + " :: " + e.Message);
+                }
+                LoadAllSkinsFromSubFolder(skinDir, skins, errs);
+            }
+            
+        }
+
         static public LoadResults LoadAllSkinsFromParentFolder (string path)
         {
             var skins = new List <Skin> ();
             var errs = new List <string> ();
 
-            foreach (var skinDir in Directory.GetDirectories(path)) {
-                try {
-                    var skin = new Skin (skinDir);
-                    skins.Add (skin);
-                }
-                catch (ConfigParseException e) {
-                    errs.Add (skinDir + " :: " + e.Message);
-                }
-            }
+            LoadAllSkinsFromSubFolder(path, skins, errs);
 
             return new LoadResults {
                 SkinsLoaded = skins,

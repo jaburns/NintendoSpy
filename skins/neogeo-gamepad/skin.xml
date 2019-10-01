@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="NeoGeo Gamepad" author="chmaller" type="neogeo;neogeomini">
+
+  <background name="Default" image="neogeo.png" />
+
+  <button name="A" image="circle2.png" x="542" y="224" width="75" height="75" />
+  <button name="D" image="circle2.png" x="580" y="88" width="75" height="75" />
+  <button name="C" image="circle2.png" x="495" y="141" width="75" height="75" />
+  <button name="B" image="circle2.png" x="630" y="177" width="75" height="75" />
+
+  <button name="start" image="circle2.png" x="388" y="288" width="50" height="25" />
+  <button name="select" image="circle2.png" x="388" y="201" width="50" height="25" />
+
+  <stick xname="lstick_x" yname="lstick_y" image="stick.png"
+   x="140" y="155" width="118" height="114" xrange="15" yrange="15" yreverse="true"/>
+
+</skin>

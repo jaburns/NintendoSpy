@@ -23,7 +23,7 @@ namespace RetroSpy.Readers
 
         static float readStick(byte input)
         {
-            if (input < 128)
+            if (input < 127)
                 return (float)input / 128;
 
             return (float)(255-input) / -128;
