@@ -58,7 +58,7 @@ namespace RetroSpy
         //static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", false, true, controllerId => new WiiReaderV1(int.Parse(controllerId)));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, COLECOVISION, CD32, C64MINI, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, NEOGEO, PLAYSTATION2, PSCLASSIC
+            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, COLECOVISION, CD32, C64MINI, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PSCLASSIC
         };
 
         static public readonly InputSource DEFAULT = NES;
