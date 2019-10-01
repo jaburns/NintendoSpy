@@ -323,7 +323,6 @@
     <Content Include="skins\colecovision-default\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="skins\commodore-mouse\circle.png"/>
     <Content Include="skins\paddles-mouse\circle.png" />
     <Content Include="skins\paddles-mouse\circle2.png" />
     <Content Include="skins\paddles-mouse\commodore.png" />
