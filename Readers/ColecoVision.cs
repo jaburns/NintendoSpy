@@ -8,7 +8,7 @@ namespace RetroSpy.Readers
 {
     static public class ColecoVision
     {
-        const int PACKET_SIZE = 10;
+        const int PACKET_SIZE = 12;
 
         static readonly string[] BUTTONS = {
             "up", "down", "left", "right", "L", null, null, null, null, "R" 

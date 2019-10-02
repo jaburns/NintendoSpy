@@ -1319,10 +1319,12 @@ inline void read_ColecoVisionData()
 
     while( (PINB & 0b00000110) == 0x02 ); while( (PINB & 0b00000110) != 0x02 );
     asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
-    rawData[0] = (PIND & 0b01111100);
+    rawData[0] = (PIND & 0b11111100);
+    rawData[2] = (PINB & 0b00000001);
     while( (PINB & 0b00000110) == 0x04 ); while( (PINB & 0b00000110) != 0x04 );
     asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
     rawData[1] = (PIND & 0b01111100);
+    
 }
 
 inline void sendRawJaguarData()
@@ -1369,6 +1371,8 @@ inline void sendRawColecoVisionData()
         Serial.write ((rawData[i] & (1 << j)) != 0 ? ZERO : ONE );
       }
     }
+    Serial.write ((rawData[0] & 0b10000000) != 0 ? ZERO : ONE );
+    Serial.write ((rawData[2] & 0b00000001) != 0 ? ZERO : ONE );
     Serial.write( SPLIT );
     #else 
     Serial.print((rawData[0] & 0b00000100 ) != 0 ? "0" : "U");
@@ -1381,6 +1385,8 @@ inline void sendRawColecoVisionData()
     Serial.print((rawData[1] & 0b00010000 ) != 0 ? "0" : "C");
     Serial.print((rawData[1] & 0b00100000 ) != 0 ? "0" : "D");
     Serial.print((rawData[1] & 0b01000000 ) != 0 ? "0" : "2");
+    Serial.print((rawData[0] & 0b10000000 ) != 0 ? "0" : "Q");
+    Serial.print((rawData[2] & 0b00000001 ) != 0 ? "0" : "W");
     Serial.print("\n");
     #endif
 }
