@@ -10,8 +10,15 @@ namespace RetroSpy.Readers
     {
         const int PACKET_SIZE = 12;
 
+        static byte lastEncoderValue = 0;
+        static byte lastEncoderPosition = 0;
+
         static readonly string[] BUTTONS = {
             "up", "down", "left", "right", "L", null, null, null, null, "R" 
+        };
+
+        static readonly string[] ENCODER = {
+            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"
         };
 
         static public ControllerState ReadFromPacket(byte[] packet)
@@ -68,7 +75,38 @@ namespace RetroSpy.Readers
             state.SetButton("star", packet[5] == 0 && packet[6] != 0 && packet[7] == 0 && packet[8] != 0);
             state.SetButton("0", packet[5] != 0 && packet[6] != 0 && packet[7] == 0 && packet[8] == 0);
             state.SetButton("pound", packet[5] != 0 && packet[6] == 0 && packet[7] != 0 && packet[8] == 0);
+            state.SetButton("purple", packet[5] != 0 && packet[6] != 0 && packet[7] == 0 && packet[8] != 0);
+            state.SetButton("blue", packet[5] != 0 && packet[6] == 0 && packet[7] != 0 && packet[8] != 0);
 
+            byte currentState = lastEncoderPosition;
+
+            byte encoderValue = (byte)((packet[10] == 0 ? 0b00000000 : 0b0000001) | (packet[11] == 0 ? 0b00000000 : 0b0000010));
+
+            if ((lastEncoderValue == 0x3 && encoderValue == 0x2)
+                || lastEncoderValue == 0x2 && encoderValue == 0x0
+                || lastEncoderValue == 0x0 && encoderValue == 0x1
+                || lastEncoderValue == 0x1 && encoderValue == 0x3)
+            {
+                if (currentState == 0)
+                    currentState = 15;
+                else
+                    currentState = (byte)((currentState - 1) % 16);
+            }
+            else if (lastEncoderValue == 0x2 && encoderValue == 0x3
+                || lastEncoderValue == 0x3 && encoderValue == 0x1
+                || lastEncoderValue == 0x1 && encoderValue == 0x0
+                || lastEncoderValue == 0x0 && encoderValue == 0x2)
+            {
+                if (currentState == 15)
+                    currentState = 0;
+                else
+                    currentState = (byte)((currentState + 1) % 16);
+            }
+
+            state.SetButton(ENCODER[currentState], true);
+
+            lastEncoderValue = encoderValue;
+            lastEncoderPosition = currentState;
 
             return state.Build();
         }
