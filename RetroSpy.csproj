@@ -332,6 +332,15 @@
     <Content Include="skins\colecovision-default\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="skins\jaguar-6button\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\jaguar-6button\jaguar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\jaguar-6button\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="skins\paddles-mouse\circle.png" />
     <Content Include="skins\paddles-mouse\circle2.png" />
     <Content Include="skins\paddles-mouse\commodore.png" />

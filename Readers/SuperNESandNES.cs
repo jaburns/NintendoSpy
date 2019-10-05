@@ -59,6 +59,7 @@ namespace RetroSpy.Readers
             "r1", "l1", "r2", "l2", "square", "x", "circle", "triangle", null, null, "down", "up", "right", "left", "start", "select"
         };
 
+
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
         {
             return readPacketButtons(packet, BUTTONS_INTELLIVISION);
@@ -130,6 +131,41 @@ namespace RetroSpy.Readers
             }
 
             return state.Build();
+        }
+
+        static public ControllerState ReadFromPacket_Jaguar (byte[] packet)
+        {
+            if (packet.Length < 4) return null;
+
+            var state = new ControllerStateBuilder();
+
+            state.SetButton("pause",    (packet[0] & 0b00000100) == 0x00);
+            state.SetButton("a",        (packet[0] & 0b00001000) == 0x00);
+            state.SetButton("right",    (packet[0] & 0b00010000) == 0x00);
+            state.SetButton("left",     (packet[0] & 0b00100000) == 0x00);
+            state.SetButton("down",     (packet[0] & 0b01000000) == 0x00);
+            state.SetButton("up",       (packet[0] & 0b10000000) == 0x00);
+
+            state.SetButton("b",        (packet[1] & 0b00001000) == 0x00);
+            state.SetButton("1",        (packet[1] & 0b00010000) == 0x00);
+            state.SetButton("4",        (packet[1] & 0b00100000) == 0x00);
+            state.SetButton("7",        (packet[1] & 0b01000000) == 0x00);
+            state.SetButton("star",     (packet[1] & 0b10000000) == 0x00);
+
+            state.SetButton("c", (packet[2] & 0b00001000) == 0x00);
+            state.SetButton("2", (packet[2] & 0b00010000) == 0x00);
+            state.SetButton("5", (packet[2] & 0b00100000) == 0x00);
+            state.SetButton("8", (packet[2] & 0b01000000) == 0x00);
+            state.SetButton("0", (packet[2] & 0b10000000) == 0x00);
+
+            state.SetButton("option",   (packet[3] & 0b00001000) == 0x00);
+            state.SetButton("3",        (packet[3] & 0b00010000) == 0x00);
+            state.SetButton("6",        (packet[3] & 0b00100000) == 0x00);
+            state.SetButton("9",        (packet[3] & 0b01000000) == 0x00);
+            state.SetButton("pound",    (packet[3] & 0b10000000) == 0x00);
+
+            return state.Build();
+
         }
 
     }
