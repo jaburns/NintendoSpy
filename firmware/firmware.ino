@@ -1291,21 +1291,21 @@ void sendIntellivisionData_Raw()
 
 inline void read_JaguarData()
 {
-  WAIT_FALLING_EDGEB(0);
+  while((PINB & 0b00001000) != 0);
   asm volatile( MICROSECOND_NOPS);
-  rawData[3] = (PIND & 0b11111000);
+  rawData[0] = (PIND & 0b11111100);
 
-  WAIT_FALLING_EDGEB(1);
-  asm volatile( MICROSECOND_NOPS);
-  rawData[2] = (PIND & 0b11111000);
-  
-  WAIT_FALLING_EDGEB(2);
+  while((PINB & 0b00000100) != 0);
   asm volatile( MICROSECOND_NOPS);
   rawData[1] = (PIND & 0b11111000);
   
-  WAIT_FALLING_EDGEB(3);
+  while((PINB & 0b00000010) != 0);
   asm volatile( MICROSECOND_NOPS);
-  rawData[0] = (PIND & 0b11111100);
+  rawData[2] = (PIND & 0b11111000);
+
+  while((PINB & 0b00000001) != 0);
+  asm volatile( MICROSECOND_NOPS);
+  rawData[3] = (PIND & 0b11111000);
 }
 
 inline void read_ColecoVisionData()
