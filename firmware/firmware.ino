@@ -1291,21 +1291,19 @@ void sendIntellivisionData_Raw()
 
 inline void read_JaguarData()
 {
-  while((PINB & 0b00001000) != 0);
-  asm volatile( MICROSECOND_NOPS);
-  rawData[0] = (PIND & 0b11111100);
 
-  while((PINB & 0b00000100) != 0);
-  asm volatile( MICROSECOND_NOPS);
+  WAIT_FALLING_EDGEB(0);
+  rawData[3] = (PIND & 0b11111000);
+
+  WAIT_FALLING_EDGEB(1);
+  rawData[2] = (PIND & 0b11111000);
+  
+  WAIT_FALLING_EDGEB(2);
   rawData[1] = (PIND & 0b11111000);
   
-  while((PINB & 0b00000010) != 0);
-  asm volatile( MICROSECOND_NOPS);
-  rawData[2] = (PIND & 0b11111000);
-
-  while((PINB & 0b00000001) != 0);
-  asm volatile( MICROSECOND_NOPS);
-  rawData[3] = (PIND & 0b11111000);
+  WAIT_FALLING_EDGEB(3);
+  rawData[0] = (PIND & 0b11111100);
+  
 }
 
 inline void read_ColecoVisionData()
@@ -1323,10 +1321,10 @@ inline void read_ColecoVisionData()
 inline void sendRawJaguarData()
 {
     #ifndef DEBUG
-    for (unsigned char i = 0; i < 4; ++i)
-    {
-      Serial.write (rawData[i]);
-    }
+    Serial.write (rawData[0]);
+    Serial.write (rawData[1]);
+    Serial.write (rawData[2]);
+    Serial.write (rawData[3]);
     Serial.write( SPLIT );
     #else 
     Serial.print((rawData[0] & 0b00000100) == 0  ? "P" : "0");
@@ -1551,7 +1549,14 @@ inline void loop_Jaguar()
   noInterrupts();
   read_JaguarData();
   interrupts();
-  sendRawJaguarData();
+  if (rawData[0] != rawData[4] || rawData[1] != rawData[5] || rawData[2] != rawData[6] || rawData[3] != rawData[7])
+  {
+    sendRawJaguarData();
+    rawData[4] = rawData[0];
+    rawData[5] = rawData[1];
+    rawData[6] = rawData[2];
+    rawData[7] = rawData[3];
+  }
 }
 
 inline void loop_ColecoVision()
