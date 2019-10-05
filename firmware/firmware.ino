@@ -1291,27 +1291,17 @@ void sendIntellivisionData_Raw()
 
 inline void read_JaguarData()
 {
-  uiCurrentState = 0;
-  
-  while((PINB & 0b00001000) != 0){}    
-  asm volatile(
-        "nop\nnop\n");
-  uiCurrentState |= ((PIND & 0b11111100) >> 2);
+  WAIT_FALLING_EDGEB(2);
+  rawData[1] = (PIND & 0b11111000);
 
-  while((PINB & 0b00000100) != 0){}    
-  asm volatile(
-        "nop\nnop\n");
-  uiCurrentState |= ((PIND & 0b11111000) << 4);
+  WAIT_FALLING_EDGEB(1);
+  rawData[2] = (PIND & 0b11111000);
 
-  while((PINB & 0b00000010) != 0){}    
-  asm volatile(
-        "nop\nnop\n");
-  uiCurrentState |= ((PIND & 0b11111000) << 9);
+  WAIT_FALLING_EDGEB(0);
+  rawData[3] = (PIND & 0b11111000);
 
-  while((PINB & 0b00000001) != 0){}    
-  asm volatile(
-        "nop\nnop\n");
-  uiCurrentState |= ((PIND & 0b11111000) << 16);
+  WAIT_FALLING_EDGEB(3);
+  rawData[0] = (PIND & 0b11111100);
 }
 
 inline void read_ColecoVisionData()
@@ -1329,33 +1319,40 @@ inline void read_ColecoVisionData()
 inline void sendRawJaguarData()
 {
     #ifndef DEBUG
-    for (unsigned char i = 0; i < 12; ++i)
+    for (unsigned char i = 0; i < 4; ++i)
     {
-      Serial.write (uiCurrentState & (1 << i) ? ONE : ZERO );
+      Serial.write (rawData[i]);
     }
     Serial.write( SPLIT );
     #else 
-    Serial.print((currentState & 0b00000000000000000000000000000001) == 0  ? "P" : "0");
-    Serial.print((currentState & 0b00000000000000000000000000000010) == 0  ? "A" : "0");
-    Serial.print((currentState & 0b00000000000000000000000000000100) == 0  ? "R" : "0");
-    Serial.print((currentState & 0b00000000000000000000000000001000) == 0  ? "L" : "0");
-    Serial.print((currentState & 0b00000000000000000000000000010000) == 0  ? "D" : "0");
-    Serial.print((currentState & 0b00000000000000000000000000100000) == 0  ? "U" : "0");
-    Serial.print((currentState & 0b00000000000000000000000001000000) == 0  ? "B" : "0");
-    Serial.print((currentState & 0b00000000000000000000000010000000) == 0  ? "1" : "0");
-    Serial.print((currentState & 0b00000000000000000000000100000000) == 0  ? "4" : "0");
-    Serial.print((currentState & 0b00000000000000000000001000000000) == 0  ? "7" : "0");
-    Serial.print((currentState & 0b00000000000000000000010000000000) == 0  ? "*" : "0");
-    Serial.print((currentState & 0b00000000000000000000100000000000) == 0  ? "C" : "0");
-    Serial.print((currentState & 0b00000000000000000001000000000000) == 0  ? "2" : "0");
-    Serial.print((currentState & 0b00000000000000000010000000000000) == 0  ? "5" : "0");
-    Serial.print((currentState & 0b00000000000000000100000000000000) == 0  ? "8" : "0");
-    Serial.print((currentState & 0b00000000000000001000000000000000) == 0  ? "0" : "0");
-    Serial.print((currentState & 0b00000000000000010000000000000000) == 0  ? "O" : "0");
-    Serial.print((currentState & 0b00000000000000100000000000000000) == 0  ? "3" : "0");
-    Serial.print((currentState & 0b00000000000001000000000000000000) == 0  ? "6" : "0");
-    Serial.print((currentState & 0b00000000000010000000000000000000) == 0  ? "9" : "0");
-    Serial.print((currentState & 0b00000000000100000000000000000000) == 0  ? "#" : "0");
+    Serial.print((rawData[0] & 0b00000100) == 0  ? "P" : "0");
+    Serial.print((rawData[0] & 0b00001000) == 0  ? "A" : "0");
+    Serial.print((rawData[0] & 0b00010000) == 0  ? "R" : "0");
+    Serial.print((rawData[0] & 0b00100000) == 0  ? "L" : "0");
+    Serial.print((rawData[0] & 0b01000000) == 0  ? "D" : "0");
+    Serial.print((rawData[0] & 0b10000000) == 0  ? "U" : "0");
+
+    //Serial.print((rawData[1] & 0b00000100) == 0  ? "P" : "0");
+    Serial.print((rawData[1] & 0b00001000) == 0  ? "B" : "0");
+    Serial.print((rawData[1] & 0b00010000) == 0  ? "1" : "0");
+    Serial.print((rawData[1] & 0b00100000) == 0  ? "4" : "0");
+    Serial.print((rawData[1] & 0b01000000) == 0  ? "7" : "0");
+    Serial.print((rawData[1] & 0b10000000) == 0  ? "*" : "0");
+
+    //Serial.print((rawData[2] & 0b00000100) == 0  ? "P" : "0");
+    Serial.print((rawData[2] & 0b00001000) == 0  ? "C" : "0");
+    Serial.print((rawData[2] & 0b00010000) == 0  ? "2" : "0");
+    Serial.print((rawData[2] & 0b00100000) == 0  ? "5" : "0");
+    Serial.print((rawData[2] & 0b01000000) == 0  ? "8" : "0");
+    Serial.print((rawData[2] & 0b10000000) == 0  ? "0" : "0");
+
+    //Serial.print((rawData[3] & 0b00000100) == 0  ? "P" : "0");
+    Serial.print((rawData[3] & 0b00001000) == 0  ? "O" : "0");
+    Serial.print((rawData[3] & 0b00010000) == 0  ? "3" : "0");
+    Serial.print((rawData[3] & 0b00100000) == 0  ? "6" : "0");
+    Serial.print((rawData[3] & 0b01000000) == 0  ? "9" : "0");
+    Serial.print((rawData[3] & 0b10000000) == 0  ? "#" : "0");
+
     Serial.print("\n");
     #endif
 }
@@ -1370,7 +1367,7 @@ inline void sendRawColecoVisionData()
         Serial.write ((rawData[i] & (1 << j)) != 0 ? ZERO : ONE );
       }
     }
-    Serial.write ((rawData[0] & 0b10000000) != 0 ? ZERO : ONE );
+        Serial.write ((rawData[0] & 0b10000000) != 0 ? ZERO : ONE );
     Serial.write ((rawData[2] & 0b00000001) != 0 ? ZERO : ONE );
     Serial.write( SPLIT );
     #else 
