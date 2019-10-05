@@ -22,6 +22,6 @@
 	<button name="0" image="circle2.png" x="151" y="766" width="90" height="90" />
 	<button name="pound" image="circle2.png" x="264" y="766" width="90" height="90" />
 
-	<stick xname="x" yname="y" image="colecovision-knob.png" x="104" y="43" width="200" height="200" xrange="25" yrange="25" yreverse="false" />
+	<stick xname="x" yname="y" image="colecovision-knob.png" x="95" y="46" width="200" height="210" xrange="25" yrange="25" yreverse="false" />
 	
 </skin>

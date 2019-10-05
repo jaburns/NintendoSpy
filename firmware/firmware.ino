@@ -1312,12 +1312,12 @@ inline void read_JaguarData()
 inline void read_ColecoVisionData()
 {
     while( (PINB & 0b00000110) == 0x02 ); while( (PINB & 0b00000110) != 0x02 );
-    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS);
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
     rawData[0] = (PIND & 0b11111100);
     rawData[2] = (PINB & 0b00000001);
 
     while( (PINB & 0b00000110) == 0x04 ); while( (PINB & 0b00000110) != 0x04 );
-    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS);
+    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
     rawData[1] = (PIND & 0b01111100);
 }
 
