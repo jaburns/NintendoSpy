@@ -1291,17 +1291,20 @@ void sendIntellivisionData_Raw()
 
 inline void read_JaguarData()
 {
-
   WAIT_FALLING_EDGEB(0);
+  asm volatile ( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
   rawData[3] = (PIND & 0b11111000);
 
   WAIT_FALLING_EDGEB(1);
+  asm volatile ( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
   rawData[2] = (PIND & 0b11111000);
   
   WAIT_FALLING_EDGEB(2);
+  asm volatile ( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
   rawData[1] = (PIND & 0b11111000);
   
   WAIT_FALLING_EDGEB(3);
+  asm volatile ( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
   rawData[0] = (PIND & 0b11111100);
   
 }
@@ -1549,14 +1552,8 @@ inline void loop_Jaguar()
   noInterrupts();
   read_JaguarData();
   interrupts();
-  if (rawData[0] != rawData[4] || rawData[1] != rawData[5] || rawData[2] != rawData[6] || rawData[3] != rawData[7])
-  {
-    sendRawJaguarData();
-    rawData[4] = rawData[0];
-    rawData[5] = rawData[1];
-    rawData[6] = rawData[2];
-    rawData[7] = rawData[3];
-  }
+  sendRawJaguarData();
+  delay(1);
 }
 
 inline void loop_ColecoVision()
