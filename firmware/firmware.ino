@@ -1344,7 +1344,7 @@ inline void sendRawJaguarData()
     Serial.print((rawData[2] & 0b00010000) == 0  ? "2" : "0");
     Serial.print((rawData[2] & 0b00100000) == 0  ? "5" : "0");
     Serial.print((rawData[2] & 0b01000000) == 0  ? "8" : "0");
-    Serial.print((rawData[2] & 0b10000000) == 0  ? "0" : "0");
+    Serial.print((rawData[2] & 0b10000000) == 0  ? "Z" : "0");
 
     //Serial.print((rawData[3] & 0b00000100) == 0  ? "P" : "0");
     Serial.print((rawData[3] & 0b00001000) == 0  ? "O" : "0");
