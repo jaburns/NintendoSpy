@@ -8,22 +8,19 @@ namespace RetroSpy.Readers
 {
     static public class ColecoVision
     {
-        const int PACKET_SIZE = 12;
+        static bool firstRun = false;
+        static int spinnerValue = 0;
+        static bool spinnerValueChanged = false;
 
-        static byte lastEncoderValue = 0;
-        static byte lastEncoderPosition = 0;
+        const int PACKET_SIZE = 11;
 
         static readonly string[] BUTTONS = {
             "up", "down", "left", "right", "L", null, null, null, null, "R" 
         };
 
-        static readonly string[] ENCODER = {
-            "E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11", "E12", "E13", "E14", "E15"
-        };
-
         static public ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE) return null;
+            if (packet.Length < PACKET_SIZE ) return null;
 
             var state = new ControllerStateBuilder();
 
@@ -78,35 +75,19 @@ namespace RetroSpy.Readers
             state.SetButton("purple", packet[5] != 0 && packet[6] != 0 && packet[7] == 0 && packet[8] != 0);
             state.SetButton("blue", packet[5] != 0 && packet[6] == 0 && packet[7] != 0 && packet[8] != 0);
 
-            byte currentState = lastEncoderPosition;
-
-            byte encoderValue = (byte)((packet[10] == 0 ? 0b00000000 : 0b0000001) | (packet[11] == 0 ? 0b00000000 : 0b0000010));
-
-            if ((lastEncoderValue == 0x3 && encoderValue == 0x2)
-                || lastEncoderValue == 0x2 && encoderValue == 0x0
-                || lastEncoderValue == 0x0 && encoderValue == 0x1
-                || lastEncoderValue == 0x1 && encoderValue == 0x3)
+            if (firstRun == false)
             {
-                if (currentState == 0)
-                    currentState = 15;
-                else
-                    currentState = (byte)((currentState - 1) % 16);
-            }
-            else if (lastEncoderValue == 0x2 && encoderValue == 0x3
-                || lastEncoderValue == 0x3 && encoderValue == 0x1
-                || lastEncoderValue == 0x1 && encoderValue == 0x0
-                || lastEncoderValue == 0x0 && encoderValue == 0x2)
-            {
-                if (currentState == 15)
-                    currentState = 0;
-                else
-                    currentState = (byte)((currentState + 1) % 16);
+                spinnerValue = packet[10] - 11;
+                firstRun = true;
             }
 
-            state.SetButton(ENCODER[currentState], true);
+            if (spinnerValueChanged == false && spinnerValue != (packet[10] - 11))
+            {
+                spinnerValueChanged = true;
+            }
 
-            lastEncoderValue = encoderValue;
-            lastEncoderPosition = currentState;
+            for (int i = 0; i < 64; ++i)
+                state.SetButton("E" + i.ToString(), spinnerValueChanged && i == (packet[10] - 11));
 
             return state.Build();
         }

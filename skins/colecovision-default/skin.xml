@@ -1,27 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin name="Generic ColecoVision" author="chmaller" type="colecovision">
 
-	<background name="ColecoVision" image="colecovision-background.png" />
+  <background name="ColecoVision" image="colecovision-background.png" />
 
-	<button name="L" image="circle2.png" x="9" y="284" width="40" height="90" />
-	<button name="R" image="circle2.png" x="346" y="284" width="40" height="90" />
+  <button name="L" image="circle2.png" x="9" y="284" width="40" height="90" />
+  <button name="R" image="circle2.png" x="346" y="284" width="40" height="90" />
 
-	<button name="1" image="circle2.png" x="51" y="442" width="90" height="90" />
-	<button name="2" image="circle2.png" x="151" y="442" width="90" height="90" />
-	<button name="3" image="circle2.png" x="264" y="442" width="90" height="90" />
+  <button name="purple" image="circle2.png" x="18" y="56" width="40" height="40" />
+  <button name="blue" image="circle2.png" x="315" y="56" width="40" height="40" />
 
-	<button name="4" image="circle2.png" x="51" y="547" width="90" height="90" />
-	<button name="5" image="circle2.png" x="151" y="547" width="90" height="90" />
-	<button name="6" image="circle2.png" x="264" y="547" width="90" height="90" />
+  <button name="1" image="circle2.png" x="51" y="442" width="90" height="90" />
+  <button name="2" image="circle2.png" x="151" y="442" width="90" height="90" />
+  <button name="3" image="circle2.png" x="264" y="442" width="90" height="90" />
 
-	<button name="7" image="circle2.png" x="51" y="657" width="90" height="90" />
-	<button name="8" image="circle2.png" x="151" y="657" width="90" height="90" />
-	<button name="9" image="circle2.png" x="264" y="657" width="90" height="90" />
+  <button name="4" image="circle2.png" x="51" y="547" width="90" height="90" />
+  <button name="5" image="circle2.png" x="151" y="547" width="90" height="90" />
+  <button name="6" image="circle2.png" x="264" y="547" width="90" height="90" />
 
-	<button name="star" image="circle2.png" x="51" y="766" width="90" height="90" />
-	<button name="0" image="circle2.png" x="151" y="766" width="90" height="90" />
-	<button name="pound" image="circle2.png" x="264" y="766" width="90" height="90" />
+  <button name="7" image="circle2.png" x="51" y="657" width="90" height="90" />
+  <button name="8" image="circle2.png" x="151" y="657" width="90" height="90" />
+  <button name="9" image="circle2.png" x="264" y="657" width="90" height="90" />
 
-	<stick xname="x" yname="y" image="colecovision-knob.png" x="95" y="46" width="200" height="210" xrange="25" yrange="25" yreverse="false" />
-	
+  <button name="star" image="circle2.png" x="51" y="766" width="90" height="90" />
+  <button name="0" image="circle2.png" x="151" y="766" width="90" height="90" />
+  <button name="pound" image="circle2.png" x="264" y="766" width="90" height="90" />
+
+  <stick xname="x" yname="y" image="colecovision-knob.png" x="95" y="46" width="200" height="210" xrange="25" yrange="25" yreverse="false" />
+
+  <button name="E0" image="circle2.png" x="72" y="290" width="20" height="20"/>
+  <button name="E1" image="circle2.png" x="76" y="290" width="20" height="20"/>
+  <button name="E2" image="circle2.png" x="80" y="290" width="20" height="20"/>
+  <button name="E3" image="circle2.png" x="84" y="290" width="20" height="20"/>
+  <button name="E4" image="circle2.png" x="88" y="290" width="20" height="20"/>
+  <button name="E5" image="circle2.png" x="92" y="290" width="20" height="20"/>
+  <button name="E6" image="circle2.png" x="96" y="290" width="20" height="20"/>
+  <button name="E7" image="circle2.png" x="100" y="290" width="20" height="20"/>
+  <button name="E8" image="circle2.png" x="104" y="290" width="20" height="20"/>
+  <button name="E9" image="circle2.png" x="108" y="290" width="20" height="20"/>
+  <button name="E10" image="circle2.png" x="112" y="290" width="20" height="20"/>
+  <button name="E11" image="circle2.png" x="118" y="290" width="20" height="20"/>
+  <button name="E12" image="circle2.png" x="122" y="290" width="20" height="20"/>
+  <button name="E13" image="circle2.png" x="126" y="290" width="20" height="20"/>
+  <button name="E14" image="circle2.png" x="130" y="290" width="20" height="20"/>
+  <button name="E15" image="circle2.png" x="134" y="290" width="20" height="20"/>
+  <button name="E16" image="circle2.png" x="138" y="290" width="20" height="20"/>
+  <button name="E17" image="circle2.png" x="142" y="290" width="20" height="20"/>
+  <button name="E18" image="circle2.png" x="146" y="290" width="20" height="20"/>
+  <button name="E19" image="circle2.png" x="150" y="290" width="20" height="20"/>
+  <button name="E20" image="circle2.png" x="154" y="290" width="20" height="20"/>
+  <button name="E21" image="circle2.png" x="158" y="290" width="20" height="20"/>
+  <button name="E22" image="circle2.png" x="162" y="290" width="20" height="20"/>
+  <button name="E23" image="circle2.png" x="166" y="290" width="20" height="20"/>
+  <button name="E24" image="circle2.png" x="170" y="290" width="20" height="20"/>
+  <button name="E25" image="circle2.png" x="174" y="290" width="20" height="20"/>
+  <button name="E26" image="circle2.png" x="178" y="290" width="20" height="20"/>
+  <button name="E27" image="circle2.png" x="182" y="290" width="20" height="20"/>
+  <button name="E28" image="circle2.png" x="186" y="290" width="20" height="20"/>
+  <button name="E29" image="circle2.png" x="190" y="290" width="20" height="20"/>
+  <button name="E30" image="circle2.png" x="194" y="290" width="20" height="20"/>
+  <button name="E31" image="circle2.png" x="198" y="290" width="20" height="20"/>
+  <button name="E32" image="circle2.png" x="202" y="290" width="20" height="20"/>
+  <button name="E33" image="circle2.png" x="206" y="290" width="20" height="20"/>
+  <button name="E34" image="circle2.png" x="210" y="290" width="20" height="20"/>
+  <button name="E35" image="circle2.png" x="214" y="290" width="20" height="20"/>
+  <button name="E36" image="circle2.png" x="218" y="290" width="20" height="20"/>
+  <button name="E37" image="circle2.png" x="222" y="290" width="20" height="20"/>
+  <button name="E38" image="circle2.png" x="226" y="290" width="20" height="20"/>
+  <button name="E39" image="circle2.png" x="230" y="290" width="20" height="20"/>
+  <button name="E40" image="circle2.png" x="234" y="290" width="20" height="20"/>
+  <button name="E41" image="circle2.png" x="238" y="290" width="20" height="20"/>
+  <button name="E42" image="circle2.png" x="242" y="290" width="20" height="20"/>
+  <button name="E43" image="circle2.png" x="246" y="290" width="20" height="20"/>
+  <button name="E44" image="circle2.png" x="250" y="290" width="20" height="20"/>
+  <button name="E45" image="circle2.png" x="254" y="290" width="20" height="20"/>
+  <button name="E46" image="circle2.png" x="258" y="290" width="20" height="20"/>
+  <button name="E47" image="circle2.png" x="262" y="290" width="20" height="20"/>
+  <button name="E48" image="circle2.png" x="266" y="290" width="20" height="20"/>
+  <button name="E49" image="circle2.png" x="270" y="290" width="20" height="20"/>
+  <button name="E50" image="circle2.png" x="274" y="290" width="20" height="20"/>
+  <button name="E51" image="circle2.png" x="278" y="290" width="20" height="20"/>
+  <button name="E52" image="circle2.png" x="282" y="290" width="20" height="20"/>
+  <button name="E53" image="circle2.png" x="286" y="290" width="20" height="20"/>
+  <button name="E54" image="circle2.png" x="290" y="290" width="20" height="20"/>
+  <button name="E55" image="circle2.png" x="294" y="290" width="20" height="20"/>
+  <button name="E56" image="circle2.png" x="298" y="290" width="20" height="20"/>
+  <button name="E57" image="circle2.png" x="302" y="290" width="20" height="20"/>
+  <button name="E58" image="circle2.png" x="306" y="290" width="20" height="20"/>
+  <button name="E59" image="circle2.png" x="310" y="290" width="20" height="20"/>
+  <button name="E60" image="circle2.png" x="314" y="290" width="20" height="20"/>
+  <button name="E61" image="circle2.png" x="318" y="290" width="20" height="20"/>
+  <button name="E62" image="circle2.png" x="322" y="290" width="20" height="20"/>
+  <button name="E63" image="circle2.png" x="326" y="290" width="20" height="20"/>
+
 </skin>

@@ -22,7 +22,6 @@
 //#define MODE_3DO
 //#define MODE_INTELLIVISION
 //#define MODE_JAGUAR
-//#define MODE_COLECOVISION
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -1309,17 +1308,6 @@ inline void read_JaguarData()
   
 }
 
-inline void read_ColecoVisionData()
-{
-    while( (PINB & 0b00000110) == 0x02 ); while( (PINB & 0b00000110) != 0x02 );
-    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
-    rawData[0] = (PIND & 0b11111100);
-    rawData[2] = (PINB & 0b00000001);
-
-    while( (PINB & 0b00000110) == 0x04 ); while( (PINB & 0b00000110) != 0x04 );
-    asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
-    rawData[1] = (PIND & 0b01111100);
-}
 
 inline void sendRawJaguarData()
 {
@@ -1362,35 +1350,6 @@ inline void sendRawJaguarData()
     #endif
 }
 
-inline void sendRawColecoVisionData()
-{
-    #ifndef DEBUG
-    for(unsigned char i = 0; i < 2; ++i)
-    {
-      for (unsigned char j = 2; j < 7; ++j)  
-      {
-        Serial.write ((rawData[i] & (1 << j)) != 0 ? ZERO : ONE );
-      }
-    }
-        Serial.write ((rawData[0] & 0b10000000) != 0 ? ZERO : ONE );
-    Serial.write ((rawData[2] & 0b00000001) != 0 ? ZERO : ONE );
-    Serial.write( SPLIT );
-    #else 
-    Serial.print((rawData[0] & 0b00000100 ) != 0 ? "0" : "U");
-    Serial.print((rawData[0] & 0b00001000 ) != 0 ? "0" : "D");
-    Serial.print((rawData[0] & 0b00010000 ) != 0 ? "0" : "L");
-    Serial.print((rawData[0] & 0b00100000 ) != 0 ? "0" : "R");
-    Serial.print((rawData[0] & 0b01000000 ) != 0 ? "0" : "1");
-    Serial.print((rawData[1] & 0b00000100 ) != 0 ? "0" : "A");
-    Serial.print((rawData[1] & 0b00001000 ) != 0 ? "0" : "B");
-    Serial.print((rawData[1] & 0b00010000 ) != 0 ? "0" : "C");
-    Serial.print((rawData[1] & 0b00100000 ) != 0 ? "0" : "D");
-    Serial.print((rawData[1] & 0b01000000 ) != 0 ? "0" : "2");
-    Serial.print((rawData[0] & 0b10000000 ) != 0 ? "0" : "Q");
-    Serial.print((rawData[2] & 0b00000001 ) != 0 ? "0" : "W");
-    Serial.print("\n");
-    #endif
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update loop definitions for the various console modes.
@@ -1553,15 +1512,6 @@ inline void loop_Jaguar()
   read_JaguarData();
   interrupts();
   sendRawJaguarData();
-  delay(1);
-}
-
-inline void loop_ColecoVision()
-{
-  noInterrupts();
-  read_ColecoVisionData();
-  interrupts();
-  sendRawColecoVisionData();
   delay(1);
 }
 
