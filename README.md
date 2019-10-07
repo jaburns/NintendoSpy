@@ -19,6 +19,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [Philips CD-i](https://github.com/zoggins/RetroSpy/wiki/CDi-on-Arduino-Getting-Started)
  - [Amiga CD32](https://github.com/zoggins/RetroSpy/wiki/Amiga-CD32-on-Teensy-Getting-Started)
  - [3DO](https://github.com/zoggins/RetroSpy/wiki/3DO-on-Arduino-Getting-Started)
+ - [Atari Jaguar](https://github.com/zoggins/RetroSpy/wiki/Jaguar-on-Arduino-Getting-Started)
  - [Sega Saturn](https://github.com/zoggins/RetroSpy/wiki/Saturn-on-Arduino-Getting-Started)
  - [Sony PlayStation](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
  - [Nintendo 64](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
