@@ -73,3 +73,4 @@ Wishlist:
  - Game Cube Keyboard Controller
  - PlayStation Analog Joystick
  - Native Plus/4 joysticks
+ - Master System Sports Pad
