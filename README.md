@@ -10,7 +10,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Commodore VIC-20 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
  - Mattel Intellivision [controllers](https://github.com/zoggins/RetroSpy/wiki/Intellivision-on-Arduino-Getting-Started)
  - Commodore 64 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
- - [NES](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
+ - NES [controllers](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - Commodore Amiga (non-CD32) [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started) and [mice](https://github.com/zoggins/RetroSpy/wiki/Amiga-Mice-on-Arduino-Getting-Started)
  - Commodore Plus/4 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Plus4-on-Arduino-Getting-Started) 
  - Commodore 128 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
@@ -36,6 +36,8 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Nintendo Switch [wired controllers](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
  - [Nintendo SNES Classic](https://github.com/zoggins/RetroSpy/wiki/Wii-on-Teensy-Getting-Started)
  - [Sony PlayStation Classic](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
+ - [SNK Neo Geo Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
+ - [Sega Genesis Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
  
 Additionally, RetroSpy has experimental support for:
 
