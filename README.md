@@ -9,7 +9,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Atari 2600 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started), [driving controllers](https://github.com/zoggins/RetroSpy/wiki/Atari-Driving-Controller-on-Arduino-Getting-Started), [keyboard controllers](https://github.com/zoggins/RetroSpy/wiki/Atari-Keyboard-Controller-on-Arduino-Getting-Started) and the [Omega Race booster grip](https://github.com/zoggins/RetroSpy/wiki/Atari-Omega-Race-Booster-Grip-on-Arduino-Getting-Started)
  - Commodore VIC-20 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
  - Mattel Intellivision [controllers](https://github.com/zoggins/RetroSpy/wiki/Intellivision-on-Arduino-Getting-Started)
- - _COMING SOON_ Coleco ColecoVision [controllers and the Super Action Controller]
+ - _COMING SOON_ Coleco ColecoVision [controllers and the Super Action Controller](https://github.com/zoggins/RetroSpy/wiki/Coleco-ColecoVision-Controllers-on-Arduino-Getting-Started)
  - Commodore 64 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
  - NES [controllers](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - Commodore Amiga (non-CD32) [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started) and [mice](https://github.com/zoggins/RetroSpy/wiki/Amiga-Mice-on-Arduino-Getting-Started)
