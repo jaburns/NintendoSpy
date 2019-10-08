@@ -26,7 +26,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - 3DO [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/3DO-on-Arduino-Getting-Started)
  - _COMING SOON_ Atari Jaguar [Standard and Pro controllers](https://github.com/zoggins/RetroSpy/wiki/Jaguar-on-Arduino-Getting-Started)
  - Sega Saturn [digital controllers, the 3D Control Pad and the Shuttle Mouse](https://github.com/zoggins/RetroSpy/wiki/Saturn-on-Arduino-Getting-Started)
- - Sony PlayStation [digital controllers, DualShock 1/2 controllers and mice](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
+ - Sony PlayStation [[digital controllers, dual analog controllers, DualShock 1/2 controllers and mice](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
  - Nintendo 64 [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - Sega Dreamcast [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/Dreamcast-on-Teensy-Getting-Started) 
  - Sony PlayStation 2 [digital controllers, dual analog controllers, DualShock 1/2 controllers and mice](https://github.com/zoggins/RetroSpy/wiki/Playstation-1-&-2-on-Arduino-Getting-Started)
