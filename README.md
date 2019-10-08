@@ -20,7 +20,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - NEC PC Engine/TurboGraphx-16/SuperGrafx [2-button controllers](https://github.com/zoggins/RetroSpy/wiki/TurboGrafx-16-PC-Engine-on-Arduino-Getting-Started)
  - Sega Genesis [3/6-button controllers and the Mega Mouse](https://github.com/zoggins/RetroSpy/wiki/Genesis-on-Arduino-Getting-Started)
  - SNK Neo Geo [Arcade Sticks and Neo Geo CD controllers](https://github.com/zoggins/RetroSpy/wiki/Neo-Geo-on-Arduino-Getting-Started)
- - SNES [controllers](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
+ - SNES [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-Hardware-Selection)
  - Philips CD-i [IR wireless controllers, wired controllers and mice](https://github.com/zoggins/RetroSpy/wiki/CDi-on-Arduino-Getting-Started)
  - Amiga CD32 [controllers](https://github.com/zoggins/RetroSpy/wiki/Amiga-CD32-on-Teensy-Getting-Started)
  - 3DO [controllers and mice](https://github.com/zoggins/RetroSpy/wiki/3DO-on-Arduino-Getting-Started)
