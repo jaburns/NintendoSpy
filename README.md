@@ -16,6 +16,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Commodore Plus/4 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Plus4-on-Arduino-Getting-Started) 
  - Commodore 128 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
  - Sega Master System [controllers](https://github.com/zoggins/RetroSpy/wiki/Classic-DB9-Controllers-on-Arduino-Getting-Started)
+ - _COMING SOON_ Atari 7800 [joysticks](https://github.com/zoggins/RetroSpy/wiki/Atari-Omega-Race-Booster-Grip-on-Arduino-Getting-Started)
  - NEC PC Engine/TurboGraphx-16/SuperGrafx [2-button controllers](https://github.com/zoggins/RetroSpy/wiki/TurboGrafx-16-PC-Engine-on-Arduino-Getting-Started)
  - Sega Genesis [3/6-button controllers and the Mega Mouse](https://github.com/zoggins/RetroSpy/wiki/Genesis-on-Arduino-Getting-Started)
  - SNK Neo Geo [Arcade Sticks and Neo Geo CD controllers](https://github.com/zoggins/RetroSpy/wiki/Neo-Geo-on-Arduino-Getting-Started)
@@ -44,6 +45,15 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
 Additionally, RetroSpy has experimental support for:
 
  - Atari 2600 [Paddles](https://github.com/zoggins/RetroSpy/wiki/Atari-Paddles-on-Arduino-Getting-Started)
+
+To-Do List (in priority order):
+ - TurboGrafx-16 Mini
+ - PC Engine 3 and 6 button controller support
+ - Better solution for Atari Paddles
+ - PS/2 Keyboards
+ - Atari 5200
+ - Dreamcast Keyboard
+ - Saturn Keyboard
 
 Wishlist:
 
