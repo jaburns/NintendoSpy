@@ -72,3 +72,4 @@ Wishlist:
  - Steel Battalion Xbox Controller
  - Game Cube Keyboard Controller
  - PlayStation Analog Joystick
+ - Native Plus/4 joysticks
