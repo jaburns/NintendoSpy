@@ -46,23 +46,27 @@ Additionally, RetroSpy has experimental support for:
 
  - Atari 2600 [Paddles](https://github.com/zoggins/RetroSpy/wiki/Atari-Paddles-on-Arduino-Getting-Started)
 
-To-Do List (in priority order):
- - TurboGrafx-16 Mini
+To-Do List (in rough priority order):
+ - TurboGrafx-16 Mini (when its released)
  - PC Engine 3 and 6 button controller support
  - Better solution for Atari Paddles
+ - Commodore Paddles
+ - Commodore Mice
+ - NES Power Pad
+ - Commodore CDTV
+ - PC-FX
+ - Atari 5200 joysticks
  - PS/2 Keyboards
- - Atari 5200
  - Dreamcast Keyboard
  - Saturn Keyboard
+ - PS 3 & 4
+ - Xbox One
 
 Wishlist:
 
- - Coleco ColecoVision
- - Commodore 64 mice and paddles
- - Commodore CDTV wireless remote
- - Atari Jaguar
- - PS/2 Keyboards
- - Sega Saturn Keyboard
- - Dreamcast Keyboard
- - Sega Genesis Mini
- - TurboGrafx-16 Mini
+ - ColecoVision Roller Controller
+ - ColecoVision Steering Wheel
+ - Atari 5200 Trackball Controller
+ - Native CDTV Keyboard and mouse/trackball
+ - Native CD32 keyboard
+ - Steel Battalion Xbox Controller
