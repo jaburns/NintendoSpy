@@ -149,19 +149,24 @@ namespace RetroSpy.Readers
             state.SetButton("b",        (packet[1] & 0b00001000) == 0x00);
             state.SetButton("1",        (packet[1] & 0b00010000) == 0x00);
             state.SetButton("4",        (packet[1] & 0b00100000) == 0x00);
+            state.SetButton("l",        (packet[1] & 0b00100000) == 0x00);
             state.SetButton("7",        (packet[1] & 0b01000000) == 0x00);
+            state.SetButton("x",        (packet[1] & 0b01000000) == 0x00);
             state.SetButton("star",     (packet[1] & 0b10000000) == 0x00);
 
             state.SetButton("c", (packet[2] & 0b00001000) == 0x00);
             state.SetButton("2", (packet[2] & 0b00010000) == 0x00);
             state.SetButton("5", (packet[2] & 0b00100000) == 0x00);
             state.SetButton("8", (packet[2] & 0b01000000) == 0x00);
+            state.SetButton("y", (packet[2] & 0b01000000) == 0x00);
             state.SetButton("0", (packet[2] & 0b10000000) == 0x00);
 
             state.SetButton("option",   (packet[3] & 0b00001000) == 0x00);
             state.SetButton("3",        (packet[3] & 0b00010000) == 0x00);
             state.SetButton("6",        (packet[3] & 0b00100000) == 0x00);
+            state.SetButton("r",        (packet[3] & 0b00100000) == 0x00);
             state.SetButton("9",        (packet[3] & 0b01000000) == 0x00);
+            state.SetButton("z",        (packet[3] & 0b01000000) == 0x00);
             state.SetButton("pound",    (packet[3] & 0b10000000) == 0x00);
 
             return state.Build();

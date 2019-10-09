@@ -8,9 +8,7 @@ namespace RetroSpy.Readers
 {
     static public class ColecoVision
     {
-        static bool firstRun = false;
-        static int spinnerValue = 0;
-        static bool spinnerValueChanged = false;
+        static int spinnerValue = 32;
 
         const int PACKET_SIZE = 11;
 
@@ -75,19 +73,8 @@ namespace RetroSpy.Readers
             state.SetButton("purple", packet[5] != 0 && packet[6] != 0 && packet[7] == 0 && packet[8] != 0);
             state.SetButton("blue", packet[5] != 0 && packet[6] == 0 && packet[7] != 0 && packet[8] != 0);
 
-            if (firstRun == false)
-            {
-                spinnerValue = packet[10] - 11;
-                firstRun = true;
-            }
-
-            if (spinnerValueChanged == false && spinnerValue != (packet[10] - 11))
-            {
-                spinnerValueChanged = true;
-            }
-
             for (int i = 0; i < 64; ++i)
-                state.SetButton("E" + i.ToString(), spinnerValueChanged && i == (packet[10] - 11));
+                state.SetButton("E" + i.ToString(), i == (packet[10] - 11));
 
             return state.Build();
         }
