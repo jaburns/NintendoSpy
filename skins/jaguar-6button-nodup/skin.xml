@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Atari Jaguar Pro Controller" author="chmaller" type="jaguar">
+<skin name="Atari Jaguar Pro Controller (no duplicate keypad presses)" author="chmaller" type="jaguar">
 
 	<background name="Jaguar" image="jaguar.png" />
 
@@ -23,13 +23,13 @@
 	<button name="2" image="circle.png" x="289" y="240" width="30" height="30" />
 	<button name="3" image="circle.png" x="363" y="240" width="30" height="30" />
 
-	<button name="4" image="circle.png" x="210" y="287" width="30" height="30" />
+	<!--<button name="4" image="circle.png" x="210" y="287" width="30" height="30" />-->
 	<button name="5" image="circle.png" x="289" y="287" width="30" height="30" />
-	<button name="6" image="circle.png" x="363" y="287" width="30" height="30" />
+	<!--<button name="6" image="circle.png" x="363" y="287" width="30" height="30" />-->
 
-	<button name="7" image="circle.png" x="210" y="334" width="30" height="30" />
+	<!--<button name="7" image="circle.png" x="210" y="334" width="30" height="30" />
 	<button name="8" image="circle.png" x="289" y="334" width="30" height="30" />
-	<button name="9" image="circle.png" x="363" y="334" width="30" height="30" />
+	<button name="9" image="circle.png" x="363" y="334" width="30" height="30" />-->
 
 	<button name="star" image="circle.png" x="210" y="382" width="30" height="30" />
 	<button name="0" image="circle.png" x="289" y="382" width="30" height="30" />
