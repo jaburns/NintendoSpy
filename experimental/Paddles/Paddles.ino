@@ -26,7 +26,7 @@ int nominal_left_max = 1004;
 int nominal_right_max = 1003;
 float EMA_al = 1;      //initialization of EMA alpha left
 float EMA_ar = 1;      //initialization of EMA alpha right
-
+float numAvgValues = 5;
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
 
