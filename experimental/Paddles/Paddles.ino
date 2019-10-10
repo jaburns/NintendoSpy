@@ -24,9 +24,8 @@ int nominal_left_min = 213;
 int nominal_right_min = 207;
 int nominal_left_max = 1004;
 int nominal_right_max = 1003;
-float EMA_al = 1;      //initialization of EMA alpha left
-float EMA_ar = 1;      //initialization of EMA alpha right
-float numAvgValues = 5;
+float EMA_al = 100;      //initialization of EMA alpha left
+float EMA_ar = 100;      //initialization of EMA alpha right
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
 
@@ -50,6 +49,8 @@ int currentRight = 0;
 float EMA_Sl = 0;          //initialization of EMA S left
 float EMA_Sr = 0;          //initialization of EMA S right
 
+#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
 
 static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
 {
@@ -64,6 +65,10 @@ static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin
 
 void setup() {
 
+  sbi(ADCSRA, ADPS2);
+  cbi(ADCSRA, ADPS1);
+  cbi(ADCSRA, ADPS0);
+  
   for (int i = 2; i <= 8; ++i)
     pinMode(i, INPUT_PULLUP);
 
