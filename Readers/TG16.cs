@@ -8,10 +8,10 @@ namespace RetroSpy.Readers
 {
     static public class Tg16
     {
-        const int PACKET_SIZE = 8;
+        const int PACKET_SIZE = 12;
 
         static readonly string[] BUTTONS = {
-            "up", "right", "down", "left", "1", "2", "select", "run"
+            "up", "right", "down", "left", "1", "2", "select", "run", "3", "4", "5", "6"
         };
 
         static public ControllerState ReadFromPacket (byte[] packet)
