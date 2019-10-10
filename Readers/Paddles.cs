@@ -11,7 +11,7 @@ namespace RetroSpy.Readers
         static byte lastLeft = 0;
         static byte lastRight = 0;
 
-        const int PACKET_SIZE = 5;
+        const int PACKET_SIZE = 6;
 
         static readonly string[] BUTTONS = {
             "2", "1"
@@ -40,12 +40,12 @@ namespace RetroSpy.Readers
             byte left = packet[2];
             byte right = packet[3];
 
-            if (Math.Abs(left - lastLeft) > 10)
+            if (Math.Abs(left - lastLeft) > (packet[5] - 11))
                 lastLeft = left;
             else
                 left = lastLeft;
 
-            if (Math.Abs(right - lastRight) > 10)
+            if (Math.Abs(right - lastRight) > (packet[5] - 11))
                 lastRight = right;
             else
                 right = lastRight;
