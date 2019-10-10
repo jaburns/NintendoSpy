@@ -25,6 +25,10 @@ int nominal_right_min = 207;
 int nominal_left_max = 1004;
 int nominal_right_max = 1003;
 
+// The below values are not scientific. These will need to be tuned for different sets of paddles.
+float EMA_al = 1;      //initialization of EMA alpha left
+float EMA_ar = 1;      //initialization of EMA alpha right
+
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
 
@@ -36,10 +40,6 @@ int nominal_right_max = 1003;
 // Atari Pin 9 -> Analog Pin 1
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
-
-// The below values are not scientific. These will need to be tuned for different sets of paddles.
-float EMA_al = 1;      //initialization of EMA alpha left
-float EMA_ar = 1;      //initialization of EMA alpha right
 
 int lastLeft = 0;
 bool leftAscending = false;
