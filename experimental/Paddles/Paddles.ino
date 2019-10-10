@@ -19,13 +19,17 @@
 // If its hitting right too soon it needs to be increased.  
 // The maximum value that can be selected is 1023 and the minimum value should be more than **nominal_left_min/nominal_right_min**. 
 
+// **EMA_al/EMA_ar** is the number of samples to average in order to smooth the signal.  1.0 is absolutely no smoothing.  
+// The larger the number the more smoothing will occur at the cost of latency to the display.
+
 int percent_change_required_to_move = 10;
 int nominal_left_min = 213;
 int nominal_right_min = 207;
 int nominal_left_max = 1004;
 int nominal_right_max = 1003;
-float EMA_al = 100;      //initialization of EMA alpha left
-float EMA_ar = 100;      //initialization of EMA alpha right
+float EMA_al = 100;      
+float EMA_ar = 100;
+
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
 
