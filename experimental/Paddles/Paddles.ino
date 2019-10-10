@@ -47,8 +47,8 @@ int lastRight = 0;
 bool rightAscending = false;
 int currentRight = 0;
 
-int EMA_Sl = 0;          //initialization of EMA S left
-int EMA_Sr = 0;          //initialization of EMA S right
+float EMA_Sl = 0;          //initialization of EMA S left
+float EMA_Sr = 0;          //initialization of EMA S right
 
 
 static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
@@ -123,8 +123,12 @@ void loop() {
       
   byte fire1 = ((pins & 0b0000000000000100) == 0);
   byte fire2 = ((pins & 0b0000000000001000) == 0);
-  EMA_Sl = (EMA_al*leftPaddle) + ((1-EMA_al)*EMA_Sl); 
-  EMA_Sr = (EMA_ar*rightPaddle) + ((1-EMA_ar)*EMA_Sr);
+  float mult_l = 2.0/(EMA_al + 1.0);
+  float mult_r = 2.0/(EMA_ar + 1.0);
+  EMA_Sl = (((float)leftPaddle) - EMA_Sl) * mult_l + EMA_Sl;
+  EMA_Sr = (((float)rightPaddle) - EMA_Sr) * mult_r + EMA_Sr;       
+  //EMA_Sl = (EMA_al*leftPaddle) + ((1-EMA_al)*EMA_Sl); 
+  //EMA_Sr = (EMA_ar*rightPaddle) + ((1-EMA_ar)*EMA_Sr);
 #ifdef DEBUG
     Serial.print(fire1 ? "3" : "-");
     Serial.print(fire2 ? "4" : "-");
