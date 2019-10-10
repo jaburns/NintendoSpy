@@ -22,7 +22,7 @@
 // **EMA_al/EMA_ar** is the number of samples to average in order to smooth the signal.  1.0 is absolutely no smoothing.  
 // The larger the number the more smoothing will occur at the cost of latency to the display.
 
-int percent_change_required_to_move = 10;
+int percent_change_required_to_move = 5;
 int nominal_left_min = 213;
 int nominal_right_min = 207;
 int nominal_left_max = 1004;
