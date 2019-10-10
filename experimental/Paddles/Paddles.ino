@@ -24,8 +24,6 @@ int nominal_left_min = 213;
 int nominal_right_min = 207;
 int nominal_left_max = 1004;
 int nominal_right_max = 1003;
-
-// The below values are not scientific. These will need to be tuned for different sets of paddles.
 float EMA_al = 1;      //initialization of EMA alpha left
 float EMA_ar = 1;      //initialization of EMA alpha right
 
