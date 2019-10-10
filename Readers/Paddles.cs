@@ -40,12 +40,12 @@ namespace RetroSpy.Readers
             byte left = packet[2];
             byte right = packet[3];
 
-            if (Math.Abs(left - lastLeft) > (packet[5] - 11))
+            if ((Math.Abs(left - lastLeft)/256.0)*100.0 > (packet[5] - 11))
                 lastLeft = left;
             else
                 left = lastLeft;
 
-            if (Math.Abs(right - lastRight) > (packet[5] - 11))
+            if ((Math.Abs(right - lastRight) / 256.0) * 100.0 > (packet[5] - 11))
                 lastRight = right;
             else
                 right = lastRight;
