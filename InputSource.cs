@@ -41,6 +41,7 @@ namespace RetroSpy
         static public readonly InputSource PC360 = new InputSource ("pc360", "PC 360 Controller", false, true, false, controllerId => new XInputReader (uint.Parse(controllerId)));
         static public readonly InputSource PAD = new InputSource ("generic", "PC Generic Gamepad", false, true, false, controllerId => new GamepadReader (int.Parse(controllerId)));
         static public readonly InputSource PADATOD = new InputSource ("genericanalogtodpad", "PC Generic Gamepad with AnalogToDPad", false, true, false, controllerId => new GamepadReaderAnalogToDPad (int.Parse(controllerId)));
+        static public readonly InputSource PS2KEYBOARD = new InputSource("ps2keyboard", "PC PS/2 Keyboard", true, false, false, port => new SerialControllerReader(port, PS2Keyboard.ReadFromPacket));
 
         static public readonly InputSource CDI = new InputSource("cdi", "Phillips CD-i", true, false, false, port => new SerialControllerReader(port, CDi.ReadFromPacket));
 
@@ -60,7 +61,7 @@ namespace RetroSpy
         //static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", false, true, controllerId => new WiiReaderV1(int.Parse(controllerId)));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, JAGUAR, COLECOVISION, CD32, C64MINI, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PSCLASSIC
+            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, JAGUAR, COLECOVISION, CD32, C64MINI, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PADATOD, PS2KEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PSCLASSIC
         };
 
         static public readonly InputSource DEFAULT = NES;
