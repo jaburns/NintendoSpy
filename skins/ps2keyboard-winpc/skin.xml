@@ -43,16 +43,16 @@
 	<button name="Tab" image="circle2.png" x="20" y="127" width="40" height="40" />
 	<button name="Q" image="circle2.png" x="98" y="127" width="40" height="40" />
 	<button name="W" image="circle2.png" x="150" y="127" width="40" height="40" />
-	<button name="E" image="circle2.png" x="254" y="127" width="40" height="40" />
-	<button name="R" image="circle2.png" x="306" y="127" width="40" height="40" />
-	<button name="T" image="circle2.png" x="358" y="127" width="40" height="40" />
-	<button name="Y" image="circle2.png" x="410" y="127" width="40" height="40" />
-	<button name="U" image="circle2.png" x="462" y="127" width="40" height="40" />
-	<button name="I" image="circle2.png" x="514" y="127" width="40" height="40" />
-	<button name="O" image="circle2.png" x="566" y="127" width="40" height="40" />
-	<button name="P" image="circle2.png" x="618" y="127" width="40" height="40" />
-	<button name="[" image="circle2.png" x="670" y="127" width="40" height="40" />
-	<button name="]" image="circle2.png" x="722" y="127" width="40" height="40" />
+	<button name="E" image="circle2.png" x="202" y="127" width="40" height="40" />
+	<button name="R" image="circle2.png" x="254" y="127" width="40" height="40" />
+	<button name="T" image="circle2.png" x="306" y="127" width="40" height="40" />
+	<button name="Y" image="circle2.png" x="358" y="127" width="40" height="40" />
+	<button name="U" image="circle2.png" x="410" y="127" width="40" height="40" />
+	<button name="I" image="circle2.png" x="462" y="127" width="40" height="40" />
+	<button name="O" image="circle2.png" x="514" y="127" width="40" height="40" />
+	<button name="P" image="circle2.png" x="566" y="127" width="40" height="40" />
+	<button name="[" image="circle2.png" x="618" y="127" width="40" height="40" />
+	<button name="]" image="circle2.png" x="670" y="127" width="40" height="40" />
 	
 	<button name="CapsLock" image="circle2.png" x="14" y="177" width="40" height="40" />
 	<button name="A" image="circle2.png" x="109" y="177" width="40" height="40" />
@@ -125,4 +125,6 @@
 
 	<button name="Num0" image="circle2.png" x="973" y="280" width="40" height="40" />
 	<button name="Num." image="circle2.png" x="1079" y="280" width="40" height="40" /> 	
+	
+	<button name="ChecksumFail"	image="circle2.png" x="1013" y="31" width="10" height="10" /> 
 </skin>
