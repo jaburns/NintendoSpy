@@ -8,12 +8,12 @@
 // **nominal_min** is the minimum value the paddle is capable of hitting.  
 // If the display is never hitting all the way left the value needs to be increased.  
 // If its hitting left too soon it needs to be decreased.  
-// The minimum value that can be selected is 0 and the maximum value should be less than **nominal_left_max/nominal_right_max**. 
+// The minimum value that can be selected is 0 and the maximum value should be less than **nominal_max**. 
 
 // **nominal_max** is the maximum value the paddle is capable of hitting.  
 // If the display is never hitting all the way right the value needs to be decreased.  
 // If its hitting right too soon it needs to be increased.  
-// The maximum value that can be selected is 1023 and the minimum value should be more than **nominal_left_min/nominal_right_min**. 
+// The maximum value that can be selected is 1023 and the minimum value should be more than **nominal_min**. 
 
 int nominal_min = 213;
 int nominal_max = 1004;
