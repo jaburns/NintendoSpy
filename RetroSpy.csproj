@@ -113,6 +113,7 @@
     <Compile Include="Readers\C64mini.cs" />
     <Compile Include="Readers\MouseTester.cs" />
     <Compile Include="Readers\PS2Keyboard.cs" />
+    <Compile Include="Readers\SerialControllerReader2.cs" />
     <Compile Include="Readers\SSHControllerReader.cs" />
     <Compile Include="Readers\GenesisMiniReader.cs" />
     <Compile Include="Readers\NeoGeoMini.cs" />
@@ -352,6 +353,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\jaguar-6button\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\paddle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\paddle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\PaddleCircle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\PaddleRing.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-2paddles\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\paddles-default\paddle2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\paddles-mouse\circle.png" />
