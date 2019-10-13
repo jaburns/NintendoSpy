@@ -15,12 +15,8 @@
 // If its hitting right too soon it needs to be increased.  
 // The maximum value that can be selected is 1023 and the minimum value should be more than **nominal_left_min/nominal_right_min**. 
 
-// **EMA_a** is the number of samples to average in order to smooth the signal.  1.0 is absolutely no smoothing.  
-// The larger the number the more smoothing will occur at the cost of latency to the display.
-
 int nominal_min = 213;
 int nominal_max = 1004;
-float EMA_a = 5;   
 
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
@@ -42,7 +38,8 @@ volatile int currentVal = 0;
 volatile int analogVal = 0;
 volatile int readFlag;
 
-float EMA_S = 0;          //initialization of EMA_S 
+int window[3];
+int windowPosition = 0;
 
 static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
 {
@@ -82,7 +79,7 @@ void setup() {
   for (int i = 2; i <= 8; ++i)
     pinMode(i, INPUT_PULLUP);
 
-  EMA_S = analogRead(0);
+  windowPosition = 0;
 
   // clear ADLAR in ADMUX (0x7C) to right-adjust the result
   // ADCL will contain lower 8 bits, ADCH upper 2 (in last two bits)
@@ -136,6 +133,32 @@ void setup() {
   Serial.begin( 115200 );
 }
 
+// Function to find the middle of three numbers 
+int middleOfThree(int a, int b, int c) 
+{ 
+    // Compare each three number to find middle  
+    // number. Enter only if a > b 
+    if (a > b)  
+    { 
+        if (b > c) 
+            return b; 
+        else if (a > c) 
+            return c; 
+        else
+            return a; 
+    } 
+    else 
+    { 
+        // Decided a is not greater than b. 
+        if (a > c) 
+            return a; 
+        else if (b > c) 
+            return c; 
+        else
+            return b; 
+    } 
+} 
+
 void loop() {
 
   if (readFlag == 1)
@@ -145,22 +168,23 @@ void loop() {
 	pins |= (PIND >> 2);
       
 	byte fire2 = ((pins & 0b0000000000001000) == 0);
-	float mult = 2.0/(EMA_a + 1.0);
-	EMA_S = (((float)currentVal) - EMA_S) * mult + EMA_S;      
+  window[windowPosition] = currentVal;
+  windowPosition += 1;
+  windowPosition = (windowPosition % 3);
 #ifdef DEBUG
     Serial.print("-");
     Serial.print(fire2 ? "4" : "-");
     Serial.print("|");
     Serial.print(EMA_S);
     Serial.print("|");
-    Serial.print(ScaleInteger(EMA_S, nominal_min, nominal_max, 0, 255));
+    Serial.print(ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255));
     Serial.print("|");
     Serial.print(0);
     Serial.print("|");
     Serial.print(0);
     Serial.print("\n");
 #else
-    int sil = ScaleInteger(EMA_S, nominal_min, nominal_max, 0, 255);
+    int sil = ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255);
     Serial.write(0);
     Serial.write(fire2);
     Serial.write(sil);
@@ -170,5 +194,6 @@ void loop() {
     Serial.write('\n');
 #endif
 	readFlag = 0;
+  delay(5);
 }
 }

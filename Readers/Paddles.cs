@@ -12,16 +12,14 @@ namespace RetroSpy.Readers
         const int PACKET_SIZE = 6;
 
         static readonly string[] BUTTONS = {
-            null, "1"
+            null, "fire"
         };
 
         static float readPaddle(ushort input)
         {
             return (float)(input)/256;
         }
-
-        static byte lastVal;
-
+        
         static public ControllerState ReadFromPacket(byte[] packet)
         {
            
@@ -36,7 +34,7 @@ namespace RetroSpy.Readers
                 state.SetButton(BUTTONS[i], packet[i] != 0x00);
             }
 
-            state.SetAnalog("left", readPaddle(packet[2]));
+            state.SetAnalog("paddle", readPaddle(packet[2]));
            
             return state.Build();
         }
