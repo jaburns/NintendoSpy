@@ -20,7 +20,8 @@
 //#define MODE_SATURN3D
 //#define MODE_NEOGEO
 //#define MODE_3DO
-//#define INTELLIVISION
+//#define MODE_INTELLIVISION
+//#define MODE_JAGUAR
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -38,6 +39,7 @@
 
 SegaControllerSpy segaController;
 word currentState = 0;
+unsigned int uiCurrentState = 0;
 word lastState = 0;
 byte ssState1 = 0;
 byte ssState2 = 0;
@@ -801,19 +803,52 @@ inline void sendRawSS3DData()
 #define TG_DATA3  4
 #define TG_DATA4  5
 
+word lastDirections = 0;
+word lastHighButtons = 0x0000;
+word lastButtons = 0;
+bool highButtons = true;
+bool seenHighButtons = false;
+
 inline void read_TgData()
 {
   currentState = 0x0000;
   while((PIND & 0b01000000) == 0){}    
   asm volatile(
         "nop\nnop\n");
-    currentState |= ((PIND & 0b00111100) >> 2);
-
+  word temp = 0;
+  temp |= ((PIND & 0b00111100) >> 2);
+  if ((temp & 0b00001111) == 0b00000000)
+  {
+    currentState |= lastDirections;
+    highButtons = false;
+    seenHighButtons = true;
+  }
+  else
+  {
+    currentState |= temp;
+    lastDirections = temp;
+    highButtons = true;
+  }
+  
   while((PIND & 0b01000000) != 0){}    
-    asm volatile(
-        "nop\nnop\n");
-    currentState |= ((PIND & 0b00111100) << 2);
-
+    asm volatile(MICROSECOND_NOPS);
+      temp = 0;
+      temp |= ((PIND & 0b00111100) << 2);
+      if (highButtons == true && seenHighButtons == true)
+      {
+        currentState |= (temp << 4);
+        lastHighButtons = temp;
+        currentState |= lastButtons;   
+      }
+      else
+      {
+        currentState |= temp;
+        lastButtons = temp;
+        if (seenHighButtons)
+          currentState |= (lastHighButtons << 4);
+        else
+          currentState |= 0b0000111100000000;
+      }
     currentState = ~currentState;
 }
 
@@ -927,7 +962,7 @@ inline void sendRawPs2Data()
 inline void sendRawTgData()
 {
     #ifndef DEBUG
-    for (unsigned char i = 0; i < 8; ++i)
+    for (unsigned char i = 0; i < 12; ++i)
     {
       Serial.write (currentState & (1 << i) ? ONE : ZERO );
     }
@@ -941,6 +976,10 @@ inline void sendRawTgData()
     Serial.print((currentState & 0b0000000000100000)    ? "B" : "0");
     Serial.print((currentState & 0b0000000001000000)    ? "S" : "0");
     Serial.print((currentState & 0b0000000010000000)    ? "R" : "0");
+    Serial.print((currentState & 0b0000000100000000)    ? "3" : "0");
+    Serial.print((currentState & 0b0000001000000000)    ? "4" : "0");
+    Serial.print((currentState & 0b0000010000000000)    ? "5" : "0");
+    Serial.print((currentState & 0b0000100000000000)    ? "6" : "0");
     Serial.print("\n");
     #endif
 }
@@ -1281,6 +1320,74 @@ void sendIntellivisionData_Raw()
     writeIntellivisionDataToSerial();
 }
 
+#define AJ_COLUMN1   8
+#define AJ_COLUMN2   9
+#define AJ_COLUMN3  10
+#define AJ_COLUMN4  11
+
+inline void read_JaguarData()
+{
+  WAIT_FALLING_EDGEB(0);
+  asm volatile ( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
+  rawData[3] = (PIND & 0b11111000);
+
+  WAIT_FALLING_EDGEB(1);
+  asm volatile ( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
+  rawData[2] = (PIND & 0b11111000);
+  
+  WAIT_FALLING_EDGEB(2);
+  asm volatile ( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
+  rawData[1] = (PIND & 0b11111000);
+  
+  WAIT_FALLING_EDGEB(3);
+  asm volatile ( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
+  rawData[0] = (PIND & 0b11111100);
+  
+}
+
+
+inline void sendRawJaguarData()
+{
+    #ifndef DEBUG
+    Serial.write (rawData[0]);
+    Serial.write (rawData[1]);
+    Serial.write (rawData[2]);
+    Serial.write (rawData[3]);
+    Serial.write( SPLIT );
+    #else 
+    Serial.print((rawData[0] & 0b00000100) == 0  ? "P" : "0");
+    Serial.print((rawData[0] & 0b00001000) == 0  ? "A" : "0");
+    Serial.print((rawData[0] & 0b00010000) == 0  ? "R" : "0");
+    Serial.print((rawData[0] & 0b00100000) == 0  ? "L" : "0");
+    Serial.print((rawData[0] & 0b01000000) == 0  ? "D" : "0");
+    Serial.print((rawData[0] & 0b10000000) == 0  ? "U" : "0");
+
+    //Serial.print((rawData[1] & 0b00000100) == 0  ? "P" : "0");
+    Serial.print((rawData[1] & 0b00001000) == 0  ? "B" : "0");
+    Serial.print((rawData[1] & 0b00010000) == 0  ? "1" : "0");
+    Serial.print((rawData[1] & 0b00100000) == 0  ? "4" : "0");
+    Serial.print((rawData[1] & 0b01000000) == 0  ? "7" : "0");
+    Serial.print((rawData[1] & 0b10000000) == 0  ? "*" : "0");
+
+    //Serial.print((rawData[2] & 0b00000100) == 0  ? "P" : "0");
+    Serial.print((rawData[2] & 0b00001000) == 0  ? "C" : "0");
+    Serial.print((rawData[2] & 0b00010000) == 0  ? "2" : "0");
+    Serial.print((rawData[2] & 0b00100000) == 0  ? "5" : "0");
+    Serial.print((rawData[2] & 0b01000000) == 0  ? "8" : "0");
+    Serial.print((rawData[2] & 0b10000000) == 0  ? "Z" : "0");
+
+    //Serial.print((rawData[3] & 0b00000100) == 0  ? "P" : "0");
+    Serial.print((rawData[3] & 0b00001000) == 0  ? "O" : "0");
+    Serial.print((rawData[3] & 0b00010000) == 0  ? "3" : "0");
+    Serial.print((rawData[3] & 0b00100000) == 0  ? "6" : "0");
+    Serial.print((rawData[3] & 0b01000000) == 0  ? "9" : "0");
+    Serial.print((rawData[3] & 0b10000000) == 0  ? "#" : "0");
+
+    Serial.print("\n");
+    #endif
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update loop definitions for the various console modes.
 
@@ -1390,6 +1497,7 @@ inline void loop_TG16()
   read_TgData();
   interrupts();
   sendRawTgData();
+  delay(1);
 }
 
 inline void loop_SS()
@@ -1436,6 +1544,15 @@ inline void loop_Intellivision()
       sendIntellivisionData_Raw();
 }
 
+inline void loop_Jaguar()
+{
+  noInterrupts();
+  read_JaguarData();
+  interrupts();
+  sendRawJaguarData();
+  delay(1);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Arduino sketch main loop definition.
 void loop()
@@ -1466,10 +1583,14 @@ void loop()
     loop_NeoGeo();
 #elif defined MODE_3DO
     loop_3DO();
-#elif defined INTELLIVISION
+#elif defined MODE_INTELLIVISION
     loop_Intellivision();
 #elif defined MODE_GENESIS_MOUSE
     loop_Genesis_Mouse();
+#elif defined MODE_JAGUAR
+    loop_Jaguar();
+#elif defined MODE_COLECOVISION
+    loop_ColecoVision();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();

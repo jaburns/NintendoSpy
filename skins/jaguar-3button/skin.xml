@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Atari Jaguar Standard Controller" author="chmaller" type="jaguar">
+
+	<background name="Jaguar" image="jaguar.png" />
+
+	<button name="up" image="circle.png" x="144" y="86" width="30" height="30" />
+	<button name="left" image="circle.png" x="113" y="108" width="30" height="30" />
+	<button name="down" image="circle.png" x="144" y="137" width="30" height="30" />
+	<button name="right" image="circle.png" x="183" y="108" width="30" height="30" />
+	
+	<button name="pause" image="circle.png" x="259" y="149" width="30" height="30" />
+	<button name="option" image="circle.png" x="302" y="149" width="30" height="30" />
+	
+	<button name="a" image="circle.png" x="456" y="91" width="40" height="40" />
+	<button name="b" image="circle.png" x="414" y="117" width="40" height="40" />
+	<button name="c" image="circle.png" x="372" y="150" width="40" height="40" />
+
+  <button name="1" image="circle.png" x="210" y="240" width="30" height="30" />
+	<button name="2" image="circle.png" x="289" y="240" width="30" height="30" />
+	<button name="3" image="circle.png" x="363" y="240" width="30" height="30" />
+
+	<button name="4" image="circle.png" x="210" y="287" width="30" height="30" />
+	<button name="5" image="circle.png" x="289" y="287" width="30" height="30" />
+	<button name="6" image="circle.png" x="363" y="287" width="30" height="30" />
+
+	<button name="7" image="circle.png" x="210" y="334" width="30" height="30" />
+	<button name="8" image="circle.png" x="289" y="334" width="30" height="30" />
+	<button name="9" image="circle.png" x="363" y="334" width="30" height="30" />
+
+	<button name="star" image="circle.png" x="210" y="382" width="30" height="30" />
+	<button name="0" image="circle.png" x="289" y="382" width="30" height="30" />
+	<button name="pound" image="circle.png" x="363" y="382" width="30" height="30" />
+	
+</skin>

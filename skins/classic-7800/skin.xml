@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Atari 7800 Controller" author="chmaller" type="classic">
+
+    <background name="Default" image="atari7800.png" />
+
+    <button name="2" image="circle.png" x="596" y="380" width="170" height="170" />
+	<button name="3" image="circle.png" x="894" y="380" width="170" height="170" />
+  
+  <button name="up" image="circle.png" x="197" y="71" width="75" height="75" />
+  <button name="down" image="circle.png" x="197" y="227" width="75" height="75" />
+  <button name="left" image="circle.png" x="123" y="140" width="75" height="75" />
+  <button name="right" image="circle.png" x="282" y="140" width="75" height="75" />
+  
+	
+</skin>

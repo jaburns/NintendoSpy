@@ -64,8 +64,6 @@ ISR(TIMER1_COMPA_vect){
   Serial.print('|');
   Serial.print(y);
   Serial.print('\n');
-  xminusticks = 0;
-  xplusticks = 0;
 #else
   for(int i = 0; i < 3; ++i)
     Serial.write(buttons[i]);

@@ -76,6 +76,7 @@ namespace RetroSpy
 
             updatePortList ();
             _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
+            _vm.Ports2.SelectIdFromText(Properties.Settings.Default.Port2);
             _vm.XIAndGamepad.SelectFirst();
             _vm.Sources.SelectId(Properties.Settings.Default.Source);
             _vm.Skins.SelectId(Properties.Settings.Default.Skin);
@@ -95,7 +96,13 @@ namespace RetroSpy
         }
 
         void updatePortList () {
-            _vm.Ports.UpdateContents (SerialPort.GetPortNames ());
+            var ports = SerialPort.GetPortNames();
+            _vm.Ports.UpdateContents (ports);
+            var ports2 = new string[ports.Length + 1];
+            ports2[0] = "Not Connected";
+            for (int i = 0; i < ports.Length; ++i)
+                ports2[i + 1] = ports[i];
+            _vm.Ports2.UpdateContents(ports2);
         }
 
         void updateGamepadList()
@@ -122,6 +129,7 @@ namespace RetroSpy
         {
             this.Hide ();
             Properties.Settings.Default.Port = _vm.Ports.SelectedItem;
+            Properties.Settings.Default.Port2 = _vm.Ports2.SelectedItem;
             Properties.Settings.Default.Source = _vm.Sources.GetSelectedId();
             Properties.Settings.Default.Skin = _vm.Skins.GetSelectedId();
             Properties.Settings.Default.Delay = _vm.DelayInMilliseconds;
@@ -146,6 +154,12 @@ namespace RetroSpy
                          _vm.Sources.SelectedItem == InputSource.NEOGEOMINI)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(txtHostname.Text);
+                }
+                else if (_vm.Sources.SelectedItem == InputSource.PADDLES)
+                {
+                    if (_vm.Ports.SelectedItem == _vm.Ports2.SelectedItem)
+                        throw new Exception("Port 1 and Port 2 cannot be the same!");
+                    reader = _vm.Sources.SelectedItem.BuildReader2(_vm.Ports.SelectedItem, _vm.Ports2.SelectedItem);
                 }
                 //else if (_vm.Sources.SelectedItem == InputSource.XBOX)
                 //{
@@ -181,6 +195,7 @@ namespace RetroSpy
         {
             if (_vm.Sources.SelectedItem == null) return;
             _vm.ComPortOptionVisibility = _vm.Sources.SelectedItem.RequiresComPort ? Visibility.Visible : Visibility.Hidden;
+            _vm.ComPort2OptionVisibility = _vm.Sources.SelectedItem.RequiresComPort2 ? Visibility.Visible : Visibility.Hidden;
             _vm.XIAndGamepadOptionVisibility = _vm.Sources.SelectedItem.RequiresId ? Visibility.Visible : Visibility.Hidden;
             _vm.SSHOptionVisibility = _vm.Sources.SelectedItem.RequiresHostname ? Visibility.Visible : Visibility.Hidden;
             updateGamepadList();
@@ -227,7 +242,7 @@ namespace RetroSpy
                 _items.AddRange (items);
                 Items.Refresh ();
             }
-            
+
             public void SelectFirst () {
                 if (_items.Count > 0) SelectedItem = _items [0];
             }
@@ -261,6 +276,7 @@ namespace RetroSpy
         }
 
         public ListView <string> Ports { get; set; }
+        public ListView<string> Ports2 { get; set; }
         public ListView <uint> XIAndGamepad { get; set; }
         public ListView <Skin> Skins { get; set; }
         public ListView <Skin.Background> Backgrounds { get; set; }
@@ -275,6 +291,17 @@ namespace RetroSpy
             set {
                 _comPortOptionVisibility = value;
                 NotifyPropertyChanged ("ComPortOptionVisibility");
+            }
+        }
+
+        Visibility _comPort2OptionVisibility;
+        public Visibility ComPort2OptionVisibility
+        {
+            get { return _comPort2OptionVisibility; }
+            set
+            {
+                _comPort2OptionVisibility = value;
+                NotifyPropertyChanged("ComPort2OptionVisibility");
             }
         }
 
@@ -302,6 +329,7 @@ namespace RetroSpy
 
         public SetupWindowViewModel () {
             Ports   = new ListView <string> ();
+            Ports2 = new ListView<string>();
             XIAndGamepad = new ListView<uint>();
             Skins   = new ListView <Skin> ();
             Sources = new ListView <InputSource> ();

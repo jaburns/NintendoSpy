@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Generic Atari Paddle" author="chmaller" type="paddles">
+<skin name="Single Atari Paddle" author="chmaller" type="paddles">
 
     <background name="Paddle" image="Paddle.png" />
 
-    <button name="1" image="circle2.png" x="11" y="23" width="10" height="30" />
-	<button name="2" image="circle2.png" x="121" y="30" width="10" height="35" />
+    <button name="fire" image="circle2.png" x="11" y="23" width="10" height="30" />
 
-	<analog name="left" image="PaddleRing.png" x="13" y="52" direction="right" reverse="false"  />
-	<analog name="right" image="PaddleRing.png" x="155" y="53" direction="right" reverse="false" />
+	<analog name="paddle" image="PaddleRing.png" x="13" y="52" direction="right" reverse="false"  />
+
+  <!--<button name="fire2" image="circle2.png" x="121" y="30" width="10" height="35" />
+  <analog name="paddle2" image="PaddleRing.png" x="155" y="53" direction="right" reverse="false" />-->
+
+
 </skin>
