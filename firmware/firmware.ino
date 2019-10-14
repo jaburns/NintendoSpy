@@ -10,7 +10,8 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
-//#define MODE_SEGA  // For Genesis. Use MODE_CLASSIC for Master System
+//#define MODE_SEGA             // For Genesis. Use MODE_CLASSIC for Master System
+//#define MODE_SMS_ON_GENESIS   // For using a genesis retrospy cable and the genesis reader in the exe while playing SMS games.
 //#define MODE_GENESIS_MOUSE
 //#define MODE_CLASSIC
 //#define MODE_BOOSTER_GRIP
@@ -51,6 +52,7 @@ bool seenGC2N64 = false;
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
 ClassicControllerSpy classicController(2, 3, 4, 5, 7, 8);
+ClassicControllerSpy smsOnGenesisController(2, 3, 4, 5, 6, 7);
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
@@ -984,6 +986,45 @@ inline void sendRawTgData()
     #endif
 }
 
+inline void sendSmsOnGenesisData()
+{
+  #ifndef DEBUG
+      Serial.write(0);
+      Serial.write((currentState & CC_BTN_UP)    ? 1 : 0);
+      Serial.write((currentState & CC_BTN_DOWN)  ? 1 : 0);
+      Serial.write((currentState & CC_BTN_LEFT)  ? 1 : 0);
+      Serial.write((currentState & CC_BTN_RIGHT) ? 1 : 0);
+      Serial.write((currentState & CC_BTN_1)     ? 1 : 0);
+      Serial.write((currentState & CC_BTN_2)     ? 1 : 0);   
+      Serial.write(0);
+      Serial.write(0);
+      Serial.write(0);
+      Serial.write(0);
+      Serial.write(0);
+      Serial.write(0);
+      Serial.write(SPLIT);  
+  #else
+  if (currentState != lastState)
+  {
+      Serial.print("-");
+      Serial.print((currentState & SCS_BTN_UP)    ? "U" : "0");
+      Serial.print((currentState & SCS_BTN_DOWN)  ? "D" : "0");
+      Serial.print((currentState & SCS_BTN_LEFT)  ? "L" : "0");
+      Serial.print((currentState & SCS_BTN_RIGHT) ? "R" : "0");
+      Serial.print("0");
+      Serial.print("0");
+      Serial.print((currentState & SCS_BTN_B)     ? "1" : "0");
+      Serial.print((currentState & SCS_BTN_C)     ? "2" : "0");
+      Serial.print("0");
+      Serial.print("0");
+      Serial.print("0");
+      Serial.print("0");
+      Serial.print("\n");
+      lastState = currentState;
+  }
+  #endif  
+}
+
 inline void sendRawSegaData()
 {
   #ifndef DEBUG
@@ -1477,6 +1518,13 @@ inline void loop_Classic()
   sendRawSegaData();
 }
 
+
+inline void loop_SMS_on_Genesis()
+{
+  currentState = smsOnGenesisController.getState();
+  sendSmsOnGenesisData();
+}
+
 inline void loop_BoosterGrip()
 {
   currentState = boosterGrip.getState();
@@ -1531,7 +1579,6 @@ inline void loop_3DO()
     interrupts();
     sendRawData( 0 , bits );
 }
-
 
 inline void loop_Intellivision()
 {
@@ -1591,6 +1638,8 @@ void loop()
     loop_Jaguar();
 #elif defined MODE_COLECOVISION
     loop_ColecoVision();
+#elif defined MODE_SMS_ON_GENESIS
+    loop_SMS_on_Genesis();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();

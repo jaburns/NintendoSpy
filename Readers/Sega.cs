@@ -44,6 +44,8 @@ namespace RetroSpy.Readers
                     if (string.IsNullOrEmpty(BUTTONS[i])) continue;
                     state.SetButton(BUTTONS[i], packet[i] != 0x00);
                 }
+                state.SetButton("1", packet[5] != 0);
+                state.SetButton("2", packet[6] != 0);
             }
             else if (packet.Length == MOUSE_PACKET_SIZE)
             {
