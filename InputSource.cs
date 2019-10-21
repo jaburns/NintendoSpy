@@ -54,8 +54,8 @@ namespace RetroSpy
         static public readonly InputSource NEOGEOMINI = new InputSource("neogeomini", "SNK NeoGeo Mini", false, false, true, false, hostname => new SSHControllerReader(hostname, "-g", NeoGeoMini.ReadFromPacket));
 
         static public readonly InputSource PLAYSTATION2 = new InputSource("playstation", "Sony Playstation 1/2", true, false, false, false, port => new SerialControllerReader(port, Playstation2.ReadFromPacket));
-        static public readonly InputSource PS3 = new InputSource("playstation3", "Sony PlayStation 3", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -y", SuperNESandNES.ReadFromPacket_PSClassic));
-        static public readonly InputSource PSCLASSIC = new InputSource("psclassic", "Sony PlayStation Classic", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -u", PS3Reader.ReadFromPacket));
+        static public readonly InputSource PS3 = new InputSource("playstation3", "Sony PlayStation 3", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -u", PS3Reader.ReadFromPacket));
+        static public readonly InputSource PSCLASSIC = new InputSource("psclassic", "Sony PlayStation Classic", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -y", SuperNESandNES.ReadFromPacket_PSClassic));
 
         //static public readonly InputSource PLAYSTATION = new InputSource("playstation", "Playstation", true, false, port => new SerialControllerReader(port, Playstation.ReadFromPacket));
         //static public readonly InputSource MOUSETESTER = new InputSource("mousetester", "Mouse Tester", true, false, port => new MouseTester(port));
