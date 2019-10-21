@@ -3,35 +3,35 @@
 
   <background name="Default" image="dualshock4.png" />
 
-  <button name="circle" image="circle2.png" x="826" y="256" width="60" height="60" />
-  <button name="x" image="circle2.png" x="748" y="325" width="60" height="60" />
-  <button name="triangle" image="circle2.png" x="748" y="186" width="60" height="60" />
-  <button name="square" image="circle2.png" x="670" y="256" width="60" height="60" />
+  <button name="circle" image="circle2.png" x="854" y="281" width="65" height="65" />
+  <button name="x" image="circle2.png" x="780" y="357" width="65" height="65" />
+  <button name="triangle" image="circle2.png" x="780" y="207" width="65" height="65" />
+  <button name="square" image="circle2.png" x="705" y="281" width="65" height="65" />
 
-  <button name="l1" image="circle2.png" x="177" y="99" width="110" height="30" />
-  <button name="r1" image="circle2.png" x="715" y="99" width="110" height="30" />
+  <button name="l1" image="circle2.png" x="128" y="159" width="110" height="30" />
+  <button name="r1" image="circle2.png" x="750" y="99" width="110" height="30" />
     
-  <analog name="l_trig" image="l2.png" x="18" y="18"
+  <analog name="l_trig" image="l2.png" x="27" y="30"
           direction="down" reverse="true" />
-  <analog name="r_trig" image="r2.png" x="870" y="18"
+  <analog name="r_trig" image="r2.png" x="854" y="30"
           direction="down" reverse="true" />
 	
-  <button name="start" image="circle2.png" x="564" y="273" width="40" height="30" />
-  <button name="select" image="circle2.png" x="406" y="273" width="40" height="30" />
+  <button name="share" image="circle2.png" x="274" y="186" width="30" height="50" />
+  <button name="options" image="circle2.png" x="688" y="186" width="30" height="50" />
 
-  <button name="ps" image="circle2.png" x="478" y="310" width="55" height="55" />
+  <button name="ps" image="circle2.png" x="471" y="432" width="50" height="50" />
   
-  <button name="up" image="circle2.png" x="215" y="219" width="30" height="30" />
-  <button name="left" image="circle2.png" x="166" y="270" width="30" height="30" />
-  <button name="down" image="circle2.png" x="220" y="327" width="30" height="30" />
-  <button name="right" image="circle2.png" x="275" y="272" width="30" height="30" />
+  <button name="up" image="circle2.png" x="160" y="237" width="40" height="40" />
+  <button name="left" image="circle2.png" x="107" y="292" width="40" height="40" />
+  <button name="down" image="circle2.png" x="160" y="350" width="40" height="40" />
+  <button name="right" image="circle2.png" x="218" y="292" width="40" height="40" />
 	
-  <button name="lstick" image="circle2.png" x="309" y="350" width="150" height="150" />
-  <button name="rstick" image="circle2.png" x="578" y="350" width="150" height="150" />
+  <button name="lstick" image="circle2.png" x="280" y="392" width="150" height="150" />
+  <button name="rstick" image="circle2.png" x="599" y="392" width="150" height="150" />
 	
   <stick xname="lstick_x" yname="lstick_y" image="ps4lstick.png"
-	       x="311" y="362" width="126" height="126" xrange="20" yrange="20" yreverse="true" />
+	       x="285" y="401" width="122" height="119" xrange="20" yrange="20" yreverse="true" />
   <stick xname="rstick_x" yname="rstick_y" image="ps4rstick.png"
-	       x="589" y="362" width="126" height="125" xrange="123" yrange="20" yreverse="true" />
+	       x="605" y="401" width="123" height="122" xrange="20" yrange="20" yreverse="true" />
 
 </skin>

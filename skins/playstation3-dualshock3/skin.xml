@@ -32,6 +32,6 @@
   <stick xname="lstick_x" yname="lstick_y" image="lstick.png"
 	       x="311" y="362" width="126" height="126" xrange="20" yrange="20" yreverse="true" />
   <stick xname="rstick_x" yname="rstick_y" image="rstick.png"
-	       x="589" y="362" width="126" height="125" xrange="123" yrange="20" yreverse="true" />
+	       x="589" y="362" width="126" height="125" xrange="20" yrange="20" yreverse="true" />
 
 </skin>
