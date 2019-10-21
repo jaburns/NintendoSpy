@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="PlayStation DualShock 3" author="zoggins" type="playstation3;playstation4">
+<skin name="PlayStation DualShock 4" author="zoggins" type="playstation4">
 
-  <background name="Default" image="dualshock3.png" />
+  <background name="Default" image="dualshock4.png" />
 
   <button name="circle" image="circle2.png" x="826" y="256" width="60" height="60" />
   <button name="x" image="circle2.png" x="748" y="325" width="60" height="60" />
@@ -29,9 +29,9 @@
   <button name="lstick" image="circle2.png" x="309" y="350" width="150" height="150" />
   <button name="rstick" image="circle2.png" x="578" y="350" width="150" height="150" />
 	
-  <stick xname="lstick_x" yname="lstick_y" image="lstick.png"
+  <stick xname="lstick_x" yname="lstick_y" image="ps4lstick.png"
 	       x="311" y="362" width="126" height="126" xrange="20" yrange="20" yreverse="true" />
-  <stick xname="rstick_x" yname="rstick_y" image="rstick.png"
+  <stick xname="rstick_x" yname="rstick_y" image="ps4rstick.png"
 	       x="589" y="362" width="126" height="125" xrange="123" yrange="20" yreverse="true" />
 
 </skin>
