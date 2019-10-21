@@ -8,16 +8,16 @@ namespace RetroSpy.Readers
 {
     static public class Classic
     {
-        const int PACKET_SIZE = 6;
+        const int PACKET_SIZE = 7;
 
         static readonly string[] BUTTONS = {
-            "up", "down", "left", "right", "1", "2"
+            "up", "down", "left", "right", "1", "2", "3"
         };
 
         static public ControllerState ReadFromPacket(byte[] packet)
         {
-            if (packet.Length < PACKET_SIZE) return null;
-
+             if (packet.Length < PACKET_SIZE) return null;
+            
             var state = new ControllerStateBuilder();
 
             for (int i = 0; i < BUTTONS.Length; ++i)

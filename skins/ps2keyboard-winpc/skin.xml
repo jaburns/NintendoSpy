@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Windows PC PS/2 Keyboard" author="zoggins" type="ps2keyboard">
+
+    <background name="Default" image="ps2keyboard.png" />
+
+    <button name="ESC" image="circle2.png" x="21" y="13" width="40" height="40" />
+
+    <button name="F1" image="circle2.png" x="118" y="13" width="40" height="40" />
+    <button name="F2" image="circle2.png" x="174" y="13" width="40" height="40" />
+    <button name="F3" image="circle2.png" x="226" y="13" width="40" height="40" />
+    <button name="F4" image="circle2.png" x="281" y="13" width="40" height="40" />
+    
+	<button name="F5" image="circle2.png" x="355" y="13" width="40" height="40" />
+    <button name="F6" image="circle2.png" x="410" y="13" width="40" height="40" />
+    <button name="F7" image="circle2.png" x="465" y="13" width="40" height="40" />
+    <button name="F8" image="circle2.png" x="520" y="13" width="40" height="40" />
+	
+    <button name="F9" image="circle2.png" x="591" y="13" width="40" height="40" />
+    <button name="F10" image="circle2.png" x="646" y="13" width="40" height="40" />
+    <button name="F11" image="circle2.png" x="701" y="13" width="40" height="40" />
+    <button name="F12" image="circle2.png" x="756" y="13" width="40" height="40" />
+	
+	<button name="PrtScr" image="circle2.png" x="811" y="13" width="40" height="40" />
+    <button name="ScrollLock" image="circle2.png" x="866" y="13" width="40" height="40" />
+    <button name="PauseBreak" image="circle2.png" x="921" y="13" width="40" height="40" />
+
+	<button name="`" image="circle2.png" x="17" y="76" width="40" height="40" />
+	<button name="1" image="circle2.png" x="70" y="76" width="40" height="40" />
+	<button name="2" image="circle2.png" x="123" y="76" width="40" height="40" />
+	<button name="3" image="circle2.png" x="176" y="76" width="40" height="40" />
+	<button name="4" image="circle2.png" x="229" y="76" width="40" height="40" />
+	<button name="5" image="circle2.png" x="282" y="76" width="40" height="40" />
+	<button name="6" image="circle2.png" x="335" y="76" width="40" height="40" />
+	<button name="7" image="circle2.png" x="388" y="76" width="40" height="40" />
+	<button name="8" image="circle2.png" x="441" y="76" width="40" height="40" />
+	<button name="9" image="circle2.png" x="494" y="76" width="40" height="40" />
+	<button name="0" image="circle2.png" x="547" y="76" width="40" height="40" />
+	<button name="-" image="circle2.png" x="600" y="76" width="40" height="40" />
+	<button name="=" image="circle2.png" x="653" y="76" width="40" height="40" />
+	<button name="\" image="circle2.png" x="706" y="76" width="40" height="40" />
+	<button name="Backspace" image="circle2.png" x="759" y="76" width="40" height="40" />
+
+	<button name="Tab" image="circle2.png" x="20" y="127" width="40" height="40" />
+	<button name="Q" image="circle2.png" x="98" y="127" width="40" height="40" />
+	<button name="W" image="circle2.png" x="150" y="127" width="40" height="40" />
+	<button name="E" image="circle2.png" x="202" y="127" width="40" height="40" />
+	<button name="R" image="circle2.png" x="254" y="127" width="40" height="40" />
+	<button name="T" image="circle2.png" x="306" y="127" width="40" height="40" />
+	<button name="Y" image="circle2.png" x="358" y="127" width="40" height="40" />
+	<button name="U" image="circle2.png" x="410" y="127" width="40" height="40" />
+	<button name="I" image="circle2.png" x="462" y="127" width="40" height="40" />
+	<button name="O" image="circle2.png" x="514" y="127" width="40" height="40" />
+	<button name="P" image="circle2.png" x="566" y="127" width="40" height="40" />
+	<button name="[" image="circle2.png" x="618" y="127" width="40" height="40" />
+	<button name="]" image="circle2.png" x="670" y="127" width="40" height="40" />
+	
+	<button name="CapsLock" image="circle2.png" x="14" y="177" width="40" height="40" />
+	<button name="A" image="circle2.png" x="109" y="177" width="40" height="40" />
+	<button name="S" image="circle2.png" x="161" y="177" width="40" height="40" />
+	<button name="D" image="circle2.png" x="213" y="177" width="40" height="40" />
+	<button name="F" image="circle2.png" x="265" y="177" width="40" height="40" />
+	<button name="G" image="circle2.png" x="317" y="177" width="40" height="40" />
+	<button name="H" image="circle2.png" x="369" y="177" width="40" height="40" />
+	<button name="J" image="circle2.png" x="421" y="177" width="40" height="40" />
+	<button name="K" image="circle2.png" x="473" y="177" width="40" height="40" />
+	<button name="L" image="circle2.png" x="525" y="177" width="40" height="40" />
+	<button name=";" image="circle2.png" x="577" y="177" width="40" height="40" />
+	<button name="'" image="circle2.png" x="629" y="177" width="40" height="40" />
+	<button name="Enter" image="circle2.png" x="720" y="162" width="60" height="60" />
+	
+	<button name="ShiftLeft" image="circle2.png" x="18" y="230" width="40" height="40" />
+	<button name="Z" image="circle2.png" x="135" y="230" width="40" height="40" />
+	<button name="X" image="circle2.png" x="187" y="230" width="40" height="40" />
+	<button name="C" image="circle2.png" x="239" y="230" width="40" height="40" />
+	<button name="V" image="circle2.png" x="291" y="230" width="40" height="40" />
+	<button name="B" image="circle2.png" x="343" y="230" width="40" height="40" />
+	<button name="N" image="circle2.png" x="395" y="230" width="40" height="40" />
+	<button name="M" image="circle2.png" x="447" y="230" width="40" height="40" />
+	<button name="," image="circle2.png" x="499" y="230" width="40" height="40" />
+	<button name="." image="circle2.png" x="551" y="230" width="40" height="40" />
+	<button name="/" image="circle2.png" x="603" y="230" width="40" height="40" />
+	<button name="ShiftRight" image="circle2.png" x="655" y="230" width="40" height="40" />
+	
+	<button name="CtrlLeft" image="circle2.png" x="21" y="280" width="40" height="40" />
+	<button name="WindowsLeft" image="circle2.png" x="99" y="280" width="40" height="40" />
+	<button name="AltLeft" image="circle2.png" x="165" y="280" width="40" height="40" />
+	<button name="Spacebar" image="circle2.png" x="324" y="280" width="40" height="40" />
+	<button name="AltRight" image="circle2.png" x="528" y="280" width="40" height="40" />
+	<button name="WindowsRight" image="circle2.png" x="593" y="280" width="40" height="40" />
+	<button name="Menus" image="circle2.png" x="658" y="280" width="40" height="40" />
+	<button name="CtrlRight" image="circle2.png" x="732" y="280" width="40" height="40" />
+	
+	<button name="Insert" image="circle2.png" x="807" y="76" width="40" height="40" />
+	<button name="Home" image="circle2.png" x="861" y="76" width="40" height="40" />
+	<button name="PageUp" image="circle2.png" x="915" y="76" width="40" height="40" />
+	
+	<button name="Delete" image="circle2.png" x="807" y="127" width="40" height="40" />
+	<button name="End" image="circle2.png" x="861" y="127" width="40" height="40" />
+	<button name="PageDown" image="circle2.png" x="915" y="127" width="40" height="40" />
+	
+	<button name="UpArrow" image="circle2.png" x="861" y="230" width="40" height="40" />
+	
+	<button name="LeftArrow" image="circle2.png" x="807" y="280" width="40" height="40" />
+	<button name="DownArrow" image="circle2.png" x="861" y="280" width="40" height="40" />
+	<button name="RightArrow" image="circle2.png" x="915" y="280" width="40" height="40" />
+	
+	<button name="NumLock" image="circle2.png" x="973" y="76" width="40" height="40" />
+	<button name="Num/" image="circle2.png" x="1026" y="76" width="40" height="40" />
+	<button name="Num*" image="circle2.png" x="1079" y="76" width="40" height="40" />
+	<button name="Num-" image="circle2.png" x="1132" y="76" width="40" height="40" />
+	
+	<button name="Num7" image="circle2.png" x="973" y="127" width="40" height="40" />
+	<button name="Num8" image="circle2.png" x="1026" y="127" width="40" height="40" />
+	<button name="Num9" image="circle2.png" x="1079" y="127" width="40" height="40" />
+	<button name="Num+" image="circle2.png" x="1132" y="127" width="40" height="40" />
+	
+	<button name="Num4" image="circle2.png" x="973" y="177" width="40" height="40" />
+	<button name="Num5" image="circle2.png" x="1026" y="177" width="40" height="40" />
+	<button name="Num6" image="circle2.png" x="1079" y="177" width="40" height="40" />
+
+	<button name="Num1" image="circle2.png" x="973" y="230" width="40" height="40" />
+	<button name="Num2" image="circle2.png" x="1026" y="230" width="40" height="40" />
+	<button name="Num3" image="circle2.png" x="1079" y="230" width="40" height="40" />
+	<button name="NumEnter" image="circle2.png" x="1132" y="230" width="40" height="40" />
+
+	<button name="Num0" image="circle2.png" x="973" y="280" width="40" height="40" />
+	<button name="Num." image="circle2.png" x="1079" y="280" width="40" height="40" /> 	
+	
+	<button name="ChecksumFail"	image="circle2.png" x="1013" y="31" width="10" height="10" /> 
+</skin>
