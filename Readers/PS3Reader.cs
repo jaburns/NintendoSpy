@@ -12,7 +12,7 @@ namespace RetroSpy.Readers
         const int POLISHED_PACKET_SIZE = 40;
 
         static readonly string[] BUTTONS = {
-            "square", "x", "circle", "triangle", "up", "right", "down", "left", "r1", "l1", "r2", "l2", "start", "r3", "l3", "select", null, null, null, null, null, null, null, "ps"
+            "square", "x", "circle", "triangle", "up", "right", "down", "left", "r1", "l1", "r2", "l2", "start", "rstick", "lstick", "select", null, null, null, null, null, null, null, "ps"
         };
 
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="PlayStation DualShock 3 with Analog Buttons" author="zoggins" type="playstation3">
+
+    <background name="Default" image="dualshock3.png" />
+
+    <analog name="analog_circle" image="circle2.png" x="826" y="256" width="60" height="60" direction="fade"/>
+    <analog name="analog_x" image="circle2.png" x="748" y="325" width="60" height="60" direction="fade"/>
+    <analog name="analog_triangle" image="circle2.png" x="748" y="186" width="60" height="60" direction="fade"/>
+    <analog name="analog_square" image="circle2.png" x="670" y="256" width="60" height="60" direction="fade"/>
+
+    <button name="analog_l1" image="circle2.png" x="177" y="99" width="110" height="30" direction="fade"/>
+    <button name="analog_r1" image="circle2.png" x="715" y="99" width="110" height="30" direction="fade"/>
+    
+	  <analog name="l_trig" image="l2.png" x="18" y="18"
+              direction="down" reverse="true" />
+	  <analog name="r_trig" image="r2.png" x="870" y="18"
+              direction="down" reverse="true" />
+	
+    <button name="start" image="circle2.png" x="564" y="273" width="40" height="30" />
+    <button name="select" image="circle2.png" x="406" y="273" width="40" height="30"/>
+
+	  <button name="ps" image="circle2.png" x="478" y="310" width="55" height="55" />
+
+    <analog name="analog_up" image="circle2.png" x="215" y="219" width="30" height="30" direction="fade"/>
+    <analog name="analog_left" image="circle2.png" x="166" y="270" width="30" height="30" direction="fade"/>
+	  <analog name="analog_down" image="circle2.png" x="220" y="327" width="30" height="30" direction="fade"/>
+    <analog name="analog_right" image="circle2.png" x="275" y="272" width="30" height="30" direction="fade"/>
+	
+	  <button name="lstick" image="circle2.png" x="309" y="350" width="150" height="150"/>
+    <button name="rstick" image="circle2.png" x="578" y="350" width="150" height="150"/>
+	
+	  <stick xname="lstick_x" yname="lstick_y" image="lstick.png"
+	     x="311" y="362" width="126" height="126" xrange="20" yrange="20" yreverse="true" />
+	  <stick xname="rstick_x" yname="rstick_y" image="rstick.png"
+	     x="589" y="362" width="126" height="125" xrange="123" yrange="20" yreverse="true" />
+
+</skin>
