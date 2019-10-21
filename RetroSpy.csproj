@@ -110,6 +110,7 @@
     <Compile Include="Keybindings.cs" />
     <Compile Include="Readers\DrivingController.cs" />
     <Compile Include="Readers\MouseTester.cs" />
+    <Compile Include="Readers\PS3Reader.cs" />
     <Compile Include="Readers\SSHControllerReader.cs" />
     <Compile Include="Readers\Xbox360Reader.cs" />
     <Compile Include="Readers\SwitchReader.cs" />
