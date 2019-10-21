@@ -113,6 +113,7 @@
     <Compile Include="Readers\C64mini.cs" />
     <Compile Include="Readers\MouseTester.cs" />
     <Compile Include="Readers\PS2Keyboard.cs" />
+    <Compile Include="Readers\PS4Reader.cs" />
     <Compile Include="Readers\SerialControllerReader2.cs" />
     <Compile Include="Readers\PS3Reader.cs" />
     <Compile Include="Readers\SSHControllerReader.cs" />
