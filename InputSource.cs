@@ -24,17 +24,17 @@ namespace RetroSpy
         static public readonly InputSource INTELLIVISION = new InputSource("intellivision", "Mattel Intellivision", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_Intellivision));
 
         //static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, true, controllerId => new XboxReader(int.Parse(controllerId)));
-        static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, false, true, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -x", XboxReaderV2.ReadFromPacket));
-        static public readonly InputSource XBOX360 = new InputSource("xbox360", "Microsoft Xbox 360", false, false, true, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b", Xbox360Reader.ReadFromPacket));
+        static public readonly InputSource XBOX = new InputSource("xbox", "Microsoft Xbox", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -x", XboxReaderV2.ReadFromPacket));
+        static public readonly InputSource XBOX360 = new InputSource("xbox360", "Microsoft Xbox 360", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b", Xbox360Reader.ReadFromPacket));
 
         static public readonly InputSource TG16 = new InputSource("tg16", "NEC Turbographx 16", true, false, false, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
 
-        static public readonly InputSource NES = new InputSource ("nes", "Nintendo NES", true, false, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_NES));
-        static public readonly InputSource SNES = new InputSource ("snes", "Nintendo SNES", true, false, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_SNES));
-        static public readonly InputSource N64 = new InputSource ("n64", "Nintendo 64", true, false, false, port => new SerialControllerReader (port, Nintendo64.ReadFromPacket));
-        static public readonly InputSource GAMECUBE = new InputSource ("gamecube", "Nintendo GameCube", true, false, false, port => new SerialControllerReader (port, GameCube.ReadFromPacket));
-        static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", true, false, false, port => new SerialControllerReader(port, WiiReaderV2.ReadFromPacket));
-        static public readonly InputSource SWITCH = new InputSource("switch", "Nintendo Switch", false, false, true, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -z", SwitchReader.ReadFromPacket));
+        static public readonly InputSource NES = new InputSource ("nes", "Nintendo NES", true, false, false, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_NES));
+        static public readonly InputSource SNES = new InputSource ("snes", "Nintendo SNES", true, false, false, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_SNES));
+        static public readonly InputSource N64 = new InputSource ("n64", "Nintendo 64", true, false, false, false, port => new SerialControllerReader (port, Nintendo64.ReadFromPacket));
+        static public readonly InputSource GAMECUBE = new InputSource ("gamecube", "Nintendo GameCube", true, false, false, false, port => new SerialControllerReader (port, GameCube.ReadFromPacket));
+        static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", true, false, false, false, port => new SerialControllerReader(port, WiiReaderV2.ReadFromPacket));
+        static public readonly InputSource SWITCH = new InputSource("switch", "Nintendo Switch", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -z", SwitchReader.ReadFromPacket));
 
         static public readonly InputSource THREEDO = new InputSource("3do", "Panasonic 3DO", true, false, false, false, port => new SerialControllerReader(port, ThreeDO.ReadFromPacket));
 
@@ -53,9 +53,9 @@ namespace RetroSpy
         static public readonly InputSource NEOGEO = new InputSource("neogeo", "SNK NeoGeo", true, false, false, false, port => new SerialControllerReader(port, NeoGeo.ReadFromPacket));
         static public readonly InputSource NEOGEOMINI = new InputSource("neogeomini", "SNK NeoGeo Mini", false, false, true, false, hostname => new SSHControllerReader(hostname, "-g", NeoGeoMini.ReadFromPacket));
 
-        static public readonly InputSource PLAYSTATION2 = new InputSource("playstation", "Sony Playstation 1/2", true, false, false, port => new SerialControllerReader(port, Playstation2.ReadFromPacket));
-        static public readonly InputSource PS3 = new InputSource("playstation3", "Sony PlayStation 3", false, false, true, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -y", SuperNESandNES.ReadFromPacket_PSClassic));
-        static public readonly InputSource PSCLASSIC = new InputSource("psclassic", "Sony PlayStation Classic", false, false, true, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -u", PS3Reader.ReadFromPacket));
+        static public readonly InputSource PLAYSTATION2 = new InputSource("playstation", "Sony Playstation 1/2", true, false, false, false, port => new SerialControllerReader(port, Playstation2.ReadFromPacket));
+        static public readonly InputSource PS3 = new InputSource("playstation3", "Sony PlayStation 3", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -y", SuperNESandNES.ReadFromPacket_PSClassic));
+        static public readonly InputSource PSCLASSIC = new InputSource("psclassic", "Sony PlayStation Classic", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -u", PS3Reader.ReadFromPacket));
 
         //static public readonly InputSource PLAYSTATION = new InputSource("playstation", "Playstation", true, false, port => new SerialControllerReader(port, Playstation.ReadFromPacket));
         //static public readonly InputSource MOUSETESTER = new InputSource("mousetester", "Mouse Tester", true, false, port => new MouseTester(port));
