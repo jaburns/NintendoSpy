@@ -8,8 +8,8 @@
     <analog name="analog_triangle" image="circle2.png" x="748" y="186" width="60" height="60" direction="fade"/>
     <analog name="analog_square" image="circle2.png" x="670" y="256" width="60" height="60" direction="fade"/>
 
-    <button name="analog_l1" image="circle2.png" x="177" y="99" width="110" height="30" direction="fade"/>
-    <button name="analog_r1" image="circle2.png" x="715" y="99" width="110" height="30" direction="fade"/>
+    <analog name="analog_l1" image="circle2.png" x="177" y="99" width="110" height="30" direction="fade"/>
+    <analog name="analog_r1" image="circle2.png" x="715" y="99" width="110" height="30" direction="fade"/>
     
 	  <analog name="l_trig" image="l2.png" x="18" y="18"
               direction="down" reverse="true" />
