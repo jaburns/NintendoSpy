@@ -541,8 +541,8 @@ namespace RetroSpy
                 if (newState.Analogs.ContainsKey(skin.XName) && newState.Analogs.ContainsKey(skin.YName))
                 {
                     // Show
-                    var x = (newState.Analogs[skin.XName] * skin.XRange) + skin.Config.X;
-                    var y = (newState.Analogs[skin.YName] * skin.YRange) + skin.Config.Y;
+                    var x = (newState.Analogs[skin.XName] * skin.XRange) + skin.Config.X - (touchpad.Item2.Width/2);
+                    var y = (newState.Analogs[skin.YName] * skin.YRange) + skin.Config.Y - (touchpad.Item2.Height/2);
 
                     if(touchpad.Item2.Dispatcher.CheckAccess())
                     {

@@ -6,7 +6,7 @@ namespace RetroSpy.Readers
     sealed public class TouchPadTester : IControllerReader
     {
         Random rand;
-        const double TIMER_MS = 7;
+        const double TIMER_MS = 1000;
 
         DispatcherTimer _timer;
 

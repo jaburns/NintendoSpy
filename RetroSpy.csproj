@@ -561,6 +561,7 @@
     </Content>
     <Content Include="skins\playstation4-dualshock4\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="skins\ps2keyboard-winpc\circle2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
