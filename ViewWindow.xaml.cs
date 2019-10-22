@@ -107,6 +107,13 @@ namespace RetroSpy
                 stick.Item1.XRange = (uint)(stick.Item1.OriginalXRange * xRatio);
                 stick.Item1.YRange = (uint)(stick.Item1.OriginalYRange * yRatio);
             }
+
+            foreach (var touchpad in _touchPadWithImages)
+            {
+                AdjustImage(touchpad.Item1.Config, touchpad.Item2, xRatio, yRatio);
+                touchpad.Item1.XRange = (uint)(touchpad.Item1.OriginalXRange * xRatio);
+                touchpad.Item1.YRange = (uint)(touchpad.Item1.OriginalYRange * yRatio);
+            }
         }
 
 
@@ -139,6 +146,7 @@ namespace RetroSpy
 
         List<Tuple<Skin.Detail, Image>> _detailsWithImages = new List<Tuple<Skin.Detail, Image>>();
         List <Tuple <Skin.Button,Image>> _buttonsWithImages = new List <Tuple <Skin.Button,Image>> ();
+        List<Tuple<Skin.TouchPad, Image>> _touchPadWithImages = new List<Tuple<Skin.TouchPad, Image>>();
         List <Tuple <Skin.RangeButton,Image>> _rangeButtonsWithImages = new List <Tuple <Skin.RangeButton,Image>> ();
         List <Tuple <Skin.AnalogStick,Image>> _sticksWithImages = new List <Tuple <Skin.AnalogStick,Image>> ();
 
@@ -218,6 +226,8 @@ namespace RetroSpy
             {
                 if (bgIsActive(skinBackground.Name, detail.Config.TargetBackgrounds, detail.Config.IgnoreBackgrounds))
                 {
+                    detail.Config.X = detail.Config.OriginalX;
+                    detail.Config.Y = detail.Config.OriginalY;
                     var image = getImageForElement(detail.Config);
                     _detailsWithImages.Add(new Tuple<Skin.Detail, Image>(detail, image));
                     ControllerGrid.Children.Add(image);
@@ -227,6 +237,8 @@ namespace RetroSpy
             foreach (var trigger in _skin.AnalogTriggers) {
                 if (bgIsActive(skinBackground.Name, trigger.Config.TargetBackgrounds, trigger.Config.IgnoreBackgrounds))
                 {
+                    trigger.Config.X = trigger.Config.OriginalX;
+                    trigger.Config.Y = trigger.Config.OriginalY;
                     var grid = getGridForAnalogTrigger(trigger);
                     _triggersWithGridImages.Add(new Tuple<Skin.AnalogTrigger, Grid>(trigger, grid));
                     ControllerGrid.Children.Add(grid);
@@ -236,6 +248,8 @@ namespace RetroSpy
             foreach (var button in _skin.Buttons) {
                 if (bgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
                 {
+                    button.Config.X = button.Config.OriginalX;
+                    button.Config.Y = button.Config.OriginalY;
                     var image = getImageForElement(button.Config);
                     _buttonsWithImages.Add(new Tuple<Skin.Button, Image>(button, image));
                     image.Visibility = Visibility.Hidden;
@@ -246,6 +260,8 @@ namespace RetroSpy
             foreach (var button in _skin.RangeButtons) {
                 if (bgIsActive(skinBackground.Name, button.Config.TargetBackgrounds, button.Config.IgnoreBackgrounds))
                 {
+                    button.Config.X = button.Config.OriginalX;
+                    button.Config.Y = button.Config.OriginalY;
                     var image = getImageForElement(button.Config);
                     _rangeButtonsWithImages.Add(new Tuple<Skin.RangeButton, Image>(button, image));
                     image.Visibility = Visibility.Hidden;
@@ -256,8 +272,27 @@ namespace RetroSpy
             foreach (var stick in _skin.AnalogSticks) {
                 if (bgIsActive(skinBackground.Name, stick.Config.TargetBackgrounds, stick.Config.IgnoreBackgrounds))
                 {
+                    stick.Config.X = stick.Config.OriginalX;
+                    stick.Config.Y = stick.Config.OriginalY;
+                    stick.XRange = stick.OriginalXRange;
+                    stick.YRange = stick.OriginalYRange;
                     var image = getImageForElement(stick.Config);
                     _sticksWithImages.Add(new Tuple<Skin.AnalogStick, Image>(stick, image));
+                    ControllerGrid.Children.Add(image);
+                }
+            }
+
+            foreach (var touchpad in _skin.TouchPads)
+            {
+                if (bgIsActive(skinBackground.Name, touchpad.Config.TargetBackgrounds, touchpad.Config.IgnoreBackgrounds))
+                {
+                    touchpad.Config.X = touchpad.Config.OriginalX;
+                    touchpad.Config.Y = touchpad.Config.OriginalY;
+                    touchpad.XRange = touchpad.OriginalXRange;
+                    touchpad.YRange = touchpad.OriginalYRange;
+                    var image = getImageForElement(touchpad.Config);
+                    _touchPadWithImages.Add(new Tuple<Skin.TouchPad, Image>(touchpad, image));
+                    image.Visibility = Visibility.Hidden;
                     ControllerGrid.Children.Add(image);
                 }
             }
@@ -496,6 +531,46 @@ namespace RetroSpy
                     {
                         image.Margin = new Thickness(x, y, 0, 0);
                     });
+                }
+            }
+
+            foreach (var touchpad in _touchPadWithImages)
+            {
+                var skin = touchpad.Item1;
+
+                if (newState.Analogs.ContainsKey(skin.XName) && newState.Analogs.ContainsKey(skin.YName))
+                {
+                    // Show
+                    var x = (newState.Analogs[skin.XName] * skin.XRange) + skin.Config.X;
+                    var y = (newState.Analogs[skin.YName] * skin.YRange) + skin.Config.Y;
+
+                    if(touchpad.Item2.Dispatcher.CheckAccess())
+                    {
+                        touchpad.Item2.Margin = new Thickness(x, y, 0, 0);
+                        touchpad.Item2.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        touchpad.Item2.Dispatcher.Invoke(() =>
+                        {
+                            touchpad.Item2.Margin = new Thickness(x, y, 0, 0);
+                            touchpad.Item2.Visibility = Visibility.Visible;
+                        });
+                    }
+                }
+                else
+                {
+                    if (touchpad.Item2.Dispatcher.CheckAccess())
+                    {
+                        touchpad.Item2.Visibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        touchpad.Item2.Dispatcher.Invoke(() =>
+                        {
+                            touchpad.Item2.Visibility = Visibility.Hidden;
+                        });
+                    }
                 }
             }
 

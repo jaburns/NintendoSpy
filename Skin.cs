@@ -63,6 +63,13 @@ namespace RetroSpy
             public bool UseNegative;
         }
 
+        public class TouchPad
+        {
+            public ElementConfig Config;
+            public string XName, YName;
+            public uint XRange, YRange;
+            public uint OriginalXRange, OriginalYRange;
+        }
 
         public string Name { get; private set; }
         public string Author { get; private set; }
@@ -87,6 +94,8 @@ namespace RetroSpy
         List <AnalogTrigger> _analogTriggers = new List <AnalogTrigger> ();
         public IReadOnlyList <AnalogTrigger> AnalogTriggers { get { return _analogTriggers; } }
 
+        List<TouchPad> _touchPads = new List<TouchPad>();
+        public IReadOnlyList<TouchPad> TouchPads { get { return _touchPads; } }
 
         // ----------------------------------------------------------------------------------------------------------------
 
@@ -240,6 +249,20 @@ namespace RetroSpy
                 });
             }
 
+            foreach (var elem in doc.Root.Elements("touchpad"))
+            {
+                _touchPads.Add(new TouchPad
+                {
+                    Config = parseStandardConfig(skinPath, elem),
+                    XName = readStringAttr(elem, "xname"),
+                    YName = readStringAttr(elem, "yname"),
+                    XRange = readUintAttr(elem, "xrange"),
+                    OriginalXRange = readUintAttr(elem, "xrange"),
+                    YRange = readUintAttr(elem, "yrange"),
+                    OriginalYRange = readUintAttr(elem, "yrange"),
+                });
+            }
+
             foreach (var elem in doc.Root.Elements("analog"))
             {
                 var directionAttrs = elem.Attributes("direction");
@@ -266,6 +289,8 @@ namespace RetroSpy
                     UseNegative = readBoolAttr(elem, "usenegative")
                 });
             }
+
+
         }
 
         static string readStringAttr(XElement elem, string attrName, bool required = true)

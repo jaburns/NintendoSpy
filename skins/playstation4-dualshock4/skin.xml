@@ -34,4 +34,11 @@
   <stick xname="rstick_x" yname="rstick_y" image="ps4rstick.png"
 	       x="605" y="401" width="123" height="122" xrange="20" yrange="20" yreverse="true" />
 
+  <!-- no click -->
+  <touchpad xname="touchpad_x1" yname="touchpad_y1" image="circle2.png" height="30" width="30" x="345" y="193" xrange="305" yrange="144" />
+  <touchpad xname="touchpad_x2" yname="touchpad_y2" image="circle2.png" height="30" width="30" x="345" y="193" xrange="305" yrange="144" />
+  <!-- click -->
+  <touchpad xname="touchpad_x3" yname="touchpad_y3" image="circle2.png" height="60" width="60" x="345" y="193" xrange="305" yrange="144" />
+  <touchpad xname="touchpad_x4" yname="touchpad_y4" image="circle2.png" height="60" width="60" x="345" y="193" xrange="305" yrange="144" />
+  
 </skin>

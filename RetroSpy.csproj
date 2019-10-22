@@ -1230,6 +1230,7 @@
     <Content Include="skins\gamecube-custom\GCN_Controllers_PSDs.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Readers\TouchPadTester.cs" />
     <None Include="skins\gamecube-simple\GCN_Controllers\GCN_NintendoSpy_Black_No_Frills.psd" />
   </ItemGroup>
   <ItemGroup>
