@@ -41,6 +41,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
 
 To-Do List (in rough priority order):
  - TurboGrafx-16 Mini (when its released)
+ - NEOGEO Arcade Stick Pro (when its released)
  - NES Power Pad
  - Commodore CDTV
  - Amiga Analog Joysticks
