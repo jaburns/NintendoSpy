@@ -8,8 +8,8 @@
   <button name="triangle" image="circle2.png" x="780" y="207" width="65" height="65" />
   <button name="square" image="circle2.png" x="705" y="281" width="65" height="65" />
 
-  <button name="l1" image="circle2.png" x="128" y="159" width="110" height="30" />
-  <button name="r1" image="circle2.png" x="750" y="99" width="110" height="30" />
+  <button name="l1" image="circle2.png" x="128" y="125" width="110" height="30" />
+  <button name="r1" image="circle2.png" x="750" y="125" width="110" height="30" />
     
   <analog name="l_trig" image="l2.png" x="27" y="30"
           direction="down" reverse="true" />
@@ -26,13 +26,13 @@
   <button name="down" image="circle2.png" x="160" y="350" width="40" height="40" />
   <button name="right" image="circle2.png" x="218" y="292" width="40" height="40" />
 	
-  <button name="lstick" image="circle2.png" x="280" y="392" width="150" height="150" />
-  <button name="rstick" image="circle2.png" x="599" y="392" width="150" height="150" />
+  <button name="lstick" image="circle2.png" x="273" y="388" width="135" height="135" />
+  <button name="rstick" image="circle2.png" x="594" y="390" width="135" height="135" />
 	
   <stick xname="lstick_x" yname="lstick_y" image="ps4lstick.png"
-	       x="285" y="401" width="122" height="119" xrange="20" yrange="20" yreverse="true" />
+	       x="278" y="396" width="122" height="119" xrange="20" yrange="20" yreverse="true" />
   <stick xname="rstick_x" yname="rstick_y" image="ps4rstick.png"
-	       x="605" y="401" width="123" height="122" xrange="20" yrange="20" yreverse="true" />
+	       x="600" y="396" width="123" height="122" xrange="20" yrange="20" yreverse="true" />
 
   <!-- no click -->
   <touchpad xname="touchpad_x1" yname="touchpad_y1" image="circle2.png" height="30" width="30" x="345" y="193" xrange="305" yrange="144" />
