@@ -113,7 +113,9 @@
     <Compile Include="Readers\C64mini.cs" />
     <Compile Include="Readers\MouseTester.cs" />
     <Compile Include="Readers\PS2Keyboard.cs" />
+    <Compile Include="Readers\PS4Reader.cs" />
     <Compile Include="Readers\SerialControllerReader2.cs" />
+    <Compile Include="Readers\PS3Reader.cs" />
     <Compile Include="Readers\SSHControllerReader.cs" />
     <Compile Include="Readers\GenesisMiniReader.cs" />
     <Compile Include="Readers\NeoGeoMini.cs" />
@@ -496,6 +498,70 @@
     </Content>
     <Content Include="skins\neogeo-gamepad\stick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\dualshock3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\L2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\lstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\r2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\rstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3-analog\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\dualshock3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\L2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\lstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\r2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\rstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation3-dualshock3\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\dualshock4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\L2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\ps4lstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\ps4rstick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\r2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\playstation4-dualshock4\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="skins\ps2keyboard-winpc\circle2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1166,6 +1232,7 @@
     <Content Include="skins\gamecube-custom\GCN_Controllers_PSDs.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Readers\TouchPadTester.cs" />
     <None Include="skins\gamecube-simple\GCN_Controllers\GCN_NintendoSpy_Black_No_Frills.psd" />
   </ItemGroup>
   <ItemGroup>

@@ -138,9 +138,10 @@ namespace RetroSpy
             Properties.Settings.Default.StaticViewerWindowName = _vm.StaticViewerWindowName;
             Properties.Settings.Default.Save();
 
-            try {
-                IControllerReader reader; 
-                if(_vm.Sources.SelectedItem == InputSource.PAD || _vm.Sources.SelectedItem == InputSource.PADATOD)
+            try
+            {
+                IControllerReader reader;
+                if (_vm.Sources.SelectedItem == InputSource.PAD || _vm.Sources.SelectedItem == InputSource.PADATOD)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }
@@ -149,9 +150,10 @@ namespace RetroSpy
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }
                 else if (_vm.Sources.SelectedItem == InputSource.XBOX || _vm.Sources.SelectedItem == InputSource.PSCLASSIC ||
-                         _vm.Sources.SelectedItem == InputSource.SWITCH || _vm.Sources.SelectedItem == InputSource.XBOX360 || 
+                         _vm.Sources.SelectedItem == InputSource.SWITCH || _vm.Sources.SelectedItem == InputSource.XBOX360 ||
                          _vm.Sources.SelectedItem == InputSource.GENMINI || _vm.Sources.SelectedItem == InputSource.C64MINI ||
-                         _vm.Sources.SelectedItem == InputSource.NEOGEOMINI)
+                         _vm.Sources.SelectedItem == InputSource.NEOGEOMINI || _vm.Sources.SelectedItem == InputSource.PS3 
+                         || _vm.Sources.SelectedItem == InputSource.PS4)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(txtHostname.Text);
                 }

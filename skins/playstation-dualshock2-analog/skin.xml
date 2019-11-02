@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Playstation DualShock 2 with Analog Buttons" author="zoggins" type="playstation">
+<skin name="Playstation DualShock 2 with Analog Buttons" author="zoggins" type="playstation;playstation3">
 
     <background name="Default" image="playstation2-analog.png" />
 
