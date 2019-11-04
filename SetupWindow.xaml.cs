@@ -73,7 +73,7 @@ namespace RetroSpy
             _xiAndGamepadListUpdateTimer.Interval = TimeSpan.FromSeconds(2);
             _xiAndGamepadListUpdateTimer.Tick += (sender, e) =>
             {
-                if (_vm.Sources.SelectedItem == InputSource.PAD || _vm.Sources.SelectedItem == InputSource.PADATOD)
+                if (_vm.Sources.SelectedItem == InputSource.PAD)
                 {
                     updateGamepadList();
                 }
@@ -159,7 +159,7 @@ namespace RetroSpy
             try
             {
                 IControllerReader reader;
-                if (_vm.Sources.SelectedItem == InputSource.PAD || _vm.Sources.SelectedItem == InputSource.PADATOD)
+                if (_vm.Sources.SelectedItem == InputSource.PAD)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }

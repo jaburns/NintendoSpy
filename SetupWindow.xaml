@@ -8,7 +8,7 @@
 <StackPanel VerticalAlignment="Top">
             <Menu Width="Auto" Height="20">
                 <MenuItem Header="_Options">
-                    <MenuItem x:Name="AddRemove" Header="Add/Remove..." HorizontalAlignment="Left" Width="Auto" Click="AddRemove_Click"/>
+                    <MenuItem x:Name="AddRemove" Header="Add/Remove Sources..." HorizontalAlignment="Left" Width="Auto" Click="AddRemove_Click"/>
         </MenuItem>
         <MenuItem Header="_Help">
             <MenuItem x:Name="About" Header="About" HorizontalAlignment="Left" Width="Auto" Click="About_Click"/>

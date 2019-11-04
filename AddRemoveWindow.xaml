@@ -11,8 +11,8 @@
         <ListBox Name="Excluded" Margin="0,31,10,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"  HorizontalAlignment="Right" Width="250" />
         <Label x:Name="DelayLabel" Content="" HorizontalAlignment="Left" Margin="54,133,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
         <Button x:Name="CancelButton" Content="Cancel" Margin="10,0,334,10" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="CancelButton_Click" />
-        <Button x:Name="Remove" Content="&gt;" Margin="277,117,274,319" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="Remove_Click"/>
-        <Button x:Name="Add" Content="&lt;" Margin="277,189,274,248" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="Add_Click"/>
+        <Button x:Name="Remove" Content="&gt;" Margin="275,117,276,319" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="Remove_Click"/>
+        <Button x:Name="Add" Content="&lt;" Margin="275,256,276,181" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="Add_Click"/>
         <Label Content="Excluded Sources" HorizontalAlignment="Left" Margin="334,1,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"/>
     </Grid>
 </Window>
