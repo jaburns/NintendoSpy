@@ -149,6 +149,9 @@
     <Compile Include="Readers\SuperNESandNES.cs" />
     <Compile Include="Readers\XInputReader.cs" />
     <Compile Include="SendKeys.cs" />
+    <Compile Include="AddRemoveWindow.xaml.cs">
+      <DependentUpon>AddRemoveWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SSHMonitor.cs" />
     <Compile Include="SerialMonitor.cs" />
     <Compile Include="Readers\SignalTool.cs" />
@@ -157,6 +160,10 @@
     <Compile Include="ViewWindow.xaml.cs">
       <DependentUpon>ViewWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddRemoveWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SetupWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

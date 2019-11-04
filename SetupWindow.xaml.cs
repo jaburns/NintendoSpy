@@ -12,6 +12,7 @@ using RetroSpy.Readers;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using System.Reflection;
 
 namespace RetroSpy
 {
@@ -21,12 +22,14 @@ namespace RetroSpy
         DispatcherTimer _portListUpdateTimer;
         DispatcherTimer _xiAndGamepadListUpdateTimer;
         List <Skin> _skins;
+        List<string> _excludedSources;
 
         public SetupWindow ()
         {
             InitializeComponent ();
             _vm = new SetupWindowViewModel ();
             DataContext = _vm;
+            _excludedSources = new List<string>();
 
             if (! Directory.Exists ("skins")) {
                 MessageBox.Show ("Could not find skins folder!", "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -38,8 +41,23 @@ namespace RetroSpy
             _skins = results.SkinsLoaded;
 
             _vm.Skins.UpdateContents (_skins.Where (x => x.Type == InputSource.DEFAULT));
-            
-            _vm.Sources.UpdateContents (InputSource.ALL);
+
+            var hiddenConsoles = Properties.Settings.Default.HiddleConsoleList.Split(';');
+            foreach (var source in hiddenConsoles)
+            {
+                if (source != "")
+                    _excludedSources.Add(source);
+            }
+
+            List<InputSource> prunedSources = new List<InputSource>();
+            foreach(var source in InputSource.ALL)
+            {
+                if(!_excludedSources.Contains(source.Name))
+                {
+                    prunedSources.Add(source);
+                }
+            }
+            _vm.Sources.UpdateContents (prunedSources);
             
 
             _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
@@ -222,6 +240,36 @@ namespace RetroSpy
             {
                 _vm.Backgrounds.SelectId(Properties.Settings.Default.Background);
             }
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(string.Format("RetroSpy Version {0}", Assembly.GetEntryAssembly().GetName().Version), "About",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void AddRemove_Click(object sender, RoutedEventArgs e)
+        {
+            new AddRemoveWindow(InputSource.ALL, _excludedSources).ShowDialog();
+
+            List<InputSource> prunedSources = new List<InputSource>();
+            foreach (var source in InputSource.ALL)
+            {
+                if (!_excludedSources.Contains(source.Name))
+                {
+                    prunedSources.Add(source);
+                }
+            }
+            _vm.Sources.UpdateContents(prunedSources);
+
+            string hiddenConsoleList = "";
+            foreach(var source in _excludedSources)
+            {
+                hiddenConsoleList += source + ";";
+            }
+
+            Properties.Settings.Default.HiddleConsoleList = hiddenConsoleList;
+            Properties.Settings.Default.Save();
         }
     }
 
