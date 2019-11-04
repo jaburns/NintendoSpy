@@ -5,10 +5,10 @@
         Title="RetroSpy" Height="515.015" Width="602" Foreground="White" Background="#FF252526">
 
     <Grid>
-        <ListBox Margin="10,31,334,47" Name="Included" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"/>
+        <ListBox Margin="10,31,334,47" Name="IncludedListBox" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"/>
         <Label Content="Included Sources" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"/>
         <Button x:Name="SaveButton" Content="Save" Margin="334,0,10,10" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="SaveButton_Click" />
-        <ListBox Name="Excluded" Margin="0,31,10,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"  HorizontalAlignment="Right" Width="250" />
+        <ListBox Name="ExcludedListBox" Margin="0,31,10,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"  HorizontalAlignment="Right" Width="250" />
         <Label x:Name="DelayLabel" Content="" HorizontalAlignment="Left" Margin="54,133,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
         <Button x:Name="CancelButton" Content="Cancel" Margin="10,0,334,10" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="CancelButton_Click" />
         <Button x:Name="Remove" Content="&gt;" Margin="275,117,276,319" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="Remove_Click"/>

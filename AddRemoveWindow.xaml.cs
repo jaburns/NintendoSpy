@@ -18,44 +18,44 @@ namespace RetroSpy
 {
     public partial class AddRemoveWindow : Window
     {
-        private List<string> excluded;
+        private List<string> _excludedList;
         IReadOnlyList<InputSource> _allSources;
-        List<string> originalExcludedList;
+        List<string> _originalExcludedList;
 
         public AddRemoveWindow(IReadOnlyList<InputSource> allSources, List<string> excludedList)
         {
-            originalExcludedList = excludedList;
-            excluded = new List<string>(excludedList);
+            _originalExcludedList = excludedList;
+            _excludedList = new List<string>(excludedList);
             _allSources = allSources;
 
             InitializeComponent();
 
-            populateBoxes();
+            PopulateListBoxes();
         }
 
-        private void populateBoxes()
+        private void PopulateListBoxes()
         {
-            Included.Items.Clear();
-            Excluded.Items.Clear();
+            IncludedListBox.Items.Clear();
+            ExcludedListBox.Items.Clear();
             foreach(var source in _allSources)
             {
-                if (excluded.Contains(source.Name))
+                if (_excludedList.Contains(source.Name))
                 {
-                    Excluded.Items.Add(source.Name);
+                    ExcludedListBox.Items.Add(source.Name);
                 }
                 else
                 {
-                    Included.Items.Add(source.Name);
+                    IncludedListBox.Items.Add(source.Name);
                 }
             }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            originalExcludedList.Clear();
-            foreach(var source in excluded)
+            _originalExcludedList.Clear();
+            foreach(var source in _excludedList)
             {
-                originalExcludedList.Add(source);
+                _originalExcludedList.Add(source);
             }
             Close();
         }
@@ -67,38 +67,38 @@ namespace RetroSpy
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            if (Included.SelectedIndex != -1)
+            if (IncludedListBox.SelectedIndex != -1)
             {
-                var selectedIndex = Included.SelectedIndex;
-                var item = Included.SelectedItem;
+                var selectedIndex = IncludedListBox.SelectedIndex;
+                var item = IncludedListBox.SelectedItem;
 
-                if (Included.SelectedIndex == Included.Items.Count - 1 && Included.Items.Count > 1)
+                if (IncludedListBox.SelectedIndex == IncludedListBox.Items.Count - 1 && IncludedListBox.Items.Count > 1)
                     selectedIndex = selectedIndex - 1;
-                else if (Included.Items.Count == 1)
+                else if (IncludedListBox.Items.Count == 1)
                     selectedIndex = -1;
 
-                excluded.Add((string)Included.Items[Included.SelectedIndex]);
+                _excludedList.Add((string)IncludedListBox.Items[IncludedListBox.SelectedIndex]);
 
-                populateBoxes();
-                Included.SelectedIndex = selectedIndex;
+                PopulateListBoxes();
+                IncludedListBox.SelectedIndex = selectedIndex;
             }
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            if (Excluded.SelectedIndex != -1)
+            if (ExcludedListBox.SelectedIndex != -1)
             {
-                var selectedIndex = Excluded.SelectedIndex;
-                var item = Excluded.SelectedItem;
-                if (Excluded.SelectedIndex == Excluded.Items.Count - 1 && Excluded.Items.Count > 1)
+                var selectedIndex = ExcludedListBox.SelectedIndex;
+                var item = ExcludedListBox.SelectedItem;
+                if (ExcludedListBox.SelectedIndex == ExcludedListBox.Items.Count - 1 && ExcludedListBox.Items.Count > 1)
                     selectedIndex = selectedIndex - 1;
-                else if (Excluded.Items.Count == 1)
+                else if (ExcludedListBox.Items.Count == 1)
                     selectedIndex = -1;
 
-                excluded.Remove((string)Excluded.Items[Excluded.SelectedIndex]);
+                _excludedList.Remove((string)ExcludedListBox.Items[ExcludedListBox.SelectedIndex]);
 
-                populateBoxes();
-                Excluded.SelectedIndex = selectedIndex;
+                PopulateListBoxes();
+                ExcludedListBox.SelectedIndex = selectedIndex;
             }
         }
     }

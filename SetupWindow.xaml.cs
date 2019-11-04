@@ -26,21 +26,22 @@ namespace RetroSpy
 
         public SetupWindow ()
         {
-            InitializeComponent ();
-            _vm = new SetupWindowViewModel ();
+            InitializeComponent();
+            _vm = new SetupWindowViewModel();
             DataContext = _vm;
             _excludedSources = new List<string>();
 
-            if (! Directory.Exists ("skins")) {
-                MessageBox.Show ("Could not find skins folder!", "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close ();
+            if (!Directory.Exists("skins"))
+            {
+                MessageBox.Show("Could not find skins folder!", "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
                 return;
             }
 
-            var results = Skin.LoadAllSkinsFromParentFolder ("skins");
+            var results = Skin.LoadAllSkinsFromParentFolder("skins");
             _skins = results.SkinsLoaded;
 
-            _vm.Skins.UpdateContents (_skins.Where (x => x.Type == InputSource.DEFAULT));
+            _vm.Skins.UpdateContents(_skins.Where(x => x.Type == InputSource.DEFAULT));
 
             var hiddenConsoles = Properties.Settings.Default.HiddleConsoleList.Split(';');
             foreach (var source in hiddenConsoles)
@@ -49,25 +50,16 @@ namespace RetroSpy
                     _excludedSources.Add(source);
             }
 
-            List<InputSource> prunedSources = new List<InputSource>();
-            foreach(var source in InputSource.ALL)
-            {
-                if(!_excludedSources.Contains(source.Name))
-                {
-                    prunedSources.Add(source);
-                }
-            }
-            _vm.Sources.UpdateContents (prunedSources);
-            
+            PopulateSources();
 
             _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
 
             _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
 
-            _portListUpdateTimer = new DispatcherTimer ();
-            _portListUpdateTimer.Interval = TimeSpan.FromSeconds (1);
-            _portListUpdateTimer.Tick += (sender, e) => updatePortList ();
-            _portListUpdateTimer.Start ();
+            _portListUpdateTimer = new DispatcherTimer();
+            _portListUpdateTimer.Interval = TimeSpan.FromSeconds(1);
+            _portListUpdateTimer.Tick += (sender, e) => updatePortList();
+            _portListUpdateTimer.Start();
 
             _xiAndGamepadListUpdateTimer = new DispatcherTimer();
             _xiAndGamepadListUpdateTimer.Interval = TimeSpan.FromSeconds(2);
@@ -92,7 +84,7 @@ namespace RetroSpy
             };
             _xiAndGamepadListUpdateTimer.Start();
 
-            updatePortList ();
+            updatePortList();
             _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
             _vm.Ports2.SelectIdFromText(Properties.Settings.Default.Port2);
             _vm.XIAndGamepad.SelectFirst();
@@ -104,6 +96,19 @@ namespace RetroSpy
             {
                 showSkinParseErrors(results.ParseErrors);
             }
+        }
+
+        private void PopulateSources()
+        {
+            List<InputSource> prunedSources = new List<InputSource>();
+            foreach (var source in InputSource.ALL)
+            {
+                if (!_excludedSources.Contains(source.Name))
+                {
+                    prunedSources.Add(source);
+                }
+            }
+            _vm.Sources.UpdateContents(prunedSources);
         }
 
         void showSkinParseErrors (List <string> errs) {
@@ -252,15 +257,7 @@ namespace RetroSpy
         {
             new AddRemoveWindow(InputSource.ALL, _excludedSources).ShowDialog();
 
-            List<InputSource> prunedSources = new List<InputSource>();
-            foreach (var source in InputSource.ALL)
-            {
-                if (!_excludedSources.Contains(source.Name))
-                {
-                    prunedSources.Add(source);
-                }
-            }
-            _vm.Sources.UpdateContents(prunedSources);
+            PopulateSources();
 
             string hiddenConsoleList = "";
             foreach(var source in _excludedSources)
