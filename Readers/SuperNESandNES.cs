@@ -59,6 +59,10 @@ namespace RetroSpy.Readers
             "r1", "l1", "r2", "l2", "square", "x", "circle", "triangle", null, null, "down", "up", "right", "left", "start", "select"
         };
 
+        static readonly string[] BUTTONS_PCFX =
+        {
+            null, "1", "2", "3", "4", "5", "6", "select", "run", "up", "right", "down", "left", "mode1", null, "mode2"
+        };
 
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
         {
@@ -67,6 +71,11 @@ namespace RetroSpy.Readers
 
         static public ControllerState ReadFromPacket_NES (byte[] packet) {
             return readPacketButtons(packet, BUTTONS_NES);
+        }
+
+        static public ControllerState ReadFromPacket_PCFX(byte[] packet)
+        {
+            return readPacketButtons(packet, BUTTONS_PCFX);
         }
 
         static public ControllerState ReadFromPacket_PSClassic(byte[] packet) {
