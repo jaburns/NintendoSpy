@@ -75,6 +75,7 @@ namespace RetroSpy.Readers
 
         static public ControllerState ReadFromPacket_PCFX(byte[] packet)
         {
+            if (packet.Length != BUTTONS_PCFX.Length) return null;
             return readPacketButtons(packet, BUTTONS_PCFX);
         }
 
