@@ -1,7 +1,11 @@
 #include "TimerOne.h"// https://code.google.com/archive/p/arduino-timerone/downloads
-#define NUM_DIFFS 128
+
+#define BUFFER_SIZE 45
 
 #define ADB_PIN 2
+
+//#define DEBUG
+//#define SNIFFER
 
 #define WAITING_FOR_ATTENTION 0
 #define WAITING_FOR_SYNC 1
@@ -9,14 +13,34 @@
 #define WAITING_FOR_CMD_STOP 3
 #define WAITING_FOR_DATA_START 4
 #define WAITING_DATA_START_BIT 5
-#define WAITING_FOR_DATA_BITS 6
-#define WAITING_FOR_DATA_STOP   7
-#define WAITING_FOR_DATA_STOP_TIMEOUT 8
+#define READING_DATA_BITS 6
+#define COULD_BE_DATA_STOP_BIT 7
 
+struct packet
+{
+  byte commandType = 0;
+  byte commandAddress = 0;
+  byte commandRegister = 0;
+  bool commandStop = false;
+  bool HasData = false;
+  bool dataStart = false;
+  byte numBytes = 0;
+  byte data[9];
+  bool dataStop = false;
+  int count  = 0;
+  int syncTiming = 0;
+};
+
+volatile packet* buffer[BUFFER_SIZE];
+uint8_t head, tail;
+volatile packet* currentReadPacket = NULL;
+
+volatile packet* currentWritePacket = NULL;
 volatile unsigned long diff;
-volatile unsigned long diffs[NUM_DIFFS];
 volatile unsigned int count = 0, state = WAITING_FOR_ATTENTION;
 volatile unsigned char command;
+
+byte rawData[16][27];
 
 void setup() {
   pinMode(ADB_PIN, INPUT_PULLUP);
@@ -30,31 +54,15 @@ void setup() {
 
 }
 
-struct packet
-{
-  byte commandType = 0;
-  byte commandAddress = 0;
-  byte commandRegister = 0;
-  bool commandStop = false;
-  bool HasData = false;
-  bool dataStart = false;
-};
-
-#define BUFFER_SIZE 45
-static volatile packet* buffer[BUFFER_SIZE];
-static volatile uint8_t head, tail;
-static volatile packet* currentWritePacket = NULL;
-static volatile packet* currentReadPacket = NULL;
-
 void loop() {
 
   if (state == WAITING_FOR_DATA_START)
   {
     unsigned long _diff = TCNT1 >> 1;
-    if (_diff > 300)
+    if (_diff > 260)
     {
       currentWritePacket->HasData = false;
-      packet* donePacket = currentWritePacket;
+      volatile packet* donePacket = currentWritePacket;
       state = WAITING_FOR_ATTENTION;
       currentWritePacket = NULL;
       uint8_t i = head + 1;
@@ -65,6 +73,23 @@ void loop() {
       }
     }
   }
+  else if (state == COULD_BE_DATA_STOP_BIT)
+  {
+    unsigned long _diff = TCNT1 >> 1;
+    if (_diff > 50)
+    {
+      currentWritePacket->dataStop = true;
+      volatile packet* donePacket = currentWritePacket;
+      state = WAITING_FOR_ATTENTION;
+      currentWritePacket = NULL;
+      uint8_t i = head + 1;
+      if (i >= BUFFER_SIZE) i = 0;
+      if (i != tail) {
+        buffer[i] = donePacket;
+        head = i;
+      }
+    }  
+  }
   
   uint8_t i = tail;
   if (i != head)
@@ -73,17 +98,61 @@ void loop() {
     if (i >= BUFFER_SIZE) i = 0;
     currentReadPacket = buffer[i];
     tail = i;
+
+#ifdef SNIFFER
     Serial.print(currentReadPacket->commandType, HEX);
     Serial.print(" ");
     Serial.print(currentReadPacket->commandAddress, HEX);
     Serial.print(" ");
     Serial.print(currentReadPacket->commandRegister, HEX);
     Serial.print(" ");
-    Serial.print(currentReadPacket->commandStop ? "S" : "N");
+    Serial.print(currentReadPacket->syncTiming);
+    Serial.print(" ");
+    Serial.print(currentReadPacket->commandStop ? "S" : "-");
     Serial.print(" ");
     Serial.print(currentReadPacket->HasData ? "D" : "N");
     Serial.print(" ");
-    Serial.println(currentReadPacket->dataStart ? "S" : "N");
+    Serial.print(currentReadPacket->dataStart ? "S" : "-");
+    Serial.print(" ");
+    Serial.print(currentReadPacket->numBytes, HEX);
+    Serial.print(" ");
+    Serial.print(currentReadPacket->count);
+    Serial.print(" ");
+    for(int j = 0; j < currentReadPacket->numBytes; ++j)
+    {
+      Serial.print(currentReadPacket->data[j], HEX);
+      Serial.print(" ");
+    }
+    Serial.println(currentReadPacket->dataStop ? "S" : "-");
+#else
+    if (currentReadPacket->HasData)
+    {
+      for(int j = 0; j < 3; ++j)
+      {
+        for(int k = 0; k < 8; ++k)
+          rawData[currentReadPacket->commandAddress][(j*8)+k] = (currentReadPacket->data[j] & (1 << k)) != 0;
+
+        rawData[currentReadPacket->commandAddress][24] = (currentReadPacket->data[3] & 0b00000001) != 0;
+        rawData[currentReadPacket->commandAddress][25] = (currentReadPacket->data[3] & 0b00000010) != 0;
+        rawData[currentReadPacket->commandAddress][26] = (currentReadPacket->data[3] & 0b00000100) != 0;
+      }
+    }
+#ifdef DEBUG
+    Serial.print((currentReadPacket->commandAddress & 0x0F) << 4);
+    Serial.print("|");
+    Serial.print(currentReadPacket->commandAddress &0xF0);  
+    Serial.print("|");
+    for(int j = 0; j < 27; ++j)
+      Serial.print(rawData[currentReadPacket->commandAddress][j] == 0 ? "0" : "1");
+    Serial.print("\n");
+#else
+    Serial.write((currentReadPacket->commandAddress & 0x0F) << 4);
+    Serial.write(currentReadPacket->commandAddress &0xF0);  
+    for(int j = 0; j < 27; ++j)
+      Serial.write(rawData[currentReadPacket->commandAddress][j] == 0 ? 0 : 1);
+    Serial.write("\n");
+#endif
+#endif      
     delete currentReadPacket;
   }
 }
@@ -99,15 +168,15 @@ void adbStateChanged()
       state = WAITING_FOR_SYNC;
     }
   } else if (state == WAITING_FOR_SYNC) {
-    if (diff < 75 && diff > 55) {
+    //if (diff < 75 && diff > 55) { // The Sync pulse in practice appears to be shorter than expected
+      currentWritePacket->syncTiming = diff;
       state = READING_COMMAND_BITS;
       count = 0;
       command = 0;
-    } else {
-      state = WAITING_FOR_ATTENTION;
-    }
+    //} else {
+    //  state = WAITING_FOR_ATTENTION;
+    //}
   } else if (state == READING_COMMAND_BITS) {
-    diffs[count] = diff;
     if (count % 2 == 0 && (count / 2) < 8) {
       if (diff < 50) {
         command |= (1 << (7 - (count / 2)));
@@ -139,17 +208,37 @@ void adbStateChanged()
   {
     if (diff > 25 && diff < 45) {
       currentWritePacket->dataStart = true;
-      state = WAITING_FOR_DATA_STOP;
     }
-    uint8_t i = head + 1;
-    if (i >= BUFFER_SIZE) i = 0;
-    if (i != tail) {
-      buffer[i] = currentWritePacket;
-      head = i;
-      currentWritePacket = NULL;
-    }
-    state = WAITING_FOR_ATTENTION;
+    else
+      state = WAITING_FOR_ATTENTION;
+      count = -1;
+      currentWritePacket->data[currentWritePacket->numBytes] = 0;
+      state = READING_DATA_BITS;
   }
-  
+  else if (state == READING_DATA_BITS || state == COULD_BE_DATA_STOP_BIT)
+  {
+    state = READING_DATA_BITS;
+      
+    if (count % 2 == 0 && (count / 2) < 8) 
+    {
+      if (diff < 50) // Is a 1, so can't be stop bit
+      {
+        currentWritePacket->data[currentWritePacket->numBytes] |= (1 << (7 - (count / 2)));
+        state = READING_DATA_BITS;
+      }
+      else if (count == 0) // Is a 0 and the first bit after a full byte
+      {
+        state = COULD_BE_DATA_STOP_BIT;
+      } 
+    }
+    
+    count++;
+    if (count >= 16) {
+      currentWritePacket->numBytes++;
+      currentWritePacket->count += count;
+      count = 0;
+      currentWritePacket->data[currentWritePacket->numBytes] = 0;
+    }
+  }
   TCNT1 = 0;
 }
