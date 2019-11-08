@@ -8,7 +8,7 @@ namespace RetroSpy.Readers
 {
     class Pippin
     {
-        const int PACKET_SIZE = 29;
+        const int PACKET_SIZE = 30;
         const int POLISHED_PACKET_SIZE = 16;
 
         static readonly string[] BUTTONS = {
@@ -30,20 +30,20 @@ namespace RetroSpy.Readers
             byte[] polishedPacket = new byte[POLISHED_PACKET_SIZE];
 
             polishedPacket[0] = (byte)((packet[0] >> 4) | packet[1]);
-            polishedPacket[1] = (byte)(packet[7] == 0 ? 0 : 1);
-            polishedPacket[2] = (byte)(packet[15] == 0 ? 0 : 1);
+            polishedPacket[1] = (byte)(packet[9] == 0 ? 0 : 1);
+            polishedPacket[2] = (byte)(packet[17] == 0 ? 0 : 1);
 
-            for (int i = 16; i < 28; ++i)
-                polishedPacket[i - 13] = (byte)(packet[i] == 0 ? 0 : 1);
+            for (int i = 18; i < 29; ++i)
+                polishedPacket[i - 15] = (byte)(packet[i] == 0 ? 0 : 1);
 
             for (byte i = 0; i < 7; ++i)
             {
-                polishedPacket[14] |= (byte)((packet[i] == 0 ? 0 : 1) << i);
+                polishedPacket[14] |= (byte)((packet[i+2] == 0 ? 0 : 1) << i);
             }
 
             for (byte i = 0; i < 7; ++i)
             {
-                polishedPacket[15] |= (byte)((packet[i + 8] == 0 ? 0 : 1) << i);
+                polishedPacket[15] |= (byte)((packet[i + 10] == 0 ? 0 : 1) << i);
             }
 
             var state = new ControllerStateBuilder();
@@ -54,8 +54,14 @@ namespace RetroSpy.Readers
                 state.SetButton(BUTTONS[i], polishedPacket[i] == 0x00);
             }
 
-            float x = readMouse(polishedPacket[14]);
-            float y = readMouse(polishedPacket[15]);
+
+            float x = 0; 
+            float y = 0;
+            if (packet[29] == 1)
+            {
+                y = readMouse(polishedPacket[14]);
+                x = readMouse(polishedPacket[15]);
+            }
             SignalTool.SetMouseProperties(x, y, state);
 
             return state.Build();

@@ -150,6 +150,7 @@ void loop() {
     Serial.write(currentReadPacket->commandAddress &0xF0);  
     for(int j = 0; j < 27; ++j)
       Serial.write(rawData[currentReadPacket->commandAddress][j] == 0 ? 0 : 1);
+    Serial.write(currentReadPacket->HasData == 1);
     Serial.write("\n");
 #endif
 #endif      
