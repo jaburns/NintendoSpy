@@ -125,7 +125,7 @@ void loop() {
     }
     Serial.println(currentReadPacket->dataStop ? "S" : "-");
 #else
-    if (currentReadPacket->HasData)
+    if (currentReadPacket->HasData && currentReadPacket->numBytes == 4)  // Is a controller, at least likely to be a controller
     {
       for(int j = 0; j < 3; ++j)
       {
