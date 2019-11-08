@@ -57,7 +57,7 @@ namespace RetroSpy.Readers
 
             float x = 0; 
             float y = 0;
-            if (packet[29] == 1)
+            if (packet[29] == 1) // This is the "Has Data" bit.  Reset the mouse on cached results.
             {
                 y = readMouse(polishedPacket[14]);
                 x = readMouse(polishedPacket[15]);
