@@ -23,6 +23,7 @@
 //#define MODE_3DO
 //#define MODE_INTELLIVISION
 //#define MODE_JAGUAR
+//#define MODE_FMTOWNS
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -1142,6 +1143,36 @@ inline void sendNeoGeoData()
     #endif
 }
 
+inline void read_FMTowns()
+{
+  rawData[0] = PIN_READ(2);
+  rawData[1] = PIN_READ(3);
+  rawData[2] = PIN_READ(4);
+  rawData[3] = PIN_READ(5);
+  rawData[4] = PIN_READ(6);
+  rawData[5] = PIN_READ(7);
+  rawData[6] = PINB_READ(0);
+  rawData[7] = PINB_READ(1);
+  rawData[8] = PINB_READ(2);
+}
+
+inline void sendFMTowns()
+{
+    #ifndef DEBUG
+    for (unsigned char i = 0; i < 9; ++i)
+    {
+      Serial.write( rawData[i] ? ZERO : ONE );
+    }
+    Serial.write( SPLIT );
+    #else
+    for(int i = 0; i < 9; ++i)
+    {
+      Serial.print(rawData[i] ? "0" : "1");
+    }
+    Serial.print("\n");
+    #endif
+}
+
 //PORT D PINS
 #define INTPIN1 2  // Digital Pin 2
 #define INTPIN2 3  // Digital Pin 3
@@ -1572,6 +1603,15 @@ inline void loop_NeoGeo()
   sendNeoGeoData();
 }
 
+inline void loop_FMTowns()
+{
+  noInterrupts();
+  read_FMTowns();
+ interrupts();
+  sendFMTowns();
+}
+
+
 inline void loop_3DO()
 {
     noInterrupts();
@@ -1640,6 +1680,8 @@ void loop()
     loop_ColecoVision();
 #elif defined MODE_SMS_ON_GENESIS
     loop_SMS_on_Genesis();
+#elif defined MODE_FMTOWNS
+	loop_FMTowns();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
