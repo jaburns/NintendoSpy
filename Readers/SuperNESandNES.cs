@@ -59,6 +59,10 @@ namespace RetroSpy.Readers
             "r1", "l1", "r2", "l2", "square", "x", "circle", "triangle", null, null, "down", "up", "right", "left", "start", "select"
         };
 
+        static readonly string[] BUTTONS_FMTOWNS =
+        {
+            "up", "down", "left", "right", null, "a", "b", null, null, "select", "run"
+        };
 
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
         {
@@ -171,6 +175,31 @@ namespace RetroSpy.Readers
 
             return state.Build();
 
+        }
+        static public ControllerState ReadFromPacket_FMTowns(byte[] packet)
+        {
+            if (packet.Length != 9) return null;
+
+            byte[] polishedPacket = new byte[BUTTONS_FMTOWNS.Length];
+
+            if (packet[0] == 1 && packet[1] == 1)
+            {
+                packet[0] = packet[1] = 0;
+                polishedPacket[9] = 1;
+            }
+
+            if (packet[2] == 1 && packet[3] == 1)
+            {
+                packet[2] = packet[3] = 0;
+                polishedPacket[10] = 1;
+            }
+
+            for(int i = 0; i < packet.Length; ++i)
+            {
+                polishedPacket[i] = packet[i];
+            }
+
+            return readPacketButtons_ascii(polishedPacket, BUTTONS_FMTOWNS);
         }
 
     }
