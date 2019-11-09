@@ -3,8 +3,8 @@
 
   <background name="Default" image="marty.png" />
 
-  <button name="b" image="circle2.png" x="458" y="110" width="60" height="60" />
-  <button name="a" image="circle2.png" x="402" y="162" width="60" height="60" />
+  <button name="a" image="circle2.png" x="458" y="110" width="60" height="60" />
+  <button name="b" image="circle2.png" x="402" y="162" width="60" height="60" />
  
   <button name="up" image="circle2.png" x="122" y="87" width="25" height="25" />
   <button name="right" image="circle2.png" x="169" y="130" width="25" height="25" />

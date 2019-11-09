@@ -182,13 +182,13 @@ namespace RetroSpy.Readers
 
             byte[] polishedPacket = new byte[BUTTONS_FMTOWNS.Length];
 
-            if (packet[0] == 1 && packet[1] == 1)
+            if (packet[0] != 0 && packet[1] != 0)
             {
                 packet[0] = packet[1] = 0;
                 polishedPacket[9] = 1;
             }
 
-            if (packet[2] == 1 && packet[3] == 1)
+            if (packet[2] != 0 && packet[3] != 0)
             {
                 packet[2] = packet[3] = 0;
                 polishedPacket[10] = 1;
@@ -199,7 +199,7 @@ namespace RetroSpy.Readers
                 polishedPacket[i] = packet[i];
             }
 
-            return readPacketButtons_ascii(polishedPacket, BUTTONS_FMTOWNS);
+            return readPacketButtons(polishedPacket, BUTTONS_FMTOWNS);
         }
 
     }
