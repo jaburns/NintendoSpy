@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="FM Towns Marty Controller" author="chmaller" type="fmtowns">
+
+  <background name="Default" image="marty.png" />
+
+  <button name="b" image="circle2.png" x="458" y="110" width="60" height="60" />
+  <button name="b" image="circle2.png" x="402" y="162" width="60" height="60" />
+ 
+  <button name="up" image="circle2.png" x="122" y="87" width="25" height="25" />
+  <button name="right" image="circle2.png" x="169" y="130" width="25" height="25" />
+  <button name="down" image="circle2.png" x="122" y="175" width="25" height="25" />
+  <button name="left" image="circle2.png" x="84" y="130" width="25" height="25" />
+  
+  <button name="select" image="circle2.png" x="220" y="241" width="70" height="25" />
+  <button name="run" image="circle2.png" x="307" y="241" width="70" height="25" />
+  
+  <button name="c" image="circle2.png" x="416" y="33" width="60" height="60" />
+</skin>
