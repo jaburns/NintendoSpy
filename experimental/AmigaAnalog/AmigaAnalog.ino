@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// RetroSpy Atari Paddles Firmware for Arduino
+// RetroSpy Amiga Analog Controllers Firmware for Arduino
 // v1.0
 // RetroSpy written by zoggins
 
@@ -21,15 +21,16 @@ int nominal_max = 1004;
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
 
-// PINOUTS for Right Paddle
-// Atari Pin 4 -> Digital Pin 5
-// Atari Pin 5 -> Analog Pin 0
-// Atari Pin 8 -> Arduino GND
-
-// PINOUTS for Left Paddle
-// Atari Pin 3 -> Digital Pin 5
-// Atari Pin 8 -> Arduino GND
-// Atari Pin 9 -> Analog Pin 0
+// PINOUTS 
+// Amiga Pin 1 -> Digital Pin 2 on Arduino 1
+// Amiga Pin 2 -> Digital Pin 3 on Arduino 1
+// Amiga Pin 3 -> Digital Pin 4 on Arduino 1
+// Atari Pin 4 -> Digital Pin 5 on Arduino 1
+// Atari Pin 5 -> Analog Pin 0 on Arduino 1
+// Atari Pin 6 -> Not Connected
+// Atari Pin 7 -> Not Connected
+// Atari Pin 8 -> GND on Arduino 1 -> GND on Arduino 2
+// Atari Pin 9 -> Analog Pin 0 on Arduino 2
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 
@@ -163,35 +164,34 @@ void loop() {
 
   if (readFlag == 1)
   {
-
 	byte pins = 0;
 	pins |= (PIND >> 2);
       
-	byte fire2 = ((pins & 0b0000000000001000) == 0);
-  window[windowPosition] = currentVal;
-  windowPosition += 1;
-  windowPosition = (windowPosition % 3);
+	byte topButton1 		= ((pins & 0b00000001) == 0);
+	byte topButton2 		= ((pins & 0b00000010) == 0);
+	byte triggerButton 		= ((pins & 0b00000100) == 0);
+	byte thumbButton 		= ((pins & 0b00001000) == 0);
+	window[windowPosition] = currentVal;
+	windowPosition += 1;
+	windowPosition = (windowPosition % 3);
 #ifdef DEBUG
-    Serial.print("-");
-    Serial.print(fire2 ? "4" : "-");
+    Serial.print(topButton1 ? "1" : "-");
+	Serial.print(topButton2 ? "2" : "-");
+	Serial.print(triggerButton ? "3" : "-");
+	Serial.print(thumbButton ? "4" : "-");
     Serial.print("|");
     Serial.print(ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255));
-    Serial.print("|");
-    Serial.print(0);
-    Serial.print("|");
-    Serial.print(0);
     Serial.print("\n");
 #else
     int sil = ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255);
-    Serial.write(0);
-    Serial.write(fire2);
+    Serial.write(topButton1);
+    Serial.write(topButton2);
+	Serial.write(triggerButton);
+	Serial.write(thumbButton);
     Serial.write(sil);
-    Serial.write(0);
-    Serial.write(5);
-    Serial.write(11);
-    Serial.write('\n');
+	Serial.print("\n");
 #endif
 	readFlag = 0;
-  delay(5);
-}
+	delay(5);
+  }
 }
