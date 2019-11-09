@@ -18,9 +18,9 @@ namespace RetroSpy.Readers
         static float readMouse(byte data)
         {
             if (data >= 64)
-                return (-1.0f * (127 - data)) / 63.0f;
+                return (-1.0f * (128 - data)) / 64.0f;
             else
-                return data / 63.0f;
+                return data / 64.0f;
         }
 
         static public ControllerState ReadFromPacket(byte[] packet)
