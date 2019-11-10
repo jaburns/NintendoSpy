@@ -3,20 +3,22 @@
 // v1.0
 // RetroSpy written by zoggins
 
+#define Y_AXIS
+//#define X_AXIS
+
 // --- These numbers will likely need modified ---
 
-// **nominal_min** is the minimum value the paddle is capable of hitting.  
-// If the display is never hitting all the way left the value needs to be increased.  
-// If its hitting left too soon it needs to be decreased.  
-// The minimum value that can be selected is 0 and the maximum value should be less than **nominal_max**. 
+// **nominal_min** is the minimum value the joystick is capable of hitting.  
+// **nominal_max** is the maximum value the joystick is capable of hitting.  
 
-// **nominal_max** is the maximum value the paddle is capable of hitting.  
-// If the display is never hitting all the way right the value needs to be decreased.  
-// If its hitting right too soon it needs to be increased.  
-// The maximum value that can be selected is 1023 and the minimum value should be more than **nominal_min**. 
-
-int nominal_min = 213;
-int nominal_max = 1004;
+#ifdef Y_AXIS
+int nominal_min = 4;
+int nominal_max = 175;
+#endif
+#ifdef X_AXIS
+int nominal_min = 4;
+int nominal_max = 159;
+#endif
 
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
@@ -35,9 +37,11 @@ int nominal_max = 1004;
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 
 volatile int lastVal = 0;
-volatile int currentVal = 0;
 volatile int analogVal = 0;
-volatile int readFlag;
+volatile int readFlag = 0;
+volatile int Count = 0;
+volatile int CapturedCount = 0;
+volatile bool CrossedThreshold = false;
 
 int window[3];
 int windowPosition = 0;
@@ -59,14 +63,22 @@ ISR(ADC_vect)
   // Must read low first
   analogVal = ADCL | (ADCH << 8);
 
-  if (analogVal < lastVal && (lastVal - analogVal) > 20)
+  if (CrossedThreshold && analogVal > 925)
   {
-    currentVal = lastVal;
-    lastVal = analogVal;
+    CrossedThreshold = false; 
+    CapturedCount = Count;
     readFlag = 1;
   }
-  else
+  
+  if (analogVal < lastVal && (lastVal - analogVal) > 20)
   {
+    CrossedThreshold = true;
+    lastVal = analogVal;
+    Count = 0;
+  }
+  else
+  { 
+    Count++;
     lastVal = analogVal;
   }
  
@@ -164,34 +176,39 @@ void loop() {
 
   if (readFlag == 1)
   {
-	byte pins = 0;
-	pins |= (PIND >> 2);
-      
-	byte topButton1 		= ((pins & 0b00000001) == 0);
-	byte topButton2 		= ((pins & 0b00000010) == 0);
-	byte triggerButton 		= ((pins & 0b00000100) == 0);
-	byte thumbButton 		= ((pins & 0b00001000) == 0);
-	window[windowPosition] = currentVal;
-	windowPosition += 1;
-	windowPosition = (windowPosition % 3);
+  	byte pins = 0;
+  	pins |= (PIND >> 2);
+        
+  	byte topButton1 		= ((pins & 0b00000001) == 0);
+  	byte topButton2 		= ((pins & 0b00000010) == 0);
+  	byte triggerButton  = ((pins & 0b00000100) == 0);
+  	byte thumbButton 		= ((pins & 0b00001000) == 0);
+  	window[windowPosition] = CapturedCount;
+  	windowPosition += 1;
+  	windowPosition = (windowPosition % 3);
 #ifdef DEBUG
-    Serial.print(topButton1 ? "1" : "-");
-	Serial.print(topButton2 ? "2" : "-");
-	Serial.print(triggerButton ? "3" : "-");
-	Serial.print(thumbButton ? "4" : "-");
-    Serial.print("|");
-    Serial.print(ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255));
-    Serial.print("\n");
+      Serial.print(CapturedCount);
+      Serial.print("|");
+      Serial.print(middleOfThree(window[0], window[1], window[2]));
+      Serial.print("|");
+      Serial.print(topButton1 ? "1" : "-");
+  	  Serial.print(topButton2 ? "2" : "-");
+  	  Serial.print(triggerButton ? "3" : "-");
+  	  Serial.print(thumbButton ? "4" : "-");
+      Serial.print("|");
+      Serial.print(ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 30));
+      Serial.print("\n");
 #else
-    int sil = ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255);
-    Serial.write(topButton1);
-    Serial.write(topButton2);
-	Serial.write(triggerButton);
-	Serial.write(thumbButton);
-    Serial.write(sil);
-	Serial.print("\n");
+      int sil = ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 30);
+      Serial.write(topButton1 ? 1 : 0);
+      Serial.write(topButton2 ? 1 : 0);
+  	  Serial.write(triggerButton ? 1 : 0);
+  	  Serial.write(thumbButton ? 1 : 0);
+      Serial.write(((sil & 0x0F) << 4));
+      Serial.write((sil & 0xF0));
+  	  Serial.print("\n");
 #endif
-	readFlag = 0;
-	delay(5);
+  	readFlag = 0;
+  	//delay(5);
   }
 }
