@@ -10,18 +10,20 @@
 //#define DEBUG
 
 // PINOUTS
-// Atari Pin 1  -> Digital Pin 2
-// Atari Pin 2  -> Digital Pin 3
-// Atari Pin 3  -> Digital Pin 4
-// Atari Pin 4  -> Digital Pin 5
-// Atari Pin 13  -> Digital Pin 6
-// Atari Pin 14  -> Digital Pin 7
-// Atari Pin 5  -> Digital Pin 8
-// Atari Pin 6  -> Digital Pin 9
-// Atari Pin 7  -> Digital Pin 10
-// Atari Pin 8  -> Digital Pin 11
-// Atari Pin 10 -> Analog Pin 0
-// Atari Pin 15 -> Arduino GND
+// Atari Pin 1  -> Digital Pin 2 on Arduino 1
+// Atari Pin 2  -> Digital Pin 3 on Arduino 1
+// Atari Pin 3  -> Digital Pin 4 on Arduino 1
+// Atari Pin 4  -> Digital Pin 5 on Arduino 1
+// Atari Pin 13  -> Digital Pin 6 on Arduino 1
+// Atari Pin 14  -> Digital Pin 7 on Arduino 1
+// Atari Pin 5  -> Digital Pin 8 on Arduino 1
+// Atari Pin 6  -> Digital Pin 9 on Arduino 1
+// Atari Pin 7  -> Digital Pin 10 on Arduino 1
+// Atari Pin 8  -> Digital Pin 11 on Arduino 1
+// Atari Pin 10 -> Analog Pin 0 on Arduino 1
+// Atari Pin 11 -> Analog Pin 0 on Arduino 2
+// Atari Pin 15 -> Arduino GND on Arduino 1 -> Arduino GND on Arduino 2
+// Pin 12 on Arduino 1 -> Pin 12 on on Arduino 2
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINB_READ( pin )  (PINB&(1<<(pin)))
@@ -44,6 +46,7 @@ int nominal_max = 0;
 int window[3];
 int windowPosition = 0;
 bool filledWindow = false;
+bool lockedCalibration = false;
 
 static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
 {
@@ -66,10 +69,10 @@ ISR(ADC_vect)
 
   if ((analogVal < lastVal && (lastVal - analogVal) > 100 && count > 25) || count > 200)
   {
-    currentVal = lastVal;
-    lastVal = analogVal;
-    readFlag = 1;
-    count = 0;
+      currentVal = lastVal;
+      lastVal = analogVal;
+      readFlag = 1;
+      count = 0;
   }
   else
   {
@@ -83,9 +86,16 @@ ISR(ADC_vect)
 }
 
 void setup() {
-  
+
   for (int i = 2; i <= 11; ++i)
     pinMode(i, INPUT_PULLUP);
+
+#ifndef YAXIS
+  pinMode(12, OUTPUT);
+#else
+  pinMode(12, INPUT);
+  lockedCalibration = (digitalRead(12) == HIGH);
+#endif
 
   windowPosition = 0;
 
@@ -139,6 +149,8 @@ void setup() {
   ADCSRA |=B01000000;
 
   Serial.begin( 115200 );
+
+  delay(5000);
 }
 
 // Function to find the middle of three numbers 
@@ -181,6 +193,7 @@ void loop() {
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+                  MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   );
     rawData[0] = PINB_READ(0);
     rawData[1] = PINB_READ(1);
@@ -188,6 +201,7 @@ void loop() {
 
     WAIT_FALLING_EDGE(4);
      asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+                  MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
@@ -206,6 +220,7 @@ void loop() {
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+                  MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   );
     rawData[7] = PINB_READ(0);
     rawData[8] = PINB_READ(1);
@@ -214,6 +229,7 @@ void loop() {
   
     WAIT_FALLING_EDGE(2);
     asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
+                  MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
@@ -228,19 +244,53 @@ void loop() {
     rawData[15] = PIN_READ(6);
     rawData[16] = PIN_READ(7);
 #endif
-  
-    window[windowPosition] = currentVal;
-    windowPosition += 1;
-    windowPosition = (windowPosition % 3);
-    if (!filledWindow && windowPosition == 2)
-      filledWindow = true;
+    int smoothedValue;
+    if (currentVal > nominal_min/2)
+    {
+      window[windowPosition] = currentVal;
+    
+      windowPosition += 1;
+      windowPosition = (windowPosition % 3);
+      if (!filledWindow && windowPosition == 2)
+        filledWindow = true;
+      smoothedValue = middleOfThree(window[0], window[1], window[2]);
 
-    int smoothedValue = middleOfThree(window[0], window[1], window[2]);
-    if (filledWindow && smoothedValue < nominal_min)
-      nominal_min = smoothedValue;
-    if (filledWindow && smoothedValue > nominal_max)
-      nominal_max = smoothedValue;
-      
+      if (!lockedCalibration)
+      {
+        smoothedValue = middleOfThree(window[0], window[1], window[2]);
+        if (filledWindow && smoothedValue < nominal_min)
+          nominal_min = smoothedValue;
+        if (filledWindow && smoothedValue > nominal_max)
+          nominal_max = smoothedValue;
+
+#ifndef YAXIS      
+        lockedCalibration = (rawData[16] == 0);
+        if (lockedCalibration)
+          digitalWrite(12, HIGH);
+#else
+        lockedCalibration = (digitalRead(12) == HIGH);
+#endif
+      }
+      else
+      {
+#ifndef YAXIS
+        if (rawData[14] == 0 && rawData[6] == 0)
+        {
+          digitalWrite(12, LOW);
+          lockedCalibration = false;
+          nominal_min = 1023;
+          nominal_max = 0;
+        }
+#else
+        if (digitalRead(12) == LOW)
+        {
+          lockedCalibration = false;
+          nominal_min = 1023;
+          nominal_max = 0;         
+        }
+#endif
+      }
+    }
 #ifdef DEBUG  
     Serial.print((rawData[2] == 0) ? "s" : "-");
     Serial.print((rawData[1] == 0) ? "p" : "-");
@@ -269,6 +319,8 @@ void loop() {
     Serial.print(nominal_min);
     Serial.print("|");
     Serial.print(nominal_max);
+    Serial.print("|");
+    Serial.print(lockedCalibration);
     Serial.print("\n");
 #else
     int sil = ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 255);
