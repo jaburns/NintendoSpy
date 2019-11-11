@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Atari 5200 Joystick" author="zoggins" type="atari5200">
+
+    <background name="Default" image="5200.png" />
+
+    <button name="start" image="circle2.png" x="36" y="37" width="40" height="20" />
+    <button name="pause" image="circle2.png" x="84" y="37" width="40" height="20" />
+    <button name="reset" image="circle2.png" x="138" y="37" width="40" height="20" />
+	
+	<button name="trigger" image="circle2.png" x="7" y="34" width="20" height="20" />
+	<button name="trigger" image="circle2.png" x="190" y="34" width="20" height="20" />
+	
+	<button name="fire" image="circle2.png" x="7" y="60" width="20" height="20" />
+	<button name="fire" image="circle2.png" x="190" y="60" width="20" height="20" />
+	
+	<button name="1" image="circle2.png" x="50" y="283" width="30" height="25" />
+	<button name="2" image="circle2.png" x="90" y="283" width="30" height="25" />
+	<button name="3" image="circle2.png" x="130" y="283" width="30" height="25" />
+
+	<button name="4" image="circle2.png" x="50" y="324" width="30" height="25" />
+	<button name="5" image="circle2.png" x="90" y="324" width="30" height="25" />
+	<button name="6" image="circle2.png" x="130" y="324" width="30" height="25" />
+	
+	<button name="7" image="circle2.png" x="50" y="365" width="30" height="25" />
+	<button name="8" image="circle2.png" x="90" y="365" width="30" height="25" />
+	<button name="9" image="circle2.png" x="130" y="365" width="30" height="25" />
+	
+	<button name="7" image="circle2.png" x="50" y="403" width="30" height="25" />
+	<button name="8" image="circle2.png" x="90" y="403" width="30" height="25" />
+	<button name="9" image="circle2.png" x="130" y="403" width="30" height="25" />
+	
+	<stick xname="x" yname="y" image="5200joystick.png"
+	   x="67" y="108" width="80" height="80" xrange="40" yrange="40" />
+
+</skin>
