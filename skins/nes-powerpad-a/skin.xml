@@ -3,8 +3,8 @@
 
   <background name="Default" image="powerpad-a.png" />
 
-  <button name="a" image="circle.png" x="189" y="61" width="24" height="24" />
-  <button name="b" image="circle.png" x="158" y="61" width="24" height="24" />
+  <button name="a" image="circle_red.png" x="189" y="61" width="24" height="24" />
+  <button name="b" image="circle_red.png" x="158" y="61" width="24" height="24" />
 
   <button name="2" image="circle_red.png" x="148" y="108" width="75" height="75" />
   <button name="3" image="circle_red.png" x="264" y="108" width="75" height="75" />
@@ -15,6 +15,6 @@
   <button name="8" image="circle_red.png" x="376" y="245" width="75" height="75" />
   
   <button name="10" image="circle_red.png" x="139" y="390" width="75" height="75" />
-  <button name="11" image="circle_red.png" x="359" y="108" width="75" height="75" />
+  <button name="11" image="circle_red.png" x="263" y="390" width="75" height="75" />
   
 </skin>
