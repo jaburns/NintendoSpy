@@ -59,7 +59,7 @@ ISR(ADC_vect)
   // Must read low first
   analogVal = ADCL | (ADCH << 8);
 
-  if ((analogVal < lastVal && (lastVal - analogVal) > 20 && count > 10) || count > 175)
+  if ((analogVal < lastVal && (lastVal - analogVal) > 20 && count > 25) || count > 175)
   {
     currentVal = lastVal;
     lastVal = analogVal;
