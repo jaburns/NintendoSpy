@@ -3,6 +3,9 @@
 // v1.0
 // RetroSpy written by zoggins
 
+// Uncomment this when programming the second Arduino for a standard controller (i.e. not a trackball)
+//#define YAXIS
+
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
 
@@ -11,6 +14,8 @@
 // Atari Pin 2  -> Digital Pin 3
 // Atari Pin 3  -> Digital Pin 4
 // Atari Pin 4  -> Digital Pin 5
+// Atari Pin 13  -> Digital Pin 6
+// Atari Pin 14  -> Digital Pin 7
 // Atari Pin 5  -> Digital Pin 8
 // Atari Pin 6  -> Digital Pin 9
 // Atari Pin 7  -> Digital Pin 10
@@ -59,12 +64,11 @@ ISR(ADC_vect)
   // Must read low first
   analogVal = ADCL | (ADCH << 8);
 
-  if ((analogVal < lastVal && (lastVal - analogVal) > 20 && count > 25) || count > 175)
+  if ((analogVal < lastVal && (lastVal - analogVal) > 100 && count > 25) || count > 200)
   {
     currentVal = lastVal;
     lastVal = analogVal;
     readFlag = 1;
-    //timeout = count + 10;
     count = 0;
   }
   else
@@ -163,13 +167,13 @@ int middleOfThree(int a, int b, int c)
     } 
 } 
 
-byte rawData[15];
+byte rawData[17];
 
 void loop() {
 
   if (readFlag == 1)
   {
-
+#ifndef YAXIS
     WAIT_FALLING_EDGE(5);
     asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
                   MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
@@ -220,6 +224,10 @@ void loop() {
     rawData[12] = PINB_READ(1);
     rawData[13] = PINB_READ(2);
     rawData[14] = PINB_READ(3);
+
+    rawData[15] = PIN_READ(6);
+    rawData[16] = PIN_READ(7);
+#endif
   
     window[windowPosition] = currentVal;
     windowPosition += 1;
@@ -249,6 +257,8 @@ void loop() {
     Serial.print((rawData[12] == 0) ? "6" : "-");
     Serial.print((rawData[11] == 0) ? "9" : "-");
     Serial.print((rawData[14] == 0) ? "#" : "-");
+    Serial.print((rawData[15] == 0) ? "t" : "-");
+    Serial.print((rawData[16] == 0) ? "f" : "-");
     Serial.print("|");
     Serial.print(ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 255));
     Serial.print("|");
@@ -277,6 +287,8 @@ void loop() {
     Serial.write((rawData[6] == 0) ? 0 : 1);
     Serial.write((rawData[10] == 0) ? 0 : 1);
     Serial.write((rawData[14] == 0) ? 0 : 1);
+    Serial.write((rawData[15] == 0) ? 0 : 1);
+    Serial.write((rawData[16] == 0) ? 0 : 1);
     Serial.write(((sil & 0x0F) << 4));
     Serial.write((sil & 0xF0));
     Serial.write('\n');

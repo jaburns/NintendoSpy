@@ -60,14 +60,9 @@ namespace RetroSpy.Readers
             "r1", "l1", "r2", "l2", "square", "x", "circle", "triangle", null, null, "down", "up", "right", "left", "start", "select"
         };
 
-        static readonly string[] BUTTONS_ATARI5200_1 =
+        static readonly string[] BUTTONS_ATARI5200 =
         {
-            "start", "pause", "reset", "1", "2", "3", "4", "5", "6", "7", "8", "9", "star", "0", "pound", null, null
-        };
-
-        static readonly string[] BUTTONS_ATARI5200_2 =
-        {
-            "trigger", "fire", null, null
+            "start", "pause", "reset", "1", "2", "3", "4", "5", "6", "7", "8", "9", "star", "0", "pound", "trigger", "fire", null, null
         };
 
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
@@ -187,35 +182,27 @@ namespace RetroSpy.Readers
         }
 
         static float atari5200_y;
-        static bool atari5200_trigger;
-        static bool atari5200_fire;
 
         static public ControllerState ReadFromPacket_Atari5200_2(byte[] packet)
         {
-            if (packet.Length != BUTTONS_ATARI5200_2.Length) return null;
-
-            atari5200_trigger = packet[0] == 0x00;
-            atari5200_fire = packet[1] == 0x00;
-            atari5200_y = (((packet[2] >> 4) | (packet[3])) - 128.0f) / 128.0f;
+            if (packet.Length != BUTTONS_ATARI5200.Length) return null;
+            atari5200_y = (((packet[17] >> 4) | (packet[18])) - 128.0f) / 128.0f;
 
             return null;
         }
 
         static public ControllerState ReadFromPacket_Atari5200_1(byte[] packet)
         {
-            if (packet.Length != BUTTONS_ATARI5200_1.Length) return null;
+            if (packet.Length != BUTTONS_ATARI5200.Length) return null;
 
             var state = new ControllerStateBuilder();
-            for (int i = 0; i < BUTTONS_ATARI5200_1.Length; ++i)
+            for (int i = 0; i < BUTTONS_ATARI5200.Length; ++i)
             {
-                if (string.IsNullOrEmpty(BUTTONS_ATARI5200_1[i])) continue;
-                state.SetButton(BUTTONS_ATARI5200_1[i], packet[i] == 0x00);
+                if (string.IsNullOrEmpty(BUTTONS_ATARI5200[i])) continue;
+                state.SetButton(BUTTONS_ATARI5200[i], packet[i] == 0x00);
             }
 
-            state.SetButton("trigger", atari5200_trigger);
-            state.SetButton("fire", atari5200_fire);
-
-            state.SetAnalog("x", (((packet[15] >> 4) | (packet[16])) - 128.0f) / -128.0f);
+            state.SetAnalog("x", (((packet[17] >> 4) | (packet[18])) - 128.0f) / -128.0f);
             state.SetAnalog("y", atari5200_y);
 
             return state.Build();
