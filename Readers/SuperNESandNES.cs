@@ -41,7 +41,7 @@ namespace RetroSpy.Readers
             "a", "b", "select", "start", "up", "down", "left", "right", "2", "1", "5", "9", "6", "10", "11", "7", "4", "3", "12", "8", null, null, null, null
         };
 
-        static readonly string[] BUTTONS_BACKCOMPAT = {
+        static readonly string[] BUTTONS_NES_BACKCOMPAT = {
             "a", "b", "select", "start", "up", "down", "left", "right"
         };
 
@@ -70,7 +70,7 @@ namespace RetroSpy.Readers
         }
 
         static public ControllerState ReadFromPacket_NES (byte[] packet) {
-            return readPacketButtons(packet, packet.Length == 8 ? BUTTONS_BACKCOMPAT : BUTTONS_NES);
+            return readPacketButtons(packet, packet.Length == 8 ? BUTTONS_NES_BACKCOMPAT : BUTTONS_NES);
         }
 
         static public ControllerState ReadFromPacket_PSClassic(byte[] packet) {
