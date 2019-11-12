@@ -244,7 +244,7 @@ void loop() {
     rawData[15] = PIN_READ(6);
     rawData[16] = PIN_READ(7);
 #endif
-    int smoothedValue;
+
     if ((!lockedCalibration && currentVal > nominal_min/2) || (lockedCalibration && currentVal >= nominal_min*.9f && currentVal <= nominal_max*1.1f))
     {
       window[windowPosition] = currentVal;
@@ -253,7 +253,7 @@ void loop() {
       windowPosition = (windowPosition % 3);
       if (!filledWindow && windowPosition == 2)
         filledWindow = true;
-      smoothedValue = middleOfThree(window[0], window[1], window[2]);
+      int smoothedValue = middleOfThree(window[0], window[1], window[2]);
 
       if (!lockedCalibration)
       {
@@ -290,62 +290,63 @@ void loop() {
         }
 #endif
       }
-    }
+    
 #ifdef DEBUG  
-    Serial.print((rawData[2] == 0) ? "s" : "-");
-    Serial.print((rawData[1] == 0) ? "p" : "-");
-    Serial.print((rawData[0] == 0) ? "r" : "-");
-    Serial.print((rawData[5] == 0) ? "1" : "-");
-    Serial.print((rawData[4] == 0) ? "4" : "-");
-    Serial.print((rawData[3] == 0) ? "7" : "-");
-    Serial.print((rawData[6] == 0) ? "*" : "-");
-    Serial.print((rawData[9] == 0) ? "2" : "-");
-    Serial.print((rawData[8] == 0) ? "5" : "-");
-    Serial.print((rawData[7] == 0) ? "8" : "-");
-    Serial.print((rawData[10] == 0) ? "0" : "-");
-    Serial.print((rawData[13] == 0) ? "3" : "-");
-    Serial.print((rawData[12] == 0) ? "6" : "-");
-    Serial.print((rawData[11] == 0) ? "9" : "-");
-    Serial.print((rawData[14] == 0) ? "#" : "-");
-    Serial.print((rawData[15] == 0) ? "t" : "-");
-    Serial.print((rawData[16] == 0) ? "f" : "-");
-    Serial.print("|");
-    Serial.print(ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 255));
-    Serial.print("|");
-    Serial.print(currentVal);
-    Serial.print("|");
-    Serial.print(smoothedValue);
-    Serial.print("|");
-    Serial.print(nominal_min);
-    Serial.print("|");
-    Serial.print(nominal_max);
-    Serial.print("|");
-    Serial.print(lockedCalibration);
-    Serial.print("\n");
+      Serial.print((rawData[2] == 0) ? "s" : "-");
+      Serial.print((rawData[1] == 0) ? "p" : "-");
+      Serial.print((rawData[0] == 0) ? "r" : "-");
+      Serial.print((rawData[5] == 0) ? "1" : "-");
+      Serial.print((rawData[4] == 0) ? "4" : "-");
+      Serial.print((rawData[3] == 0) ? "7" : "-");
+      Serial.print((rawData[6] == 0) ? "*" : "-");
+      Serial.print((rawData[9] == 0) ? "2" : "-");
+      Serial.print((rawData[8] == 0) ? "5" : "-");
+      Serial.print((rawData[7] == 0) ? "8" : "-");
+      Serial.print((rawData[10] == 0) ? "0" : "-");
+      Serial.print((rawData[13] == 0) ? "3" : "-");
+      Serial.print((rawData[12] == 0) ? "6" : "-");
+      Serial.print((rawData[11] == 0) ? "9" : "-");
+      Serial.print((rawData[14] == 0) ? "#" : "-");
+      Serial.print((rawData[15] == 0) ? "t" : "-");
+      Serial.print((rawData[16] == 0) ? "f" : "-");
+      Serial.print("|");
+      Serial.print(ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 255));
+      Serial.print("|");
+      Serial.print(currentVal);
+      Serial.print("|");
+      Serial.print(smoothedValue);
+      Serial.print("|");
+      Serial.print(nominal_min);
+      Serial.print("|");
+      Serial.print(nominal_max);
+      Serial.print("|");
+      Serial.print(lockedCalibration);
+      Serial.print("\n");
 #else
-    int sil = ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 255);
-    Serial.write((rawData[2] == 0) ? 0 : 1);
-    Serial.write((rawData[1] == 0) ? 0 : 1);
-    Serial.write((rawData[0] == 0) ? 0 : 1);
-    Serial.write((rawData[5] == 0) ? 0 : 1);
-    Serial.write((rawData[9] == 0) ? 0 : 1);
-    Serial.write((rawData[13] == 0) ? 0 : 1);
-    Serial.write((rawData[4] == 0) ? 0 : 1);
-    Serial.write((rawData[8] == 0) ? 0 : 1);
-    Serial.write((rawData[12] == 0) ? 0 : 1);
-    Serial.write((rawData[3] == 0) ? 0 : 1);
-    Serial.write((rawData[7] == 0) ? 0 : 1);
-    Serial.write((rawData[11] == 0) ? 0 : 1);
-    Serial.write((rawData[6] == 0) ? 0 : 1);
-    Serial.write((rawData[10] == 0) ? 0 : 1);
-    Serial.write((rawData[14] == 0) ? 0 : 1);
-    Serial.write((rawData[15] == 0) ? 0 : 1);
-    Serial.write((rawData[16] == 0) ? 0 : 1);
-    Serial.write(((sil & 0x0F) << 4));
-    Serial.write((sil & 0xF0));
-    Serial.write('\n');
+      int sil = ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 255);
+      Serial.write((rawData[2] == 0) ? 0 : 1);
+      Serial.write((rawData[1] == 0) ? 0 : 1);
+      Serial.write((rawData[0] == 0) ? 0 : 1);
+      Serial.write((rawData[5] == 0) ? 0 : 1);
+      Serial.write((rawData[9] == 0) ? 0 : 1);
+      Serial.write((rawData[13] == 0) ? 0 : 1);
+      Serial.write((rawData[4] == 0) ? 0 : 1);
+      Serial.write((rawData[8] == 0) ? 0 : 1);
+      Serial.write((rawData[12] == 0) ? 0 : 1);
+      Serial.write((rawData[3] == 0) ? 0 : 1);
+      Serial.write((rawData[7] == 0) ? 0 : 1);
+      Serial.write((rawData[11] == 0) ? 0 : 1);
+      Serial.write((rawData[6] == 0) ? 0 : 1);
+      Serial.write((rawData[10] == 0) ? 0 : 1);
+      Serial.write((rawData[14] == 0) ? 0 : 1);
+      Serial.write((rawData[15] == 0) ? 0 : 1);
+      Serial.write((rawData[16] == 0) ? 0 : 1);
+      Serial.write(((sil & 0x0F) << 4));
+      Serial.write((sil & 0xF0));
+      Serial.write('\n');
 #endif
+    }
 	  readFlag = 0;
 	  delay(5);
-	}
+  }
 }
