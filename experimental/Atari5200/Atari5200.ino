@@ -245,7 +245,7 @@ void loop() {
     rawData[16] = PIN_READ(7);
 #endif
     int smoothedValue;
-    if (currentVal > nominal_min/2)
+    if ((!lockedCalibration && currentVal > nominal_min/2) || (lockedCalibration && currentVal >= nominal_min*.9f && currentVal <= nominal_max*1.1f))
     {
       window[windowPosition] = currentVal;
     
@@ -264,7 +264,7 @@ void loop() {
           nominal_max = smoothedValue;
 
 #ifndef YAXIS      
-        lockedCalibration = (rawData[16] == 0);
+        lockedCalibration = ((rawData[16] == 0) || (rawData[15] == 0));
         if (lockedCalibration)
           digitalWrite(12, HIGH);
 #else
@@ -345,7 +345,7 @@ void loop() {
     Serial.write((sil & 0xF0));
     Serial.write('\n');
 #endif
-  readFlag = 0;
-  delay(5);
-}
+	  readFlag = 0;
+	  delay(5);
+	}
 }
