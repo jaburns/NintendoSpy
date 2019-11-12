@@ -3,22 +3,7 @@
 // v1.0
 // RetroSpy written by zoggins
 
-#define Y_AXIS
 //#define X_AXIS
-
-// --- These numbers will likely need modified ---
-
-// **nominal_min** is the minimum value the joystick is capable of hitting.  
-// **nominal_max** is the maximum value the joystick is capable of hitting.  
-
-#ifdef Y_AXIS
-int nominal_min = 4;
-int nominal_max = 175;
-#endif
-#ifdef X_AXIS
-int nominal_min = 4;
-int nominal_max = 159;
-#endif
 
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
@@ -45,6 +30,11 @@ volatile bool CrossedThreshold = false;
 
 int window[3];
 int windowPosition = 0;
+bool filledWindow = false;
+bool lockedCalibration = false;
+int nominal_min = 1023;
+int nominal_max = 0;
+
 
 static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
 {
@@ -91,6 +81,13 @@ void setup() {
   
   for (int i = 2; i <= 8; ++i)
     pinMode(i, INPUT_PULLUP);
+
+#ifndef X_AXIS
+  pinMode(12, OUTPUT);
+#else
+  pinMode(12, INPUT);
+  lockedCalibration = (digitalRead(12) == HIGH);
+#endif
 
   windowPosition = 0;
 
@@ -183,23 +180,42 @@ void loop() {
   	byte topButton2 		= ((pins & 0b00000010) == 0);
   	byte triggerButton  = ((pins & 0b00000100) == 0);
   	byte thumbButton 		= ((pins & 0b00001000) == 0);
-  	window[windowPosition] = CapturedCount;
+  	
+	window[windowPosition] = CapturedCount;
   	windowPosition += 1;
   	windowPosition = (windowPosition % 3);
+	if (!filledWindow && windowPosition == 2)
+        filledWindow = true;
+	int smoothedValue = middleOfThree(window[0], window[1], window[2]);
+
+    if (!lockedCalibration)
+    {
+		if (filledWindow && smoothedValue < nominal_min)
+			nominal_min = smoothedValue;
+		if (filledWindow && smoothedValue > nominal_max)
+			nominal_max = smoothedValue;
+#ifndef X_AXIS
+		lockedCalibration = (topButton1 || topButton2 || triggerButton || thumbButton);
+		if (lockedCalibration)
+          digitalWrite(12, HIGH);
+#else
+		lockedCalibration = (digitalRead(12) == HIGH);
+#endif
+	}
 #ifdef DEBUG
       Serial.print(CapturedCount);
       Serial.print("|");
-      Serial.print(middleOfThree(window[0], window[1], window[2]));
+      Serial.print(smoothedValue);
       Serial.print("|");
       Serial.print(topButton1 ? "1" : "-");
   	  Serial.print(topButton2 ? "2" : "-");
   	  Serial.print(triggerButton ? "3" : "-");
   	  Serial.print(thumbButton ? "4" : "-");
       Serial.print("|");
-      Serial.print(ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 30));
+      Serial.print(ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 30));
       Serial.print("\n");
 #else
-      int sil = ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 30);
+      int sil = ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 30);
       Serial.write(topButton1 ? 1 : 0);
       Serial.write(topButton2 ? 1 : 0);
   	  Serial.write(triggerButton ? 1 : 0);
