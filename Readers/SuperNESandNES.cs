@@ -176,30 +176,79 @@ namespace RetroSpy.Readers
             return state.Build();
 
         }
+
+        static readonly string[] SCANCODES_FMTOWNS =
+        {
+            null, "ESC", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "^", "yen", "Backspace",
+            "Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "@", "[", "Enter", "A", "S",
+            "D", "F", "G", "H", "J", "K", "L", ";", ":", "]", "Z", "X", "C", "V", "B", "N",
+            "M", ",", ".", "/", "\"", "Spacebar", "*", "divide", "+", "subtract", "Num7", "Num8", "Num9", "=", "Num4", "Num5",
+            "Num6", null, "Num1", "Num2", "Num3", "NumEnter", "Num0", "Num.", "DUP", null, "000", "EL", null, "Up", "Home", "Left",
+            "Down", "Right", "CTRL", "SHIFT", null, "CAP", "BottomLeft", "BelowSpace1", "BelowSpace2", "RightOfSpacebar1",
+                             "RightOfSpacebar2", "PF12", "ALT", "PF1", "PF2", "PF3",
+            "PF4", "PF5", "PF6", "PF7", "PF8", "PF9", "PF10", "PF11", null, "UpperLeftOfHome", "AboveHome", "UpperRightOfHome", "LeftOfHome", null,
+            null, "LowerLeftOfHome", "RightOfSpacebar3", "BelowArrows", "PF13", "PF14", "PF15", "PF16", "PF17", "PF18", "PF19", "PF20", "Pause",
+                             "Copy", null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, "SYSREQ", null, null,
+            "ScrollLock", "SysHome", "End", null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, "EXT1", null, null, null, "EXT2", null, null, null, null, null, null, null
+        };
+
         static public ControllerState ReadFromPacket_FMTowns(byte[] packet)
         {
-            if (packet.Length != 9) return null;
+            if (packet.Length != 9 && packet.Length != 64) return null;
 
-            byte[] polishedPacket = new byte[BUTTONS_FMTOWNS.Length];
-
-            if (packet[0] != 0 && packet[1] != 0)
+            if (packet.Length == 9)
             {
-                packet[0] = packet[1] = 0;
-                polishedPacket[9] = 1;
-            }
+                byte[] polishedPacket = new byte[BUTTONS_FMTOWNS.Length];
 
-            if (packet[2] != 0 && packet[3] != 0)
+                if (packet[0] != 0 && packet[1] != 0)
+                {
+                    packet[0] = packet[1] = 0;
+                    polishedPacket[9] = 1;
+                }
+
+                if (packet[2] != 0 && packet[3] != 0)
+                {
+                    packet[2] = packet[3] = 0;
+                    polishedPacket[10] = 1;
+                }
+
+                for (int i = 0; i < packet.Length; ++i)
+                {
+                    polishedPacket[i] = packet[i];
+                }
+
+                return readPacketButtons(polishedPacket, BUTTONS_FMTOWNS);
+            }
+            else
             {
-                packet[2] = packet[3] = 0;
-                polishedPacket[10] = 1;
-            }
+                int j = 0;
+                var reconstructedPacket = new byte[32];
+                for (int i = 0; i < 32; ++i)
+                {
+                    reconstructedPacket[i] = (byte)((packet[j] >> 4) | packet[j + 1]);
+                    j += 2;
+                }
 
-            for(int i = 0; i < packet.Length; ++i)
-            {
-                polishedPacket[i] = packet[i];
-            }
+                byte[] polishedPacket = new byte[256];
 
-            return readPacketButtons(polishedPacket, BUTTONS_FMTOWNS);
+                for (int i = 0; i < 32; ++i)
+                {
+                    for (int k = 0; k < 8; ++k)
+                    {
+                        polishedPacket[(i * 8) + k] = (byte)((reconstructedPacket[i] & (1 << k)) != 0 ? 1 : 0);
+                    }
+                }
+
+                return readPacketButtons(polishedPacket, SCANCODES_FMTOWNS);
+
+            }
         }
 
     }
