@@ -16,7 +16,7 @@
   <button name="0" image="circle2.png" x="488" y="140" width="25" height="25" />
   <button name="-" image="circle2.png" x="527" y="140" width="25" height="25" />
   <button name="^" image="circle2.png" x="566" y="140" width="25" height="25" />
-  <button name="yes" image="circle2.png" x="606" y="140" width="25" height="25" />
+  <button name="yen" image="circle2.png" x="606" y="140" width="25" height="25" />
   <button name="Backspace" image="circle2.png" x="645" y="140" width="25" height="25" />
   
   <button name="Tab" image="circle2.png" x="97" y="182" width="40" height="25" />
@@ -40,9 +40,9 @@
   <button name="D" image="circle2.png" x="244" y="219" width="25" height="25" />
   <button name="F" image="circle2.png" x="282" y="219" width="25" height="25" />
   <button name="G" image="circle2.png" x="322" y="219" width="25" height="25" />
-  <button name="H" image="circle2.png" x="262" y="219" width="25" height="25" />
+  <button name="H" image="circle2.png" x="362" y="219" width="25" height="25" />
   <button name="J" image="circle2.png" x="399" y="219" width="25" height="25" />
-  <button name="K" image="circle2.png" x="339" y="219" width="25" height="25" />
+  <button name="K" image="circle2.png" x="439" y="219" width="25" height="25" />
   <button name="L" image="circle2.png" x="478" y="219" width="25" height="25" />
   <button name=";" image="circle2.png" x="518" y="219" width="25" height="25" />
   <button name=":" image="circle2.png" x="558" y="219" width="25" height="25" />
@@ -91,6 +91,8 @@
   
   <button name="PF11" image="circle2.png" x="606" y="70" width="25" height="25" />
   <button name="PF12" image="circle2.png" x="647" y="70" width="25" height="25" />
+
+  <button name="SYSREQ" image="circle2.png" x="39" y="70" width="25" height="25" />
   
   <button name="EXT1" image="circle2.png" x="39" y="139" width="25" height="25" />
   <button name="EXT2" image="circle2.png" x="39" y="182" width="25" height="25" />

@@ -186,7 +186,7 @@ namespace RetroSpy.Readers
             "Num6", null, "Num1", "Num2", "Num3", "NumEnter", "Num0", "Num.", "DUP", null, "000", "EL", null, "Up", "Home", "Left",
             "Down", "Right", "CTRL", "SHIFT", null, "CAP", "BottomLeft", "BelowSpace1", "BelowSpace2", "RightOfSpacebar1",
                              "RightOfSpacebar2", "PF12", "ALT", "PF1", "PF2", "PF3",
-            "PF4", "PF5", "PF6", "PF7", "PF8", "PF9", "PF10", "PF11", null, "UpperLeftOfHome", "AboveHome", "UpperRightOfHome", "LeftOfHome", null,
+            "PF4", "PF5", "PF6", "PF7", "PF8", "PF9", "PF10", null, null, "PF11", null, "UpperLeftOfHome", "AboveHome", "UpperRightOfHome", "LeftOfHome", null,
             "RightOfHome", "LowerLeftOfHome", "RightOfSpacebar3", "BelowArrows", "PF13", "PF14", "PF15", "PF16", "PF17", "PF18", "PF19", "PF20", "Pause",
                              "Copy", null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,

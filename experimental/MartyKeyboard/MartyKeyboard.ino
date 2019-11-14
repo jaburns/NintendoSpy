@@ -12,6 +12,7 @@
 
 byte rawData[32];
 
+
 void setup() {
 
   for(int i = 0; i < 32; ++i)
@@ -22,12 +23,13 @@ void setup() {
 }
 
 byte controlModeOffset = 0;
+byte seenControlModeOff = false;
 
 void loop() {
   byte incomingByte;
 
 #ifdef SNIFFER
-  if (Serial1.available() > 1) 
+  if (Serial1.available() > 0) 
   {
     incomingByte = Serial1.read();
     Serial.print("UART received: ");
@@ -55,14 +57,39 @@ void loop() {
       {
         incomingByte += controlModeOffset;
         rawData[incomingByte/8] &= ~(1 << (incomingByte % 8));
+        if (seenControlModeOff)
+        {
+          seenControlModeOff = false;
+          controlModeOffset = 0;
+        }
       }
       else if (incomingByte == 0x7E)
-        controlModeOffset = 0;
+        seenControlModeOff = true;
       else if (incomingByte == 0x7F)
       {
         for(int i = 0; i < 32; ++i)
           rawData[i] = 0;
       }
+    }
+    else if (incomingByte == 0xF2)
+    {
+      incomingByte = Serial1.read();
+      incomingByte += 0x2d;
+      rawData[incomingByte/8] |= (1 << (incomingByte % 8));
+    }
+    else if (incomingByte == 0xFA)
+    {
+      incomingByte = Serial1.read();
+    }
+    else if (incomingByte == 0xF0)
+    {
+      incomingByte = Serial1.read();
+    }
+    else if (incomingByte == 0xF1)
+    {
+      incomingByte = Serial1.read();
+      incomingByte += 0x2d;
+      rawData[incomingByte/8] &= ~(1 << (incomingByte % 8));    
     }
   }
 
@@ -83,6 +110,7 @@ void loop() {
   }
   Serial.print("\n");
 #endif
+
   delay(5);
 #endif
 }
