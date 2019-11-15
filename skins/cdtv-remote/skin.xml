@@ -3,19 +3,44 @@
 
   <background name="Default" image="cdtv-remote.png" />
 
-  <button name="a" image="circle.png" x="189" y="61" width="24" height="24" />
-  <button name="b" image="circle.png" x="158" y="61" width="24" height="24" />
+  <button name="up" image="circle.png" x="48" y="74" width="25" height="25" />
+  <button name="right" image="circle.png" x="77" y="98" width="25" height="25" />
+  <button name="down" image="circle.png" x="47" y="124" width="25" height="25" />
+  <button name="left" image="circle.png" x="25" y="95" width="25" height="25" />
+  
+  <button name="B" image="circle.png" x="546" y="91" width="35" height="35" />
+  <button name="A" image="circle.png" x="491" y="91" width="35" height="35" />
+  
+  <button name="1" image="circle.png" x="139" y="75" width="25" height="13" />
+  <button name="2" image="circle.png" x="180" y="75" width="25" height="13" />
+  <button name="3" image="circle.png" x="222" y="75" width="25" height="13" />
+  <button name="Escape" image="circle.png" x="262" y="75" width="25" height="13" />
 
-  <button name="start" image="circle.png" x="116" y="64" width="28" height="17" />
-  <button name="+" image="circle.png" x="116" y="64" width="28" height="17" />
-  <button name="select" image="circle.png" x="86" y="64" width="28" height="17" />
-  <button name="-" image="circle.png" x="86" y="64" width="28" height="17" />
+  <button name="4" image="circle.png" x="139" y="110" width="25" height="13" />
+  <button name="5" image="circle.png" x="180" y="110" width="25" height="13" />
+  <button name="6" image="circle.png" x="222" y="110" width="25" height="13" />
+  <button name="0" image="circle.png" x="262" y="110" width="25" height="13" />
 
-  <button name="up" image="circle.png" x="42" y="41" width="16" height="16" />
-  <button name="down" image="circle.png" x="42" y="69" width="16" height="16" />
-  <button name="left" image="circle.png" x="28" y="55" width="16" height="16" />
-  <button name="right" image="circle.png" x="56" y="55" width="16" height="16" />
+  <button name="7" image="circle.png" x="139" y="144" width="25" height="13" />
+  <button name="8" image="circle.png" x="180" y="144" width="25" height="13" />
+  <button name="9" image="circle.png" x="222" y="144" width="25" height="13" />
+  <button name="Enter" image="circle.png" x="262" y="144" width="25" height="13" />
 
-  <button name="disconnect" image="disconnect.png" x="73" y="10" width="100" height="100" />
-  <button name="lock" image="lock100.png" x="73" y="10" width="100" height="100" />
+  <button name="Genlock" image="circle.png" x="301" y="75" width="25" height="13" />
+  <button name="CDTV" image="circle.png" x="342" y="75" width="25" height="13" />
+  <button name="Power" image="circle.png" x="383" y="75" width="25" height="13" />
+
+  <button name="Rew" image="circle.png" x="301" y="110" width="25" height="13" />
+  <button name="Play" image="circle.png" x="342" y="110" width="35" height="13" />
+  <button name="Power" image="circle.png" x="396" y="110" width="25" height="13" />
+  <button name="VolumeUp" image="circle.png" x="396" y="110" width="25" height="13" />
+
+  <button name="Stop" image="circle.png" x="342" y="144" width="35" height="13" />
+  <button name="VolumeDown" image="circle.png" x="396" y="144" width="25" height="13" />
+  
+  <button name="JoyUp" image="circle.png" x="48" y="74" width="25" height="25" />
+  <button name="JoyRight" image="circle.png" x="77" y="98" width="25" height="25" />
+  <button name="JoyDown" image="circle.png" x="47" y="124" width="25" height="25" />
+  <button name="JoyDown" image="circle.png" x="25" y="95" width="25" height="25" />
+
 </skin>
