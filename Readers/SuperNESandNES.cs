@@ -54,6 +54,11 @@ namespace RetroSpy.Readers
             null, "blue", "red", "yellow", "green", "forward", "backward", "pause", null
         };
 
+        static readonly string[] BUTTONS_CDTV =
+        {
+            "left", "up", "right", "down", "B", "A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "Escape", "Enter", "Genlock", "CDTV", "Power", "Rew", "Play", "FF", "Stop", "VolumeUp", "VolumeDown", "JoyLeft", "JoyUp", "JoyRight", "JoyDown", "JoyB", "JoyA"
+        };
+
         static readonly string[] BUTTONS_PSCLASSIC =
         {
             "r1", "l1", "r2", "l2", "square", "x", "circle", "triangle", null, null, "down", "up", "right", "left", "start", "select"
@@ -94,6 +99,10 @@ namespace RetroSpy.Readers
                 state.SetButton("down", (packet[0] & 0b00000100) == 0);
                 state.SetButton("left", (packet[0] & 0b00001000) == 0);
                 state.SetButton("right", (packet[0]& 0b00010000) == 0);
+            }
+            else if (packet.Length == BUTTONS_CDTV.Length)
+            {
+                return readPacketButtons(packet, BUTTONS_CDTV);
             }
             else if (packet.Length == 19)
             {
