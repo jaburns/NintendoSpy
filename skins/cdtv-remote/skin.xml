@@ -32,15 +32,18 @@
 
   <button name="Rew" image="circle.png" x="301" y="110" width="25" height="13" />
   <button name="Play" image="circle.png" x="342" y="110" width="35" height="13" />
-  <button name="Power" image="circle.png" x="396" y="110" width="25" height="13" />
-  <button name="VolumeUp" image="circle.png" x="396" y="110" width="25" height="13" />
+  <button name="FF" image="circle.png" x="396" y="110" width="25" height="13" />
+  <button name="VolumeUp" image="circle.png" x="435" y="110" width="25" height="13" />
 
   <button name="Stop" image="circle.png" x="342" y="144" width="35" height="13" />
-  <button name="VolumeDown" image="circle.png" x="396" y="144" width="25" height="13" />
+  <button name="VolumeDown" image="circle.png" x="435" y="144" width="25" height="13" />
   
   <button name="JoyUp" image="circle.png" x="48" y="74" width="25" height="25" />
   <button name="JoyRight" image="circle.png" x="77" y="98" width="25" height="25" />
   <button name="JoyDown" image="circle.png" x="47" y="124" width="25" height="25" />
-  <button name="JoyDown" image="circle.png" x="25" y="95" width="25" height="25" />
-
+  <button name="JoyLeft" image="circle.png" x="25" y="95" width="25" height="25" />
+  
+  <button name="JoyB" image="circle.png" x="546" y="91" width="35" height="35" />
+  <button name="JoyA" image="circle.png" x="491" y="91" width="35" height="35" />
+  
 </skin>

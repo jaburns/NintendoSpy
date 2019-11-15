@@ -4,8 +4,8 @@
 // RetroSpy written by zoggins
 
 // ---------------------------------------------------------------------------------
-// Uncomment this for serial debugging output
-//#define DEBUG
+// Uncomment this for debugging output
+//#define PRETTY_PRINT
 
 #include <IRremote.h>
 
@@ -183,13 +183,13 @@ void loop() {
     rawData = 0;
   }
 
-#ifdef DEBUG
-  for(int i = 0; i < 33; ++i)
-    Serial.print((rawData & ((unsigned long long)1 << i)) != 0 ? "1" : "0");
-  Serial.print("\n");
-#else
+#ifndef PRETTY_PRINT
   for(int i = 0; i < 33; ++i)
     Serial.write((rawData & ((unsigned long long)1 << i)) != 0 ? 1 : 0);
   Serial.write("\n");
+#else
+  for(int i = 0; i < 33; ++i)
+    Serial.print((rawData & ((unsigned long long)1 << i)) != 0 ? "1" : "0");
+  Serial.print("\n");
 #endif
 }
