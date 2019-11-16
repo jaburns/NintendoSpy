@@ -54,9 +54,14 @@ namespace RetroSpy.Readers
             null, "blue", "red", "yellow", "green", "forward", "backward", "pause", null
         };
 
-        static readonly string[] BUTTONS_CDTV =
+        static readonly string[] BUTTONS_CDTV_REMOTE =
         {
             "left", "up", "right", "down", "B", "A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "Escape", "Enter", "Genlock", "CDTV", "Power", "Rew", "Play", "FF", "Stop", "VolumeUp", "VolumeDown", "JoyLeft", "JoyUp", "JoyRight", "JoyDown", "JoyB", "JoyA"
+        };
+
+        static readonly string[] BUTTONS_CDTV_JOYSTICK =
+        {
+            null, "2", "1", "right", "left", "down", "up", "Joy22", "Joy22", "Joy2Right", "Joy2Left", "Joy2Down", "Joy2Up", null, null, null, null, null, null, null, null, null, null, null, null, null
         };
 
         static readonly string[] BUTTONS_PSCLASSIC =
@@ -100,9 +105,51 @@ namespace RetroSpy.Readers
                 state.SetButton("left", (packet[0] & 0b00001000) == 0);
                 state.SetButton("right", (packet[0]& 0b00010000) == 0);
             }
-            else if (packet.Length == BUTTONS_CDTV.Length)
+            else if (packet.Length == BUTTONS_CDTV_REMOTE.Length)
             {
-                return readPacketButtons(packet, BUTTONS_CDTV);
+                return readPacketButtons(packet, BUTTONS_CDTV_REMOTE);
+            }
+            else if (packet.Length == BUTTONS_CDTV_JOYSTICK.Length && packet[0] == 0)
+            {
+                int checksum = (packet[24] >> 4) | packet[25];
+                int checkedCheckSum = 0;
+                for (int i = 0; i < 24; ++i)
+                    checkedCheckSum += packet[i] == 0 ? 0 : 1;
+
+                if (checksum == checkedCheckSum)
+                {
+                    state = new ControllerStateBuilder();
+
+                    for (int i = 0; i < BUTTONS_CDTV_JOYSTICK.Length; ++i)
+                    {
+                        if (string.IsNullOrEmpty(BUTTONS_CDTV_JOYSTICK[i])) continue;
+                        state.SetButton(BUTTONS_CDTV_JOYSTICK[i], packet[i] != 0x00);
+                    }
+
+                    SignalTool.FakeAnalogStick(packet[6], packet[5], packet[4], packet[3], state, "x", "y");
+                    SignalTool.FakeAnalogStick(packet[12], packet[11], packet[10], packet[9], state, "Joy2x", "Joy2y");
+                
+                }
+            }
+            else if (packet.Length == 26 && packet[0] == 1)
+            {
+                int checksum = (packet[24] >> 4) | packet[25];
+                int checkedCheckSum = 0;
+                for (int i = 0; i < 24; ++i)
+                    checkedCheckSum += packet[i] == 0 ? 0 : 1;
+
+                if (checksum == checkedCheckSum)
+                {
+                    state = new ControllerStateBuilder();
+
+                    state.SetButton("left_button", packet[2] == 0x00);
+                    state.SetButton("right_button", packet[1] == 0x00);
+
+                    sbyte xVal = (sbyte)SignalTool.readByte(packet, 3);
+                    sbyte yVal = (sbyte)SignalTool.readByte(packet, 11);
+
+                    SignalTool.SetMouseProperties(xVal / -128.0f, yVal / 128.0f, state);
+                }
             }
             else if (packet.Length == 19)
             {

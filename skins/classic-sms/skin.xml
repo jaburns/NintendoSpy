@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="SMS Controller" author="chmaller" type="classic;cd32;c64mini;genesis">
+<skin name="SMS Controller" author="chmaller" type="classic;cd32;c64mini;genesis;cdtv">
 
     <background name="Default" image="sms.png" />
 

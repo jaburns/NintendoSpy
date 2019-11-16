@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="Atari 2600 Joystick" author="chmaller" type="classic;cd32;c64mini">
+<skin name="Atari 2600 Joystick" author="chmaller" type="classic;cd32;c64mini;cdtv">
 
     <background name="Default" image="atari.png" />
 
