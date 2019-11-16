@@ -25,16 +25,16 @@
   <button name="CDTV" image="circle.png" x="94" y="59" width="30" height="12" />
   <button name="Power" image="circle.png" x="181" y="59" width="30" height="12" />
 
-  <button name="Play" image="circle.png" x="51" y="224" width="60" height="23" />
+  <button name="Play" image="circle.png" x="51" y="224" width="60" height="12" />
   <button name="Stop" image="circle.png" x="136" y="224" width="30" height="12" />
   <button name="VolumeUp" image="circle.png" x="180" y="224" width="30" height="12" />
   
-  <button name="Rew" image="circle.png" x="48" y="262" width="30" height="12" />
-  <button name="FF" image="circle.png" x="91" y="262" width="30" height="12" />
-  <button name="VolumeDown" image="circle.png" x="180" y="262" width="30" height="12" />
+  <button name="Rew" image="circle.png" x="38" y="264" width="30" height="12" />
+  <button name="FF" image="circle.png" x="84" y="264" width="30" height="12" />
+  <button name="VolumeDown" image="circle.png" x="180" y="264" width="30" height="12" />
 
-  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle1.png" x="350" y="200" xrange="50" yrange="50" height="30" width="30"/>
-  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle1.png" x="350" y="200" xrange="50" yrange="50" height="30" width="30"/>
-  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="350" y="200" xrange="50" yrange="50" height="30" width="30"/>
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle1.png" x="350" y="200" xrange="50" yrange="50" height="12" width="12"/>
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle1.png" x="350" y="200" xrange="50" yrange="50" height="12" width="12"/>
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="350" y="200" xrange="50" yrange="50" height="12" width="12"/>
 
 </skin>

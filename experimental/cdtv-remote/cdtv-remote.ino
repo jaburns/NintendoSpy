@@ -184,8 +184,14 @@ void loop() {
   }
 
 #ifndef PRETTY_PRINT
+  int checksum = 0;
   for(int i = 0; i < 33; ++i)
+  {
+    checksum += (rawData & ((unsigned long long)1 << i)) != 0 ? 1 : 0;
     Serial.write((rawData & ((unsigned long long)1 << i)) != 0 ? 1 : 0);
+  }
+  Serial.write((checksum & 0x0F) << 4);
+  Serial.write((checksum & 0xF0));
   Serial.write("\n");
 #else
   for(int i = 0; i < 33; ++i)

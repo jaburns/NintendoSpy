@@ -56,7 +56,7 @@ namespace RetroSpy.Readers
 
         static readonly string[] BUTTONS_CDTV_REMOTE =
         {
-            "mouse_left", "mouse_up", "mouse_right", "mouse_down", "right_button", "left_button", "Num1", "Num2", "Num3", "Num4", "Num5", "Num6", "Num7", "Num8", "Num9", "Num0", "Escape", "Enter", "Genlock", "CDTV", "Power", "Rew", "Play", "FF", "Stop", "VolumeUp", "VolumeDown", "left", "up", "right", "down", "2", "1"
+            "mouse_left", "mouse_up", "mouse_right", "mouse_down", "right_button", "left_button", "Num1", "Num2", "Num3", "Num4", "Num5", "Num6", "Num7", "Num8", "Num9", "Num0", "Escape", "Enter", "Genlock", "CDTV", "Power", "Rew", "Play", "FF", "Stop", "VolumeUp", "VolumeDown", "left", "up", "right", "down", "2", "1", null, null
         };
 
         static readonly string[] BUTTONS_CDTV_JOYSTICK =
@@ -107,27 +107,35 @@ namespace RetroSpy.Readers
             }
             else if (packet.Length == BUTTONS_CDTV_REMOTE.Length)
             {
-                state = new ControllerStateBuilder();
+                int checksum = (packet[33] >> 4) | packet[34];
+                int checkedCheckSum = 0;
+                for (int i = 0; i < 33; ++i)
+                    checkedCheckSum += packet[i] == 0 ? 0 : 1;
 
-                for (int i = 0; i < BUTTONS_CDTV_REMOTE.Length; ++i)
+                if (checksum == checkedCheckSum)
                 {
-                    if (string.IsNullOrEmpty(BUTTONS_CDTV_REMOTE[i])) continue;
-                    state.SetButton(BUTTONS_CDTV_REMOTE[i], packet[i] != 0x00);
+                    state = new ControllerStateBuilder();
+
+                    for (int i = 0; i < BUTTONS_CDTV_REMOTE.Length; ++i)
+                    {
+                        if (string.IsNullOrEmpty(BUTTONS_CDTV_REMOTE[i])) continue;
+                        state.SetButton(BUTTONS_CDTV_REMOTE[i], packet[i] != 0x00);
+                    }
+
+                    float x = 0;
+                    float y = 0;
+
+                    if (packet[0] != 0x00)
+                        x = -0.25f;
+                    else if (packet[2] != 0x00)
+                        x = 0.25f;
+                    if (packet[1] != 0x00)
+                        y = 0.25f;
+                    else if (packet[3] != 0x00)
+                        y = -0.25f;
+
+                    SignalTool.SetMouseProperties(x, y, state, .25f);
                 }
-
-                float x = 0;
-                float y = 0;
-
-                if (packet[0] != 0x00)
-                    x = -0.25f;
-                else if (packet[2] != 0x00)
-                    x = 0.25f;
-                if (packet[1] != 0x00)
-                    y = 0.25f;
-                else if (packet[3] != 0x00)
-                    y = -0.25f;
-
-                SignalTool.SetMouseProperties(x, y, state, 0.25f);
 
             }
             else if (packet.Length == BUTTONS_CDTV_JOYSTICK.Length && packet[0] == 0)

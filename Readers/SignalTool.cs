@@ -85,8 +85,8 @@ namespace RetroSpy.Readers
             {
                 // Direction shows around the unit circle
                 double radian = Math.Atan2(y, x);
-                x1 = (float)Math.Cos(radian);
-                y1 = (float)Math.Sin(radian);
+                x1 = maxCircleSize*(float)Math.Cos(radian);
+                y1 = maxCircleSize*(float)Math.Sin(radian);
 
                 // Don't let magnitude exceed the unit circle
                 if (Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)) > maxCircleSize)
