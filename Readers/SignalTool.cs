@@ -65,7 +65,7 @@ namespace RetroSpy.Readers
         static int windowPositionX = 0;
         static float[] windowY = new float[3];
         static int windowPositionY = 0;
-        public static void SetMouseProperties(float x, float y, ControllerStateBuilder state)
+        public static void SetMouseProperties(float x, float y, ControllerStateBuilder state, float maxCircleSize = 1.0f)
         {
             windowX[windowPositionX] = x;
             windowPositionX += 1;
@@ -89,7 +89,7 @@ namespace RetroSpy.Readers
                 y1 = (float)Math.Sin(radian);
 
                 // Don't let magnitude exceed the unit circle
-                if (Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)) > 1.0)
+                if (Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)) > maxCircleSize)
                 {
                     x = x1;
                     y = y1;

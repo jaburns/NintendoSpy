@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="CDTV Trackball" author="zoggins" type="cdtv">
+
+  <background name="Default" image="cdtv-trackball.png" />
+
+  <button name="right_button" image="circle.png" x="565" y="20" width="50" height="50" />
+  <button name="left_button" image="circle.png" x="460" y="20" width="50" height="50" />
+
+  <button name="Num1" image="circle.png" x="48" y="113" width="30" height="12" />
+  <button name="Num2" image="circle.png" x="91" y="113" width="30" height="12" />
+  <button name="Num3" image="circle.png" x="136" y="113" width="30" height="12" />
+  <button name="Escape" image="circle.png" x="180" y="113" width="30" height="12" />
+
+  <button name="Num4" image="circle.png" x="48" y="150" width="30" height="12" />
+  <button name="Num5" image="circle.png" x="91" y="150" width="30" height="12" />
+  <button name="Num6" image="circle.png" x="136" y="150" width="30" height="12" />
+  <button name="Num0" image="circle.png" x="180" y="150" width="30" height="12" />
+
+  <button name="Num7" image="circle.png" x="48" y="187" width="30" height="12" />
+  <button name="Num8" image="circle.png" x="91" y="187" width="30" height="12" />
+  <button name="Num9" image="circle.png" x="136" y="187" width="30" height="12" />
+  <button name="Enter" image="circle.png" x="180" y="187" width="30" height="12" />
+
+  <button name="Genlock" image="circle.png" x="51" y="59" width="30" height="12" />
+  <button name="CDTV" image="circle.png" x="94" y="59" width="30" height="12" />
+  <button name="Power" image="circle.png" x="181" y="59" width="30" height="12" />
+
+  <button name="Play" image="circle.png" x="51" y="224" width="60" height="23" />
+  <button name="Stop" image="circle.png" x="136" y="224" width="30" height="12" />
+  <button name="VolumeUp" image="circle.png" x="180" y="224" width="30" height="12" />
+  
+  <button name="Rew" image="circle.png" x="48" y="262" width="30" height="12" />
+  <button name="FF" image="circle.png" x="91" y="262" width="30" height="12" />
+  <button name="VolumeDown" image="circle.png" x="180" y="262" width="30" height="12" />
+
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle1.png" x="350" y="200" xrange="50" yrange="50" height="30" width="30"/>
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle1.png" x="350" y="200" xrange="50" yrange="50" height="30" width="30"/>
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="350" y="200" xrange="50" yrange="50" height="30" width="30"/>
+
+</skin>

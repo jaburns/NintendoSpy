@@ -56,7 +56,7 @@ namespace RetroSpy.Readers
 
         static readonly string[] BUTTONS_CDTV_REMOTE =
         {
-            "left", "up", "right", "down", "B", "A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "Escape", "Enter", "Genlock", "CDTV", "Power", "Rew", "Play", "FF", "Stop", "VolumeUp", "VolumeDown", "JoyLeft", "JoyUp", "JoyRight", "JoyDown", "JoyB", "JoyA"
+            "mouse_left", "mouse_up", "mouse_right", "mouse_down", "right_button", "left_button", "Num1", "Num2", "Num3", "Num4", "Num5", "Num6", "Num7", "Num8", "Num9", "Num0", "Escape", "Enter", "Genlock", "CDTV", "Power", "Rew", "Play", "FF", "Stop", "VolumeUp", "VolumeDown", "left", "up", "right", "down", "2", "1"
         };
 
         static readonly string[] BUTTONS_CDTV_JOYSTICK =
@@ -107,7 +107,28 @@ namespace RetroSpy.Readers
             }
             else if (packet.Length == BUTTONS_CDTV_REMOTE.Length)
             {
-                return readPacketButtons(packet, BUTTONS_CDTV_REMOTE);
+                state = new ControllerStateBuilder();
+
+                for (int i = 0; i < BUTTONS_CDTV_REMOTE.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(BUTTONS_CDTV_REMOTE[i])) continue;
+                    state.SetButton(BUTTONS_CDTV_REMOTE[i], packet[i] != 0x00);
+                }
+
+                float x = 0;
+                float y = 0;
+
+                if (packet[0] != 0x00)
+                    x = -0.25f;
+                else if (packet[2] != 0x00)
+                    x = 0.25f;
+                if (packet[1] != 0x00)
+                    y = 0.25f;
+                else if (packet[3] != 0x00)
+                    y = -0.25f;
+
+                SignalTool.SetMouseProperties(x, y, state, 0.25f);
+
             }
             else if (packet.Length == BUTTONS_CDTV_JOYSTICK.Length && packet[0] == 0)
             {
@@ -127,8 +148,7 @@ namespace RetroSpy.Readers
                     }
 
                     SignalTool.FakeAnalogStick(packet[6], packet[5], packet[4], packet[3], state, "x", "y");
-                    SignalTool.FakeAnalogStick(packet[12], packet[11], packet[10], packet[9], state, "Joy2x", "Joy2y");
-                
+                    SignalTool.FakeAnalogStick(packet[12], packet[11], packet[10], packet[9], state, "Joy2x", "Joy2y");               
                 }
             }
             else if (packet.Length == 26 && packet[0] == 1)
@@ -155,8 +175,8 @@ namespace RetroSpy.Readers
             {
                 state = new ControllerStateBuilder();
 
-                state.SetButton("left", packet[0] != 0x00);
-                state.SetButton("right", packet[2] != 0x00);
+                state.SetButton("left_button", packet[0] != 0x00);
+                state.SetButton("right_button", packet[2] != 0x00);
 
                 sbyte xVal = (sbyte)SignalTool.readByteBackwards(packet, 3);
                 sbyte yVal = (sbyte)SignalTool.readByteBackwards(packet, 11);
