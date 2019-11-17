@@ -3,6 +3,8 @@
 
   <background name="Default" image="cdtv-keyboard-us.png" />
   
+  <!-- scan codes from here: whdload.de/docs/en/rawkey.html -->
+  
   <button name="45" image="circle2.png" x="40" y="40" width="25" height="25" />
   
   <button name="50" image="circle2.png" x="84" y="40" width="35" height="25" />
