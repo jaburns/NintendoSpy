@@ -220,8 +220,8 @@ namespace RetroSpy.Readers
                     state = new ControllerStateBuilder();
 
                     for (int i = 0; i < 128; ++i)
-                    {                        
-                        string scanCode = i.ToString("X");
+                    {
+                        string scanCode = i.ToString("X").ToUpper(); ;
                         state.SetButton(scanCode, polishedPacket[i] != 0x00);
                     }
                 }
