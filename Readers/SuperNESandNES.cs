@@ -191,8 +191,44 @@ namespace RetroSpy.Readers
 
                 SignalTool.SetMouseProperties( xVal / -128.0f, yVal / 128.0f, state);
             }
+            else if (packet.Length == 36)
+            {
+                byte[] reconstructedPacket = new byte[18];
 
-            return state != null ? state.Build() : null;
+                int j = 0;
+                for (int i = 0; i < 18; ++i)
+                {
+                    reconstructedPacket[i] = (byte)((packet[j] >> 4) | packet[j + 1]);
+                    j += 2;
+                }
+
+                byte[] polishedPacket = new byte[128];
+
+                int checksum = 0;
+                for (int i = 0; i < 16; ++i)
+                {
+                    checksum += reconstructedPacket[i];
+                    for (int k = 0; k < 8; ++k)
+                    {
+                        polishedPacket[(i * 8) + k] = (byte)((reconstructedPacket[i] & (1 << k)) != 0 ? 1 : 0);
+                    }
+                }
+
+                short sentChecksum = (short)((reconstructedPacket[17] << 8) | reconstructedPacket[16]);
+                if (checksum == sentChecksum)
+                {
+                    state = new ControllerStateBuilder();
+
+                    for (int i = 0; i < 128; ++i)
+                    {                        
+                        string scanCode = i.ToString("X");
+                        state.SetButton(scanCode, polishedPacket[i] != 0x00);
+                    }
+                }
+
+            }
+
+            return state?.Build();
         }
 
         static public ControllerState ReadFromPacket_SNES (byte[] packet) {
