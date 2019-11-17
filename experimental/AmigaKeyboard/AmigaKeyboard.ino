@@ -55,7 +55,7 @@ static inline uint8_t get_scan_code(void)
   uint8_t c, i;
 
   i = tail;
-  if (i == head) return 0;
+  if (i == head) return 0xFF;
   i++;
   if (i >= BUFFER_SIZE) i = 0;
   c = buffer[i];
@@ -88,7 +88,7 @@ void loop() {
 
   while (1) {
     s = get_scan_code();
-    if (s)
+    if (s != 0xFF)
     {  
 #ifdef SNIFFER
       Serial.print((s & 0b01111111), HEX);
@@ -104,7 +104,7 @@ void loop() {
       else
       {
         rawData[(s & 0b01111111)/8] &= ~(1 << ((s & 0b01111111)%8));
-      }
+      }      
     }
 #ifndef SNIFFER
 #ifndef DEBUG
