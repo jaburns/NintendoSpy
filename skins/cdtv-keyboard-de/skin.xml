@@ -56,7 +56,7 @@
   <button name="19" image="circle2.png" x="375" y="126" width="25" height="25" />
   <button name="1A" image="circle2.png" x="406" y="126" width="25" height="25" />
   <button name="1B" image="circle2.png" x="435" y="126" width="25" height="25" />
-  <button name="44" image="circle2.png" x="475" y="126" width="40" height="50" />
+  <button name="44" image="circle2.png" x="475" y="126" width="30" height="50" />
 
   <button name="3D" image="circle2.png" x="631" y="126" width="25" height="25" />
   <button name="3E" image="circle2.png" x="662" y="126" width="25" height="25" />
