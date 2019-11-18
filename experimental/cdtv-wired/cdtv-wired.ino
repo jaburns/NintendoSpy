@@ -1,10 +1,17 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RetroSpy Commodore CDTV Wired Firmware for Arduino
+// v1.0
+// RetroSpy written by zoggins
+
+// ---------------------------------------------------------------------------------
+// Uncomment this for debugging output
+//#define DEBUG
+
 #include "TimerOne.h"// https://code.google.com/archive/p/arduino-timerone/downloads
 
 #define BUFFER_SIZE 45
 
 #define PRDT_PIN 2
-
-//#define DEBUG
 
 #define WAITING_FOR_SYNC_HIGH 1
 #define WAITING_FOR_SYNC_LOW  2

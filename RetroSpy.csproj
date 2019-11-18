@@ -108,6 +108,7 @@
     <Compile Include="beagle.cs" />
     <Compile Include="InputSource.cs" />
     <Compile Include="Keybindings.cs" />
+    <Compile Include="Readers\Amiga.cs" />
     <Compile Include="Readers\ColecoVision.cs" />
     <Compile Include="Readers\DrivingController.cs" />
     <Compile Include="Readers\C64mini.cs" />
@@ -187,18 +188,16 @@
     <Content Include="beagle.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\cdtv-mouse\config\known_16bit_timers.h">
+    <Content Include="experimental\cdtv-wired\config\known_16bit_timers.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\cdtv-mouse\TimerOne.cpp">
+    <Content Include="experimental\cdtv-wired\TimerOne.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\cdtv-mouse\TimerOne.h">
+    <Content Include="experimental\cdtv-wired\TimerOne.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\ps2keyboard\ps2keyboard.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="experimental\legacy\ps2keyboard\ps2keyboard.ino" />
     <Content Include="firmware\BoosterGripSpy.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1087,28 +1086,24 @@
     <Content Include="experimental\cdi\cdi.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\dreamcast\dreamcast.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="experimental\legacy\dreamcast\dreamcast.ino" />
     <Content Include="firmware_teensy\firmware_teensy.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\AmigaMouse\AmigaMouse.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\Wii\Wii.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="experimental\legacy\Wii\Wii.ino" />
     <Content Include="experimental\ColecoVision\ColecoVision.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="experimental\cdtv-mouse\cdtv-mouse.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\cdtv-remote\cdtv-remote.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\AmigaKeyboard\AmigaKeyboard.ino">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="experimental\cdtv-wired\cdtv-wired.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\Settings.settings">
