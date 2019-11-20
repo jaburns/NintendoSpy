@@ -1,11 +1,23 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RetroSpy Bandai Pippin Controller Firmware for Arduino
+// v1.0
+// RetroSpy written by zoggins
+
+// Uncomment this to spy on Controller 1
+//#define CURRENT_SPY_ADDRESS 0xF
+// Uncomment this to spy on Controller 2
+//#define CURRENT_SPY_ADDRESS 0xE
+
+// ---------- Uncomment this for debugging ouput --------------
+//#define DEBUG
+// ---------- Uncomment this for a mostly complete general purpose ADB sniffer  --------------
+//#define SNIFFER
+
 #include "TimerOne.h"// https://code.google.com/archive/p/arduino-timerone/downloads
 
 #define BUFFER_SIZE 45
 
 #define ADB_PIN 2
-
-//#define DEBUG
-//#define SNIFFER
 
 #define WAITING_FOR_ATTENTION 0
 #define WAITING_FOR_SYNC 1
@@ -15,6 +27,10 @@
 #define WAITING_DATA_START_BIT 5
 #define READING_DATA_BITS 6
 #define COULD_BE_DATA_STOP_BIT 7
+
+#ifndef CURRENT_SPY_ADDRESS
+#define CURRENT_SPY_ADDRESS 0xF
+#endif
 
 struct packet
 {
@@ -125,8 +141,7 @@ void loop() {
     }
     Serial.println(currentReadPacket->dataStop ? "S" : "-");
 #else
-    if (currentReadPacket->HasData && currentReadPacket->numBytes == 4)  // Is a controller, at least likely to be a controller
-    {
+    if (currentReadPacket->HasData && currentReadPacket->numBytes == 4 && (currentReadPacket->commandAddress == 0xF || currentReadPacket->commandAddress == 0xE))    {
       for(int j = 0; j < 3; ++j)
       {
         for(int k = 0; k < 8; ++k)
@@ -146,12 +161,15 @@ void loop() {
       Serial.print(rawData[currentReadPacket->commandAddress][j] == 0 ? "0" : "1");
     Serial.print("\n");
 #else
-    Serial.write((currentReadPacket->commandAddress & 0x0F) << 4);
-    Serial.write(currentReadPacket->commandAddress &0xF0);  
-    for(int j = 0; j < 27; ++j)
-      Serial.write(rawData[currentReadPacket->commandAddress][j] == 0 ? 0 : 1);
-    Serial.write(currentReadPacket->HasData == 1);
-    Serial.write("\n");
+    if (currentReadPacket->commandAddress == CURRENT_SPY_ADDRESS)
+    {
+      Serial.write((currentReadPacket->commandAddress & 0x0F) << 4);
+      Serial.write(currentReadPacket->commandAddress &0xF0);  
+      for(int j = 0; j < 27; ++j)
+        Serial.write(rawData[currentReadPacket->commandAddress][j] == 0 ? 0 : 1);
+      Serial.write(currentReadPacket->HasData == 1);
+      Serial.write("\n");
+    }
 #endif
 #endif      
     delete currentReadPacket;
