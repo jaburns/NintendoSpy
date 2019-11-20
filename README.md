@@ -53,9 +53,7 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - [SNK Neo Geo Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
  - [Sega Genesis Mini](https://github.com/zoggins/RetroSpy/wiki/RetroSpy-USB-based-Controller-Getting-Started)
 
-## To-Do List
- - TurboGrafx-16 Mini (when its released)
- - NEOGEO Arcade Stick Pro (when its released)
+## Next Release
  - NES Power Pad
  - Amiga Analog Joysticks
  - Atari 5200 joysticks
@@ -63,6 +61,13 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - Apple Pippin controllers
  - FM Towns Marty controllers, keyboards & mice
  - PC-FX controllers
+ - CDTV Keyboard, Mouse and Joystick
+ - CD32 keyboard
+ - CD-i Keyboard and Trackball
+
+## To-Do List
+ - TurboGrafx-16 Mini (when its released)
+ - NEOGEO Arcade Stick Pro (when its released)
  - Dreamcast Keyboard
  - Saturn Keyboard
  - Virtual Boy
@@ -72,10 +77,8 @@ A fork of [NintendoSpy](https://github.com/jaburns/NintendoSpy), RetroSpy is des
  - ColecoVision Roller Controller
  - ColecoVision Steering Wheel
  - Atari 5200 Trackball Controller
- - Native CDTV Keyboard and mouse/trackball
- - Native CD32 keyboard
  - Steel Battalion Xbox Controller
  - Game Cube Keyboard Controller
  - PlayStation Analog Joystick
  - Master System Sports Pad
- - CD-i Trackball
+ - CDTV Trackball
