@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Atari 2600 Omega Booster Grip" author="chmaller" type="classic">
+
+    <background name="Default" image="atari.png" />
+
+    <button name="1" image="circle.png" x="21" y="20" width="26" height="26" />
+    <button name="red" image="circle.png" x="21" y="20" width="26" height="26" />
+  
+  <button name="2" image="circle.png" x="68" y="90" width="26" height="26" />
+  <button name="3" image="circle.png" x="68" y="65" width="26" height="26" />
+  
+	  <stick xname="x" yname="y" image="omega.png"
+	   x="51" y="58" width="50" height="63" xrange="12" yrange="12" yreverse="false" />
+	
+</skin>
