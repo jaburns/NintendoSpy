@@ -9,6 +9,6 @@
 	   x="88" y="57" width="129" height="211" xrange="20" yrange="20" yreverse="false" />
 	
       <stick xname="x" yname="y" visname="1" image="circle.png"
-	   x="137" y="175" width="55" height="55" xrange="20" yrange="20" yreverse="false" />
+	   x="130" y="175" width="55" height="55" xrange="20" yrange="20" yreverse="false" />
 	
 </skin>
