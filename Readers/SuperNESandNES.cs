@@ -54,6 +54,11 @@ namespace RetroSpy.Readers
             null, "blue", "red", "yellow", "green", "forward", "backward", "pause", null
         };
 
+        static readonly string[] BUTTONS_AMIGA_ANALOG =
+        {
+            "1", "2", "3", "4", null, null
+        };
+
         static readonly string[] BUTTONS_PSCLASSIC =
         {
             "r1", "l1", "r2", "l2", "square", "x", "circle", "triangle", null, null, "down", "up", "right", "left", "start", "select"
@@ -73,6 +78,17 @@ namespace RetroSpy.Readers
                 return readPacketButtons_ascii(packet, BUTTONS_PSCLASSIC);
         }
 
+        static private float AmigaAnalogXAxisData;
+
+        static public ControllerState ReadFromPacket2_CD32(byte[] packet)
+        {
+            if (packet.Length == 6)
+            {
+                AmigaAnalogXAxisData = (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f;
+            }
+            return null;
+        }
+
         static public ControllerState ReadFromPacket_CD32(byte[] packet)
         {
             ControllerStateBuilder state = null;
@@ -80,7 +96,20 @@ namespace RetroSpy.Readers
             {
                 return Classic.ReadFromPacket(packet);
             }
-            if (packet.Length == BUTTONS_CD32.Length)
+            else if (packet.Length == 6)
+            {
+                state = new ControllerStateBuilder();
+
+                for (int i = 0; i < BUTTONS_AMIGA_ANALOG.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(BUTTONS_AMIGA_ANALOG[i])) continue;
+                    state.SetButton(BUTTONS_AMIGA_ANALOG[i], packet[i] == 0x01);
+                }
+
+                state.SetAnalog("y",(((packet[4] >> 4) | (packet[5])) - 15.0f)/-15.0f);
+                state.SetAnalog("x", AmigaAnalogXAxisData);
+            }
+            else if (packet.Length == BUTTONS_CD32.Length)
             {
                 state = new ControllerStateBuilder();
 
