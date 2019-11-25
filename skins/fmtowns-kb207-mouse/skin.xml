@@ -149,4 +149,11 @@
   <button name="Num0" image="circle2.png" x="843" y="329" width="70" height="25" />
   <button name="000" image="circle2.png" x="922" y="329" width="25" height="25" />
   
+  <button name="left" image="circle2.png" x="1086" y="73" width="43" height="43" />
+  <button name="right" image="circle2.png" x="1170" y="73" width="43" height="43" />
+  
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle2.png" x="1147" y="207" xrange="48" yrange="48" height="24" width="24"/>
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle2.png" x="1147" y="207" xrange="48" yrange="48" height="24" width="24"/>
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle.png" x="1147" y="207" xrange="48" yrange="48" height="24" width="24"/>
+  
 </skin>
