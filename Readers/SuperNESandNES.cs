@@ -201,7 +201,7 @@ namespace RetroSpy.Readers
 
         static public ControllerState ReadFromPacket_FMTowns(byte[] packet)
         {
-            if (packet.Length != 9 && packet.Length != 64) return null;
+            if (packet.Length != 9 && packet.Length != 70) return null;
 
             if (packet.Length == 9)
             {
