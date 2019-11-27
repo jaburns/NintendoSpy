@@ -229,8 +229,8 @@ namespace RetroSpy.Readers
             else
             {
                 int j = 0;
-                var reconstructedPacket = new byte[32];
-                for (int i = 0; i < 32; ++i)
+                var reconstructedPacket = new byte[34];
+                for (int i = 0; i < 34; ++i)
                 {
                     reconstructedPacket[i] = (byte)((packet[j] >> 4) | packet[j + 1]);
                     j += 2;
@@ -246,7 +246,21 @@ namespace RetroSpy.Readers
                     }
                 }
 
-                return readPacketButtons(polishedPacket, SCANCODES_FMTOWNS);
+                var state = new ControllerStateBuilder();
+
+                for (int i = 0; i < SCANCODES_FMTOWNS.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(SCANCODES_FMTOWNS[i])) continue;
+                    state.SetButton(SCANCODES_FMTOWNS[i], polishedPacket[i] != 0x00);
+                }
+
+                SignalTool.SetMouseProperties(((sbyte)reconstructedPacket[33]) / -128.0f, ((sbyte)reconstructedPacket[32]) / 128.0f, state);
+
+                state.SetButton("left", packet[68] == 1);
+                state.SetButton("right", packet[69] == 1);
+
+
+                return state.Build();
 
             }
         }
