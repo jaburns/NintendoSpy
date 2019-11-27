@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// RetroSpy Fujitsu FM Towns Marty Keyboard/Mouse Firmware for Teensy 3.5
+// RetroSpy Fujitsu FM Towns Marty Keyboard & Mouse Firmware for Teensy 3.5
 // Tested Settings: Teensy 3.5, 168 MHz (overclock), Fastest + pure-code with LTO, US English
 // v1.0
 // RetroSpy written by zoggins

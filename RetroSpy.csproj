@@ -1102,7 +1102,7 @@
     <Content Include="experimental\ColecoVision\ColecoVision.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\MartyKeyboard\MartyKeyboard.ino">
+    <Content Include="experimental\FMTownsMarty\FMTownsMarty.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\Settings.settings">
