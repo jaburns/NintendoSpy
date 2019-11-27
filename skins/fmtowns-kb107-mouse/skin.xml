@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="FM Towns FMT-KB107 Keyboard w/ Mouse" author="chmaller" type="fmtowns">
+
+  <background name="Default" image="FMT-KB107.png" />
+
+  <button name="ESC" image="circle2.png" x="97" y="140" width="25" height="25" />
+  <button name="1" image="circle2.png" x="136" y="140" width="25" height="25" />
+  <button name="2" image="circle2.png" x="176" y="140" width="25" height="25" />
+  <button name="3" image="circle2.png" x="212" y="140" width="25" height="25" />
+  <button name="4" image="circle2.png" x="253" y="140" width="25" height="25" />
+  <button name="5" image="circle2.png" x="292" y="140" width="25" height="25" />
+  <button name="6" image="circle2.png" x="333" y="140" width="25" height="25" />
+  <button name="7" image="circle2.png" x="371" y="140" width="25" height="25" />
+  <button name="8" image="circle2.png" x="409" y="140" width="25" height="25" />
+  <button name="9" image="circle2.png" x="449" y="140" width="25" height="25" />
+  <button name="0" image="circle2.png" x="488" y="140" width="25" height="25" />
+  <button name="-" image="circle2.png" x="527" y="140" width="25" height="25" />
+  <button name="^" image="circle2.png" x="566" y="140" width="25" height="25" />
+  <button name="yen" image="circle2.png" x="606" y="140" width="25" height="25" />
+  <button name="Backspace" image="circle2.png" x="645" y="140" width="25" height="25" />
+  
+  <button name="Tab" image="circle2.png" x="97" y="182" width="40" height="25" />
+  <button name="Q" image="circle2.png" x="157" y="182" width="25" height="25" />
+  <button name="W" image="circle2.png" x="195" y="182" width="25" height="25" />
+  <button name="E" image="circle2.png" x="235" y="182" width="25" height="25" />
+  <button name="R" image="circle2.png" x="273" y="182" width="25" height="25" />
+  <button name="T" image="circle2.png" x="313" y="182" width="25" height="25" />
+  <button name="Y" image="circle2.png" x="353" y="182" width="25" height="25" />
+  <button name="U" image="circle2.png" x="390" y="182" width="25" height="25" />
+  <button name="I" image="circle2.png" x="430" y="182" width="25" height="25" />
+  <button name="O" image="circle2.png" x="470" y="182" width="25" height="25" />
+  <button name="P" image="circle2.png" x="508" y="182" width="25" height="25" />
+  <button name="@" image="circle2.png" x="548" y="182" width="25" height="25" />
+  <button name="[" image="circle2.png" x="585" y="182" width="25" height="25" />
+  <button name="Enter" image="circle2.png" x="635" y="182" width="35" height="50" />
+  
+  <button name="CTRL" image="circle2.png" x="97" y="219" width="50" height="25" />
+  <button name="A" image="circle2.png" x="167" y="219" width="25" height="25" />
+  <button name="S" image="circle2.png" x="205" y="219" width="25" height="25" />
+  <button name="D" image="circle2.png" x="244" y="219" width="25" height="25" />
+  <button name="F" image="circle2.png" x="282" y="219" width="25" height="25" />
+  <button name="G" image="circle2.png" x="322" y="219" width="25" height="25" />
+  <button name="H" image="circle2.png" x="362" y="219" width="25" height="25" />
+  <button name="J" image="circle2.png" x="399" y="219" width="25" height="25" />
+  <button name="K" image="circle2.png" x="439" y="219" width="25" height="25" />
+  <button name="L" image="circle2.png" x="478" y="219" width="25" height="25" />
+  <button name=";" image="circle2.png" x="518" y="219" width="25" height="25" />
+  <button name=":" image="circle2.png" x="558" y="219" width="25" height="25" />
+  <button name="]" image="circle2.png" x="597" y="219" width="25" height="25" />
+  
+  <button name="SHIFT" image="circle2.png" x="97" y="259" width="70" height="25" />
+  <button name="Z" image="circle2.png" x="187" y="259" width="25" height="25" />
+  <button name="X" image="circle2.png" x="224" y="259" width="25" height="25" />
+  <button name="C" image="circle2.png" x="264" y="259" width="25" height="25" />
+  <button name="V" image="circle2.png" x="302" y="259" width="25" height="25" />
+  <button name="B" image="circle2.png" x="341" y="259" width="25" height="25" />
+  <button name="N" image="circle2.png" x="381" y="259" width="25" height="25" />
+  <button name="M" image="circle2.png" x="420" y="259" width="25" height="25" />
+  <button name="," image="circle2.png" x="457" y="259" width="25" height="25" />
+  <button name="." image="circle2.png" x="498" y="259" width="25" height="25" />
+  <button name="/" image="circle2.png" x="537" y="259" width="25" height="25" />
+  <button name="quote" image="circle2.png" x="575" y="259" width="25" height="25" />
+  <button name="SHIFT" image="circle2.png" x="617" y="259" width="50" height="25" />
+  
+  <button name="BottomLeft" image="circle2.png" x="97" y="296" width="40" height="25" />
+  <button name="ALT" image="circle2.png" x="155" y="296" width="40" height="25" />
+  <button name="CAP" image="circle2.png" x="215" y="296" width="40" height="25" />
+  <button name="Spacebar" image="circle2.png" x="333" y="296" width="80" height="25" />
+  <button name="RightOfSpacebar1" image="circle2.png" x="468" y="296" width="50" height="25" />
+  <button name="RightOfSpacebar2" image="circle2.png" x="538" y="296" width="70" height="25" />
+  <button name="RightOfSpacebar3" image="circle2.png" x="627" y="296" width="40" height="25" />
+  
+  <button name="BelowSpace1" image="circle2.png" x="311" y="336" width="30" height="25" />
+  <button name="BelowSpace2" image="circle2.png" x="359" y="336" width="30" height="25" />
+  
+  <button name="Pause" image="circle2.png" x="97" y="70" width="25" height="25" />
+  
+  <button name="Copy" image="circle2.png" x="148" y="70" width="25" height="25" />
+  
+  <button name="PF1" image="circle2.png" x="194" y="70" width="25" height="25" />
+  <button name="PF2" image="circle2.png" x="235" y="70" width="25" height="25" />
+  <button name="PF3" image="circle2.png" x="273" y="70" width="25" height="25" />
+  <button name="PF4" image="circle2.png" x="312" y="70" width="25" height="25" />
+  <button name="PF5" image="circle2.png" x="352" y="70" width="25" height="25" />
+  
+  <button name="PF6" image="circle2.png" x="402" y="70" width="25" height="25" />
+  <button name="PF7" image="circle2.png" x="440" y="70" width="25" height="25" />
+  <button name="PF8" image="circle2.png" x="478" y="70" width="25" height="25" />
+  <button name="PF9" image="circle2.png" x="519" y="70" width="25" height="25" />
+  <button name="PF10" image="circle2.png" x="558" y="70" width="25" height="25" />
+  
+  <button name="PF11" image="circle2.png" x="606" y="70" width="25" height="25" />
+  <button name="PF12" image="circle2.png" x="647" y="70" width="25" height="25" />
+
+  <button name="SYSREQ" image="circle2.png" x="39" y="70" width="25" height="25" />
+  
+  <button name="EXT1" image="circle2.png" x="39" y="139" width="25" height="25" />
+  <button name="EXT2" image="circle2.png" x="39" y="182" width="25" height="25" />
+  <button name="ScrollLock" image="circle2.png" x="39" y="219" width="25" height="25" />
+  <button name="SysHome" image="circle2.png" x="39" y="259" width="25" height="25" />
+  <button name="End" image="circle2.png" x="39" y="296" width="25" height="25" />
+  
+  <button name="UpperLeftOfHome" image="circle2.png" x="705" y="72" width="25" height="25" />
+  <button name="AboveHome" image="circle2.png" x="744" y="72" width="25" height="25" />
+  <button name="UpperRightOfHome" image="circle2.png" x="784" y="72" width="25" height="25" /> 
+  <button name="LeftOfHome" image="circle2.png" x="705" y="114" width="25" height="25" />
+  <button name="Home" image="circle2.png" x="744" y="114" width="25" height="25" />
+  <button name="RightOfHome" image="circle2.png" x="784" y="114" width="25" height="25" />
+  <button name="LowerLeftOfHome" image="circle2.png" x="705" y="151" width="25" height="25" />
+  <button name="EL" image="circle2.png" x="744" y="151" width="25" height="25" />
+  <button name="DUP" image="circle2.png" x="784" y="151" width="25" height="25" />
+  
+  <button name="Left" image="circle2.png" x="703" y="238" width="25" height="25" />
+  <button name="Up" image="circle2.png" x="744" y="220" width="25" height="25" />
+  <button name="Right" image="circle2.png" x="784" y="238" width="25" height="25" />
+  <button name="Down" image="circle2.png" x="744" y="258" width="25" height="25" />
+  
+  <button name="BelowArrows" image="circle2.png" x="704" y="336" width="100" height="25" />
+  
+  <button name="PF13" image="circle2.png" x="843" y="72" width="25" height="25" />
+  <button name="PF14" image="circle2.png" x="883" y="72" width="25" height="25" />
+  <button name="PF15" image="circle2.png" x="922" y="72" width="25" height="25" />
+  <button name="PF16" image="circle2.png" x="962" y="72" width="25" height="25" />
+  <button name="PF17" image="circle2.png" x="843" y="112" width="25" height="25" />
+  <button name="PF18" image="circle2.png" x="883" y="112" width="25" height="25" />
+  <button name="PF19" image="circle2.png" x="922" y="112" width="25" height="25" />
+  <button name="PF20" image="circle2.png" x="962" y="112" width="25" height="25" />
+  
+  <button name="*" image="circle2.png" x="843" y="181" width="25" height="25" />
+  <button name="divide" image="circle2.png" x="883" y="181" width="25" height="25" />
+  <button name="+" image="circle2.png" x="922" y="181" width="25" height="25" />
+  <button name="subtract" image="circle2.png" x="962" y="181" width="25" height="25" />
+  
+  <button name="Num7" image="circle2.png" x="843" y="220" width="25" height="25" />
+  <button name="Num8" image="circle2.png" x="883" y="220" width="25" height="25" />
+  <button name="Num9" image="circle2.png" x="922" y="220" width="25" height="25" />
+  <button name="=" image="circle2.png" x="962" y="220" width="25" height="25" />
+  
+  <button name="Num4" image="circle2.png" x="843" y="261" width="25" height="25" />
+  <button name="Num5" image="circle2.png" x="883" y="261" width="25" height="25" />
+  <button name="Num6" image="circle2.png" x="922" y="261" width="25" height="25" />
+  <button name="Num." image="circle2.png" x="962" y="261" width="25" height="25" />
+  
+  <button name="Num1" image="circle2.png" x="843" y="299" width="25" height="25" />
+  <button name="Num2" image="circle2.png" x="883" y="299" width="25" height="25" />
+  <button name="Num3" image="circle2.png" x="922" y="299" width="25" height="25" />
+  <button name="NumEnter" image="circle2.png" x="962" y="299" width="25" height="70" />
+  
+  <button name="Num0" image="circle2.png" x="843" y="339" width="70" height="25" />
+  <button name="000" image="circle2.png" x="922" y="339" width="25" height="25" />
+  
+  <button name="left" image="circle2.png" x="1086" y=76" width="45" height="45" />
+  <button name="right" image="circle2.png" x="1170" y=76" width="45" height="45" />
+  
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle2.png" x="1147" y="213" xrange="50" yrange="50" height="25" width="25"/>
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle2.png" x="1147" y="213" xrange="50" yrange="50" height="25" width="25"/>
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle.png" x="1147" y="213" xrange="50" yrange="50" height="25" width="25"/>
+  
+</skin>
