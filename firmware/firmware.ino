@@ -631,24 +631,28 @@ inline void read_SSData()
   word pincache = 0;
 
   while((PIND & 0b11000000) != 0b10000000){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b10000000)
     ssState3 = ~pincache;
-
+  
   pincache = 0;
   while((PIND & 0b11000000) != 0b01000000){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b01000000)
     ssState2 = ~pincache;
     
   pincache = 0;
   while((PIND & 0b11000000) != 0){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0)
     ssState1 = ~pincache;
 
   pincache = 0;
   while((PIND & 0b11000000) != 0b11000000){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b11000000)
     ssState4 = ~pincache;
@@ -734,7 +738,6 @@ inline void read_SS3DData()
       rawData[numBits++] = PIN_READ(SS_DATA1);    
       rawData[numBits++] = PIN_READ(SS_DATA0);
   }
-
   int numBytes = 0;
   if (rawData[2] != 0 && rawData[3] != 0)
     numBytes = 1;
@@ -1553,7 +1556,8 @@ inline void loop_SS()
   noInterrupts();
   read_SSData();
   interrupts();
-  sendRawSSDataV2();
+  //if (!(ssState3 & 0b00001100) == 0b00001100)
+    sendRawSSDataV2();
 }
 
 inline void loop_SS3D()
