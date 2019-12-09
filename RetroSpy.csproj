@@ -132,7 +132,6 @@
     <Compile Include="Readers\ControllerState.cs" />
     <Compile Include="Readers\DelayedControllerReader.cs" />
     <Compile Include="Readers\GameCube.cs" />
-    <Compile Include="Readers\GamepadReaderAnalogToDPad.cs" />
     <Compile Include="Readers\IControllerReader.cs" />
     <Compile Include="Readers\BlinkReductionFilter.cs" />
     <Compile Include="Readers\Classic.cs" />
@@ -149,6 +148,9 @@
     <Compile Include="Readers\SuperNESandNES.cs" />
     <Compile Include="Readers\XInputReader.cs" />
     <Compile Include="SendKeys.cs" />
+    <Compile Include="AddRemoveWindow.xaml.cs">
+      <DependentUpon>AddRemoveWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SSHMonitor.cs" />
     <Compile Include="SerialMonitor.cs" />
     <Compile Include="Readers\SignalTool.cs" />
@@ -157,6 +159,10 @@
     <Compile Include="ViewWindow.xaml.cs">
       <DependentUpon>ViewWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddRemoveWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SetupWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -355,6 +361,30 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\jaguar-6button\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-a\circle_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-a\circle_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-a\powerpad-a.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-a\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-b\circle_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-b\circle_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-b\powerpad-b.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\nes-powerpad-b\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\paddles-2paddles\circle2.png">

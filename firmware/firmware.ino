@@ -83,6 +83,8 @@ BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
 #define SNES_BITCOUNT       16
 #define SNES_BITCOUNT_EXT   32
 #define NES_BITCOUNT         8
+#define NES_DATA0            2
+#define NES_DATA1            5
 
 #define GC_PIN        5
 #define GC_PREFIX    25
@@ -442,6 +444,23 @@ void read_shiftRegister( unsigned char bits )
     while( --bits > 0 );    
 }
 
+template< unsigned char latch, unsigned char data, unsigned char clock, unsigned char data0, unsigned char data1 >
+void read_shiftRegister_NES( unsigned char bits )
+{
+    unsigned char *rawDataPtr = rawData;
+
+    WAIT_FALLING_EDGE( latch );
+
+    do {
+        WAIT_FALLING_EDGE( clock );
+        *rawDataPtr = !PIN_READ(data);
+        *(rawDataPtr+8) = !PIN_READ(data0);
+        *(rawDataPtr+16) = !PIN_READ(data1);
+        ++rawDataPtr;
+    }
+    while( --bits > 0 );    
+}
+
 template< unsigned char latch, unsigned char data, unsigned char clock >
 unsigned char read_shiftRegister_SNES()
 {
@@ -637,24 +656,28 @@ inline void read_SSData()
   word pincache = 0;
 
   while((PIND & 0b11000000) != 0b10000000){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b10000000)
     ssState3 = ~pincache;
-
+  
   pincache = 0;
   while((PIND & 0b11000000) != 0b01000000){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b01000000)
     ssState2 = ~pincache;
     
   pincache = 0;
   while((PIND & 0b11000000) != 0){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0)
     ssState1 = ~pincache;
 
   pincache = 0;
   while((PIND & 0b11000000) != 0b11000000){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b11000000)
     ssState4 = ~pincache;
@@ -740,7 +763,6 @@ inline void read_SS3DData()
       rawData[numBits++] = PIN_READ(SS_DATA1);    
       rawData[numBits++] = PIN_READ(SS_DATA0);
   }
-
   int numBytes = 0;
   if (rawData[2] != 0 && rawData[3] != 0)
     numBytes = 1;
@@ -1500,10 +1522,10 @@ inline void loop_NES()
 #ifdef MODE_2WIRE_SNES
     read_shiftRegister< SNES_LATCH , SNES_DATA , true >( NES_BITCOUNT );
 #else
-    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( NES_BITCOUNT );
+    read_shiftRegister_NES< SNES_LATCH , SNES_DATA , SNES_CLOCK, NES_DATA0, NES_DATA1>( NES_BITCOUNT );
 #endif
     interrupts();
-    sendRawData( 0 , NES_BITCOUNT );
+    sendRawData( 0 , NES_BITCOUNT*3 );
 }
 
 
