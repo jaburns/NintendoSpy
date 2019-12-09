@@ -1556,8 +1556,7 @@ inline void loop_SS()
   noInterrupts();
   read_SSData();
   interrupts();
-  //if (!(ssState3 & 0b00001100) == 0b00001100)
-    sendRawSSDataV2();
+  sendRawSSDataV2();
 }
 
 inline void loop_SS3D()
