@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Gravis Analog Joystick" author="chmaller" type="cd32">
+
+  <background name="Default" image="analog.png" />
+
+  <button name="3" image="circle.png" x="75" y="73" width="65" height="65" />
+  <button name="4" image="circle.png" x="75" y="202" width="65" height="65" />
+
+  <stick xname="x" yname="y" image="joystick.png"
+		   x="206" y="73" width="129" height="215" xrange="30" yrange="30" yreverse="false" />
+  <stick xname="x" yname="y" visname="4" image="circle.png"
+		   x="235" y="138" width="70" height="70" xrange="30" yrange="30" yreverse="false" />
+</skin>

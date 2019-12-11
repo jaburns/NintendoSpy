@@ -14,10 +14,4 @@
     <button name="left" image="circle.png" x="70" y="220" width="30" height="30" />
     <button name="right" image="circle.png" x="158" y="220" width="30" height="30" />
 
-    <button name="3" image="circle.png" x="615" y="230" width="60" height="60" />
-    <button name="4" image="circle.png" x="530" y="230" width="60" height="60" />
-
-    <button name="5" image="circle.png" x="400" y="250" width="50" height="20" />
-    <button name="6" image="circle.png" x="315" y="250" width="50" height="20" />
-
 </skin>

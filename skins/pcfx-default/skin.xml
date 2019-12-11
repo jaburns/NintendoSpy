@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="PC-FX 6 Button Controller" author="zoggins" type="tg16;pcfx">
+
+    <background name="Default" image="PC-FX_Controller.png" />
+
+    <button name="1" image="circle.png" x="537" y="137" width="40" height="40" />
+    <button name="2" image="circle.png" x="486" y="154" width="40" height="40" />
+	<button name="3" image="circle.png" x="435" y="176" width="40" height="40" />
+
+    <button name="4" image="circle.png" x="415" y="123" width="40" height="40" />
+    <button name="5" image="circle.png" x="463" y="102" width="40" height="40" />
+	<button name="6" image="circle.png" x="519" y="85" width="40" height="40" />
+
+    <button name="run" image="circle.png" x="320" y="208" width="35" height="15" />
+    <button name="select" image="circle.png" x="271" y="208" width="35" height="15" />
+
+    <button name="up" image="circle.png" x="109" y="116" width="30" height="30" />
+    <button name="down" image="circle.png" x="109" y="183" width="30" height="30" />
+    <button name="left" image="circle.png" x="78" y="148" width="30" height="30" />
+    <button name="right" image="circle.png" x="155" y="148" width="30" height="30" />
+
+</skin>

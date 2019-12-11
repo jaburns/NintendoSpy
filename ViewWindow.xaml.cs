@@ -278,6 +278,8 @@ namespace RetroSpy
                     stick.YRange = stick.OriginalYRange;
                     var image = getImageForElement(stick.Config);
                     _sticksWithImages.Add(new Tuple<Skin.AnalogStick, Image>(stick, image));
+                    if (stick.VisibilityName != "")
+                        image.Visibility = Visibility.Hidden;
                     ControllerGrid.Children.Add(image);
                 }
             }
@@ -523,13 +525,23 @@ namespace RetroSpy
                       ? skin.Config.Y + yrange * newState.Analogs[skin.YName]
                       : skin.Config.Y;
 
+                Visibility visibility;
+                if (skin.VisibilityName != "")
+                    visibility = (newState.Buttons.ContainsKey(skin.VisibilityName) && newState.Buttons[skin.VisibilityName]) ? Visibility.Visible : Visibility.Hidden;
+                else
+                    visibility = Visibility.Visible;
+
                 if (image.Dispatcher.CheckAccess())
+                {
                     image.Margin = new Thickness(x, y, 0, 0);
+                    image.Visibility = visibility;
+                }
                 else
                 {
                     image.Dispatcher.Invoke(() =>
                     {
                         image.Margin = new Thickness(x, y, 0, 0);
+                        image.Visibility = visibility;
                     });
                 }
             }

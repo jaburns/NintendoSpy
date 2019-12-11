@@ -12,6 +12,7 @@ using RetroSpy.Readers;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using System.Reflection;
 
 namespace RetroSpy
 {
@@ -21,41 +22,50 @@ namespace RetroSpy
         DispatcherTimer _portListUpdateTimer;
         DispatcherTimer _xiAndGamepadListUpdateTimer;
         List <Skin> _skins;
+        List<string> _excludedSources;
 
         public SetupWindow ()
         {
-            InitializeComponent ();
-            _vm = new SetupWindowViewModel ();
+            InitializeComponent();
+            _vm = new SetupWindowViewModel();
             DataContext = _vm;
+            _excludedSources = new List<string>();
 
-            if (! Directory.Exists ("skins")) {
-                MessageBox.Show ("Could not find skins folder!", "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close ();
+            if (!Directory.Exists("skins"))
+            {
+                MessageBox.Show("Could not find skins folder!", "RetroSpy", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
                 return;
             }
 
-            var results = Skin.LoadAllSkinsFromParentFolder ("skins");
+            var results = Skin.LoadAllSkinsFromParentFolder("skins");
             _skins = results.SkinsLoaded;
 
-            _vm.Skins.UpdateContents (_skins.Where (x => x.Type == InputSource.DEFAULT));
-            
-            _vm.Sources.UpdateContents (InputSource.ALL);
-            
+            _vm.Skins.UpdateContents(_skins.Where(x => x.Type == InputSource.DEFAULT));
+
+            var hiddenConsoles = Properties.Settings.Default.HiddleConsoleList.Split(';');
+            foreach (var source in hiddenConsoles)
+            {
+                if (source != "")
+                    _excludedSources.Add(source);
+            }
+
+            PopulateSources();
 
             _vm.DelayInMilliseconds = Properties.Settings.Default.Delay;
 
             _vm.StaticViewerWindowName = Properties.Settings.Default.StaticViewerWindowName;
 
-            _portListUpdateTimer = new DispatcherTimer ();
-            _portListUpdateTimer.Interval = TimeSpan.FromSeconds (1);
-            _portListUpdateTimer.Tick += (sender, e) => updatePortList ();
-            _portListUpdateTimer.Start ();
+            _portListUpdateTimer = new DispatcherTimer();
+            _portListUpdateTimer.Interval = TimeSpan.FromSeconds(1);
+            _portListUpdateTimer.Tick += (sender, e) => updatePortList();
+            _portListUpdateTimer.Start();
 
             _xiAndGamepadListUpdateTimer = new DispatcherTimer();
             _xiAndGamepadListUpdateTimer.Interval = TimeSpan.FromSeconds(2);
             _xiAndGamepadListUpdateTimer.Tick += (sender, e) =>
             {
-                if (_vm.Sources.SelectedItem == InputSource.PAD || _vm.Sources.SelectedItem == InputSource.PADATOD)
+                if (_vm.Sources.SelectedItem == InputSource.PAD)
                 {
                     updateGamepadList();
                 }
@@ -74,7 +84,7 @@ namespace RetroSpy
             };
             _xiAndGamepadListUpdateTimer.Start();
 
-            updatePortList ();
+            updatePortList();
             _vm.Ports.SelectIdFromText(Properties.Settings.Default.Port);
             _vm.Ports2.SelectIdFromText(Properties.Settings.Default.Port2);
             _vm.XIAndGamepad.SelectFirst();
@@ -86,6 +96,19 @@ namespace RetroSpy
             {
                 showSkinParseErrors(results.ParseErrors);
             }
+        }
+
+        private void PopulateSources()
+        {
+            List<InputSource> prunedSources = new List<InputSource>();
+            foreach (var source in InputSource.ALL)
+            {
+                if (!_excludedSources.Contains(source.Name))
+                {
+                    prunedSources.Add(source);
+                }
+            }
+            _vm.Sources.UpdateContents(prunedSources);
         }
 
         void showSkinParseErrors (List <string> errs) {
@@ -141,7 +164,7 @@ namespace RetroSpy
             try
             {
                 IControllerReader reader;
-                if (_vm.Sources.SelectedItem == InputSource.PAD || _vm.Sources.SelectedItem == InputSource.PADATOD)
+                if (_vm.Sources.SelectedItem == InputSource.PAD)
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(_vm.XIAndGamepad.SelectedItem.ToString());
                 }
@@ -157,7 +180,7 @@ namespace RetroSpy
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(txtHostname.Text);
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.PADDLES)
+                else if (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32 || _vm.Sources.SelectedItem == InputSource.ATARI5200)
                 {
                     if (_vm.Ports.SelectedItem == _vm.Ports2.SelectedItem)
                         throw new Exception("Port 1 and Port 2 cannot be the same!");
@@ -222,6 +245,28 @@ namespace RetroSpy
             {
                 _vm.Backgrounds.SelectId(Properties.Settings.Default.Background);
             }
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(string.Format("RetroSpy Version {0}", Assembly.GetEntryAssembly().GetName().Version), "About",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void AddRemove_Click(object sender, RoutedEventArgs e)
+        {
+            new AddRemoveWindow(InputSource.ALL, _excludedSources).ShowDialog();
+
+            PopulateSources();
+
+            string hiddenConsoleList = "";
+            foreach(var source in _excludedSources)
+            {
+                hiddenConsoleList += source + ";";
+            }
+
+            Properties.Settings.Default.HiddleConsoleList = hiddenConsoleList;
+            Properties.Settings.Default.Save();
         }
     }
 
