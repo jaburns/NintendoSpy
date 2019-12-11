@@ -69,14 +69,14 @@ namespace RetroSpy.Readers
             "r1", "l1", "r2", "l2", "square", "x", "circle", "triangle", null, null, "down", "up", "right", "left", "start", "select"
         };
 
-        static readonly string[] BUTTONS_PCFX =
-        {
-            null, "1", "2", "3", "4", "5", "6", "select", "run", "up", "right", "down", "left", "mode1", null, "mode2"
-        };
-
         static readonly string[] BUTTONS_ATARI5200 =
         {
             "start", "pause", "reset", "1", "2", "3", "4", "5", "6", "7", "8", "9", "star", "0", "pound", "trigger", "fire", null, null
+        };
+
+        static readonly string[] BUTTONS_PCFX =
+        {
+            null, "1", "2", "3", "4", "5", "6", "select", "run", "up", "right", "down", "left", "mode1", null, "mode2"
         };
 
         static public ControllerState ReadFromPacket_Intellivision(byte[] packet)
