@@ -2,47 +2,59 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:RuntimeBinder="clr-namespace:Microsoft.CSharp.RuntimeBinder;assembly=Microsoft.CSharp" x:Class="RetroSpy.SetupWindow"
-        Title="RetroSpy" Height="495.015" Width="602" Foreground="White" Background="#FF252526">
+        Title="RetroSpy" Height="515.015" Width="602" Foreground="White" Background="#FF252526">
+
     <Grid>
-        <ComboBox Margin="145,17,10,0" SelectedIndex="0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
+<StackPanel VerticalAlignment="Top">
+            <Menu Width="Auto" Height="20">
+                <MenuItem Header="_Options">
+                    <MenuItem x:Name="AddRemove" Header="Add/Remove Sources..." HorizontalAlignment="Left" Width="Auto" Click="AddRemove_Click"/>
+        </MenuItem>
+        <MenuItem Header="_Help">
+            <MenuItem x:Name="About" Header="About" HorizontalAlignment="Left" Width="Auto" Click="About_Click"/>
+        </MenuItem>
+    </Menu>
+    <Label Content="Label"/>
+</StackPanel>
+        <ComboBox Margin="145,37,10,0" SelectedIndex="0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
                   SelectionChanged="SourceSelectComboBox_SelectionChanged"
                   ItemsSource="{Binding Sources.Items}"
                   DisplayMemberPath="Name"
                   SelectedValue="{Binding Sources.SelectedItem}" />
-        <Label Content="Controller Source:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"/>
-        <Label Name="ComPortLabel" Content="COM Port:" HorizontalAlignment="Left" Margin="59,45,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
+        <Label Content="Controller Source:" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"/>
+        <Label Name="ComPortLabel" Content="COM Port:" HorizontalAlignment="Left" Margin="59,65,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
                Visibility="{Binding ComPortOptionVisibility}" />
-        <Label Name="ControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="59,45,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
+        <Label Name="ControllerIdLabel" Content="Controller:" HorizontalAlignment="Left" Margin="59,65,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
                Visibility="{Binding XIAndGamepadOptionVisibility}" />
-        <Label Name="HostnameLabel" Content="Hostname:" HorizontalAlignment="Left" Margin="59,47,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
+        <Label Name="HostnameLabel" Content="Hostname:" HorizontalAlignment="Left" Margin="59,67,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
                Visibility="{Binding SSHOptionVisibility}" />
-        <ComboBox Name="ComPortCombo" Margin="145,51,10,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
+        <ComboBox Name="ComPortCombo" Margin="145,71,10,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
                   ItemsSource="{Binding Ports.Items}"
                   SelectedValue="{Binding Ports.SelectedItem}" 
                   Visibility="{Binding ComPortOptionVisibility}" />
-        <ComboBox Name="ControllerIdCombo" Margin="145,51,10,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
+        <ComboBox Name="ControllerIdCombo" Margin="145,71,10,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
                   ItemsSource="{Binding XIAndGamepad.Items}"
                   SelectedValue="{Binding XIAndGamepad.SelectedItem}" 
                   Visibility="{Binding XIAndGamepadOptionVisibility}" />
-        <TextBox Name="txtHostname" Margin="145,53,10.333,0" VerticalAlignment="Top" Height="24" Text="{Binding Hostname}" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" Visibility="{Binding SSHOptionVisibility}" />
-        <Label Content="Viewer Skin:" HorizontalAlignment="Left" Margin="10,149,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
-        <ListBox Margin="10,178,265.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"
+        <TextBox Name="txtHostname" Margin="145,73,10.333,0" VerticalAlignment="Top" Height="24" Text="{Binding Hostname}" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Left" Visibility="{Binding SSHOptionVisibility}" />
+        <Label Content="Viewer Skin:" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
+        <ListBox Margin="10,198,265.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"
                  SelectedIndex="0"
                  ItemsSource="{Binding Skins.Items}"
                  DisplayMemberPath="Name"
                  SelectedValue="{Binding Skins.SelectedItem}" SelectionChanged="Skin_SelectionChanged" />
-        <TextBox Name="txtDelay" Margin="145,117,10.333,0" VerticalAlignment="Top" Height="24    " Text="{Binding DelayInMilliseconds}" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Right" />
+        <TextBox Name="txtDelay" Margin="145,137,10.333,0" VerticalAlignment="Top" Height="24    " Text="{Binding DelayInMilliseconds}" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF656565" TextAlignment="Right" />
         <Button Name="goButton" Content="Go!" Margin="10,0,10,10" Height="23" VerticalAlignment="Bottom" FontSize="16" FontFamily="Calibri" Background="#FF3E3E42" Foreground="#FFCBCBCB" BorderBrush="#FF252526" Click="goButton_Click" />
-        <ListBox Margin="0,178,10.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"
+        <ListBox Margin="0,198,10.333,47" Background="#FF1D1D1D" Foreground="#FFCBCBCB" BorderBrush="#FF3E3E42" BorderThickness="2" FontFamily="Calibri" FontSize="16"
         	SelectedIndex="0"
         	ItemsSource="{Binding Backgrounds.Items}"
         	DisplayMemberPath="Name"
         	SelectedValue="{Binding Backgrounds.SelectedItem}" HorizontalAlignment="Right" Width="250" />
-        <Label x:Name="DelayLabel" Content="Delay (ms):" HorizontalAlignment="Left" Margin="54,113,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
-        <CheckBox x:Name="staticViewerNameCheckbox" Content="Static View Window Name&#xD;&#xA;" IsChecked="{Binding StaticViewerWindowName}" HorizontalAlignment="Left" Margin="382,158,0,0" VerticalAlignment="Top" Width="202" Foreground="White" FontSize="16" FontFamily="Calibri" Height="24"/>
-        <Label x:Name="ComPort2Label_Copy" Content="COM Port 2:" HorizontalAlignment="Left" Margin="49,83,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
+        <Label x:Name="DelayLabel" Content="Delay (ms):" HorizontalAlignment="Left" Margin="54,133,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16" />
+        <CheckBox x:Name="staticViewerNameCheckbox" Content="Static View Window Name&#xD;&#xA;" IsChecked="{Binding StaticViewerWindowName}" HorizontalAlignment="Left" Margin="382,178,0,0" VerticalAlignment="Top" Width="202" Foreground="White" FontSize="16" FontFamily="Calibri" Height="24"/>
+        <Label x:Name="ComPort2Label_Copy" Content="COM Port 2:" HorizontalAlignment="Left" Margin="49,103,0,0" VerticalAlignment="Top" Foreground="#FFCBCBCB" FontFamily="Calibri" FontSize="16"
             Visibility="{Binding ComPort2OptionVisibility}" />
-        <ComboBox Name="ComPort2Combo" Margin="145,85,10.333,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
+        <ComboBox Name="ComPort2Combo" Margin="145,105,10.333,0" VerticalAlignment="Top" BorderBrush="#FF252525" IsReadOnly="True" 
                   ItemsSource="{Binding Ports2.Items}"
                   SelectedValue="{Binding Ports2.SelectedItem}" 
                   Visibility="{Binding ComPort2OptionVisibility}" />
