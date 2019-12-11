@@ -773,15 +773,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="skins\ps2keyboard-winpc\circle2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="skins\ps2keyboard-winpc\ps2keyboard.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="skins\ps2keyboard-winpc\skin.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="skins\ps2keyboard-winpc\circle2.png" />
+    <Content Include="skins\ps2keyboard-winpc\ps2keyboard.png" />
+    <Content Include="skins\ps2keyboard-winpc\skin.xml" />
     <Content Include="skins\wii-nes\circle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
