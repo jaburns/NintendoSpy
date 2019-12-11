@@ -314,6 +314,7 @@ namespace RetroSpy.Readers
 
                 return state.Build();
 
+            }
         }
 
         static float atari5200_y;
