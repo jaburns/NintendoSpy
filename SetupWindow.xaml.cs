@@ -180,7 +180,7 @@ namespace RetroSpy
                 {
                     reader = _vm.Sources.SelectedItem.BuildReader(txtHostname.Text);
                 }
-                else if (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32)
+                else if (_vm.Sources.SelectedItem == InputSource.PADDLES || _vm.Sources.SelectedItem == InputSource.CD32 || _vm.Sources.SelectedItem == InputSource.ATARI5200)
                 {
                     if (_vm.Ports.SelectedItem == _vm.Ports2.SelectedItem)
                         throw new Exception("Port 1 and Port 2 cannot be the same!");
