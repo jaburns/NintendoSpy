@@ -23,6 +23,7 @@
 //#define MODE_3DO
 //#define MODE_INTELLIVISION
 //#define MODE_JAGUAR
+//#define MODE_PCFX
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -93,6 +94,11 @@ BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
 #define ThreeDO_DATA       4
 #define ThreeDO_CLOCK      3   
 #define ThreeDO_BITCOUNT  32
+
+#define PCFX_LATCH        3
+#define PCFX_CLOCK        4
+#define PCFX_DATA         5
+#define PCFX_BITCOUNT     16
 
 #define ZERO  '\0'  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE    '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
@@ -1522,6 +1528,15 @@ inline void loop_NES()
     sendRawData( 0 , NES_BITCOUNT*3 );
 }
 
+
+inline void loop_PCFX()
+{
+    noInterrupts();
+    read_shiftRegister< PCFX_LATCH , PCFX_DATA , PCFX_CLOCK >( PCFX_BITCOUNT );
+    interrupts();
+    sendRawData( 0 , PCFX_BITCOUNT );
+}
+
 inline void loop_Sega()
 {
   currentState = segaController.getState();
@@ -1662,6 +1677,8 @@ void loop()
     loop_ColecoVision();
 #elif defined MODE_SMS_ON_GENESIS
     loop_SMS_on_Genesis();
+#elif defined MODE_PCFX
+    loop_PCFX();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();

@@ -1,4 +1,4 @@
-﻿using RetroSpy.Readers;
+using RetroSpy.Readers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +28,7 @@ namespace RetroSpy
         static public readonly InputSource XBOX360 = new InputSource("xbox360", "Microsoft Xbox 360", false, false, true, false, hostname => new SSHControllerReader(hostname, "sudo pkill -9 usb-mitm ; sudo usb-mitm 2> /dev/null -b", Xbox360Reader.ReadFromPacket));
 
         static public readonly InputSource TG16 = new InputSource("tg16", "NEC Turbographx 16", true, false, false, false, port => new SerialControllerReader(port, Tg16.ReadFromPacket));
+        static public readonly InputSource PCFX = new InputSource("pcfx", "NEC PC-FX", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_PCFX));
 
         static public readonly InputSource NES = new InputSource ("nes", "Nintendo NES", true, false, false, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_NES));
         static public readonly InputSource SNES = new InputSource ("snes", "Nintendo SNES", true, false, false, false, port => new SerialControllerReader (port, SuperNESandNES.ReadFromPacket_SNES));
@@ -62,7 +63,7 @@ namespace RetroSpy
         //static public readonly InputSource TOUCHPADTESTER = new InputSource("touchpadtester", "TouchPad Tester", true, false, false, false, port => new TouchPadTester(port));
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, JAGUAR, COLECOVISION, CD32, C64MINI, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PS2KEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC
+            CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, JAGUAR, COLECOVISION, CD32, C64MINI, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PS2KEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC
         };
 
         static public readonly InputSource DEFAULT = NES;
