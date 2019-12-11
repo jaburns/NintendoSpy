@@ -48,7 +48,7 @@ namespace RetroSpy
 
         public class AnalogStick {
             public ElementConfig Config;
-            public string XName, YName;
+            public string XName, YName, VisibilityName;
             public uint XRange, YRange;
             public uint OriginalXRange, OriginalYRange;
             public bool XReverse, YReverse;
@@ -240,6 +240,7 @@ namespace RetroSpy
                     Config = parseStandardConfig(skinPath, elem),
                     XName = readStringAttr(elem, "xname"),
                     YName = readStringAttr(elem, "yname"),
+                    VisibilityName = readStringAttr(elem, "visname", false),
                     XRange = readUintAttr(elem, "xrange"),
                     OriginalXRange = readUintAttr(elem, "xrange"),
                     YRange = readUintAttr(elem, "yrange"),
