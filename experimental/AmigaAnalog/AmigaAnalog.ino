@@ -1,45 +1,40 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// RetroSpy Atari Paddles Firmware for Arduino
+// RetroSpy Amiga Analog Controllers Firmware for Arduino
 // v1.0
 // RetroSpy written by zoggins
 
-// --- These numbers will likely need modified ---
-
-// **nominal_min** is the minimum value the paddle is capable of hitting.  
-// If the display is never hitting all the way left the value needs to be increased.  
-// If its hitting left too soon it needs to be decreased.  
-// The minimum value that can be selected is 0 and the maximum value should be less than **nominal_max**. 
-
-// **nominal_max** is the maximum value the paddle is capable of hitting.  
-// If the display is never hitting all the way right the value needs to be decreased.  
-// If its hitting right too soon it needs to be increased.  
-// The maximum value that can be selected is 1023 and the minimum value should be more than **nominal_min**. 
-
-int nominal_min = 213;
-int nominal_max = 1004;
+//#define X_AXIS
 
 // ---------- Uncomment for debugging output --------------
 //#define DEBUG
 
-// PINOUTS for Right Paddle
-// Atari Pin 4 -> Digital Pin 5
-// Atari Pin 5 -> Analog Pin 0
-// Atari Pin 8 -> Arduino GND
-
-// PINOUTS for Left Paddle
-// Atari Pin 3 -> Digital Pin 5
-// Atari Pin 8 -> Arduino GND
-// Atari Pin 9 -> Analog Pin 0
+// PINOUTS 
+// Amiga Pin 1 -> Digital Pin 2 on Arduino 1
+// Amiga Pin 2 -> Digital Pin 3 on Arduino 1
+// Amiga Pin 3 -> Digital Pin 4 on Arduino 1
+// Atari Pin 4 -> Digital Pin 5 on Arduino 1
+// Atari Pin 5 -> Analog Pin 0 on Arduino 1
+// Atari Pin 6 -> Not Connected
+// Atari Pin 7 -> Not Connected
+// Atari Pin 8 -> GND on Arduino 1 -> GND on Arduino 2
+// Atari Pin 9 -> Analog Pin 0 on Arduino 2
 
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 
 volatile int lastVal = 0;
-volatile int currentVal = 0;
 volatile int analogVal = 0;
-volatile int readFlag;
+volatile int readFlag = 0;
+volatile int Count = 0;
+volatile int CapturedCount = 0;
+volatile bool CrossedThreshold = false;
 
 int window[3];
 int windowPosition = 0;
+bool filledWindow = false;
+bool lockedCalibration = false;
+int nominal_min = 1023;
+int nominal_max = 0;
+
 
 static int ScaleInteger(float oldValue, float oldMin, float oldMax, float newMin, float newMax)
 {
@@ -58,14 +53,22 @@ ISR(ADC_vect)
   // Must read low first
   analogVal = ADCL | (ADCH << 8);
 
-  if (analogVal < lastVal && (lastVal - analogVal) > 20)
+  if (CrossedThreshold && analogVal > 925)
   {
-    currentVal = lastVal;
-    lastVal = analogVal;
+    CrossedThreshold = false; 
+    CapturedCount = Count;
     readFlag = 1;
   }
-  else
+  
+  if (analogVal < lastVal && (lastVal - analogVal) > 20)
   {
+    CrossedThreshold = true;
+    lastVal = analogVal;
+    Count = 0;
+  }
+  else
+  { 
+    Count++;
     lastVal = analogVal;
   }
  
@@ -78,6 +81,13 @@ void setup() {
   
   for (int i = 2; i <= 8; ++i)
     pinMode(i, INPUT_PULLUP);
+
+#ifndef X_AXIS
+  pinMode(12, OUTPUT);
+#else
+  pinMode(12, INPUT);
+  lockedCalibration = (digitalRead(12) == HIGH);
+#endif
 
   windowPosition = 0;
 
@@ -163,35 +173,58 @@ void loop() {
 
   if (readFlag == 1)
   {
+  	byte pins = 0;
+  	pins |= (PIND >> 2);
+        
+  	byte topButton1 		= ((pins & 0b00000001) == 0);
+  	byte topButton2 		= ((pins & 0b00000010) == 0);
+  	byte triggerButton  = ((pins & 0b00000100) == 0);
+  	byte thumbButton 		= ((pins & 0b00001000) == 0);
+  	
+	window[windowPosition] = CapturedCount;
+  	windowPosition += 1;
+  	windowPosition = (windowPosition % 3);
+	if (!filledWindow && windowPosition == 2)
+        filledWindow = true;
+	int smoothedValue = middleOfThree(window[0], window[1], window[2]);
 
-	byte pins = 0;
-	pins |= (PIND >> 2);
-      
-	byte fire2 = ((pins & 0b0000000000001000) == 0);
-  window[windowPosition] = currentVal;
-  windowPosition += 1;
-  windowPosition = (windowPosition % 3);
-#ifdef DEBUG
-    Serial.print("-");
-    Serial.print(fire2 ? "4" : "-");
-    Serial.print("|");
-    Serial.print(ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255));
-    Serial.print("|");
-    Serial.print(0);
-    Serial.print("|");
-    Serial.print(0);
-    Serial.print("\n");
+    if (!lockedCalibration)
+    {
+		if (filledWindow && smoothedValue < nominal_min)
+			nominal_min = smoothedValue;
+		if (filledWindow && smoothedValue > nominal_max)
+			nominal_max = smoothedValue;
+#ifndef X_AXIS
+		lockedCalibration = (topButton1 || topButton2 || triggerButton || thumbButton);
+		if (lockedCalibration)
+          digitalWrite(12, HIGH);
 #else
-    int sil = ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255);
-    Serial.write(0);
-    Serial.write(fire2);
-    Serial.write(sil);
-    Serial.write(0);
-    Serial.write(5);
-    Serial.write(11);
-    Serial.write('\n');
+		lockedCalibration = (digitalRead(12) == HIGH);
 #endif
-	readFlag = 0;
-  delay(5);
-}
+	}
+#ifdef DEBUG
+      Serial.print(CapturedCount);
+      Serial.print("|");
+      Serial.print(smoothedValue);
+      Serial.print("|");
+      Serial.print(topButton1 ? "1" : "-");
+  	  Serial.print(topButton2 ? "2" : "-");
+  	  Serial.print(triggerButton ? "3" : "-");
+  	  Serial.print(thumbButton ? "4" : "-");
+      Serial.print("|");
+      Serial.print(ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 30));
+      Serial.print("\n");
+#else
+      int sil = ScaleInteger(smoothedValue, nominal_min, nominal_max, 0, 30);
+      Serial.write(topButton1 ? 1 : 0);
+      Serial.write(topButton2 ? 1 : 0);
+  	  Serial.write(triggerButton ? 1 : 0);
+  	  Serial.write(thumbButton ? 1 : 0);
+      Serial.write(((sil & 0x0F) << 4));
+      Serial.write((sil & 0xF0));
+  	  Serial.print("\n");
+#endif
+  	readFlag = 0;
+  	//delay(5);
+  }
 }

@@ -176,5 +176,20 @@ namespace RetroSpy.Properties {
                 this["StaticViewerWindowName"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HiddleConsoleList
+        {
+            get
+            {
+                return ((string)(this["HiddleConsoleList"]));
+            }
+            set
+            {
+                this["HiddleConsoleList"] = value;
+            }
+        }
     }
 }

@@ -39,6 +39,10 @@ namespace RetroSpy.Readers
             return state.Build();
         }
         static readonly string[] BUTTONS_NES = {
+            "a", "b", "select", "start", "up", "down", "left", "right", "2", "1", "5", "9", "6", "10", "11", "7", "4", "3", "12", "8", null, null, null, null
+        };
+
+        static readonly string[] BUTTONS_NES_BACKCOMPAT = {
             "a", "b", "select", "start", "up", "down", "left", "right"
         };
 
@@ -55,9 +59,19 @@ namespace RetroSpy.Readers
             null, "blue", "red", "yellow", "green", "forward", "backward", "pause", null
         };
 
+        static readonly string[] BUTTONS_AMIGA_ANALOG =
+        {
+            "1", "2", "3", "4", null, null
+        };
+
         static readonly string[] BUTTONS_PSCLASSIC =
         {
             "r1", "l1", "r2", "l2", "square", "x", "circle", "triangle", null, null, "down", "up", "right", "left", "start", "select"
+        };
+
+        static readonly string[] BUTTONS_PCFX =
+        {
+            null, "1", "2", "3", "4", "5", "6", "select", "run", "up", "right", "down", "left", "mode1", null, "mode2"
         };
 
         static readonly string[] BUTTONS_ATARI5200 =
@@ -70,14 +84,30 @@ namespace RetroSpy.Readers
             return readPacketButtons(packet, BUTTONS_INTELLIVISION);
         }
 
-        static public ControllerState ReadFromPacket_NES(byte[] packet)
+        static public ControllerState ReadFromPacket_NES (byte[] packet) {
+            return readPacketButtons(packet, packet.Length == 8 ? BUTTONS_NES_BACKCOMPAT : BUTTONS_NES);
+        }
+
+        static public ControllerState ReadFromPacket_PCFX(byte[] packet)
         {
-            return readPacketButtons(packet, BUTTONS_NES);
+            if (packet.Length != BUTTONS_PCFX.Length) return null;
+            return readPacketButtons(packet, BUTTONS_PCFX);
         }
 
         static public ControllerState ReadFromPacket_PSClassic(byte[] packet)
         {
             return readPacketButtons_ascii(packet, BUTTONS_PSCLASSIC);
+        }
+
+        static private float AmigaAnalogXAxisData;
+
+        static public ControllerState ReadFromPacket2_CD32(byte[] packet)
+        {
+            if (packet.Length == 6)
+            {
+                AmigaAnalogXAxisData = (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f;
+            }
+            return null;
         }
 
         static public ControllerState ReadFromPacket_CD32(byte[] packet)
@@ -87,7 +117,20 @@ namespace RetroSpy.Readers
             {
                 return Classic.ReadFromPacket(packet);
             }
-            if (packet.Length == BUTTONS_CD32.Length)
+            else if (packet.Length == 6)
+            {
+                state = new ControllerStateBuilder();
+
+                for (int i = 0; i < BUTTONS_AMIGA_ANALOG.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(BUTTONS_AMIGA_ANALOG[i])) continue;
+                    state.SetButton(BUTTONS_AMIGA_ANALOG[i], packet[i] == 0x01);
+                }
+
+                state.SetAnalog("y",(((packet[4] >> 4) | (packet[5])) - 15.0f)/-15.0f);
+                state.SetAnalog("x", AmigaAnalogXAxisData);
+            }
+            else if (packet.Length == BUTTONS_CD32.Length)
             {
                 state = new ControllerStateBuilder();
 

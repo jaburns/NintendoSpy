@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="NES Power Pad Side B" author="zoggins" type="nes">
+
+  <background name="Default" image="powerpad-b.png" />
+
+  <button name="1" image="circle_red.png" x="14" y="90" width="75" height="75" />
+  <button name="2" image="circle_red.png" x="130" y="90" width="75" height="75" />
+  <button name="3" image="circle_blue.png" x="249" y="90" width="75" height="75" />
+  <button name="4" image="circle_blue.png" x="362" y="90" width="75" height="75" />
+  
+  <button name="5" image="circle_red.png" x="14" y="228" width="75" height="75" />
+  <button name="6" image="circle_red.png" x="130" y="228" width="75" height="75" />
+  <button name="7" image="circle_blue.png" x="249" y="228" width="75" height="75" />
+  <button name="8" image="circle_blue.png" x="362" y="228" width="75" height="75" />
+  
+  <button name="9" image="circle_red.png" x="14" y="361" width="75" height="75" />
+  <button name="10" image="circle_red.png" x="130" y="361" width="75" height="75" />
+  <button name="11" image="circle_blue.png" x="249" y="361" width="75" height="75" />
+  <button name="12" image="circle_blue.png" x="362" y="361" width="75" height="75" />
+  
+</skin>
