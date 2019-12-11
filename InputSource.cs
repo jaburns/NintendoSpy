@@ -21,8 +21,9 @@ namespace RetroSpy
 
 
         static public readonly InputSource COLECOVISION = new InputSource("colecovision", "ColecoVision", true, false, false, false, port => new SerialControllerReader(port, ColecoVision.ReadFromPacket));
-
-        static public readonly InputSource CD32 = new InputSource("cd32", "Commodore Amiga CD32", true, false, false, true, (port, port2) => new SerialControllerReader2(port, port2, SuperNESandNES.ReadFromPacket_CD32, SuperNESandNES.ReadFromPacket2_CD32));
+      
+        static public readonly InputSource CDTV = new InputSource("cdtv", "Commodore CDTV", true, false, false, false, port => new SerialControllerReader(port, Amiga.ReadFromPacket));
+        static public readonly InputSource CD32 = new InputSource("cd32", "Commodore Amiga CD32", true, false, false, false, (port, port2) => new SerialControllerReader2(port, port2, Amiga.ReadFromPacket, Amiga.ReadFromPacket2));
         static public readonly InputSource C64MINI = new InputSource("c64mini", "The C64 Mini", false, false, true, false, hostname => new SSHControllerReader(hostname, "-z", C64mini.ReadFromPacket));
 
         static public readonly InputSource FMTOWNS = new InputSource("fmtowns", "Fujitsu FM Towns Marty", true, false, false, false, port => new SerialControllerReader(port, SuperNESandNES.ReadFromPacket_FMTowns));
@@ -47,8 +48,7 @@ namespace RetroSpy
 
         static public readonly InputSource PC360 = new InputSource ("pc360", "PC 360 Controller", false, true, false, false, controllerId => new XInputReader (uint.Parse(controllerId)));
         static public readonly InputSource PAD = new InputSource ("generic", "PC Generic Gamepad", false, true, false, false, controllerId => new GamepadReader (int.Parse(controllerId)));
-        static public readonly InputSource PS2KEYBOARD = new InputSource("ps2keyboard", "PC PS/2 Keyboard", true, false, false, false, port => new SerialControllerReader(port, PS2Keyboard.ReadFromPacket));
-
+ 
         static public readonly InputSource CDI = new InputSource("cdi", "Phillips CD-i", true, false, false, false, port => new SerialControllerReader(port, CDi.ReadFromPacket));
 
         static public readonly InputSource SEGA = new InputSource("genesis", "Sega Genesis", true, false, false, false, port => new SerialControllerReader(port, Sega.ReadFromPacket));
@@ -67,9 +67,11 @@ namespace RetroSpy
         //static public readonly InputSource MOUSETESTER = new InputSource("mousetester", "Mouse Tester", true, false, port => new MouseTester(port));
         //static public readonly InputSource WII = new InputSource("wii", "Nintendo Wii", false, true, controllerId => new WiiReaderV1(int.Parse(controllerId)));
         //static public readonly InputSource TOUCHPADTESTER = new InputSource("touchpadtester", "TouchPad Tester", true, false, false, false, port => new TouchPadTester(port));
+        //static public readonly InputSource PS2KEYBOARD = new InputSource("ps2keyboard", "PC PS/2 Keyboard", true, false, false, false, port => new SerialControllerReader(port, PS2Keyboard.ReadFromPacket));
+
 
         static public readonly IReadOnlyList <InputSource> ALL = new List <InputSource> {
-        CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, PIPPIN, COLECOVISION, CD32, C64MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, PS2KEYBOARD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC
+          CLASSIC, DRIVINGCONTROLLER, ATARIKEYBOARD, PADDLES, ATARI5200, JAGUAR, PIPPIN, COLECOVISION, CDTV, CD32, C64MINI, FMTOWNS, INTELLIVISION, XBOX, XBOX360, TG16, PCFX, NES, SNES, N64, GAMECUBE, WII, SWITCH, THREEDO, PC360, PAD, CDI, SEGA, SATURN3D, DREAMCAST, GENMINI, NEOGEO, NEOGEOMINI, PLAYSTATION2, PS3, PS4, PSCLASSIC
         };
 
         static public readonly InputSource DEFAULT = NES;

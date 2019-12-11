@@ -108,6 +108,7 @@
     <Compile Include="beagle.cs" />
     <Compile Include="InputSource.cs" />
     <Compile Include="Keybindings.cs" />
+    <Compile Include="Readers\Amiga.cs" />
     <Compile Include="Readers\ColecoVision.cs" />
     <Compile Include="Readers\DrivingController.cs" />
     <Compile Include="Readers\C64mini.cs" />
@@ -203,9 +204,16 @@
     <Content Include="experimental\pippin\TimerOne.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\ps2keyboard\ps2keyboard.ino">
+    <Content Include="experimental\cdtv-wired\config\known_16bit_timers.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="experimental\cdtv-wired\TimerOne.cpp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="experimental\cdtv-wired\TimerOne.h">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="experimental\legacy\ps2keyboard\ps2keyboard.ino" />
     <Content Include="firmware\BoosterGripSpy.cpp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -356,6 +364,48 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\cdi-mouse\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-de\cdtv-keyboard-german.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-de\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-de\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-us\cdtv-keyboard-us.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-us\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-keyboard-us\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-remote\cdtv-remote.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-remote\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-remote\skin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\cdtv-trackball.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\circle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\circle1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\circle2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\cdtv-trackball\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="skins\classic-7800\circle.png">
@@ -723,15 +773,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="skins\ps2keyboard-winpc\circle2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="skins\ps2keyboard-winpc\ps2keyboard.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="skins\ps2keyboard-winpc\skin.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="skins\ps2keyboard-winpc\circle2.png" />
+    <Content Include="skins\ps2keyboard-winpc\ps2keyboard.png" />
+    <Content Include="skins\ps2keyboard-winpc\skin.xml" />
     <Content Include="skins\wii-nes\circle.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1196,19 +1240,24 @@
     <Content Include="experimental\cdi\cdi.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\dreamcast\dreamcast.ino">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="experimental\legacy\dreamcast\dreamcast.ino" />
     <Content Include="firmware_teensy\firmware_teensy.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\AmigaMouse\AmigaMouse.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\Wii\Wii.ino">
+    <None Include="experimental\legacy\Wii\Wii.ino" />
+    <Content Include="experimental\ColecoVision\ColecoVision.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="experimental\ColecoVision\ColecoVision.ino">
+    <Content Include="experimental\cdtv-remote\cdtv-remote.ino">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="experimental\AmigaKeyboard\AmigaKeyboard.ino">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="experimental\cdtv-wired\cdtv-wired.ino">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="experimental\Atari5200\Atari5200.ino">
@@ -1354,6 +1403,12 @@
     <Content Include="skins\gamecube-custom\skin.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="skins\generic-skinhelper\source.fla">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="skins\gamecube-custom\GCN_Controllers_PSDs.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="skins\gamecube-simple\ColorKeyScreens\BlackScreen.png" />
     <Resource Include="skins\gamecube-simple\ColorKeyScreens\BlueScreen.png" />
     <Resource Include="skins\gamecube-simple\ColorKeyScreens\GreenScreen.png" />
@@ -1398,12 +1453,6 @@
     <Resource Include="skins\gamecube-simple\GCN_Controllers\GCN_NintendoSpy_Black_No_Frills.png" />
     <Resource Include="skins\gamecube-simple\README.txt" />
     <Resource Include="skins\gamecube-simple\skin.xml" />
-    <Content Include="skins\generic-skinhelper\source.fla">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="skins\gamecube-custom\GCN_Controllers_PSDs.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Compile Include="Readers\TouchPadTester.cs" />
     <None Include="skins\gamecube-simple\GCN_Controllers\GCN_NintendoSpy_Black_No_Frills.psd" />
   </ItemGroup>
