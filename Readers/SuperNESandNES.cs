@@ -65,6 +65,11 @@ namespace RetroSpy.Readers
             "start", "pause", "reset", "1", "2", "3", "4", "5", "6", "7", "8", "9", "star", "0", "pound", "trigger", "fire", null, null
         };
 
+        static readonly string[] BUTTONS_FMTOWNS =
+        {
+            "up", "down", "left", "right", null, "a", "b", null, null, "select", "run"
+        };
+
         static readonly string[] BUTTONS_PCFX =
         {
             null, "1", "2", "3", "4", "5", "6", "select", "run", "up", "right", "down", "left", "mode1", null, "mode2"
@@ -150,6 +155,94 @@ namespace RetroSpy.Readers
 
             return state.Build();
 
+        }
+
+        static readonly string[] SCANCODES_FMTOWNS =
+        {
+            null, "ESC", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "^", "yen", "Backspace",
+            "Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "@", "[", "Enter", "A", "S",
+            "D", "F", "G", "H", "J", "K", "L", ";", ":", "]", "Z", "X", "C", "V", "B", "N",
+            "M", ",", ".", "/", "quote", "Spacebar", "*", "divide", "+", "subtract", "Num7", "Num8", "Num9", "=", "Num4", "Num5",
+            "Num6", null, "Num1", "Num2", "Num3", "NumEnter", "Num0", "Num.", "DUP", null, "000", "EL", null, "Up", "Home", "Left",
+            "Down", "Right", "CTRL", "SHIFT", null, "CAP", "BottomLeft", "BelowSpace1", "BelowSpace2", "RightOfSpacebar1",
+                             "RightOfSpacebar2", "PF12", "ALT", "PF1", "PF2", "PF3",
+            "PF4", "PF5", "PF6", "PF7", "PF8", "PF9", "PF10", null, null, "PF11", null, "UpperLeftOfHome", "AboveHome", "UpperRightOfHome", "LeftOfHome", null,
+            "RightOfHome", "LowerLeftOfHome", "RightOfSpacebar3", "BelowArrows", "PF13", "PF14", "PF15", "PF16", "PF17", "PF18", "PF19", "PF20", "Pause",
+                             "Copy", null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null, null, null, null, "SYSREQ", null, null,
+            "ScrollLock", "SysHome", "End", null, null, null, null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, "EXT1", null, null, null, "EXT2", null, null, null, null, null, null, null
+        };
+
+        static public ControllerState ReadFromPacket_FMTowns(byte[] packet)
+        {
+            if (packet.Length != 9 && packet.Length != 70) return null;
+
+            if (packet.Length == 9)
+            {
+                byte[] polishedPacket = new byte[BUTTONS_FMTOWNS.Length];
+
+                if (packet[0] != 0 && packet[1] != 0)
+                {
+                    packet[0] = packet[1] = 0;
+                    polishedPacket[9] = 1;
+                }
+
+                if (packet[2] != 0 && packet[3] != 0)
+                {
+                    packet[2] = packet[3] = 0;
+                    polishedPacket[10] = 1;
+                }
+
+                for (int i = 0; i < packet.Length; ++i)
+                {
+                    polishedPacket[i] = packet[i];
+                }
+
+                return readPacketButtons(polishedPacket, BUTTONS_FMTOWNS);
+            }
+            else
+            {
+                int j = 0;
+                var reconstructedPacket = new byte[34];
+                for (int i = 0; i < 34; ++i)
+                {
+                    reconstructedPacket[i] = (byte)((packet[j] >> 4) | packet[j + 1]);
+                    j += 2;
+                }
+
+                byte[] polishedPacket = new byte[256];
+
+                for (int i = 0; i < 32; ++i)
+                {
+                    for (int k = 0; k < 8; ++k)
+                    {
+                        polishedPacket[(i * 8) + k] = (byte)((reconstructedPacket[i] & (1 << k)) != 0 ? 1 : 0);
+                    }
+                }
+
+                var state = new ControllerStateBuilder();
+
+                for (int i = 0; i < SCANCODES_FMTOWNS.Length; ++i)
+                {
+                    if (string.IsNullOrEmpty(SCANCODES_FMTOWNS[i])) continue;
+                    state.SetButton(SCANCODES_FMTOWNS[i], polishedPacket[i] != 0x00);
+                }
+
+                SignalTool.SetMouseProperties(((sbyte)reconstructedPacket[33]) / -128.0f, ((sbyte)reconstructedPacket[32]) / 128.0f, state);
+
+                state.SetButton("left", packet[68] == 1);
+                state.SetButton("right", packet[69] == 1);
+
+
+                return state.Build();
+
+            }
         }
 
         static float atari5200_y;
