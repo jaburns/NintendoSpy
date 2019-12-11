@@ -23,6 +23,17 @@ namespace RetroSpy.Readers
             null, "2", "1", "right", "left", "down", "up", "Joy22", "Joy22", "Joy2Right", "Joy2Left", "Joy2Down", "Joy2Up", null, null, null, null, null, null, null, null, null, null, null, null, null
         };
 
+         static private float AmigaAnalogXAxisData;
+
+        static public ControllerState ReadFromPacket2(byte[] packet)
+        {
+            if (packet.Length == 6)
+            {
+                AmigaAnalogXAxisData = (((packet[4] >> 4) | (packet[5])) - 15.0f) / 15.0f;
+            }
+            return null;
+        }
+
         static public ControllerState ReadFromPacket(byte[] packet)
         {
             ControllerStateBuilder state = null;
