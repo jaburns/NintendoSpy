@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="CDTV Keyboard (US)" author="zoggins" type="cdtv;cd32">
+
+  <background name="Default" image="cdtv-keyboard-us.png" />
+  
+  <!-- scan codes from here: whdload.de/docs/en/rawkey.html -->
+  
+  <button name="45" image="circle2.png" x="40" y="40" width="25" height="25" />
+  
+  <button name="50" image="circle2.png" x="84" y="40" width="35" height="25" />
+  <button name="51" image="circle2.png" x="123" y="40" width="35" height="25" />
+  <button name="52" image="circle2.png" x="160" y="40" width="35" height="25" />
+  <button name="53" image="circle2.png" x="196" y="40" width="35" height="25" />
+  <button name="54" image="circle2.png" x="235" y="40" width="35" height="25" />
+  
+  <button name="55" image="circle2.png" x="287" y="40" width="35" height="25" />
+  <button name="56" image="circle2.png" x="325" y="40" width="35" height="25" />
+  <button name="57" image="circle2.png" x="363" y="40" width="35" height="25" />
+  <button name="58" image="circle2.png" x="400" y="40" width="35" height="25" />
+  <button name="59" image="circle2.png" x="437" y="40" width="35" height="25" />
+  
+  <button name="0" image="circle2.png" x="40" y="84" width="35" height="25" />
+  <button name="1" image="circle2.png" x="84" y="84" width="25" height="25" />
+  <button name="2" image="circle2.png" x="114" y="84" width="25" height="25" />
+  <button name="3" image="circle2.png" x="144" y="84" width="25" height="25" />
+  <button name="4" image="circle2.png" x="174" y="84" width="25" height="25" />
+  <button name="5" image="circle2.png" x="205" y="84" width="25" height="25" />
+  <button name="6" image="circle2.png" x="235" y="84" width="25" height="25" />
+  <button name="7" image="circle2.png" x="265" y="84" width="25" height="25" />
+  <button name="8" image="circle2.png" x="294" y="84" width="25" height="25" />
+  <button name="9" image="circle2.png" x="324" y="84" width="25" height="25" />
+  <button name="A" image="circle2.png" x="355" y="84" width="25" height="25" />
+  <button name="B" image="circle2.png" x="384" y="84" width="25" height="25" />
+  <button name="C" image="circle2.png" x="415" y="84" width="25" height="25" />
+  <button name="D" image="circle2.png" x="446" y="84" width="25" height="25" />
+  <button name="41" image="circle2.png" x="476" y="84" width="25" height="25" />
+  
+  <button name="46" image="circle2.png" x="519" y="84" width="35" height="25" />
+  <button name="5F" image="circle2.png" x="566" y="84" width="35" height="25" />
+  
+  <button name="5A" image="circle2.png" x="622" y="84" width="25" height="25" />
+  <button name="5B" image="circle2.png" x="654" y="84" width="25" height="25" />
+  <button name="5C" image="circle2.png" x="683" y="84" width="25" height="25" />
+  <button name="5D" image="circle2.png" x="711" y="84" width="25" height="25" />
+  
+  <button name="42" image="circle2.png" x="40" y="114" width="50" height="25" />
+  <button name="10" image="circle2.png" x="99" y="114" width="25" height="25" />
+  <button name="11" image="circle2.png" x="129" y="114" width="25" height="25" />
+  <button name="12" image="circle2.png" x="157" y="114" width="25" height="25" />
+  <button name="13" image="circle2.png" x="191" y="114" width="25" height="25" />
+  <button name="14" image="circle2.png" x="220" y="114" width="25" height="25" />
+  <button name="15" image="circle2.png" x="250" y="114" width="25" height="25" />
+  <button name="16" image="circle2.png" x="282" y="114" width="25" height="25" />
+  <button name="17" image="circle2.png" x="312" y="114" width="25" height="25" />
+  <button name="18" image="circle2.png" x="339" y="114" width="25" height="25" />
+  <button name="19" image="circle2.png" x="372" y="114" width="25" height="25" />
+  <button name="1A" image="circle2.png" x="402" y="114" width="25" height="25" />
+  <button name="1B" image="circle2.png" x="432" y="114" width="25" height="25" />
+  <button name="44" image="circle2.png" x="460" y="114" width="40" height="50" />
+  
+  <button name="3D" image="circle2.png" x="623" y="114" width="25" height="25" />
+  <button name="3E" image="circle2.png" x="651" y="114" width="25" height="25" />
+  <button name="3F" image="circle2.png" x="682" y="114" width="25" height="25" />
+  <button name="4A" image="circle2.png" x="711" y="114" width="25" height="25" />
+  
+  <button name="63" image="circle2.png" x="40" y="145" width="25" height="25" />
+  <button name="62" image="circle2.png" x="75" y="145" width="25" height="25" />
+  <button name="20" image="circle2.png" x="107" y="145" width="25" height="25" />
+  <button name="21" image="circle2.png" x="137" y="145" width="25" height="25" />
+  <button name="22" image="circle2.png" x="168" y="145" width="25" height="25" />
+  <button name="23" image="circle2.png" x="198" y="145" width="25" height="25" />
+  <button name="24" image="circle2.png" x="228" y="145" width="25" height="25" />
+  <button name="25" image="circle2.png" x="258" y="145" width="25" height="25" />
+  <button name="26" image="circle2.png" x="287" y="145" width="25" height="25" />
+  <button name="27" image="circle2.png" x="319" y="145" width="25" height="25" />
+  <button name="28" image="circle2.png" x="347" y="145" width="25" height="25" />
+  <button name="29" image="circle2.png" x="375" y="145" width="25" height="25" />
+  <button name="2A" image="circle2.png" x="407" y="145" width="25" height="25" />
+  <!--<button name="2B" image="circle2.png" x="565" y="20" width="50" height="50" />-->
+  
+  <button name="4C" image="circle2.png" x="549" y="145" width="25" height="25" />
+  
+  <button name="2D" image="circle2.png" x="623" y="145" width="25" height="25" />
+  <button name="2E" image="circle2.png" x="651" y="145" width="25" height="25" />
+  <button name="2F" image="circle2.png" x="682" y="145" width="25" height="25" />
+  <button name="5E" image="circle2.png" x="711" y="145" width="25" height="25" />
+  
+  <button name="60" image="circle2.png" x="40" y="176" width="70" height="25" />
+  <!--<button name="30" image="circle2.png" x="120" y="176" width="25" height="25" />-->
+  <button name="31" image="circle2.png" x="120" y="176" width="25" height="25" />
+  <button name="32" image="circle2.png" x="151" y="176" width="25" height="25" />
+  <button name="33" image="circle2.png" x="181" y="176" width="25" height="25" />
+  <button name="34" image="circle2.png" x="212" y="176" width="25" height="25" />
+  <button name="35" image="circle2.png" x="244" y="176" width="25" height="25" />
+  <button name="36" image="circle2.png" x="275" y="176" width="25" height="25" />
+  <button name="37" image="circle2.png" x="302" y="176" width="25" height="25" />
+  <button name="38" image="circle2.png" x="334" y="176" width="25" height="25" />
+  <button name="39" image="circle2.png" x="365" y="176" width="25" height="25" />
+  <button name="3A" image="circle2.png" x="392" y="176" width="25" height="25" />
+  <button name="61" image="circle2.png" x="427" y="176" width="70" height="25" />
+  
+  <button name="4F" image="circle2.png" x="517" y="176" width="25" height="25" />
+  <button name="4D" image="circle2.png" x="549" y="176" width="25" height="25" />
+  <button name="4E" image="circle2.png" x="579" y="176" width="25" height="25" />
+  
+  <button name="1D" image="circle2.png" x="623" y="176" width="25" height="25" />
+  <button name="1E" image="circle2.png" x="651" y="176" width="25" height="25" />
+  <button name="1F" image="circle2.png" x="682" y="176" width="25" height="25" />
+  <button name="43" image="circle2.png" x="715" y="176" width="25" height="50" />
+  
+  <button name="64" image="circle2.png" x="56" y="205" width="35" height="25" />
+  <button name="66" image="circle2.png" x="96" y="205" width="35" height="25" />
+  <button name="40" image="circle2.png" x="132" y="205" width="270" height="25" />
+  <button name="67" image="circle2.png" x="406" y="205" width="35" height="25" />
+  <button name="65" image="circle2.png" x="446" y="205" width="35" height="25" />
+  
+  <button name="F" image="circle2.png" x="625" y="205" width="50" height="25" />
+  <button name="3C" image="circle2.png" x="684" y="205" width="25" height="25" />
+  
+</skin>

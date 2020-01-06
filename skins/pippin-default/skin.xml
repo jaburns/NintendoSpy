@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin name="Pippin Applejack" author="zoggins" type="pippin">
+
+    <background name="Default" image="pippin.png" />
+
+    <button name="1" image="circle2.png" x="195" y="34" width="25" height="25" />
+    <button name="2" image="circle2.png" x="253" y="35" width="25" height="25" />
+
+    <button name="red" image="circle2.png" x="301" y="133" width="25" height="25" />
+    <button name="green" image="circle2.png" x="333" y="110" width="25" height="25" />
+	<button name="blue" image="circle2.png" x="324" y="72" width="25" height="25" />
+    <button name="yellow" image="circle2.png" x="294" y="92" width="25" height="25" />
+
+    <button name="up" image="circle2.png" x="123" y="83" width="25" height="25" />
+    <button name="right" image="circle2.png" x="153" y="111" width="25" height="25" />
+	<button name="down" image="circle2.png" x="121" y="138" width="25" height="25" />
+    <button name="left" image="circle2.png" x="97" y="110" width="25" height="25" />
+
+    <button name="square" image="circle2.png" x="176" y="177" width="25" height="25" />
+	<button name="circle" image="circle2.png" x="221" y="177" width="25" height="25" />
+    <button name="diamond" image="circle2.png" x="271" y="177" width="25" height="25" />
+
+  <stick xname="mouse_direction_x" yname="mouse_direction_y" image="circle.png" x="227" y="94" xrange="40" yrange="40" height="10" width="10" yreverse="true" />
+  <stick xname="mouse_center_x" yname="mouse_center_y" image="circle.png" x="227" y="94" xrange="40" yrange="40" height="10" width="10" yreverse="true" />
+  <stick xname="mouse_magnitude_x" yname="mouse_magnitude_y" image="circle2.png" x="227" y="94" xrange="40" yrange="40" height="10" width="10" yreverse="true"/>
+
+
+</skin>

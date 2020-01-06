@@ -175,8 +175,6 @@ void loop() {
     Serial.print("-");
     Serial.print(fire2 ? "4" : "-");
     Serial.print("|");
-    Serial.print(EMA_S);
-    Serial.print("|");
     Serial.print(ScaleInteger(middleOfThree(window[0], window[1], window[2]), nominal_min, nominal_max, 0, 255));
     Serial.print("|");
     Serial.print(0);

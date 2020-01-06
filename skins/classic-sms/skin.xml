@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skin name="SMS Controller" author="chmaller" type="classic;cd32;c64mini;genesis">
+<skin name="SMS Controller" author="chmaller" type="classic;cd32;c64mini;genesis;cdtv">
 
     <background name="Default" image="sms.png" />
 
-    <button name="1" image="circle.png" x="145" y="85" width="23" height="23" />
+  <button name="1" image="circle.png" x="145" y="85" width="23" height="23" />
   <button name="red" image="circle.png" x="145" y="85" width="23" height="23" />
 	<button name="2" image="circle.png" x="179" y="85" width="23" height="23" />
   <button name="blue" image="circle.png" x="179" y="85" width="23" height="23" />

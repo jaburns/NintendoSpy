@@ -23,6 +23,8 @@
 //#define MODE_3DO
 //#define MODE_INTELLIVISION
 //#define MODE_JAGUAR
+//#define MODE_FMTOWNS
+//#define MODE_PCFX
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
 // ---------------------------------------------------------------------------------
@@ -82,6 +84,8 @@ BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
 #define SNES_BITCOUNT       16
 #define SNES_BITCOUNT_EXT   32
 #define NES_BITCOUNT         8
+#define NES_DATA0            2
+#define NES_DATA1            5
 
 #define GC_PIN        5
 #define GC_PREFIX    25
@@ -91,6 +95,11 @@ BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
 #define ThreeDO_DATA       4
 #define ThreeDO_CLOCK      3   
 #define ThreeDO_BITCOUNT  32
+
+#define PCFX_LATCH        3
+#define PCFX_CLOCK        4
+#define PCFX_DATA         5
+#define PCFX_BITCOUNT     16
 
 #define ZERO  '\0'  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE    '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
@@ -436,6 +445,23 @@ void read_shiftRegister( unsigned char bits )
     while( --bits > 0 );    
 }
 
+template< unsigned char latch, unsigned char data, unsigned char clock, unsigned char data0, unsigned char data1 >
+void read_shiftRegister_NES( unsigned char bits )
+{
+    unsigned char *rawDataPtr = rawData;
+
+    WAIT_FALLING_EDGE( latch );
+
+    do {
+        WAIT_FALLING_EDGE( clock );
+        *rawDataPtr = !PIN_READ(data);
+        *(rawDataPtr+8) = !PIN_READ(data0);
+        *(rawDataPtr+16) = !PIN_READ(data1);
+        ++rawDataPtr;
+    }
+    while( --bits > 0 );    
+}
+
 template< unsigned char latch, unsigned char data, unsigned char clock >
 unsigned char read_shiftRegister_SNES()
 {
@@ -631,24 +657,28 @@ inline void read_SSData()
   word pincache = 0;
 
   while((PIND & 0b11000000) != 0b10000000){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b10000000)
     ssState3 = ~pincache;
-
+  
   pincache = 0;
   while((PIND & 0b11000000) != 0b01000000){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b01000000)
     ssState2 = ~pincache;
     
   pincache = 0;
   while((PIND & 0b11000000) != 0){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0)
     ssState1 = ~pincache;
 
   pincache = 0;
   while((PIND & 0b11000000) != 0b11000000){}
+  asm volatile( MICROSECOND_NOPS );
   pincache |= PIND;
   if ((pincache & 0b11000000) == 0b11000000)
     ssState4 = ~pincache;
@@ -734,7 +764,6 @@ inline void read_SS3DData()
       rawData[numBits++] = PIN_READ(SS_DATA1);    
       rawData[numBits++] = PIN_READ(SS_DATA0);
   }
-
   int numBytes = 0;
   if (rawData[2] != 0 && rawData[3] != 0)
     numBytes = 1;
@@ -1142,6 +1171,36 @@ inline void sendNeoGeoData()
     #endif
 }
 
+inline void read_FMTowns()
+{
+  rawData[0] = PIN_READ(2);
+  rawData[1] = PIN_READ(3);
+  rawData[2] = PIN_READ(4);
+  rawData[3] = PIN_READ(5);
+  rawData[4] = PIN_READ(6);
+  rawData[5] = PIN_READ(7);
+  rawData[6] = PINB_READ(0);
+  rawData[7] = PINB_READ(1);
+  rawData[8] = PINB_READ(2);
+}
+
+inline void sendFMTowns()
+{
+    #ifndef DEBUG
+    for (unsigned char i = 0; i < 9; ++i)
+    {
+      Serial.write( rawData[i] ? ZERO : ONE );
+    }
+    Serial.write( SPLIT );
+    #else
+    for(int i = 0; i < 9; ++i)
+    {
+      Serial.print(rawData[i] ? "0" : "1");
+    }
+    Serial.print("\n");
+    #endif
+}
+
 //PORT D PINS
 #define INTPIN1 2  // Digital Pin 2
 #define INTPIN2 3  // Digital Pin 3
@@ -1494,10 +1553,19 @@ inline void loop_NES()
 #ifdef MODE_2WIRE_SNES
     read_shiftRegister< SNES_LATCH , SNES_DATA , true >( NES_BITCOUNT );
 #else
-    read_shiftRegister< SNES_LATCH , SNES_DATA , SNES_CLOCK >( NES_BITCOUNT );
+    read_shiftRegister_NES< SNES_LATCH , SNES_DATA , SNES_CLOCK, NES_DATA0, NES_DATA1>( NES_BITCOUNT );
 #endif
     interrupts();
-    sendRawData( 0 , NES_BITCOUNT );
+    sendRawData( 0 , NES_BITCOUNT*3 );
+}
+
+
+inline void loop_PCFX()
+{
+    noInterrupts();
+    read_shiftRegister< PCFX_LATCH , PCFX_DATA , PCFX_CLOCK >( PCFX_BITCOUNT );
+    interrupts();
+    sendRawData( 0 , PCFX_BITCOUNT );
 }
 
 inline void loop_Sega()
@@ -1572,6 +1640,15 @@ inline void loop_NeoGeo()
   sendNeoGeoData();
 }
 
+inline void loop_FMTowns()
+{
+  noInterrupts();
+  read_FMTowns();
+ interrupts();
+  sendFMTowns();
+}
+
+
 inline void loop_3DO()
 {
     noInterrupts();
@@ -1640,6 +1717,10 @@ void loop()
     loop_ColecoVision();
 #elif defined MODE_SMS_ON_GENESIS
     loop_SMS_on_Genesis();
+#elif defined MODE_PCFX
+    loop_PCFX();
+#elif defined MODE_FMTOWNS
+	loop_FMTowns();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
         loop_SNES();
