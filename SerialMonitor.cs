@@ -11,7 +11,6 @@ namespace RetroSpy
     public class SerialMonitor
     {
         const int BAUD_RATE = 115200;
-        const int TIMER_MS = 7;
 
         public event PacketEventHandler PacketReceived;
         public event EventHandler Disconnected;
@@ -19,25 +18,17 @@ namespace RetroSpy
         SerialPort _datPort;
         List<byte> _localBuffer;
 
-        DispatcherTimer _timer;
-
         public SerialMonitor(string portName)
         {
             _localBuffer = new List<byte>();
             _datPort = new SerialPort(portName, BAUD_RATE);
+            _datPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
         }
 
         public void Start()
         {
-            if (_timer != null) return;
-
             _localBuffer.Clear();
             _datPort.Open();
-
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(TIMER_MS);
-            _timer.Tick += tick;
-            _timer.Start();
         }
 
         public void Stop()
@@ -51,15 +42,11 @@ namespace RetroSpy
                 catch (IOException) { }
                 _datPort = null;
             }
-            if (_timer != null)
-            {
-                _timer.Stop();
-                _timer = null;
-            }
         }
 
-        void tick(object sender, EventArgs e)
+        void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
+
             if (_datPort == null || !_datPort.IsOpen || PacketReceived == null) return;
 
             // Try to read some data from the COM port and append it to our localBuffer.
@@ -70,7 +57,6 @@ namespace RetroSpy
                 if (readCount < 1) return;
                 byte[] readBuffer = new byte[readCount];
                 _datPort.Read(readBuffer, 0, readCount);
-                _datPort.DiscardInBuffer();
                 _localBuffer.AddRange(readBuffer);
             }
             catch (IOException)
