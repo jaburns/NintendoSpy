@@ -12,3 +12,12 @@
 #define ZERO  ((uint8_t)0)  // Use a byte value of 0x00 to represent a bit with value 0.
 #define ONE   '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
 #define SPLIT '\n'  // Use a new-line character to split up the controller state packets.
+
+// Declare some space to store the bits we read from a controller.
+extern unsigned char rawData[];
+
+void common_pin_setup();
+
+template< unsigned char latch, unsigned char data, unsigned char longWait >
+void read_shiftRegister_2wire( unsigned char bits );
+void sendRawData( unsigned char first, unsigned char count );

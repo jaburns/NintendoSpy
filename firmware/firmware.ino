@@ -31,9 +31,6 @@ SMSControllerSpy SMSOnGenesisController(2, 3, 4, 5, 6, 7);
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
 BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
 
-// Declare some space to store the bits we read from a controller.
-unsigned char rawData[ 1024 ];
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
@@ -85,23 +82,13 @@ void sms_pin_setup()
     pinMode(i, INPUT_PULLUP);
 }
 
-void common_pin_setup()
-{
-  PORTD = 0x00;
-  PORTB = 0x00;
-  DDRD  = 0x00;
-
-  for(int i = 2; i <= 6; ++i)
-    pinMode(i, INPUT_PULLUP);
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Performs a read cycle from one of Nintendo's one-wire interface based controllers.
 // This includes the N64 and the Gamecube.
 //     pin  = Pin index on Port D where the data wire is attached.
 //     bits = Number of bits to read from the line.
 template< unsigned char pin >
-void read_oneWire( unsigned char bits )
+void read_GC( unsigned char bits )
 {
     unsigned char *rawDataPtr = rawData;
 
@@ -321,49 +308,8 @@ inline bool checkPrefixGBA ()
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Performs a read cycle from a shift register based controller (SNES + NES) using only the data and latch
-// wires, and waiting a fixed time between reads.  This read method is deprecated due to being finicky,
-// but still exists here to support older builds.
-//     latch = Pin index on Port D where the latch wire is attached.
-//     data  = Pin index on Port D where the output data wire is attached.
-//     bits  = Number of bits to read from the controller.
-//  longWait = The NES takes a bit longer between reads to get valid results back.
-template< unsigned char latch, unsigned char data, unsigned char longWait >
-void read_shiftRegister_2wire( unsigned char bits )
-{
-    unsigned char *rawDataPtr = rawData;
-
-    WAIT_FALLING_EDGE( latch );
-
-read_loop:
-
-    // Read the data from the line and store in "rawData"
-    *rawDataPtr = !PIN_READ(data);
-    ++rawDataPtr;
-    if( --bits == 0 ) return;
-
-    // Wait until the next button value is on the data line. ~12us between each.
-    asm volatile(
-        MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-        MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-        MICROSECOND_NOPS MICROSECOND_NOPS
-    );
-    if( longWait ) {
-        asm volatile(
-            MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-            MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS
-            MICROSECOND_NOPS MICROSECOND_NOPS
-        );
-    }
-
-    goto read_loop;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Preferred method for reading SNES + NES controller data.
 template< unsigned char latch, unsigned char data, unsigned char clock >
-void read_shiftRegister( unsigned char bits )
+void read_shiftRegister_PCFX( unsigned char bits )
 {
     unsigned char *rawDataPtr = rawData;
 
@@ -377,6 +323,8 @@ void read_shiftRegister( unsigned char bits )
     while( --bits > 0 );    
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Preferred methods for reading SNES + NES controller data.
 template< unsigned char latch, unsigned char data, unsigned char clock, unsigned char data0, unsigned char data1 >
 void read_shiftRegister_NES( unsigned char bits )
 {
@@ -461,33 +409,6 @@ byte read_3do( )
     while( --bits > 0 );
 
     return numBitsToRead;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Sends a packet of controller data over the Arduino serial interface.
-inline void sendRawData( unsigned char first, unsigned char count )
-{
-    #ifndef DEBUG
-    for( unsigned char i = first ; i < first + count ; i++ ) {
-        Serial.write( rawData[i] ? ONE : ZERO );
-    }
-    Serial.write( SPLIT );
-    #else
-
-    for( unsigned char i = 0 ; i < first; i++ ) {
-        Serial.print( rawData[i] ? "1" : "0" );
-    }
-    Serial.print("|");
-    int j = 0;
-    for( unsigned char i = first ; i < first + count ; i++ ) {
-
-        if (j % 8 == 0 && j != 0)
-          Serial.print("|");
-        Serial.print( rawData[i] ? "1" : "0" );
-        ++j;
-    }
-    Serial.print("\n");
-    #endif
 }
 
 inline void sendN64Data( unsigned char first, unsigned char count )
@@ -1388,7 +1309,7 @@ inline void loop_GC()
     if (!seenGC2N64)
     {
       noInterrupts();
-      read_oneWire< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
+      read_GC< GC_PIN >( GC_PREFIX + GC_BITCOUNT );
       interrupts();
       if (checkPrefixGC()) {
         sendRawData( GC_PREFIX, GC_BITCOUNT );
@@ -1403,7 +1324,7 @@ inline void loop_GC()
     else
     {
       noInterrupts();
-      read_oneWire< GC_PIN >( 34+GC_PREFIX + GC_BITCOUNT );
+      read_GC< GC_PIN >( 34+GC_PREFIX + GC_BITCOUNT );
       interrupts();
       if (checkBothGCPrefixOnRaphnet())
         sendRawData(34+GC_PREFIX, GC_BITCOUNT);
@@ -1443,7 +1364,7 @@ inline void loop_NES()
 {
     noInterrupts();
 #ifdef MODE_2WIRE_SNES
-    read_shiftRegister< SNES_LATCH , SNES_DATA , true >( NES_BITCOUNT );
+    read_shiftRegister_2wire< SNES_LATCH , SNES_DATA , true >( NES_BITCOUNT );
 #else
     read_shiftRegister_NES< SNES_LATCH , SNES_DATA , SNES_CLOCK, NES_DATA0, NES_DATA1>( NES_BITCOUNT );
 #endif
@@ -1454,7 +1375,7 @@ inline void loop_NES()
 inline void loop_PCFX()
 {
     noInterrupts();
-    read_shiftRegister< PCFX_LATCH , PCFX_DATA , PCFX_CLOCK >( PCFX_BITCOUNT );
+    read_shiftRegister_PCFX< PCFX_LATCH , PCFX_DATA , PCFX_CLOCK >( PCFX_BITCOUNT );
     interrupts();
     sendRawData( 0 , PCFX_BITCOUNT );
 }
