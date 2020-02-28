@@ -10,10 +10,10 @@
 //#define MODE_N64
 //#define MODE_SNES
 //#define MODE_NES
-//#define MODE_SEGA             // For Genesis. Use MODE_CLASSIC for Master System
+//#define MODE_GENESIS
 //#define MODE_SMS_ON_GENESIS   // For using a genesis retrospy cable and the genesis reader in the exe while playing SMS games.
 //#define MODE_GENESIS_MOUSE
-//#define MODE_CLASSIC
+//#define MODE_SMS
 //#define MODE_BOOSTER_GRIP
 //#define MODE_PLAYSTATION
 //#define MODE_TG16
@@ -36,11 +36,11 @@
 // Uncomment this for serial debugging output
 //#define DEBUG
 
-#include "SegaControllerSpy.h"
-#include "ClassicControllerSpy.h"
+#include "GenesisControllerSpy.h"
+#include "SMSControllerSpy.h"
 #include "BoosterGripSpy.h"
 
-SegaControllerSpy segaController;
+GenesisControllerSpy genesisController;
 word currentState = 0;
 unsigned int uiCurrentState = 0;
 word lastState = 0;
@@ -53,8 +53,8 @@ bool seenGC2N64 = false;
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
-ClassicControllerSpy classicController(2, 3, 4, 5, 7, 8);
-ClassicControllerSpy smsOnGenesisController(2, 3, 4, 5, 6, 7);
+SMSControllerSpy SMSController(2, 3, 4, 5, 7, 8);
+SMSControllerSpy SMSOnGenesisController(2, 3, 4, 5, 6, 7);
 
 // Specify the Arduino pins that are connected to
 // DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
@@ -114,26 +114,26 @@ void setup()
 {
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
-  
-  #ifdef MODE_SEGA
-      sega_classic_pin_setup();
+
+  #ifdef MODE_GENESIS
+      genesis_pin_setup();
       goto setup1;
-  #elif defined MODE_CLASSIC
-      sega_classic_pin_setup();
+  #elif defined MODE_SMS
+      sms_pin_setup();
       goto setup1;
   #elif defined MODE_DETECT
-  	#ifdef MODEPIN_SEGA
-      if( !PINC_READ( MODEPIN_SEGA ) ) {
-          sega_classic_pin_setup();
-  		    goto setup1;
+      #ifdef MODEPIN_GENESIS
+      if( !PINC_READ( MODEPIN_GENESIS ) ) {
+          genesis_pin_setup();
+          goto setup1;
       }
-  	#endif 
-  	#ifdef MODEPIN_CLASSIC
-  	if( !PINC_READ( MODEPIN_CLASSIC ) ) {
-          sega_classic_pin_setup();
-  		    goto setup1;
+      #endif
+      #ifdef MODEPIN_SMS
+      if( !PINC_READ( MODEPIN_SMS ) ) {
+          sms_pin_setup();
+          goto setup1;
       }
-  	#endif
+      #endif
   #endif
 
   common_pin_setup();
@@ -147,7 +147,13 @@ setup1:
     Serial.begin( 115200 );
 }
 
-void sega_classic_pin_setup()
+void genesis_pin_setup()
+{
+  for(int i = 2; i <= 6; ++i)
+    pinMode(i, INPUT_PULLUP);
+}
+
+void sms_pin_setup()
 {
   for(int i = 2; i <= 6; ++i)
     pinMode(i, INPUT_PULLUP);
@@ -1015,7 +1021,7 @@ inline void sendRawTgData()
     #endif
 }
 
-inline void sendSmsOnGenesisData()
+inline void sendSMSOnGenesisData()
 {
   #ifndef DEBUG
       Serial.write(0);
@@ -1054,7 +1060,7 @@ inline void sendSmsOnGenesisData()
   #endif  
 }
 
-inline void sendRawSegaData()
+inline void sendRawGenesisData()
 {
   #ifndef DEBUG
   for (unsigned char i = 0; i < 13; ++i)
@@ -1063,7 +1069,6 @@ inline void sendRawSegaData()
   }
   Serial.write( SPLIT );
   #else
-  #ifdef MODE_SEGA
   if (currentState != lastState)
   {
       Serial.print((currentState & SCS_CTL_ON)    ? "+" : "-");
@@ -1083,7 +1088,17 @@ inline void sendRawSegaData()
       lastState = currentState;
   }
   #endif
-  #ifdef MODE_CLASSIC
+}
+
+inline void sendRawSMSData()
+{
+  #ifndef DEBUG
+  for (unsigned char i = 0; i < 6; ++i)
+  {
+    Serial.write (currentState & (1 << i) ? ONE : ZERO );
+  }
+  Serial.write( SPLIT );
+  #else
   if (currentState != lastState)
   {
       Serial.print((currentState & CC_BTN_UP)    ? "U" : "0");
@@ -1096,7 +1111,17 @@ inline void sendRawSegaData()
       lastState = currentState;
   } 
   #endif
-  #ifdef MODE_BOOSTER_GRIP
+}
+
+inline void sendRawBoosterGripData()
+{
+  #ifndef DEBUG
+  for (unsigned char i = 0; i < 17; ++i)
+  {
+    Serial.write (currentState & (1 << i) ? ONE : ZERO );
+  }
+  Serial.write( SPLIT );
+  #else
   if (currentState != lastState)
   {
       Serial.print((currentState & BG_BTN_UP)    ? "U" : "0");
@@ -1110,10 +1135,9 @@ inline void sendRawSegaData()
       lastState = currentState;
   } 
   #endif
-  #endif
 }
 
-inline void sendRawSegaMouseData()
+inline void sendRawGenesisMouseData()
 {
   #ifndef DEBUG
   for(int i = 0; i < 3; ++i)
@@ -1568,35 +1592,34 @@ inline void loop_PCFX()
     sendRawData( 0 , PCFX_BITCOUNT );
 }
 
-inline void loop_Sega()
+inline void loop_Genesis()
 {
-  currentState = segaController.getState();
-  sendRawSegaData();
+  currentState = genesisController.getState();
+  sendRawGenesisData();
 }
 
-inline void loop_Genesis_Mouse()
+inline void loop_GenesisMouse()
 {
-  segaController.getMouseState(rawData);
-  sendRawSegaMouseData();
+  genesisController.getMouseState(rawData);
+  sendRawGenesisMouseData();
 }
 
-inline void loop_Classic()
+inline void loop_SMS()
 {
-  currentState = classicController.getState();
-  sendRawSegaData();
+  currentState = SMSController.getState();
+  sendRawSMSData();
 }
-
 
 inline void loop_SMS_on_Genesis()
 {
-  currentState = smsOnGenesisController.getState();
-  sendSmsOnGenesisData();
+  currentState = SMSOnGenesisController.getState();
+  sendSMSOnGenesisData();
 }
 
 inline void loop_BoosterGrip()
 {
   currentState = boosterGrip.getState();
-  sendRawSegaData();
+  sendRawBoosterGripData();
 }
 
 inline void loop_Playstation2()
@@ -1689,10 +1712,10 @@ void loop()
     loop_SNES();
 #elif defined MODE_NES
     loop_NES();
-#elif defined MODE_SEGA
-    loop_Sega();
-#elif defined MODE_CLASSIC
-    loop_Classic();
+#elif defined MODE_GENESIS
+    loop_Genesis();
+#elif defined MODE_SMS
+    loop_SMS();
 #elif defined MODE_BOOSTER_GRIP
     loop_BoosterGrip();
 #elif defined MODE_PLAYSTATION
@@ -1710,7 +1733,7 @@ void loop()
 #elif defined MODE_INTELLIVISION
     loop_Intellivision();
 #elif defined MODE_GENESIS_MOUSE
-    loop_Genesis_Mouse();
+    loop_GenesisMouse();
 #elif defined MODE_JAGUAR
     loop_Jaguar();
 #elif defined MODE_COLECOVISION
