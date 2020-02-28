@@ -1,4 +1,3 @@
-#include "Arduino.h"
 #include "common.h"
 
 // Declare some space to store the bits we read from a controller.

@@ -25,6 +25,7 @@
 // before the 3-wire firmware was implemented.  This mode is for backwards
 // compatibility only. 
 //#define MODE_2WIRE_SNES
+//#define MODE_2WIRE_NES
 // ---------------------------------------------------------------------------------
 // Uncomment this for serial debugging output
 //#define DEBUG
@@ -38,6 +39,10 @@
 #define SNES_LATCH           3
 #define SNES_DATA            4
 #define SNES_CLOCK           6
+
+#define NES_LATCH            3
+#define NES_CLOCK            6
+#define NES_DATA             4
 #define NES_DATA0            2
 #define NES_DATA1            5
 

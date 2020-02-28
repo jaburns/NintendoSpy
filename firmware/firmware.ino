@@ -5,7 +5,8 @@
 // NintendoSpy originally written by jaburns
 
 #include "common.h"
-#include "config.h"
+
+#include "SNES.h"
 
 #include "GenesisControllerSpy.h"
 #include "SMSControllerSpy.h"
@@ -323,8 +324,6 @@ void read_shiftRegister_PCFX( unsigned char bits )
     while( --bits > 0 );    
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Preferred methods for reading SNES + NES controller data.
 template< unsigned char latch, unsigned char data, unsigned char clock, unsigned char data0, unsigned char data1 >
 void read_shiftRegister_NES( unsigned char bits )
 {
@@ -340,35 +339,6 @@ void read_shiftRegister_NES( unsigned char bits )
         ++rawDataPtr;
     }
     while( --bits > 0 );    
-}
-
-template< unsigned char latch, unsigned char data, unsigned char clock >
-unsigned char read_shiftRegister_SNES()
-{
-    unsigned char position = 0;
-    unsigned char bits = 0;
-
-    WAIT_FALLING_EDGE( latch );
-
-    do {
-        WAIT_FALLING_EDGE( clock );
-        rawData[position++] = !PIN_READ(data);
-    }
-    while( ++bits <= SNES_BITCOUNT );    
-
-    if (rawData[15] != 0x0)
-    {
-      bits = 0;
-      do {
-	      WAIT_FALLING_EDGE( clock );
-          rawData[position++] = !PIN_READ(data);
-      }
-      while( ++bits <= SNES_BITCOUNT );
-
-      return SNES_BITCOUNT_EXT;
-    }
-
-    return SNES_BITCOUNT;
 }
 
 template< unsigned char latch, unsigned char data, unsigned char clock >
@@ -1347,26 +1317,13 @@ inline void loop_N64()
       delay(2);
 }
 
-inline void loop_SNES()
-{
-    noInterrupts();
-    unsigned char bytesToReturn = SNES_BITCOUNT;
-#ifdef MODE_2WIRE_SNES
-    read_shiftRegister_2wire< SNES_LATCH , SNES_DATA , false >( SNES_BITCOUNT );
-#else
-    bytesToReturn = read_shiftRegister_SNES< SNES_LATCH , SNES_DATA , SNES_CLOCK >();
-#endif
-    interrupts();
-    sendRawData( 0 , bytesToReturn );
-}
-
 inline void loop_NES()
 {
     noInterrupts();
-#ifdef MODE_2WIRE_SNES
-    read_shiftRegister_2wire< SNES_LATCH , SNES_DATA , true >( NES_BITCOUNT );
+#ifdef MODE_2WIRE_NES
+    read_shiftRegister_2wire< NES_LATCH , NES_DATA , true >( NES_BITCOUNT );
 #else
-    read_shiftRegister_NES< SNES_LATCH , SNES_DATA , SNES_CLOCK, NES_DATA0, NES_DATA1>( NES_BITCOUNT );
+    read_shiftRegister_NES< NES_LATCH , NES_DATA , NES_CLOCK, NES_DATA0, NES_DATA1>( NES_BITCOUNT );
 #endif
     interrupts();
     sendRawData( 0 , NES_BITCOUNT*3 );

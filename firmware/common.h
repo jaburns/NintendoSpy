@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "config.h"
 
 #define N64_BITCOUNT  32
