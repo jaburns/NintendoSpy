@@ -1,3 +1,13 @@
+#include "config.h"
+
+#define N64_BITCOUNT  32
+#define SNES_BITCOUNT       16
+#define SNES_BITCOUNT_EXT   32
+#define NES_BITCOUNT         8
+#define GC_BITCOUNT  64
+#define ThreeDO_BITCOUNT  32
+#define PCFX_BITCOUNT     16
+
 #define PIN_READ( pin )  (PIND&(1<<(pin)))
 #define PINC_READ( pin ) (PINC&(1<<(pin)))
 #define PINB_READ( pin ) (PINB&(1<<(pin)))

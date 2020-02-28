@@ -34,30 +34,23 @@
 #define MODEPIN_GC   2
 
 #define N64_PIN        2
-#define N64_BITCOUNT  32
 
 #define SNES_LATCH           3
 #define SNES_DATA            4
 #define SNES_CLOCK           6
-#define SNES_BITCOUNT       16
-#define SNES_BITCOUNT_EXT   32
-#define NES_BITCOUNT         8
 #define NES_DATA0            2
 #define NES_DATA1            5
 
 #define GC_PIN        5
 #define GC_PREFIX    25
-#define GC_BITCOUNT  64
 
 #define ThreeDO_LATCH      2
 #define ThreeDO_DATA       4
 #define ThreeDO_CLOCK      3   
-#define ThreeDO_BITCOUNT  32
 
 #define PCFX_LATCH        3
 #define PCFX_CLOCK        4
 #define PCFX_DATA         5
-#define PCFX_BITCOUNT     16
 
 #define SS_SELECT0 6
 #define SS_SEL 6
