@@ -2,6 +2,8 @@
 
 // Declare some space to store the bits we read from a controller.
 unsigned char rawData[1024];
+word currentState = 0;
+word lastState = -1;
 
 void common_pin_setup()
 {

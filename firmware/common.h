@@ -27,6 +27,8 @@
 
 // Declare some space to store the bits we read from a controller.
 extern unsigned char rawData[];
+extern word currentState;
+extern word lastState;
 
 void common_pin_setup();
 
