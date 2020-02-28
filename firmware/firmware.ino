@@ -12,6 +12,7 @@
 #include "GC.h"
 
 #include "3DO.h"
+#include "ColecoVision.h"
 #include "FMTowns.h"
 #include "Jaguar.h"
 #include "Intellivision.h"
