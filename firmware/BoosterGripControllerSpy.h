@@ -1,5 +1,5 @@
 //
-// BoosterGripSpy.h
+// BoosterGripControllerSpy.h
 //
 // Author:
 //       Christopher Mallery <christopher.mallery@gmail.com>
@@ -24,8 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef BoosterGripSpy_h
-#define BoosterGripSpy_h
+#ifndef BoosterGripControllerSpy_h
+#define BoosterGripControllerSpy_h
 
 enum
 {
@@ -42,9 +42,9 @@ const byte BG_INPUT_PINS = 7;
 
 const unsigned long BG_READ_DELAY_MS = 5;
 
-class BoosterGripSpy {
+class BoosterGripControllerSpy {
     public:
-        BoosterGripSpy(byte db9_pin_1, byte db9_pin_2, byte db9_pin_3, byte db9_pin_4, byte db9_pin_5, byte db9_pin_6, byte db9_pin_9);
+        BoosterGripControllerSpy(byte db9_pin_1, byte db9_pin_2, byte db9_pin_3, byte db9_pin_4, byte db9_pin_5, byte db9_pin_6, byte db9_pin_9);
 
         word getState();
 

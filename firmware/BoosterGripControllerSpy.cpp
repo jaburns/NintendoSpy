@@ -1,5 +1,5 @@
 //
-// BoosterGripSpy.cpp
+// BoosterGripControllerSpy.cpp
 //
 // Author:
 //       Christopher Mallery <christopher.mallery@gmail.com>
@@ -25,9 +25,9 @@
 // THE SOFTWARE.
 
 #include "Arduino.h"
-#include "BoosterGripSpy.h"
+#include "BoosterGripControllerSpy.h"
 
-BoosterGripSpy::BoosterGripSpy(byte db9_pin_1, byte db9_pin_2, byte db9_pin_3, byte db9_pin_4, byte db9_pin_5, byte db9_pin_6, byte db9_pin_9)
+BoosterGripControllerSpy::BoosterGripControllerSpy(byte db9_pin_1, byte db9_pin_2, byte db9_pin_3, byte db9_pin_4, byte db9_pin_5, byte db9_pin_6, byte db9_pin_9)
 {
     // Set pins
     _inputPins[0] = db9_pin_1;
@@ -52,7 +52,7 @@ BoosterGripSpy::BoosterGripSpy(byte db9_pin_1, byte db9_pin_2, byte db9_pin_3, b
     _lastReadTime = millis();
 }
 
-word BoosterGripSpy::getState()
+word BoosterGripControllerSpy::getState()
 {
     if (max(millis() - _lastReadTime, 0) < BG_READ_DELAY_MS)
     {
@@ -74,7 +74,7 @@ word BoosterGripSpy::getState()
     return _currentState;
 }
 
-void BoosterGripSpy::readCycle()
+void BoosterGripControllerSpy::readCycle()
 {
 	// Read input pins for Up, Down, Left, Right, 1, 2, 3
 	if (digitalRead(_inputPins[0]) == LOW) { _currentState |= BG_BTN_UP; }

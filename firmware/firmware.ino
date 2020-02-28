@@ -11,6 +11,10 @@
 #include "N64.h"
 #include "GC.h"
 
+#include "BoosterGrip.h"
+#include "Genesis.h"
+#include "SMS.h"
+
 #include "3DO.h"
 #include "ColecoVision.h"
 #include "FMTowns.h"
@@ -21,21 +25,6 @@
 #include "PlayStation.h"
 #include "Saturn.h"
 #include "TG16.h"
-
-#include "GenesisControllerSpy.h"
-#include "SMSControllerSpy.h"
-#include "BoosterGripSpy.h"
-
-GenesisControllerSpy genesisController;
-
-// Specify the Arduino pins that are connected to
-// DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
-SMSControllerSpy SMSController(2, 3, 4, 5, 7, 8);
-SMSControllerSpy SMSOnGenesisController(2, 3, 4, 5, 6, 7);
-
-// Specify the Arduino pins that are connected to
-// DB9 Pin 1, DB9 Pin 2, DB9 Pin 3, DB9 Pin 4, DB9 Pin 5, DB9 Pin 6, DB9 Pin 9
-BoosterGripSpy boosterGrip(2, 3, 4, 5, 6, 7, 8);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
@@ -70,196 +59,6 @@ void setup()
 setup1:
 
     Serial.begin( 115200 );
-}
-
-void genesis_pin_setup()
-{
-  for(int i = 2; i <= 6; ++i)
-    pinMode(i, INPUT_PULLUP);
-}
-
-void sms_pin_setup()
-{
-  for(int i = 2; i <= 6; ++i)
-    pinMode(i, INPUT_PULLUP);
-}
-
-template< unsigned char latch, unsigned char data, unsigned char clock >
-void read_shiftRegister_reverse_clock( unsigned char bits )
-{
-    unsigned char *rawDataPtr = rawData;
-
-    WAIT_FALLING_EDGE( latch );
-
-    do {
-        WAIT_LEADING_EDGE( clock );
-        *rawDataPtr = PIN_READ(data);
-        ++rawDataPtr;
-    }
-    while( --bits > 0 );
-}
-
-inline void sendSMSOnGenesisData()
-{
-  #ifndef DEBUG
-      Serial.write(ZERO);
-      Serial.write((currentState & CC_BTN_UP)    ? 1 : 0);
-      Serial.write((currentState & CC_BTN_DOWN)  ? 1 : 0);
-      Serial.write((currentState & CC_BTN_LEFT)  ? 1 : 0);
-      Serial.write((currentState & CC_BTN_RIGHT) ? 1 : 0);
-      Serial.write((currentState & CC_BTN_1)     ? 1 : 0);
-      Serial.write((currentState & CC_BTN_2)     ? 1 : 0);   
-      Serial.write(ZERO);
-      Serial.write(ZERO);
-      Serial.write(ZERO);
-      Serial.write(ZERO);
-      Serial.write(ZERO);
-      Serial.write(ZERO);
-      Serial.write(SPLIT);  
-  #else
-  if (currentState != lastState)
-  {
-      Serial.print("-");
-      Serial.print((currentState & SCS_BTN_UP)    ? "U" : "0");
-      Serial.print((currentState & SCS_BTN_DOWN)  ? "D" : "0");
-      Serial.print((currentState & SCS_BTN_LEFT)  ? "L" : "0");
-      Serial.print((currentState & SCS_BTN_RIGHT) ? "R" : "0");
-      Serial.print("0");
-      Serial.print("0");
-      Serial.print((currentState & SCS_BTN_B)     ? "1" : "0");
-      Serial.print((currentState & SCS_BTN_C)     ? "2" : "0");
-      Serial.print("0");
-      Serial.print("0");
-      Serial.print("0");
-      Serial.print("0");
-      Serial.print("\n");
-      lastState = currentState;
-  }
-  #endif  
-}
-
-inline void sendRawGenesisData()
-{
-  #ifndef DEBUG
-  for (unsigned char i = 0; i < 13; ++i)
-  {
-    Serial.write (currentState & (1 << i) ? ONE : ZERO );
-  }
-  Serial.write( SPLIT );
-  #else
-  if (currentState != lastState)
-  {
-      Serial.print((currentState & SCS_CTL_ON)    ? "+" : "-");
-      Serial.print((currentState & SCS_BTN_UP)    ? "U" : "0");
-      Serial.print((currentState & SCS_BTN_DOWN)  ? "D" : "0");
-      Serial.print((currentState & SCS_BTN_LEFT)  ? "L" : "0");
-      Serial.print((currentState & SCS_BTN_RIGHT) ? "R" : "0");
-      Serial.print((currentState & SCS_BTN_START) ? "S" : "0");
-      Serial.print((currentState & SCS_BTN_A)     ? "A" : "0");
-      Serial.print((currentState & SCS_BTN_B)     ? "B" : "0");
-      Serial.print((currentState & SCS_BTN_C)     ? "C" : "0");
-      Serial.print((currentState & SCS_BTN_X)     ? "X" : "0");
-      Serial.print((currentState & SCS_BTN_Y)     ? "Y" : "0");
-      Serial.print((currentState & SCS_BTN_Z)     ? "Z" : "0");
-      Serial.print((currentState & SCS_BTN_MODE)  ? "M" : "0");
-      Serial.print("\n");
-      lastState = currentState;
-  }
-  #endif
-}
-
-inline void sendRawSMSData()
-{
-  #ifndef DEBUG
-  for (unsigned char i = 0; i < 6; ++i)
-  {
-    Serial.write (currentState & (1 << i) ? ONE : ZERO );
-  }
-  Serial.write( SPLIT );
-  #else
-  if (currentState != lastState)
-  {
-      Serial.print((currentState & CC_BTN_UP)    ? "U" : "0");
-      Serial.print((currentState & CC_BTN_DOWN)  ? "D" : "0");
-      Serial.print((currentState & CC_BTN_LEFT)  ? "L" : "0");
-      Serial.print((currentState & CC_BTN_RIGHT) ? "R" : "0");
-      Serial.print((currentState & CC_BTN_1)     ? "1" : "0");
-      Serial.print((currentState & CC_BTN_2)     ? "2" : "0");
-      Serial.print("\n");
-      lastState = currentState;
-  } 
-  #endif
-}
-
-inline void sendRawBoosterGripData()
-{
-  #ifndef DEBUG
-  for (unsigned char i = 0; i < 17; ++i)
-  {
-    Serial.write (currentState & (1 << i) ? ONE : ZERO );
-  }
-  Serial.write( SPLIT );
-  #else
-  if (currentState != lastState)
-  {
-      Serial.print((currentState & BG_BTN_UP)    ? "U" : "0");
-      Serial.print((currentState & BG_BTN_DOWN)  ? "D" : "0");
-      Serial.print((currentState & BG_BTN_LEFT)  ? "L" : "0");
-      Serial.print((currentState & BG_BTN_RIGHT) ? "R" : "0");
-      Serial.print((currentState & BG_BTN_1)     ? "1" : "0");
-      Serial.print((currentState & BG_BTN_2)     ? "2" : "0");
-      Serial.print((currentState & BG_BTN_3)     ? "3" : "0");
-      Serial.print("\n");
-      lastState = currentState;
-  } 
-  #endif
-}
-
-inline void sendRawGenesisMouseData()
-{
-  #ifndef DEBUG
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 8; ++j)
-      Serial.write((rawData[i] & (1 << j)) == 0 ? ZERO : ONE);
-  #else
-    for(int i = 0; i < 3; ++i)
-      for(int j = 0; j < 8; ++j)
-        Serial.print((rawData[i] & (1 << j)) == 0 ? "0" : "1");
-  #endif   
-  Serial.print("\n");
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Update loop definitions for the various console modes.
-
-inline void loop_Genesis()
-{
-  currentState = genesisController.getState();
-  sendRawGenesisData();
-}
-
-inline void loop_GenesisMouse()
-{
-  genesisController.getMouseState(rawData);
-  sendRawGenesisMouseData();
-}
-
-inline void loop_SMS()
-{
-  currentState = SMSController.getState();
-  sendRawSMSData();
-}
-
-inline void loop_SMS_on_Genesis()
-{
-  currentState = SMSOnGenesisController.getState();
-  sendSMSOnGenesisData();
-}
-
-inline void loop_BoosterGrip()
-{
-  currentState = boosterGrip.getState();
-  sendRawBoosterGripData();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
