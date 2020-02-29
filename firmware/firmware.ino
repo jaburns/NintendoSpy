@@ -30,9 +30,12 @@
 NESSpy NESSpy;
 #elif defined(MODE_SNES)
 SNESSpy SNESSpy;
+#elif defined(MODE_N64)
+N64Spy N64Spy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
+N64Spy N64Spy;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,9 +49,13 @@ void setup()
     NESSpy.setup();
 #elif defined(MODE_SNES)
     SNESSpy.setup();
+#elif defined(MODE_N64)
+    N64Spy.setup();
 #elif defined(MODE_DETECT)
     if (false /* read SNES_PIN */) {
         SNESSpy.setup();
+    else if (false /* read N64_PIN */) {
+        N64Spy.setup();
     } else {
         NESSpy.setup();
     }
@@ -89,7 +96,7 @@ void loop()
 #ifdef MODE_GC
     loop_GC();
 #elif defined MODE_N64
-    loop_N64();
+    N64Spy.loop();
 #elif defined MODE_SNES
     SNESSpy.loop();
 #elif defined MODE_NES
@@ -130,7 +137,7 @@ void loop()
     if( !PINC_READ( MODEPIN_SNES ) ) {
         SNESSpy.loop();
     } else if( !PINC_READ( MODEPIN_N64 ) ) {
-        loop_N64();
+        N64Spy.loop();
     } else if( !PINC_READ( MODEPIN_GC ) ) {
         loop_GC();
     } else {
