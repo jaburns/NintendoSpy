@@ -1,3 +1,18 @@
-template< unsigned char latch, unsigned char data, unsigned char clock >
-unsigned char read_shiftRegister_SNES();
-void loop_SNES();
+#ifndef SNESSpy_h
+#define SNESSpy_h
+
+#include "ControllerSpy.h"
+
+class SNESSpy : public ControllerSpy {
+    public:
+        void setup();
+        void loop();
+        void writeSerial();
+        void updateState();
+
+    private:
+        unsigned char rawData[SNES_BITCOUNT_EXT];
+	unsigned char bytesToReturn = SNES_BITCOUNT;
+};
+
+#endif

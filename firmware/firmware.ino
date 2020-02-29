@@ -6,8 +6,7 @@
 
 #include "common.h"
 
-#include "NESSpy.h"
-
+#include "NES.h"
 #include "SNES.h"
 #include "N64.h"
 #include "GC.h"
@@ -29,8 +28,11 @@
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
+#elif defined(MODE_SNES)
+SNESSpy SNESSpy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
+SNESSpy SNESSpy;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,8 +44,11 @@ void setup()
 
 #if defined(MODE_NES)
     NESSpy.setup();
+#elif defined(MODE_SNES)
+    SNESSpy.setup();
 #elif defined(MODE_DETECT)
     if (false /* read SNES_PIN */) {
+        SNESSpy.setup();
     } else {
         NESSpy.setup();
     }
@@ -86,7 +91,7 @@ void loop()
 #elif defined MODE_N64
     loop_N64();
 #elif defined MODE_SNES
-    loop_SNES();
+    SNESSpy.loop();
 #elif defined MODE_NES
     NESSpy.loop();
 #elif defined MODE_GENESIS
@@ -123,7 +128,7 @@ void loop()
     loop_FMTowns();
 #elif defined MODE_DETECT
     if( !PINC_READ( MODEPIN_SNES ) ) {
-        loop_SNES();
+        SNESSpy.loop();
     } else if( !PINC_READ( MODEPIN_N64 ) ) {
         loop_N64();
     } else if( !PINC_READ( MODEPIN_GC ) ) {
