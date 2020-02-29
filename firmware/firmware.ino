@@ -6,7 +6,8 @@
 
 #include "common.h"
 
-#include "NES.h"
+#include "NESSpy.h"
+
 #include "SNES.h"
 #include "N64.h"
 #include "GC.h"
@@ -26,12 +27,27 @@
 #include "Saturn.h"
 #include "TG16.h"
 
+#if defined(MODE_NES)
+NESSpy NESSpy;
+#elif defined(MODE_DETECT)
+NESSpy NESSpy;
+#endif
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
 void setup()
 {
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
+
+#if defined(MODE_NES)
+    NESSpy.setup();
+#elif defined(MODE_DETECT)
+    if (false /* read SNES_PIN */) {
+    } else {
+        NESSpy.setup();
+    }
+#endif
 
   #ifdef MODE_GENESIS
       genesis_pin_setup();
@@ -72,7 +88,7 @@ void loop()
 #elif defined MODE_SNES
     loop_SNES();
 #elif defined MODE_NES
-    loop_NES();
+    NESSpy.loop();
 #elif defined MODE_GENESIS
     loop_Genesis();
 #elif defined MODE_SMS
@@ -113,7 +129,7 @@ void loop()
     } else if( !PINC_READ( MODEPIN_GC ) ) {
         loop_GC();
     } else {
-        loop_NES();
+        NESSpy.loop();
     }
 #endif
 }

@@ -35,7 +35,7 @@ inline void loop_SNES()
     noInterrupts();
     unsigned char bytesToReturn = SNES_BITCOUNT;
 #ifdef MODE_2WIRE_SNES
-    read_shiftRegister_2wire< SNES_LATCH , SNES_DATA , false >( SNES_BITCOUNT );
+    read_shiftRegister_2wire(SNES_LATCH, SNES_DATA, false, SNES_BITCOUNT);
 #else
     bytesToReturn = read_shiftRegister_SNES< SNES_LATCH , SNES_DATA , SNES_CLOCK >();
 #endif
