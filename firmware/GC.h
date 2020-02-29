@@ -1,7 +1,24 @@
-template< unsigned char pin >
-void read_GC( unsigned char bits );
-void sendRawGBAData();
-void loop_GC();
+#ifndef GCSpy_h
+#define GCSpy_h
 
-extern bool seenGC2N64;
+#include "ControllerSpy.h"
 
+class GCSpy : public ControllerSpy {
+    public:
+        void setup();
+        void loop();
+        void writeSerial();
+        void updateState();
+
+    private:
+	bool seenGC2N64 = false;
+        bool checkPrefixGBA();
+        bool checkPrefixGC();
+        bool checkBothGCPrefixOnRaphnet();
+        void sendRawGBAData();
+
+        unsigned char rawData[34 + GC_PREFIX + GC_BITCOUNT];
+        unsigned char readBits;
+};
+
+#endif
