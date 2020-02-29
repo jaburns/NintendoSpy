@@ -1,4 +1,4 @@
-#include "NESSpy.h"
+#include "NES.h"
 
 void NESSpy::setup() {
 }
