@@ -36,6 +36,8 @@ N64Spy N64Spy;
 GCSpy GCSpy;
 #elif defined(MODE_ThreeDO)
 ThreeDOSpy ThreeDOSpy;
+#elif defined(MODE_BOOSTER_GRIP)
+BoosterGripSpy BoosterGripSpy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
@@ -117,7 +119,7 @@ void loop()
 #elif defined MODE_SMS
     loop_SMS();
 #elif defined MODE_BOOSTER_GRIP
-    loop_BoosterGrip();
+    BoosterGripSpy.loop();
 #elif defined MODE_PLAYSTATION
     loop_Playstation();
 #elif defined MODE_TG16
