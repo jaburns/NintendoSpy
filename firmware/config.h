@@ -13,7 +13,7 @@
 //#define MODE_SATURN
 //#define MODE_SATURN3D
 //#define MODE_NEOGEO
-//#define MODE_3DO
+//#define MODE_ThreeDO
 //#define MODE_INTELLIVISION
 //#define MODE_JAGUAR
 //#define MODE_FMTOWNS

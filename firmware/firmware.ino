@@ -15,7 +15,7 @@
 #include "Genesis.h"
 #include "SMS.h"
 
-#include "3DO.h"
+#include "ThreeDO.h"
 #include "ColecoVision.h"
 #include "FMTowns.h"
 #include "Jaguar.h"
@@ -34,6 +34,8 @@ SNESSpy SNESSpy;
 N64Spy N64Spy;
 #elif defined(MODE_GC)
 GCSpy GCSpy;
+#elif defined(MODE_ThreeDO)
+ThreeDOSpy ThreeDOSpy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
@@ -56,6 +58,8 @@ void setup()
     N64Spy.setup();
 #elif defined(MODE_GC)
     GCSpy.setup();
+#elif defined(MODE_ThreeDO)
+    ThreeDOSpy.setup();
 #elif defined(MODE_DETECT)
     if (false /* read SNES_MODEPIN */) {
         SNESSpy.setup();
@@ -124,8 +128,8 @@ void loop()
     loop_SS3D();
 #elif defined MODE_NEOGEO
     loop_NeoGeo();
-#elif defined MODE_3DO
-    loop_3DO();
+#elif defined MODE_ThreeDO
+    ThreeDO.loop();
 #elif defined MODE_INTELLIVISION
     loop_Intellivision();
 #elif defined MODE_GENESIS_MOUSE
