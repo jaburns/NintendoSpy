@@ -62,6 +62,8 @@ void setup()
     GCSpy.setup();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.setup();
+#elif defined(MODE_BOOSTER_GRIP)
+    BoosterGripSpy.setup();
 #elif defined(MODE_DETECT)
     if (false /* read SNES_MODEPIN */) {
         SNESSpy.setup();
