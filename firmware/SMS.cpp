@@ -149,14 +149,14 @@ void SMSSpy::debugSerial() {
         }
 
         Serial.print("-");
-        Serial.print((currentState & CS_BTN_UP)    ? "U" : "0");
-        Serial.print((currentState & CS_BTN_DOWN)  ? "D" : "0");
-        Serial.print((currentState & CS_BTN_LEFT)  ? "L" : "0");
-        Serial.print((currentState & CS_BTN_RIGHT) ? "R" : "0");
+        Serial.print((currentState & CC_BTN_UP)    ? "U" : "0");
+        Serial.print((currentState & CC_BTN_DOWN)  ? "D" : "0");
+        Serial.print((currentState & CC_BTN_LEFT)  ? "L" : "0");
+        Serial.print((currentState & CC_BTN_RIGHT) ? "R" : "0");
         Serial.print("0");
         Serial.print("0");
-        Serial.print((currentState & CS_BTN_1)     ? "1" : "0");
-        Serial.print((currentState & CS_BTN_2)     ? "2" : "0");
+        Serial.print((currentState & CC_BTN_1)     ? "1" : "0");
+        Serial.print((currentState & CC_BTN_2)     ? "2" : "0");
         Serial.print("0");
         Serial.print("0");
         Serial.print("0");
