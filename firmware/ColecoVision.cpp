@@ -1,8 +1,5 @@
 #include "ColecoVision.h"
 
-void ColecoVisionSpy::setup() {
-}
-
 void ColecoVisionSpy::loop() {
 }
 

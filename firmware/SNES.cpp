@@ -1,8 +1,5 @@
 #include "SNES.h"
 
-void SNESSpy::setup() {
-}
-
 void SNESSpy::loop() {
     noInterrupts();
     updateState();
@@ -37,7 +34,7 @@ void SNESSpy::updateState() {
         WAIT_FALLING_EDGE(SNES_CLOCK);
         rawData[position++] = !PIN_READ(SNES_DATA);
     }
-    while(++bits <= SNES_BITCOUNT);
+    while(++bits < SNES_BITCOUNT);
 
     if (rawData[15] != 0x0)
     {
@@ -46,7 +43,7 @@ void SNESSpy::updateState() {
             WAIT_FALLING_EDGE(SNES_CLOCK);
             rawData[position++] = !PIN_READ(SNES_DATA);
         }
-        while(++bits <= SNES_BITCOUNT);
+        while(++bits < SNES_BITCOUNT);
 
         bytesToReturn = SNES_BITCOUNT_EXT;
     }

@@ -1,8 +1,5 @@
 #include "Saturn3D.h"
 
-void Saturn3DSpy::setup() {
-}
-
 void Saturn3DSpy::loop() {
     noInterrupts();
     updateState();
@@ -74,7 +71,7 @@ void Saturn3DSpy::updateState() {
             rawData[numBits++] = 0;
         }
 
-        for(int i = 0; i < 16; ++i)
+        for(int i = 0; i < 16; ++i) {
             rawData[numBits++] = 0;
         }
     }

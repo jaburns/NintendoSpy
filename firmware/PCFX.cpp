@@ -1,8 +1,5 @@
 #include "PCFX.h"
 
-void PCFXSpy::setup() {
-}
-
 void PCFXSpy::loop() {
     noInterrupts();
     updateState();

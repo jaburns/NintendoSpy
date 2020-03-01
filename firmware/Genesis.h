@@ -69,13 +69,13 @@ class GenesisSpy : public ControllerSpy {
             SCS_BTN_MODE  = 4096
 	};
 
-        static const uint16_t MASK_PINS_FOUR_AND_FIVE       = 0x0030 // 0b0000000000110000
-        static const uint16_t MASK_PINS_TWO_AND_THREE       = 0x000C // 0b0000000000001100
-        static const uint16_t MASK_PINS_TWO_THREE_FOUR_FIVE = 0x003C // 0b0000000000111100
+        static const uint16_t MASK_PINS_FOUR_AND_FIVE       = 0x0030; // 0b0000000000110000
+        static const uint16_t MASK_PINS_TWO_AND_THREE       = 0x000C; // 0b0000000000001100
+        static const uint16_t MASK_PINS_TWO_THREE_FOUR_FIVE = 0x003C; // 0b0000000000111100
 
-        static const uint16_t TWOC_MASK_A_AND_START_CTRL    = 0xFE7E // 0b1111111001111110
-        static const uint16_t TWOC_MASK_UPLRBC              = 0xFF81 // 0b1111111110000001
-        static const uint16_t TWOC_MASK_XYXM                = 0xE1FF // 0b1110000111111111
+        static const uint16_t TWOC_MASK_A_AND_START_CTRL    = 0xFE7E; // 0b1111111001111110
+        static const uint16_t TWOC_MASK_UPLRBC              = 0xFF81; // 0b1111111110000001
+        static const uint16_t TWOC_MASK_XYXM                = 0xE1FF; // 0b1110000111111111
 
         unsigned long last6buttonCheck;
         bool sixButtonConnected;

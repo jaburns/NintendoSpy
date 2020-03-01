@@ -50,7 +50,7 @@ void BoosterGripSpy::setup() {
 }
 
 void BoosterGripSpy::loop() {
-    if (max(millis() - lastReadTime, 0) < BG_READ_DELAY_MS)
+    if (max(millis() - lastReadTime, 0U) < BG_READ_DELAY_MS)
     {
         // Not enough time has elapsed, return
         return;

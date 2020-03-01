@@ -1,8 +1,5 @@
 #include "Jaguar.h"
 
-void JaguarSpy::setup() {
-}
-
 void JaguarSpy::loop() {
     noInterrupts();
     updateState();

@@ -5,7 +5,6 @@
 
 class NeoGeoSpy : public ControllerSpy {
     public:
-        void setup();
         void loop();
         void writeSerial();
         void debugSerial();
@@ -16,4 +15,3 @@ class NeoGeoSpy : public ControllerSpy {
 };
 
 #endif
-

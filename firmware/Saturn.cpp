@@ -1,8 +1,5 @@
 #include "Saturn.h"
 
-void SaturnSpy::setup() {
-}
-
 void SaturnSpy::loop() {
     noInterrupts();
     updateState();

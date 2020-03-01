@@ -1,8 +1,5 @@
 #include "NeoGeo.h"
 
-void NeoGeoSpy::setup() {
-}
-
 void NeoGeoSpy::loop() {
     noInterrupts();
     updateState();

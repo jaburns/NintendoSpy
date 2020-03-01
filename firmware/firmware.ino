@@ -13,6 +13,7 @@
 
 #include "BoosterGrip.h"
 #include "Genesis.h"
+#include "GenesisMouse.h"
 #include "SMS.h"
 #include "Saturn.h"
 #include "Saturn3D.h"
@@ -54,7 +55,7 @@ ColecoVisionSpy ColecoVisionSpy;
 #elif defined(MODE_FMTOWNS)
 FMTownsSpy FMTownsSpy;
 #elif defined(MODE_INTELLIVISION)
-IntelliVisionSpy IntelliVisionSpy;
+IntellivisionSpy IntelliVisionSpy;
 #elif defined(MODE_JAGUAR)
 JaguarSpy JaguarSpy;
 #elif defined(MODE_NEOGEO)
@@ -98,7 +99,7 @@ void setup()
 #elif defined(MODE_SMS)
     SMSSpy.setup();
 #elif defined(MODE_SMS_ON_GENESIS)
-    SMSOnGenesisSpy.setup(SMSOnGenesisSpy::OUTPUT_GENESIS);
+    SMSOnGenesisSpy.setup(SMSSpy::OUTPUT_GENESIS);
 #elif defined(MODE_SATURN)
     SaturnSpy.setup();
 #elif defined(MODE_SATURN3D)
@@ -122,11 +123,11 @@ void setup()
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.setup();
 #elif defined(MODE_DETECT)
-    if (false /* read SNES_MODEPIN */) {
+    if ( !PINC_READ(MODEPIN_SNES)) {
         SNESSpy.setup();
-    } else if (false /* read N64_MODEPIN */) {
+    } else if ( !PINC_READ(MODEPIN_N64))  {
         N64Spy.setup();
-    } else if (false /* read GC_MODEPIN */) {
+    } else if ( !PINC_READ(MODEPIN_GC)) {
         GCSpy.setup();
     } else {
         NESSpy.setup();
@@ -163,11 +164,11 @@ void loop()
 #elif defined(MODE_SATURN3D)
     Saturn3DSpy.loop();
 #elif defined(MODE_COLECOVISION)
-    ColecoVision.loop();
+    ColecoVisionSpy.loop();
 #elif defined(MODE_FMTOWNS)
     FMTownsSpy.loop();
 #elif defined(MODE_INTELLIVISION)
-    INtelliVisionSpy.loop();
+    IntelliVisionSpy.loop();
 #elif defined(MODE_JAGUAR)
     JaguarSpy.loop();
 #elif defined(MODE_NEOGEO)

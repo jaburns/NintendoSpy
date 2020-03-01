@@ -18,6 +18,7 @@
 //#define MODE_JAGUAR
 //#define MODE_FMTOWNS
 //#define MODE_PCFX
+//#define MODE_COLECOVISION
 
 //Bridge one of the analog GND to the right analog IN to enable your selected mode
 //#define MODE_DETECT
@@ -109,7 +110,7 @@
 
 // The raw output of an Intellivision controller when
 // multiple buttons is pressed is very strange and
-// no likely what you want to see, but set this to false
+// not likely what you want to see, but set this to false
 // if you do want the strange behavior
 #define INT_SANE_BEHAVIOR true
 

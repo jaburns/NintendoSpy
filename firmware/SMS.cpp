@@ -27,7 +27,7 @@
 #include "SMS.h"
 
 void SMSSpy::setup(uint8_t outputType) {
-    this.outputType = outputType;
+    this->outputType = outputType;
     setup();
 }
 
@@ -71,7 +71,7 @@ void SMSSpy::loop() {
 }
 
 void SMSSpy::updateState() {
-    if (max(millis() - lastReadTime, 0) < CC_READ_DELAY_MS)
+    if (max(millis() - lastReadTime, 0U) < CC_READ_DELAY_MS)
     {
         // Not enough time has elapsed, return
         return;

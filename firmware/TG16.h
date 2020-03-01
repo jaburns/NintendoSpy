@@ -5,7 +5,6 @@
 
 class TG16Spy : public ControllerSpy {
     public:
-        void setup();
         void loop();
         void writeSerial();
         void debugSerial();

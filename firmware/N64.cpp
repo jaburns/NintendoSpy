@@ -1,8 +1,5 @@
 #include "N64.h"
 
-void N64Spy::setup() {
-}
-
 void N64Spy::loop() {
     noInterrupts();
     updateState();

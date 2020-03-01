@@ -1,8 +1,5 @@
 #include "PlayStation.h"
 
-void PlayStationSpy::setup() {
-}
-
 void PlayStationSpy::loop() {
     noInterrupts();
     updateState();
