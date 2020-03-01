@@ -55,7 +55,7 @@ void setup()
   #endif
 
   common_pin_setup();
-
+  goto setup1;
 setup1:
 
     Serial.begin( 115200 );

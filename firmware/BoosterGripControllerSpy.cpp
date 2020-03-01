@@ -54,7 +54,7 @@ BoosterGripControllerSpy::BoosterGripControllerSpy(byte db9_pin_1, byte db9_pin_
 
 word BoosterGripControllerSpy::getState()
 {
-    if (max(millis() - _lastReadTime, 0) < BG_READ_DELAY_MS)
+    if (max(millis() - _lastReadTime, 0U) < BG_READ_DELAY_MS)
     {
         // Not enough time has elapsed, return previously read state
         return _currentState;
