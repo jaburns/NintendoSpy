@@ -16,6 +16,8 @@
 #include "BoosterGrip.h"
 #include "Genesis.h"
 #include "SMS.h"
+#include "Saturn.h"
+#include "Saturn3D.h"
 
 #include "ColecoVision.h"
 #include "FMTowns.h"
@@ -24,7 +26,6 @@
 #include "NeoGeo.h"
 #include "PCFX.h"
 #include "PlayStation.h"
-#include "Saturn.h"
 #include "TG16.h"
 
 #if defined(MODE_NES)
@@ -39,7 +40,7 @@ GCSpy GCSpy;
 ThreeDOSpy ThreeDOSpy;
 #elif defined(MODE_BOOSTER_GRIP)
 BoosterGripSpy BoosterGripSpy;
-#elif defined(MODE_Genesis)
+#elif defined(MODE_GENESIS)
 GenesisSpy GenesisSpy;
 #elif defined(MODE_GENESIS_MOUSE)
 GenesisMouseSpy GenesisMouseSpy;
@@ -47,6 +48,10 @@ GenesisMouseSpy GenesisMouseSpy;
 SMSSpy SMSSpy;
 #elif defined(MODE_SMS_ON_GENESIS)
 SMSSpy SMSOnGenesisSpy;
+#elif defined(MODE_SATURN)
+SaturnSpy SaturnSpy;
+#elif defined(MODE_SATURN3D)
+Saturn3DSpy Saturn3DSpy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
@@ -81,6 +86,8 @@ void setup()
     SMSSpy.setup();
 #elif defined(MODE_SMS_ON_GENESIS)
     SMSOnGenesisSpy.setup(SMSOnGenesisSpy::OUTPUT_GENESIS);
+#elif defined(MODE_SATURN)
+    SaturnSpy.setup();
 #elif defined(MODE_DETECT)
     if (false /* read SNES_MODEPIN */) {
         SNESSpy.setup();
@@ -100,47 +107,47 @@ void setup()
 // Arduino sketch main loop definition.
 void loop()
 {
-#ifdef MODE_GC
+#if defined(MODE_GC)
     GCSpy.loop();
-#elif defined MODE_N64
+#elif defined(MODE_N64)
     N64Spy.loop();
-#elif defined MODE_SNES
+#elif defined(MODE_SNES)
     SNESSpy.loop();
-#elif defined MODE_NES
+#elif defined(MODE_NES)
     NESSpy.loop();
-#elif defined MODE_ThreeDO
+#elif defined(MODE_ThreeDO)
     ThreeDO.loop();
-#elif defined MODE_BOOSTER_GRIP
+#elif defined(MODE_BOOSTER_GRIP)
     BoosterGripSpy.loop();
-#elif defined MODE_GENESIS
+#elif defined(MODE_GENESIS)
     GenesisSpy.loop();
-#elif defined MODE_GENESIS_MOUSE
+#elif defined(MODE_GENESIS_MOUSE)
     GenesisMouseSpy.loop();
-#elif defined MODE_SMS
+#elif defined(MODE_SMS)
     SMSSpy.loop();
-#elif defined MODE_SMS_ON_GENESIS
+#elif defined(MODE_SMS_ON_GENESIS)
     SMSOnGenesisSpy.loop();
-#elif defined MODE_PLAYSTATION
+#elif defined(MODE_SATURN)
+    SaturnSpy.loop();
+#elif defined(MODE_SATURN3D)
+    Saturn3DSpy.loop();
+#elif defined(MODE_PLAYSTATION)
     loop_Playstation();
-#elif defined MODE_TG16
+#elif defined(MODE_TG16)
     loop_TG16();
-#elif defined MODE_SATURN
-    loop_SS();
-#elif defined MODE_SATURN3D
-    loop_SS3D();
-#elif defined MODE_NEOGEO
+#elif defined(MODE_NEOGEO)
     loop_NeoGeo();
-#elif defined MODE_INTELLIVISION
+#elif defined(MODE_INTELLIVISION)
     loop_Intellivision();
-#elif defined MODE_JAGUAR
+#elif defined(MODE_JAGUAR)
     loop_Jaguar();
-#elif defined MODE_COLECOVISION
+#elif defined(MODE_COLECOVISION)
     loop_ColecoVision();
-#elif defined MODE_PCFX
+#elif defined(MODE_PCFX)
     loop_PCFX();
-#elif defined MODE_FMTOWNS
+#elif defined(MODE_FMTOWNS)
     loop_FMTowns();
-#elif defined MODE_DETECT
+#elif defined(MODE_DETECT)
     if( !PINC_READ( MODEPIN_SNES ) ) {
         SNESSpy.loop();
     } else if( !PINC_READ( MODEPIN_N64 ) ) {
