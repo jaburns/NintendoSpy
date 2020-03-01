@@ -26,6 +26,11 @@
 
 #include "SMS.h"
 
+void SMSSpy::setup(uint8_t outputType) {
+    this.outputType = outputType;
+    setup();
+}
+
 void SMSSpy::setup() {
     // Set pins
     // TODO: Move these to config.h

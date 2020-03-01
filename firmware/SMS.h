@@ -36,6 +36,11 @@ class SMSSpy : public ControllerSpy {
         void writeSerial();
         void updateState();
 
+        enum outputTypes {
+            OUTPUT_SMS = 1,
+            OUTPUT_GENESIS  = 2,
+        };
+
     private:
         enum buttonTypes {
             CC_BTN_UP    = 1,
@@ -46,10 +51,6 @@ class SMSSpy : public ControllerSpy {
             CC_BTN_2     = 32
         };
 
-        enum outputTypes {
-            OUTPUT_SMS = 1,
-            OUTPUT_GENESIS  = 2,
-        };
         uint8_t outputType = OUTPUT_SMS;
 
         static const byte CC_INPUT_PINS = 6;

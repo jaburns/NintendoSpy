@@ -11,11 +11,12 @@
 #include "N64.h"
 #include "GC.h"
 
+#include "ThreeDO.h"
+
 #include "BoosterGrip.h"
 #include "Genesis.h"
 #include "SMS.h"
 
-#include "ThreeDO.h"
 #include "ColecoVision.h"
 #include "FMTowns.h"
 #include "Jaguar.h"
@@ -42,6 +43,10 @@ BoosterGripSpy BoosterGripSpy;
 GenesisSpy GenesisSpy;
 #elif defined(MODE_GENESIS_MOUSE)
 GenesisMouseSpy GenesisMouseSpy;
+#elif defined(MODE_SMS)
+SMSSpy SMSSpy;
+#elif defined(MODE_SMS_ON_GENESIS)
+SMSSpy SMSOnGenesisSpy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
@@ -72,42 +77,21 @@ void setup()
     GenesisSpy.setup();
 #elif defined(MODE_GENESIS_MOUSE)
     GenesisMouseSpy.setup();
+#elif defined(MODE_SMS)
+    SMSSpy.setup();
+#elif defined(MODE_SMS_ON_GENESIS)
+    SMSOnGenesisSpy.setup(SMSOnGenesisSpy::OUTPUT_GENESIS);
 #elif defined(MODE_DETECT)
     if (false /* read SNES_MODEPIN */) {
         SNESSpy.setup();
-    else if (false /* read N64_MODEPIN */) {
+    } else if (false /* read N64_MODEPIN */) {
         N64Spy.setup();
-    else if (false /* read GC_MODEPIN */) {
+    } else if (false /* read GC_MODEPIN */) {
         GCSpy.setup();
     } else {
         NESSpy.setup();
     }
 #endif
-
-  #ifdef MODE_GENESIS
-      genesis_pin_setup();
-      goto setup1;
-  #elif defined MODE_SMS
-      sms_pin_setup();
-      goto setup1;
-  #elif defined MODE_DETECT
-      #ifdef MODEPIN_GENESIS
-      if( !PINC_READ( MODEPIN_GENESIS ) ) {
-          genesis_pin_setup();
-          goto setup1;
-      }
-      #endif
-      #ifdef MODEPIN_SMS
-      if( !PINC_READ( MODEPIN_SMS ) ) {
-          sms_pin_setup();
-          goto setup1;
-      }
-      #endif
-  #endif
-
-  common_pin_setup();
-
-setup1:
 
     Serial.begin( 115200 );
 }
@@ -124,16 +108,18 @@ void loop()
     SNESSpy.loop();
 #elif defined MODE_NES
     NESSpy.loop();
-#elif defined MODE_GENESIS
-    loop_Genesis();
-#elif defined MODE_SMS
-    loop_SMS();
+#elif defined MODE_ThreeDO
+    ThreeDO.loop();
 #elif defined MODE_BOOSTER_GRIP
     BoosterGripSpy.loop();
 #elif defined MODE_GENESIS
     GenesisSpy.loop();
 #elif defined MODE_GENESIS_MOUSE
     GenesisMouseSpy.loop();
+#elif defined MODE_SMS
+    SMSSpy.loop();
+#elif defined MODE_SMS_ON_GENESIS
+    SMSOnGenesisSpy.loop();
 #elif defined MODE_PLAYSTATION
     loop_Playstation();
 #elif defined MODE_TG16
@@ -144,18 +130,12 @@ void loop()
     loop_SS3D();
 #elif defined MODE_NEOGEO
     loop_NeoGeo();
-#elif defined MODE_ThreeDO
-    ThreeDO.loop();
 #elif defined MODE_INTELLIVISION
     loop_Intellivision();
-#elif defined MODE_GENESIS_MOUSE
-    loop_GenesisMouse();
 #elif defined MODE_JAGUAR
     loop_Jaguar();
 #elif defined MODE_COLECOVISION
     loop_ColecoVision();
-#elif defined MODE_SMS_ON_GENESIS
-    loop_SMS_on_Genesis();
 #elif defined MODE_PCFX
     loop_PCFX();
 #elif defined MODE_FMTOWNS
