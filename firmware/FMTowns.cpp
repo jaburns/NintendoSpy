@@ -7,7 +7,11 @@ void FMTownsSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void FMTownsSpy::updateState() {
@@ -23,15 +27,15 @@ void FMTownsSpy::updateState() {
 }
 
 void FMTownsSpy::writeSerial() {
-#ifndef DEBUG
     for (unsigned char i = 0; i < 9; ++i) {
         Serial.write(rawData[i] ? ZERO : ONE);
     }
     Serial.write( SPLIT );
-#else
+}
+
+void FMTownsSpy::debugSerial() {
     for(int i = 0; i < 9; ++i) {
         Serial.print(rawData[i] ? "0" : "1");
     }
     Serial.print("\n");
-#endif
 }

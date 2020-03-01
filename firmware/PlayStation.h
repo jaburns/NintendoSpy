@@ -8,13 +8,12 @@ class PlayStationSpy : public ControllerSpy {
         void setup();
         void loop();
         void writeSerial();
+        void debugSerial();
         void updateState();
 
     private:
         unsigned char rawData[152]; // 8 + 16 + 128
-#if defined(DEBUG)
         unsigned char playstationCommand[8];
-#endif
 };
 
 #endif

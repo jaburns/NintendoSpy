@@ -7,7 +7,11 @@ void TG16Spy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
     delay(1);
 }
 
@@ -49,24 +53,24 @@ void TG16Spy::updateState() {
 }
 
 void TG16Spy::writeSerial() {
-#ifndef DEBUG
     for (unsigned char i = 0; i < 12; ++i) {
-        Serial.write (currentState & (1 << i) ? ONE : ZERO );
+        Serial.write(currentState & (1 << i) ? ONE : ZERO);
     }
-    Serial.write( SPLIT );
-#else
-    Serial.print((currentState & 0b0000000000000001)    ? "U" : "0");
-    Serial.print((currentState & 0b0000000000000010)    ? "R" : "0");
-    Serial.print((currentState & 0b0000000000000100)    ? "D" : "0");
-    Serial.print((currentState & 0b0000000000001000)    ? "L" : "0");
-    Serial.print((currentState & 0b0000000000010000)    ? "A" : "0");
-    Serial.print((currentState & 0b0000000000100000)    ? "B" : "0");
-    Serial.print((currentState & 0b0000000001000000)    ? "S" : "0");
-    Serial.print((currentState & 0b0000000010000000)    ? "R" : "0");
-    Serial.print((currentState & 0b0000000100000000)    ? "3" : "0");
-    Serial.print((currentState & 0b0000001000000000)    ? "4" : "0");
-    Serial.print((currentState & 0b0000010000000000)    ? "5" : "0");
-    Serial.print((currentState & 0b0000100000000000)    ? "6" : "0");
+    Serial.write(SPLIT);
+}
+
+void TG16Spy::debugSerial() {
+    Serial.print((currentState & 0b0000000000000001) ? "U" : "0");
+    Serial.print((currentState & 0b0000000000000010) ? "R" : "0");
+    Serial.print((currentState & 0b0000000000000100) ? "D" : "0");
+    Serial.print((currentState & 0b0000000000001000) ? "L" : "0");
+    Serial.print((currentState & 0b0000000000010000) ? "A" : "0");
+    Serial.print((currentState & 0b0000000000100000) ? "B" : "0");
+    Serial.print((currentState & 0b0000000001000000) ? "S" : "0");
+    Serial.print((currentState & 0b0000000010000000) ? "R" : "0");
+    Serial.print((currentState & 0b0000000100000000) ? "3" : "0");
+    Serial.print((currentState & 0b0000001000000000) ? "4" : "0");
+    Serial.print((currentState & 0b0000010000000000) ? "5" : "0");
+    Serial.print((currentState & 0b0000100000000000) ? "6" : "0");
     Serial.print("\n");
-    #endif
 }

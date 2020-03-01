@@ -8,6 +8,7 @@ class SNESSpy : public ControllerSpy {
         void setup();
         void loop();
         void writeSerial();
+        void debugSerial();
         void updateState();
 
     private:

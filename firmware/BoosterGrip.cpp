@@ -29,28 +29,28 @@
 void BoosterGripSpy::setup() {
     // TODO: Move these pin numbers to config.h
     // Set pins
-    _inputPins[0] = 2;
-    _inputPins[1] = 3;
-    _inputPins[2] = 4;
-    _inputPins[3] = 5;
-    _inputPins[4] = 6;
-    _inputPins[5] = 7;
-    _inputPins[6] = 8;
+    inputPins[0] = 2;
+    inputPins[1] = 3;
+    inputPins[2] = 4;
+    inputPins[3] = 5;
+    inputPins[4] = 6;
+    inputPins[5] = 7;
+    inputPins[6] = 8;
 
     // Setup input pins
     for (byte i = 0; i < BG_INPUT_PINS; i++) {
         if (i == 4 || i == 6) {
-            pinMode(_inputPins[i], INPUT);
+            pinMode(inputPins[i], INPUT);
         } else {
-            pinMode(_inputPins[i], INPUT_PULLUP);
+            pinMode(inputPins[i], INPUT_PULLUP);
         }
     }
 
-    _lastReadTime = millis();
+    lastReadTime = millis();
 }
 
 void BoosterGripSpy::loop() {
-    if (max(millis() - _lastReadTime, 0) < BG_READ_DELAY_MS)
+    if (max(millis() - lastReadTime, 0) < BG_READ_DELAY_MS)
     {
         // Not enough time has elapsed, return
         return;
@@ -59,29 +59,34 @@ void BoosterGripSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 
-    _lastReadTime = millis();
+    lastReadTime = millis();
 }
 
 void BoosterGripSpy::updateState() {
     // Read input pins for Up, Down, Left, Right, 1, 2, 3
-    if (digitalRead(_inputPins[0]) == LOW) { _currentState |= BG_BTN_UP; }
-    if (digitalRead(_inputPins[1]) == LOW) { _currentState |= BG_BTN_DOWN; }
-    if (digitalRead(_inputPins[2]) == LOW) { _currentState |= BG_BTN_LEFT; }
-    if (digitalRead(_inputPins[3]) == LOW) { _currentState |= BG_BTN_RIGHT; }
-    if (digitalRead(_inputPins[4]) == HIGH) { _currentState |= BG_BTN_3; }
-    if (digitalRead(_inputPins[5]) == LOW)  { _currentState |= BG_BTN_1; }
-    if (digitalRead(_inputPins[6]) == HIGH) { _currentState |= BG_BTN_2; }
+    if (digitalRead(inputPins[0]) == LOW) { currentState |= BG_BTN_UP; }
+    if (digitalRead(inputPins[1]) == LOW) { currentState |= BG_BTN_DOWN; }
+    if (digitalRead(inputPins[2]) == LOW) { currentState |= BG_BTN_LEFT; }
+    if (digitalRead(inputPins[3]) == LOW) { currentState |= BG_BTN_RIGHT; }
+    if (digitalRead(inputPins[4]) == HIGH) { currentState |= BG_BTN_3; }
+    if (digitalRead(inputPins[5]) == LOW)  { currentState |= BG_BTN_1; }
+    if (digitalRead(inputPins[6]) == HIGH) { currentState |= BG_BTN_2; }
 }
 
 void BoosterGripSpy::writeSerial() {
-#ifndef DEBUG
     for (unsigned char i = 0; i < 7; ++i) {
-      Serial.write (currentState & (1 << i) ? ONE : ZERO );
+        Serial.write (currentState & (1 << i) ? ONE : ZERO );
     }
     Serial.write( SPLIT );
-#else
+}
+
+void BoosterGripSpy::debugSerial() {
     if (currentState != lastState) {
         Serial.print((currentState & BG_BTN_UP)    ? "U" : "0");
         Serial.print((currentState & BG_BTN_DOWN)  ? "D" : "0");
@@ -93,5 +98,4 @@ void BoosterGripSpy::writeSerial() {
         Serial.print("\n");
         lastState = currentState;
     }
-#endif
 }

@@ -8,7 +8,11 @@ void N64Spy::loop() {
     updateState();
     interrupts();
     if (checkPrefixN64()) {
+#if !defined(DEBUG)
         writeSerial();
+#else
+        debugSerial();
+#endif
     } else {
       // This makes no sense, but its needed after command 0x0 or else you get garbage on the line
       delay(2);
@@ -100,21 +104,21 @@ read_loop:
 void N64Spy::writeSerial() {
     const unsigned char first = 2;
 
-    #ifndef DEBUG
-    for( unsigned char i = first ; i < first + N64_BITCOUNT ; i++ ) {
-        Serial.write( rawData[i] ? ONE : ZERO );
+    for(unsigned char i = first ; i < first + N64_BITCOUNT ; i++) {
+        Serial.write(rawData[i] ? ONE : ZERO);
     }
-    Serial.write( SPLIT );
-    #else
+    Serial.write(SPLIT);
+}
+
+void N64Spy::debugSerial() {
     Serial.print(rawData[0]);
     Serial.print("|");
     int j = 0;
     for( unsigned char i = 0 ; i < 32; i++ ) {
         if (j % 8 == 0 && j != 0)
-          Serial.print("|");
-        Serial.print( rawData[i+2] ? "1" : "0" );
+            Serial.print("|");
+        Serial.print(rawData[i+2] ? "1" : "0");
         j++;
     }
     Serial.print("\n");
-    #endif
 }

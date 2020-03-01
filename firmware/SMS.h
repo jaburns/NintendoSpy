@@ -34,6 +34,7 @@ class SMSSpy : public ControllerSpy {
         void setup();
         void loop();
         void writeSerial();
+        void debugSerial();
         void updateState();
 
         enum outputTypes {
@@ -58,6 +59,7 @@ class SMSSpy : public ControllerSpy {
 
         byte inputPins[CC_INPUT_PINS];
         word currentState;
+	word lastState = -1;
         unsigned long lastReadTime;
 };
 

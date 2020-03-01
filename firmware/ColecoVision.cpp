@@ -11,3 +11,6 @@ void ColecoVisionSpy::updateState() {
 
 void ColecoVisionSpy::writeSerial() {
 }
+
+void ColecoVisionSpy::debugSerial() {
+}

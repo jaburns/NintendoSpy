@@ -34,14 +34,16 @@ class BoosterGripSpy : public ControllerSpy {
         void setup();
         void loop();
         void writeSerial();
+        void debugSerial();
         void updateState();
 
     private:
-        word _currentState;
+        word currentState;
+	word lastState = -1;
 
-        unsigned long _lastReadTime;
+        unsigned long lastReadTime;
 
-        byte _inputPins[BG_INPUT_PINS];
+        byte inputPins[BG_INPUT_PINS];
 
         enum buttonTypes {
             BG_BTN_UP    = 1,

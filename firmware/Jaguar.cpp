@@ -1,17 +1,21 @@
 #include "Jaguar.h"
 
-void SkelSpy::setup() {
+void JaguarSpy::setup() {
 }
 
-void SkelSpy::loop() {
+void JaguarSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
     delay(1);
 }
 
-void SkelSpy::updateState() {
+void JaguarSpy::updateState() {
     WAIT_FALLING_EDGEB(0);
     asm volatile( MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS MICROSECOND_NOPS);
     rawData[3] = (PIND & 0b11111000);
@@ -29,14 +33,15 @@ void SkelSpy::updateState() {
     rawData[0] = (PIND & 0b11111100);
 }
 
-void SkelSpy::writeSerial() {
-#ifndef DEBUG
+void JaguarSpy::writeSerial() {
     Serial.write(rawData[0]);
     Serial.write(rawData[1]);
     Serial.write(rawData[2]);
     Serial.write(rawData[3]);
     Serial.write(SPLIT);
-#else 
+}
+
+void JaguarSpy::debugSerial() {
     Serial.print((rawData[0] & 0b00000100) == 0 ? "P" : "0");
     Serial.print((rawData[0] & 0b00001000) == 0 ? "A" : "0");
     Serial.print((rawData[0] & 0b00010000) == 0 ? "R" : "0");
@@ -66,5 +71,4 @@ void SkelSpy::writeSerial() {
     Serial.print((rawData[3] & 0b10000000) == 0 ? "#" : "0");
 
     Serial.print("\n");
-#endif
 }
