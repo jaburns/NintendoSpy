@@ -21,9 +21,9 @@
 #include "FMTowns.h"
 #include "Intellivision.h"
 #include "Jaguar.h"
+#include "NeoGeo.h"
 #include "ThreeDO.h"
 
-#include "NeoGeo.h"
 #include "PCFX.h"
 #include "PlayStation.h"
 #include "TG16.h"
@@ -58,6 +58,8 @@ FMTownsSpy FMTownsSpy;
 IntelliVisionSpy IntelliVisionSpy;
 #elif defined(MODE_JAGUAR)
 JaguarSpy JaguarSpy;
+#elif defined(MODE_NEOGEO)
+NeoGeoSpy NeoGeoSpy;
 #elif defined(MODE_ThreeDO)
 ThreeDOSpy ThreeDOSpy;
 #elif defined(MODE_DETECT)
@@ -104,6 +106,8 @@ void setup()
     IntelliVisionSpy.setup();
 #elif defined(MODE_JAGUAR)
     JaguarSpy.setup();
+#elif defined(MODE_NEOGEO)
+    NeoGeoSpy.setup();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.setup();
 #elif defined(MODE_DETECT)
@@ -155,6 +159,8 @@ void loop()
     INtelliVisionSpy.loop();
 #elif defined(MODE_JAGUAR)
     JaguarSpy.loop();
+#elif defined(MODE_NEOGEO)
+    NeoGeoSpy.loop();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.loop();
 #elif defined(MODE_PLAYSTATION)
