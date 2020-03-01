@@ -22,13 +22,26 @@ namespace RetroSpy
         {
             _localBuffer = new List<byte>();
             _datPort = new SerialPort(portName, BAUD_RATE);
+
             _datPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+
+            try { _datPort.DtrEnable = true; } catch { }
+            try { _datPort.RtsEnable = true; } catch { }
         }
 
         public void Start()
         {
             _localBuffer.Clear();
             _datPort.Open();
+            if (_timer != null) return;
+
+            _localBuffer.Clear();
+            _datPort.Open();
+
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromMilliseconds(TIMER_MS);
+            _timer.Tick += tick;
+            _timer.Start();
         }
 
         public void Stop()
@@ -57,6 +70,7 @@ namespace RetroSpy
                 if (readCount < 1) return;
                 byte[] readBuffer = new byte[readCount];
                 _datPort.Read(readBuffer, 0, readCount);
+
                 _localBuffer.AddRange(readBuffer);
             }
             catch (IOException)
