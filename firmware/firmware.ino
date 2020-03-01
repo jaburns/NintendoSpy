@@ -17,11 +17,11 @@
 #include "Saturn.h"
 #include "Saturn3D.h"
 
+#include "ColecoVision.h"
 #include "FMTowns.h"
 #include "Jaguar.h"
 #include "ThreeDO.h"
 
-#include "ColecoVision.h"
 #include "Intellivision.h"
 #include "NeoGeo.h"
 #include "PCFX.h"
@@ -50,6 +50,8 @@ SMSSpy SMSOnGenesisSpy;
 SaturnSpy SaturnSpy;
 #elif defined(MODE_SATURN3D)
 Saturn3DSpy Saturn3DSpy;
+#elif defined(MODE_COLECOVISION)
+ColecoVisionSpy ColecoVisionSpy;
 #elif defined(MODE_FMTOWNS)
 FMTownsSpy FMTownsSpy;
 #elif defined(MODE_JAGUAR)
@@ -92,6 +94,8 @@ void setup()
     SaturnSpy.setup();
 #elif defined(MODE_SATURN3D)
     Saturn3DSpy.setup();
+#elif defined(MODE_COLECOVISION)
+    ColecoVisionSpy.setup();
 #elif defined(MODE_FMTOWNS)
     FMTownsSpy.setup();
 #elif defined(MODE_JAGUAR)
@@ -139,6 +143,8 @@ void loop()
     SaturnSpy.loop();
 #elif defined(MODE_SATURN3D)
     Saturn3DSpy.loop();
+#elif defined(MODE_COLECOVISION)
+    ColecoVision.loop();
 #elif defined(MODE_FMTOWNS)
     FMTownsSpy.loop();
 #elif defined(MODE_JAGUAR)
@@ -153,8 +159,6 @@ void loop()
     loop_NeoGeo();
 #elif defined(MODE_INTELLIVISION)
     loop_Intellivision();
-#elif defined(MODE_COLECOVISION)
-    loop_ColecoVision();
 #elif defined(MODE_PCFX)
     loop_PCFX();
 #elif defined(MODE_DETECT)
