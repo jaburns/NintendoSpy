@@ -76,10 +76,6 @@ class GenesisSpy : public ControllerSpy {
         static const uint16_t TWOC_MASK_UPLRBC              = 0xFF81 // 0b1111111110000001
         static const uint16_t TWOC_MASK_XYXM                = 0xE1FF // 0b1110000111111111
 
-        const uint8_t TH 0  // Pin 8, 0 on PINB
-        const uint8_t TR 7  // Pin 7
-        const uint8_t TL 6  // Pin 6
-
         unsigned long last6buttonCheck;
         bool sixButtonConnected;
 
@@ -88,6 +84,3 @@ class GenesisSpy : public ControllerSpy {
 };
 
 #endif
-
-void sendRawGenesisMouseData();
-void loop_GenesisMouse();
