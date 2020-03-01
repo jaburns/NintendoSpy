@@ -1,3 +1,17 @@
-template< unsigned char latch, unsigned char data, unsigned char clock, unsigned char data0, unsigned char data1 >
-void read_shiftRegister_NES( unsigned char bits );
-void loop_NES();
+#ifndef NESSpy_h
+#define NESSpy_h
+
+#include "ControllerSpy.h"
+
+class NESSpy : public ControllerSpy {
+    public:
+        void setup();
+        void loop();
+        void writeSerial();
+        void updateState();
+
+    private:
+        unsigned char rawData[NES_BITCOUNT * 3];
+};
+
+#endif

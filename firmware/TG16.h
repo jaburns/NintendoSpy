@@ -1,9 +1,21 @@
-void read_TgData();
-void sendRawTgData();
-void loop_TG16();
+#ifndef TG16Spy_h
+#define TG16Spy_h
 
-extern word lastDirections;
-extern word lastHighButtons;
-extern word lastButtons;
-extern bool highButtons;
-extern bool seenHighButtons;
+#include "ControllerSpy.h"
+
+class TG16Spy : public ControllerSpy {
+    public:
+        void setup();
+        void loop();
+        void writeSerial();
+        void updateState();
+
+    private:
+        word lastDirections = 0;
+        word lastHighButtons = 0;
+        word lastButtons = 0;
+        bool highButtons = true;
+        bool seenHighButtons = false;
+};
+
+#endif

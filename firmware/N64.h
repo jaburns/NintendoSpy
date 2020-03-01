@@ -1,3 +1,18 @@
-void read_N64( );
-void sendN64Data( unsigned char first, unsigned char count );
-void loop_N64();
+#ifndef N64Spy_h
+#define N64Spy_h
+
+#include "ControllerSpy.h"
+
+class N64Spy : public ControllerSpy {
+    public:
+        void setup();
+        void loop();
+        void writeSerial();
+        void updateState();
+
+    private:
+        bool checkPrefixN64();
+        unsigned char rawData[512]; // This can probably be lowered.
+};
+
+#endif

@@ -1,9 +1,9 @@
-#ifndef NeoGeoSpy_h
-#define NeoGeoSpy_h
+#ifndef Saturn3DSpy_h
+#define Saturn3DSpy_h
 
 #include "ControllerSpy.h"
 
-class NeoGeoSpy : public ControllerSpy {
+class Saturn3DSpy : public ControllerSpy {
     public:
         void setup();
         void loop();
@@ -11,8 +11,7 @@ class NeoGeoSpy : public ControllerSpy {
         void updateState();
 
     private:
-        unsigned char rawData[10];
+        unsigned char rawData[64];
 };
 
 #endif
-

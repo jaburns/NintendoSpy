@@ -1,6 +1,13 @@
-#include "common.h"
 #include "ColecoVision.h"
 
-// Nothing here yet.
-void loop_ColecoVision() {
+void ColecoVisionSpy::setup() {
+}
+
+void ColecoVisionSpy::loop() {
+}
+
+void ColecoVisionSpy::updateState() {
+}
+
+void ColecoVisionSpy::writeSerial() {
 }

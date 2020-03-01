@@ -32,6 +32,6 @@ extern word lastState;
 
 void common_pin_setup();
 
-template< unsigned char latch, unsigned char data, unsigned char longWait >
-void read_shiftRegister_2wire( unsigned char bits );
-void sendRawData( unsigned char first, unsigned char count );
+void read_shiftRegister_2wire(unsigned char latch, unsigned char data, unsigned char longWait, unsigned char bits);
+void sendRawData(unsigned char first, unsigned char count);
+void sendRawData(unsigned char rawControllerData[], unsigned char first, unsigned char count);

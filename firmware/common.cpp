@@ -23,8 +23,7 @@ void common_pin_setup()
 //     data  = Pin index on Port D where the output data wire is attached.
 //     bits  = Number of bits to read from the controller.
 //  longWait = The NES takes a bit longer between reads to get valid results back.
-template< unsigned char latch, unsigned char data, unsigned char longWait >
-void read_shiftRegister_2wire( unsigned char bits )
+void read_shiftRegister_2wire(unsigned char latch, unsigned char data, unsigned char longWait, unsigned char bits)
 {
     unsigned char *rawDataPtr = rawData;
 
@@ -56,17 +55,17 @@ read_loop:
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sends a packet of controller data over the Arduino serial interface.
-inline void sendRawData( unsigned char first, unsigned char count )
+void sendRawData(unsigned char rawControllerData[], unsigned char first, unsigned char count)
 {
     #ifndef DEBUG
     for( unsigned char i = first ; i < first + count ; i++ ) {
-        Serial.write( rawData[i] ? ONE : ZERO );
+        Serial.write( rawControllerData[i] ? ONE : ZERO );
     }
     Serial.write( SPLIT );
     #else
 
     for( unsigned char i = 0 ; i < first; i++ ) {
-        Serial.print( rawData[i] ? "1" : "0" );
+        Serial.print( rawControllerData[i] ? "1" : "0" );
     }
     Serial.print("|");
     int j = 0;
@@ -74,9 +73,16 @@ inline void sendRawData( unsigned char first, unsigned char count )
 
         if (j % 8 == 0 && j != 0)
           Serial.print("|");
-        Serial.print( rawData[i] ? "1" : "0" );
+        Serial.print( rawControllerData[i] ? "1" : "0" );
         ++j;
     }
     Serial.print("\n");
     #endif
+}
+
+void sendRawData(unsigned char first, unsigned char count)
+{
+    // TODO: Get rid of this function.
+    // Use the global rawData
+    sendRawData(rawData, first, count);
 }

@@ -14,17 +14,65 @@
 #include "BoosterGrip.h"
 #include "Genesis.h"
 #include "SMS.h"
+#include "Saturn.h"
+#include "Saturn3D.h"
 
-#include "3DO.h"
 #include "ColecoVision.h"
 #include "FMTowns.h"
-#include "Jaguar.h"
 #include "Intellivision.h"
+#include "Jaguar.h"
 #include "NeoGeo.h"
 #include "PCFX.h"
 #include "PlayStation.h"
-#include "Saturn.h"
 #include "TG16.h"
+#include "ThreeDO.h"
+
+#if defined(MODE_NES)
+NESSpy NESSpy;
+#elif defined(MODE_SNES)
+SNESSpy SNESSpy;
+#elif defined(MODE_N64)
+N64Spy N64Spy;
+#elif defined(MODE_GC)
+GCSpy GCSpy;
+#elif defined(MODE_BOOSTER_GRIP)
+BoosterGripSpy BoosterGripSpy;
+#elif defined(MODE_GENESIS)
+GenesisSpy GenesisSpy;
+#elif defined(MODE_GENESIS_MOUSE)
+GenesisMouseSpy GenesisMouseSpy;
+#elif defined(MODE_SMS)
+SMSSpy SMSSpy;
+#elif defined(MODE_SMS_ON_GENESIS)
+SMSSpy SMSOnGenesisSpy;
+#elif defined(MODE_SATURN)
+SaturnSpy SaturnSpy;
+#elif defined(MODE_SATURN3D)
+Saturn3DSpy Saturn3DSpy;
+#elif defined(MODE_COLECOVISION)
+ColecoVisionSpy ColecoVisionSpy;
+#elif defined(MODE_FMTOWNS)
+FMTownsSpy FMTownsSpy;
+#elif defined(MODE_INTELLIVISION)
+IntelliVisionSpy IntelliVisionSpy;
+#elif defined(MODE_JAGUAR)
+JaguarSpy JaguarSpy;
+#elif defined(MODE_NEOGEO)
+NeoGeoSpy NeoGeoSpy;
+#elif defined(MODE_PCFX)
+PCFXSpy PCFXSpy;
+#elif defined(MODE_PLAYSTATION)
+PlayStationSpy PlayStationSpy;
+#elif defined(MODE_TG16)
+TG16Spy TG16Spy;
+#elif defined(MODE_ThreeDO)
+ThreeDOSpy ThreeDOSpy;
+#elif defined(MODE_DETECT)
+NESSpy NESSpy;
+SNESSpy SNESSpy;
+N64Spy N64Spy;
+GCSpy GCSpy;
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // General initialization, just sets all pins to input and starts serial communication.
@@ -33,30 +81,57 @@ void setup()
     PORTC = 0xFF; // Set the pull-ups on the port we use to check operation mode.
     DDRC  = 0x00;
 
-  #ifdef MODE_GENESIS
-      genesis_pin_setup();
-      goto setup1;
-  #elif defined MODE_SMS
-      sms_pin_setup();
-      goto setup1;
-  #elif defined MODE_DETECT
-      #ifdef MODEPIN_GENESIS
-      if( !PINC_READ( MODEPIN_GENESIS ) ) {
-          genesis_pin_setup();
-          goto setup1;
-      }
-      #endif
-      #ifdef MODEPIN_SMS
-      if( !PINC_READ( MODEPIN_SMS ) ) {
-          sms_pin_setup();
-          goto setup1;
-      }
-      #endif
-  #endif
-
-  common_pin_setup();
-  goto setup1;
-setup1:
+#if defined(MODE_NES)
+    NESSpy.setup();
+#elif defined(MODE_SNES)
+    SNESSpy.setup();
+#elif defined(MODE_N64)
+    N64Spy.setup();
+#elif defined(MODE_GC)
+    GCSpy.setup();
+#elif defined(MODE_BOOSTER_GRIP)
+    BoosterGripSpy.setup();
+#elif defined(MODE_GENESIS)
+    GenesisSpy.setup();
+#elif defined(MODE_GENESIS_MOUSE)
+    GenesisMouseSpy.setup();
+#elif defined(MODE_SMS)
+    SMSSpy.setup();
+#elif defined(MODE_SMS_ON_GENESIS)
+    SMSOnGenesisSpy.setup(SMSOnGenesisSpy::OUTPUT_GENESIS);
+#elif defined(MODE_SATURN)
+    SaturnSpy.setup();
+#elif defined(MODE_SATURN3D)
+    Saturn3DSpy.setup();
+#elif defined(MODE_COLECOVISION)
+    ColecoVisionSpy.setup();
+#elif defined(MODE_FMTOWNS)
+    FMTownsSpy.setup();
+#elif defined(MODE_INTELLIVISION)
+    IntelliVisionSpy.setup();
+#elif defined(MODE_JAGUAR)
+    JaguarSpy.setup();
+#elif defined(MODE_NEOGEO)
+    NeoGeoSpy.setup();
+#elif defined(MODE_PCFX)
+    PCFXSpy.setup();
+#elif defined(MODE_PLAYSTATION)
+    PlayStationSpy.setup();
+#elif defined(MODE_TG16)
+    TG16Spy.setup();
+#elif defined(MODE_ThreeDO)
+    ThreeDOSpy.setup();
+#elif defined(MODE_DETECT)
+    if (false /* read SNES_MODEPIN */) {
+        SNESSpy.setup();
+    } else if (false /* read N64_MODEPIN */) {
+        N64Spy.setup();
+    } else if (false /* read GC_MODEPIN */) {
+        GCSpy.setup();
+    } else {
+        NESSpy.setup();
+    }
+#endif
 
     Serial.begin( 115200 );
 }
@@ -65,55 +140,55 @@ setup1:
 // Arduino sketch main loop definition.
 void loop()
 {
-#ifdef MODE_GC
-    loop_GC();
-#elif defined MODE_N64
-    loop_N64();
-#elif defined MODE_SNES
-    loop_SNES();
-#elif defined MODE_NES
-    loop_NES();
-#elif defined MODE_GENESIS
-    loop_Genesis();
-#elif defined MODE_SMS
-    loop_SMS();
-#elif defined MODE_BOOSTER_GRIP
-    loop_BoosterGrip();
-#elif defined MODE_PLAYSTATION
-    loop_Playstation();
-#elif defined MODE_TG16
-    loop_TG16();
-#elif defined MODE_SATURN
-    loop_SS();
-#elif defined MODE_SATURN3D
-    loop_SS3D();
-#elif defined MODE_NEOGEO
-    loop_NeoGeo();
-#elif defined MODE_3DO
-    loop_3DO();
-#elif defined MODE_INTELLIVISION
-    loop_Intellivision();
-#elif defined MODE_GENESIS_MOUSE
-    loop_GenesisMouse();
-#elif defined MODE_JAGUAR
-    loop_Jaguar();
-#elif defined MODE_COLECOVISION
-    loop_ColecoVision();
-#elif defined MODE_SMS_ON_GENESIS
-    loop_SMS_on_Genesis();
-#elif defined MODE_PCFX
-    loop_PCFX();
-#elif defined MODE_FMTOWNS
-    loop_FMTowns();
-#elif defined MODE_DETECT
+#if defined(MODE_GC)
+    GCSpy.loop();
+#elif defined(MODE_N64)
+    N64Spy.loop();
+#elif defined(MODE_SNES)
+    SNESSpy.loop();
+#elif defined(MODE_NES)
+    NESSpy.loop();
+#elif defined(MODE_BOOSTER_GRIP)
+    BoosterGripSpy.loop();
+#elif defined(MODE_GENESIS)
+    GenesisSpy.loop();
+#elif defined(MODE_GENESIS_MOUSE)
+    GenesisMouseSpy.loop();
+#elif defined(MODE_SMS)
+    SMSSpy.loop();
+#elif defined(MODE_SMS_ON_GENESIS)
+    SMSOnGenesisSpy.loop();
+#elif defined(MODE_SATURN)
+    SaturnSpy.loop();
+#elif defined(MODE_SATURN3D)
+    Saturn3DSpy.loop();
+#elif defined(MODE_COLECOVISION)
+    ColecoVision.loop();
+#elif defined(MODE_FMTOWNS)
+    FMTownsSpy.loop();
+#elif defined(MODE_INTELLIVISION)
+    INtelliVisionSpy.loop();
+#elif defined(MODE_JAGUAR)
+    JaguarSpy.loop();
+#elif defined(MODE_NEOGEO)
+    NeoGeoSpy.loop();
+#elif defined(MODE_PCFX)
+    PCFXSpy.loop();
+#elif defined(MODE_PlayStation)
+    PlayStationSpy.loop();
+#elif defined(MODE_TG16)
+    TG16Spy.loop();
+#elif defined(MODE_ThreeDO)
+    ThreeDOSpy.loop();
+#elif defined(MODE_DETECT)
     if( !PINC_READ( MODEPIN_SNES ) ) {
-        loop_SNES();
+        SNESSpy.loop();
     } else if( !PINC_READ( MODEPIN_N64 ) ) {
-        loop_N64();
+        N64Spy.loop();
     } else if( !PINC_READ( MODEPIN_GC ) ) {
-        loop_GC();
+        GCSpy.loop();
     } else {
-        loop_NES();
+        NESSpy.loop();
     }
 #endif
 }

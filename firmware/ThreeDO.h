@@ -1,9 +1,9 @@
-#ifndef NeoGeoSpy_h
-#define NeoGeoSpy_h
+#ifndef ThreeDOSpy_h
+#define ThreeDOSpy_h
 
 #include "ControllerSpy.h"
 
-class NeoGeoSpy : public ControllerSpy {
+class ThreeDOSpy : public ControllerSpy {
     public:
         void setup();
         void loop();
@@ -11,8 +11,8 @@ class NeoGeoSpy : public ControllerSpy {
         void updateState();
 
     private:
-        unsigned char rawData[10];
+        unsigned char rawData[32];
+	unsigned char bytesToReturn = 0;
 };
 
 #endif
-
