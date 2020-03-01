@@ -1,5 +1,5 @@
 //
-// GenesisControllerSpy.h
+// GenesisMouse.h
 //
 // Author:
 //       Christopher Mallery <christopher.mallery@gmail.com>
@@ -24,35 +24,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef GenesisControllerSpy_h
-#define GenesisControllerSpy_h
+#ifndef GenesisMouseSpy_h
+#define GenesisMouseSpy_h
 
-enum
-{
-    SCS_CTL_ON    = 1, // The controller is connected
-    SCS_BTN_UP    = 2,
-    SCS_BTN_DOWN  = 4,
-    SCS_BTN_LEFT  = 8,
-    SCS_BTN_RIGHT = 16,
-    SCS_BTN_B     = 32,
-    SCS_BTN_C     = 64,
-    SCS_BTN_A     = 128,
-    SCS_BTN_START = 256,
-    SCS_BTN_Z     = 512,
-    SCS_BTN_Y     = 1024,
-    SCS_BTN_X     = 2048,
-    SCS_BTN_MODE  = 4096
-};
+#include "ControllerSpy.h"
 
-class GenesisControllerSpy {
+class GenesisMouseSpy : public ControllerSpy {
     public:
-        GenesisControllerSpy();
-        word getState();
-        void getMouseState(byte data[3]);
+        void setup();
+        void loop();
+        void writeSerial();
+        void updateState();
 
-   private:
-      unsigned long last6buttonCheck;
-      bool sixButtonConnected;    
+    private:
+        const uint8_t TH = 0  // Pin 8, 0 on PINB
+        const uint8_t TR = 7  // Pin 7
+        const uint8_t TL = 6  // Pin 6
 };
 
 #endif
