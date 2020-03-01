@@ -38,6 +38,10 @@ GCSpy GCSpy;
 ThreeDOSpy ThreeDOSpy;
 #elif defined(MODE_BOOSTER_GRIP)
 BoosterGripSpy BoosterGripSpy;
+#elif defined(MODE_Genesis)
+GenesisSpy GenesisSpy;
+#elif defined(MODE_GENESIS_MOUSE)
+GenesisMouseSpy GenesisMouseSpy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
@@ -64,6 +68,10 @@ void setup()
     ThreeDOSpy.setup();
 #elif defined(MODE_BOOSTER_GRIP)
     BoosterGripSpy.setup();
+#elif defined(MODE_GENESIS)
+    GenesisSpy.setup();
+#elif defined(MODE_GENESIS_MOUSE)
+    GenesisMouseSpy.setup();
 #elif defined(MODE_DETECT)
     if (false /* read SNES_MODEPIN */) {
         SNESSpy.setup();
@@ -122,6 +130,10 @@ void loop()
     loop_SMS();
 #elif defined MODE_BOOSTER_GRIP
     BoosterGripSpy.loop();
+#elif defined MODE_GENESIS
+    GenesisSpy.loop();
+#elif defined MODE_GENESIS_MOUSE
+    GenesisMouseSpy.loop();
 #elif defined MODE_PLAYSTATION
     loop_Playstation();
 #elif defined MODE_TG16
