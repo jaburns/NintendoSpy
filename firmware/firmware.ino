@@ -11,17 +11,17 @@
 #include "N64.h"
 #include "GC.h"
 
-#include "ThreeDO.h"
-
 #include "BoosterGrip.h"
 #include "Genesis.h"
 #include "SMS.h"
 #include "Saturn.h"
 #include "Saturn3D.h"
 
+#include "Jaguar.h"
+#include "ThreeDO.h"
+
 #include "ColecoVision.h"
 #include "FMTowns.h"
-#include "Jaguar.h"
 #include "Intellivision.h"
 #include "NeoGeo.h"
 #include "PCFX.h"
@@ -36,8 +36,6 @@ SNESSpy SNESSpy;
 N64Spy N64Spy;
 #elif defined(MODE_GC)
 GCSpy GCSpy;
-#elif defined(MODE_ThreeDO)
-ThreeDOSpy ThreeDOSpy;
 #elif defined(MODE_BOOSTER_GRIP)
 BoosterGripSpy BoosterGripSpy;
 #elif defined(MODE_GENESIS)
@@ -52,6 +50,10 @@ SMSSpy SMSOnGenesisSpy;
 SaturnSpy SaturnSpy;
 #elif defined(MODE_SATURN3D)
 Saturn3DSpy Saturn3DSpy;
+#elif defined(MODE_JAGUAR)
+JaguarSpy JaguarSpy;
+#elif defined(MODE_ThreeDO)
+ThreeDOSpy ThreeDOSpy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
@@ -74,8 +76,6 @@ void setup()
     N64Spy.setup();
 #elif defined(MODE_GC)
     GCSpy.setup();
-#elif defined(MODE_ThreeDO)
-    ThreeDOSpy.setup();
 #elif defined(MODE_BOOSTER_GRIP)
     BoosterGripSpy.setup();
 #elif defined(MODE_GENESIS)
@@ -88,6 +88,12 @@ void setup()
     SMSOnGenesisSpy.setup(SMSOnGenesisSpy::OUTPUT_GENESIS);
 #elif defined(MODE_SATURN)
     SaturnSpy.setup();
+#elif defined(MODE_SATURN3D)
+    Saturn3DSpy.setup();
+#elif defined(MODE_JAGUAR)
+    JaguarSpy.setup();
+#elif defined(MODE_ThreeDO)
+    ThreeDOSpy.setup();
 #elif defined(MODE_DETECT)
     if (false /* read SNES_MODEPIN */) {
         SNESSpy.setup();
@@ -115,8 +121,6 @@ void loop()
     SNESSpy.loop();
 #elif defined(MODE_NES)
     NESSpy.loop();
-#elif defined(MODE_ThreeDO)
-    ThreeDO.loop();
 #elif defined(MODE_BOOSTER_GRIP)
     BoosterGripSpy.loop();
 #elif defined(MODE_GENESIS)
@@ -131,6 +135,10 @@ void loop()
     SaturnSpy.loop();
 #elif defined(MODE_SATURN3D)
     Saturn3DSpy.loop();
+#elif defined(MODE_JAGUAR)
+    JaguarSpy.loop();
+#elif defined(MODE_ThreeDO)
+    ThreeDO.loop();
 #elif defined(MODE_PLAYSTATION)
     loop_Playstation();
 #elif defined(MODE_TG16)
@@ -139,8 +147,6 @@ void loop()
     loop_NeoGeo();
 #elif defined(MODE_INTELLIVISION)
     loop_Intellivision();
-#elif defined(MODE_JAGUAR)
-    loop_Jaguar();
 #elif defined(MODE_COLECOVISION)
     loop_ColecoVision();
 #elif defined(MODE_PCFX)
