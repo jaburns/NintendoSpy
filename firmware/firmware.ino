@@ -19,9 +19,9 @@
 
 #include "Jaguar.h"
 #include "ThreeDO.h"
+#include "FMTowns.h"
 
 #include "ColecoVision.h"
-#include "FMTowns.h"
 #include "Intellivision.h"
 #include "NeoGeo.h"
 #include "PCFX.h"
@@ -54,6 +54,8 @@ Saturn3DSpy Saturn3DSpy;
 JaguarSpy JaguarSpy;
 #elif defined(MODE_ThreeDO)
 ThreeDOSpy ThreeDOSpy;
+#elif defined(MODE_FMTOWNS)
+FMTownsSpy FMTownsSpy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
@@ -94,6 +96,8 @@ void setup()
     JaguarSpy.setup();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.setup();
+#elif defined(MODE_FMTOWNS)
+    FMTownsSpy.setup();
 #elif defined(MODE_DETECT)
     if (false /* read SNES_MODEPIN */) {
         SNESSpy.setup();
@@ -138,7 +142,9 @@ void loop()
 #elif defined(MODE_JAGUAR)
     JaguarSpy.loop();
 #elif defined(MODE_ThreeDO)
-    ThreeDO.loop();
+    ThreeDOSpy.loop();
+#elif defined(MODE_FMTOWNS)
+    FMTownsSpy.loop();
 #elif defined(MODE_PLAYSTATION)
     loop_Playstation();
 #elif defined(MODE_TG16)
@@ -151,8 +157,6 @@ void loop()
     loop_ColecoVision();
 #elif defined(MODE_PCFX)
     loop_PCFX();
-#elif defined(MODE_FMTOWNS)
-    loop_FMTowns();
 #elif defined(MODE_DETECT)
     if( !PINC_READ( MODEPIN_SNES ) ) {
         SNESSpy.loop();
