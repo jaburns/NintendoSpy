@@ -22,9 +22,9 @@
 #include "Intellivision.h"
 #include "Jaguar.h"
 #include "NeoGeo.h"
+#include "PCFX.h"
 #include "ThreeDO.h"
 
-#include "PCFX.h"
 #include "PlayStation.h"
 #include "TG16.h"
 
@@ -60,6 +60,8 @@ IntelliVisionSpy IntelliVisionSpy;
 JaguarSpy JaguarSpy;
 #elif defined(MODE_NEOGEO)
 NeoGeoSpy NeoGeoSpy;
+#elif defined(MODE_PCFX)
+PCFXSpy PCFXSpy;
 #elif defined(MODE_ThreeDO)
 ThreeDOSpy ThreeDOSpy;
 #elif defined(MODE_DETECT)
@@ -108,6 +110,8 @@ void setup()
     JaguarSpy.setup();
 #elif defined(MODE_NEOGEO)
     NeoGeoSpy.setup();
+#elif defined(MODE_PCFX)
+    PCFXSpy.setup();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.setup();
 #elif defined(MODE_DETECT)
@@ -161,16 +165,14 @@ void loop()
     JaguarSpy.loop();
 #elif defined(MODE_NEOGEO)
     NeoGeoSpy.loop();
+#elif defined(MODE_PCFX)
+    PCFXSpy.loop();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.loop();
 #elif defined(MODE_PLAYSTATION)
     loop_Playstation();
 #elif defined(MODE_TG16)
     loop_TG16();
-#elif defined(MODE_NEOGEO)
-    loop_NeoGeo();
-#elif defined(MODE_PCFX)
-    loop_PCFX();
 #elif defined(MODE_DETECT)
     if( !PINC_READ( MODEPIN_SNES ) ) {
         SNESSpy.loop();
