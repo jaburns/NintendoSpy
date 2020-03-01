@@ -17,9 +17,9 @@
 #include "Saturn.h"
 #include "Saturn3D.h"
 
+#include "FMTowns.h"
 #include "Jaguar.h"
 #include "ThreeDO.h"
-#include "FMTowns.h"
 
 #include "ColecoVision.h"
 #include "Intellivision.h"
@@ -50,12 +50,12 @@ SMSSpy SMSOnGenesisSpy;
 SaturnSpy SaturnSpy;
 #elif defined(MODE_SATURN3D)
 Saturn3DSpy Saturn3DSpy;
+#elif defined(MODE_FMTOWNS)
+FMTownsSpy FMTownsSpy;
 #elif defined(MODE_JAGUAR)
 JaguarSpy JaguarSpy;
 #elif defined(MODE_ThreeDO)
 ThreeDOSpy ThreeDOSpy;
-#elif defined(MODE_FMTOWNS)
-FMTownsSpy FMTownsSpy;
 #elif defined(MODE_DETECT)
 NESSpy NESSpy;
 SNESSpy SNESSpy;
@@ -92,12 +92,12 @@ void setup()
     SaturnSpy.setup();
 #elif defined(MODE_SATURN3D)
     Saturn3DSpy.setup();
+#elif defined(MODE_FMTOWNS)
+    FMTownsSpy.setup();
 #elif defined(MODE_JAGUAR)
     JaguarSpy.setup();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.setup();
-#elif defined(MODE_FMTOWNS)
-    FMTownsSpy.setup();
 #elif defined(MODE_DETECT)
     if (false /* read SNES_MODEPIN */) {
         SNESSpy.setup();
@@ -139,12 +139,12 @@ void loop()
     SaturnSpy.loop();
 #elif defined(MODE_SATURN3D)
     Saturn3DSpy.loop();
+#elif defined(MODE_FMTOWNS)
+    FMTownsSpy.loop();
 #elif defined(MODE_JAGUAR)
     JaguarSpy.loop();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.loop();
-#elif defined(MODE_FMTOWNS)
-    FMTownsSpy.loop();
 #elif defined(MODE_PLAYSTATION)
     loop_Playstation();
 #elif defined(MODE_TG16)
