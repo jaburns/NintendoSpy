@@ -33,15 +33,6 @@ namespace RetroSpy
         {
             _localBuffer.Clear();
             _datPort.Open();
-            if (_timer != null) return;
-
-            _localBuffer.Clear();
-            _datPort.Open();
-
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(TIMER_MS);
-            _timer.Tick += tick;
-            _timer.Start();
         }
 
         public void Stop()
