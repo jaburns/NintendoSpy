@@ -1,5 +1,5 @@
 //
-// ClassicControllerSpy.h
+// SMSControllerSpy.h
 //
 // Author:
 //       Christopher Mallery <christopher.mallery@gmail.com>
@@ -24,8 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef ClassicControllerSpy_h
-#define ClassicControllerSpy_h
+#ifndef SMSControllerSpy_h
+#define SMSControllerSpy_h
 
 enum
 {
@@ -41,9 +41,9 @@ const byte CC_INPUT_PINS = 6;
 
 const unsigned long CC_READ_DELAY_MS = 5;
 
-class ClassicControllerSpy {
+class SMSControllerSpy {
     public:
-        ClassicControllerSpy(byte db9_pin_1, byte db9_pin_2, byte db9_pin_3, byte db9_pin_4, byte db9_pin_6, byte db9_pin_9);
+        SMSControllerSpy(byte db9_pin_1, byte db9_pin_2, byte db9_pin_3, byte db9_pin_4, byte db9_pin_6, byte db9_pin_9);
 
         word getState();
 

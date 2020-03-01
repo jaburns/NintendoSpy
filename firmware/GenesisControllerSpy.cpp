@@ -1,5 +1,5 @@
 //
-// SegaControllerSpy.cpp
+// GenesisControllerSpy.cpp
 //
 // Author:
 //       Christopher Mallery <christopher.mallery@gmail.com>
@@ -25,9 +25,9 @@
 // THE SOFTWARE.
 
 #include "Arduino.h"
-#include "SegaControllerSpy.h"
+#include "GenesisControllerSpy.h"
 
-SegaControllerSpy::SegaControllerSpy()
+GenesisControllerSpy::GenesisControllerSpy()
 {
     // Setup input pins
     // Assumes pin 8 is SELECT (DB9 pin 7)
@@ -85,7 +85,7 @@ SegaControllerSpy::SegaControllerSpy()
 #define WAIT_FALLING_EDGEB( pin ) while( !PINB_READ(pin) ); while( PINB_READ(pin) );
 #define WAIT_LEADING_EDGEB( pin ) while( PINB_READ(pin) ); while( !PINB_READ(pin) );
 
-void SegaControllerSpy::getMouseState(byte data[3])
+void GenesisControllerSpy::getMouseState(byte data[3])
 {
   unsigned long reads = 0;
 
@@ -112,7 +112,7 @@ void SegaControllerSpy::getMouseState(byte data[3])
   interrupts();
 }
 
-word SegaControllerSpy::getState()
+word GenesisControllerSpy::getState()
 {
     word currentState = 0xFFFF;
     bool check6 = false;

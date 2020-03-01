@@ -1,5 +1,5 @@
 //
-// SegaControllerSpy.h
+// GenesisControllerSpy.h
 //
 // Author:
 //       Christopher Mallery <christopher.mallery@gmail.com>
@@ -24,8 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SegaControllerSpy_h
-#define SegaControllerSpy_h
+#ifndef GenesisControllerSpy_h
+#define GenesisControllerSpy_h
 
 enum
 {
@@ -44,9 +44,9 @@ enum
     SCS_BTN_MODE  = 4096
 };
 
-class SegaControllerSpy {
+class GenesisControllerSpy {
     public:
-        SegaControllerSpy();
+        GenesisControllerSpy();
         word getState();
         void getMouseState(byte data[3]);
 
