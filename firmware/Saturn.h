@@ -1,12 +1,20 @@
-void loop_SS();
-void read_SSData();
-void sendRawSSDataV2();
+#ifndef SaturnSpy_h
+#define SaturnSpy_h
 
-void loop_SS3D();
-void read_SS3DData();
-void sendRawSS3DData();
+#include "ControllerSpy.h"
 
-extern byte ssState1;
-extern byte ssState2;
-extern byte ssState3;
-extern byte ssState4;
+class SaturnSpy : public ControllerSpy {
+    public:
+        void setup();
+        void loop();
+        void writeSerial();
+        void updateState();
+
+    private:
+        byte ssState1 = 0;
+        byte ssState2 = 0;
+        byte ssState3 = 0;
+        byte ssState4 = 0;
+};
+
+#endif

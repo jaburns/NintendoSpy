@@ -1,44 +1,46 @@
-#include "common.h"
 #include "SNES.h"
 
-template< unsigned char latch, unsigned char data, unsigned char clock >
-unsigned char read_shiftRegister_SNES()
-{
+void SNESSpy::setup() {
+}
+
+void SNESSpy::loop() {
+    noInterrupts();
+#ifdef MODE_2WIRE_SNES
+    read_shiftRegister_2wire(SNES_LATCH, SNES_DATA, false, SNES_BITCOUNT);
+#else
+    updateState();
+#endif
+    interrupts();
+    writeSerial();
+}
+
+void SNESSpy::writeSerial() {
+    sendRawData(rawData, 0, bytesToReturn);
+}
+
+void SNESSpy::updateState() {
     unsigned char position = 0;
     unsigned char bits = 0;
 
-    WAIT_FALLING_EDGE( latch );
+    bytesToReturn = SNES_BITCOUNT;
+
+    WAIT_FALLING_EDGE(SNES_LATCH);
 
     do {
-        WAIT_FALLING_EDGE( clock );
-        rawData[position++] = !PIN_READ(data);
+        WAIT_FALLING_EDGE(SNES_CLOCK);
+        rawData[position++] = !PIN_READ(SNES_DATA);
     }
-    while( ++bits <= SNES_BITCOUNT );    
+    while(++bits <= SNES_BITCOUNT);
 
     if (rawData[15] != 0x0)
     {
-      bits = 0;
-      do {
-	      WAIT_FALLING_EDGE( clock );
-          rawData[position++] = !PIN_READ(data);
-      }
-      while( ++bits <= SNES_BITCOUNT );
+        bits = 0;
+        do {
+            WAIT_FALLING_EDGE(SNES_CLOCK);
+            rawData[position++] = !PIN_READ(SNES_DATA);
+        }
+        while(++bits <= SNES_BITCOUNT);
 
-      return SNES_BITCOUNT_EXT;
+        bytesToReturn = SNES_BITCOUNT_EXT;
     }
-
-    return SNES_BITCOUNT;
-}
-
-inline void loop_SNES()
-{
-    noInterrupts();
-    unsigned char bytesToReturn = SNES_BITCOUNT;
-#ifdef MODE_2WIRE_SNES
-    read_shiftRegister_2wire< SNES_LATCH , SNES_DATA , false >( SNES_BITCOUNT );
-#else
-    bytesToReturn = read_shiftRegister_SNES< SNES_LATCH , SNES_DATA , SNES_CLOCK >();
-#endif
-    interrupts();
-    sendRawData( 0 , bytesToReturn );
 }

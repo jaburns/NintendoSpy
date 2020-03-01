@@ -1,26 +1,29 @@
-#include "common.h"
 #include "PCFX.h"
 
-template< unsigned char latch, unsigned char data, unsigned char clock >
-void read_shiftRegister_PCFX( unsigned char bits )
-{
+void PCFXSpy::setup() {
+}
+
+void PCFXSpy::loop() {
+    noInterrupts();
+    updateState();
+    interrupts();
+    writeSerial();
+}
+
+void PCFXSpy::updateState() {
+    unsigned char bits = PCFX_BITCOUNT;
     unsigned char *rawDataPtr = rawData;
 
-    WAIT_FALLING_EDGE( latch );
+    WAIT_FALLING_EDGE(PCFX_LATCH);
 
     do {
-        WAIT_FALLING_EDGE( clock );
-        *rawDataPtr = !PIN_READ(data);
+        WAIT_FALLING_EDGE(PCFX_CLOCK);
+        *rawDataPtr = !PIN_READ(PCFX_DATA);
         ++rawDataPtr;
     }
-    while( --bits > 0 );    
+    while(--bits > 0);
 }
 
-inline void loop_PCFX()
-{
-    noInterrupts();
-    read_shiftRegister_PCFX< PCFX_LATCH , PCFX_DATA , PCFX_CLOCK >( PCFX_BITCOUNT );
-    interrupts();
-    sendRawData( 0 , PCFX_BITCOUNT );
+void PCFXSpy::writeSerial() {
+    sendRawData(rawData, 0, PCFX_BITCOUNT);
 }
-

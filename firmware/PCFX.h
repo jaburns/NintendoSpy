@@ -1,3 +1,17 @@
-template< unsigned char latch, unsigned char data, unsigned char clock >
-void read_shiftRegister_PCFX( unsigned char bits );
-void loop_PCFX();
+#ifndef PCFXSpy_h
+#define PCFXSpy_h
+
+#include "ControllerSpy.h"
+
+class PCFXSpy : public ControllerSpy {
+    public:
+        void setup();
+        void loop();
+        void writeSerial();
+        void updateState();
+
+    private:
+        unsigned char rawData[8];
+};
+
+#endif

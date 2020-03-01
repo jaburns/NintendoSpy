@@ -1,8 +1,27 @@
-#include "common.h"
 #include "N64.h"
 
-void read_N64( )
-{
+void N64Spy::setup() {
+}
+
+void N64Spy::loop() {
+    noInterrupts();
+    updateState();
+    interrupts();
+    if (checkPrefixN64()) {
+        writeSerial();
+    } else {
+      // This makes no sense, but its needed after command 0x0 or else you get garbage on the line
+      delay(2);
+    }
+}
+
+// Verifies that the 9 bits prefixing N64 controller data in 'rawData'
+// are actually indicative of a controller state signal.
+inline bool N64Spy::checkPrefixN64() {
+    return rawData[0] == 0x01;
+}
+
+void N64Spy::updateState() {
     unsigned short bits;
 
     unsigned char *rawDataPtr = &rawData[1];
@@ -78,17 +97,11 @@ read_loop:
     goto read_loop;
 }
 
-// Verifies that the 9 bits prefixing N64 controller data in 'rawData'
-// are actually indicative of a controller state signal.
-inline bool checkPrefixN64 ()
-{
-    return rawData[0] == 0x01;
-}
+void N64Spy::writeSerial() {
+    const unsigned char first = 2;
 
-inline void sendN64Data( unsigned char first, unsigned char count )
-{
     #ifndef DEBUG
-    for( unsigned char i = first ; i < first + count ; i++ ) {
+    for( unsigned char i = first ; i < first + N64_BITCOUNT ; i++ ) {
         Serial.write( rawData[i] ? ONE : ZERO );
     }
     Serial.write( SPLIT );
@@ -105,16 +118,3 @@ inline void sendN64Data( unsigned char first, unsigned char count )
     Serial.print("\n");
     #endif
 }
-
-inline void loop_N64()
-{
-    noInterrupts();
-    read_N64();
-    interrupts();
-    if( checkPrefixN64() ) {
-        sendN64Data( 2 , N64_BITCOUNT);
-    }
-    else  // This makes no sense, but its needed after command 0x0 or else you get garbage on the line
-      delay(2);
-}
-
