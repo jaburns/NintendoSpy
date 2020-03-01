@@ -25,6 +25,7 @@
 #define ONE   '1'  // Use an ASCII one to represent a bit with value 1.  This makes Arduino debugging easier.
 #define SPLIT '\n'  // Use a new-line character to split up the controller state packets.
 
+void common_pin_setup();
 void read_shiftRegister_2wire(unsigned char rawData[], unsigned char latch, unsigned char data, unsigned char longWait, unsigned char bits);
 void sendRawData(unsigned char rawControllerData[], unsigned char first, unsigned char count);
 void sendRawDataDebug(unsigned char rawControllerData[], unsigned char first, unsigned char count);

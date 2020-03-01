@@ -1,5 +1,15 @@
 #include "common.h"
 
+void common_pin_setup()
+{
+  PORTD = 0x00;
+  PORTB = 0x00;
+  DDRD  = 0x00;
+
+  for(int i = 2; i <= 6; ++i)
+    pinMode(i, INPUT_PULLUP);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Performs a read cycle from a shift register based controller (SNES + NES) using only the data and latch
 // wires, and waiting a fixed time between reads.  This read method is deprecated due to being finicky,
