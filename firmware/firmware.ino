@@ -24,9 +24,8 @@
 #include "NeoGeo.h"
 #include "PCFX.h"
 #include "PlayStation.h"
-#include "ThreeDO.h"
-
 #include "TG16.h"
+#include "ThreeDO.h"
 
 #if defined(MODE_NES)
 NESSpy NESSpy;
@@ -64,6 +63,8 @@ NeoGeoSpy NeoGeoSpy;
 PCFXSpy PCFXSpy;
 #elif defined(MODE_PLAYSTATION)
 PlayStationSpy PlayStationSpy;
+#elif defined(MODE_TG16)
+TG16Spy TG16Spy;
 #elif defined(MODE_ThreeDO)
 ThreeDOSpy ThreeDOSpy;
 #elif defined(MODE_DETECT)
@@ -116,6 +117,8 @@ void setup()
     PCFXSpy.setup();
 #elif defined(MODE_PLAYSTATION)
     PlayStationSpy.setup();
+#elif defined(MODE_TG16)
+    TG16Spy.setup();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.setup();
 #elif defined(MODE_DETECT)
@@ -173,10 +176,10 @@ void loop()
     PCFXSpy.loop();
 #elif defined(MODE_PlayStation)
     PlayStationSpy.loop();
+#elif defined(MODE_TG16)
+    TG16Spy.loop();
 #elif defined(MODE_ThreeDO)
     ThreeDOSpy.loop();
-#elif defined(MODE_TG16)
-    loop_TG16();
 #elif defined(MODE_DETECT)
     if( !PINC_READ( MODEPIN_SNES ) ) {
         SNESSpy.loop();
