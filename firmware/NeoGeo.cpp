@@ -1,8 +1,5 @@
 #include "NeoGeo.h"
 
-void NeoGeoSpy::setup() {
-}
-
 void NeoGeoSpy::loop() {
     noInterrupts();
     updateState();
@@ -36,5 +33,3 @@ void NeoGeoSpy::writeSerial() {
     Serial.print("\n");
 #endif
 }
-
-

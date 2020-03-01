@@ -5,7 +5,10 @@
 
 class ControllerSpy {
 	public:
-		virtual void setup();
+		virtual void setup()
+    {
+      common_pin_setup();
+    }
 		virtual void loop();
 		virtual void writeSerial();
 		virtual void updateState();

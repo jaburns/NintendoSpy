@@ -1,8 +1,5 @@
 #include "ThreeDO.h"
 
-void ThreeDOSpy::setup() {
-}
-
 void ThreeDOSpy::loop() {
     noInterrupts();
     updateState();

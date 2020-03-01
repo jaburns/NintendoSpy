@@ -1,8 +1,5 @@
 #include "GC.h"
 
-void GCSpy::setup() {
-}
-
 void GCSpy::loop() {
     if (!seenGC2N64) {
         noInterrupts();

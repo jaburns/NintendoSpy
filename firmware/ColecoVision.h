@@ -5,7 +5,6 @@
 
 class ColecoVisionSpy : public ControllerSpy {
     public:
-        void setup();
         void loop();
         void writeSerial();
         void updateState();

@@ -1,8 +1,5 @@
 #include "NES.h"
 
-void NESSpy::setup() {
-}
-
 void NESSpy::loop() {
     noInterrupts();
 #ifdef MODE_2WIRE_NES

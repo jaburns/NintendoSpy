@@ -1,8 +1,5 @@
 #include "TG16.h"
 
-void TG16Spy::setup() {
-}
-
 void TG16Spy::loop() {
     noInterrupts();
     updateState();

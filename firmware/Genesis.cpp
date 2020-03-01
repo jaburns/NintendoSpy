@@ -43,7 +43,7 @@ void GenesisSpy::setup() {
 
 void GenesisSpy::loop() {
     updateState();
-    sendRawGenesisData();
+    writeSerial();
 }
 
 void GenesisSpy::updateState() {

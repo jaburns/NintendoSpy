@@ -1,8 +1,5 @@
 #include "FMTowns.h"
 
-void FMTownsSpy::setup() {
-}
-
 void FMTownsSpy::loop() {
     noInterrupts();
     updateState();

@@ -52,18 +52,18 @@ void GenesisMouseSpy::updateState() {
     WAIT_FALLING_EDGE(TL);
 
     while(reads != 3) {
-        data[reads] = 0;
+        rawData[reads] = 0;
         WAIT_FALLING_EDGE(TL);
-        data[reads] |= ((PIND & 0b00111100) << 2);
+        rawData[reads] |= ((PIND & 0b00111100) << 2);
         WAIT_LEADING_EDGE(TL);
-        data[reads] |= ((PIND & 0b00111100) >> 2);
+        rawData[reads] |= ((PIND & 0b00111100) >> 2);
         ++reads;
     }
 
     // This makes no sense.
     // Its like if there is no data the low nibble of the Y axis isn't sent.
-    if (data[2] == 0b00001011)
-        data[2] &= 0;
+    if (rawData[2] == 0b00001011)
+        rawData[2] &= 0;
 
     interrupts();
 }

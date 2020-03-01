@@ -31,6 +31,7 @@
 
 class SMSSpy : public ControllerSpy {
     public:
+        void setup(uint8_t outputType);
         void setup();
         void loop();
         void writeSerial();
@@ -62,4 +63,3 @@ class SMSSpy : public ControllerSpy {
 };
 
 #endif
-

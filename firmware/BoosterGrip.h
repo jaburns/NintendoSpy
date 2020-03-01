@@ -37,6 +37,10 @@ class BoosterGripSpy : public ControllerSpy {
         void updateState();
 
     private:
+
+        static const byte BG_INPUT_PINS = 7;
+        const unsigned long BG_READ_DELAY_MS = 5;
+
         word _currentState;
 
         unsigned long _lastReadTime;
@@ -53,8 +57,6 @@ class BoosterGripSpy : public ControllerSpy {
             BG_BTN_3     = 64
         };
 
-        const byte BG_INPUT_PINS = 7;
-        const unsigned long BG_READ_DELAY_MS = 5;
 };
 
 #endif
