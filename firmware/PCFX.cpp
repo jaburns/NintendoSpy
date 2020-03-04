@@ -4,7 +4,11 @@ void PCFXSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void PCFXSpy::updateState() {
@@ -23,4 +27,8 @@ void PCFXSpy::updateState() {
 
 void PCFXSpy::writeSerial() {
     sendRawData(rawData, 0, PCFX_BITCOUNT);
+}
+
+void PCFXSpy::debugSerial() {
+    sendRawDataDebug(rawData, 0, PCFX_BITCOUNT);
 }

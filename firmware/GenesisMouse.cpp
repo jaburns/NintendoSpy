@@ -40,7 +40,11 @@ void GenesisMouseSpy::setup() {
 
 void GenesisMouseSpy::loop() {
     updateState();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void GenesisMouseSpy::updateState() {
@@ -69,14 +73,16 @@ void GenesisMouseSpy::updateState() {
 }
 
 void GenesisMouseSpy::writeSerial() {
-#ifndef DEBUG
-  for(int i = 0; i < 3; ++i)
-    for(int j = 0; j < 8; ++j)
-      Serial.write((rawData[i] & (1 << j)) == 0 ? ZERO : ONE);
-#else
     for(int i = 0; i < 3; ++i)
       for(int j = 0; j < 8; ++j)
-        Serial.print((rawData[i] & (1 << j)) == 0 ? "0" : "1");
-#endif
+          Serial.write((rawData[i] & (1 << j)) == 0 ? ZERO : ONE);
   Serial.print("\n");
 }
+
+void GenesisMouseSpy::debugSerial() {
+    for(int i = 0; i < 3; ++i)
+        for(int j = 0; j < 8; ++j)
+            Serial.print((rawData[i] & (1 << j)) == 0 ? "0" : "1");
+  Serial.print("\n");
+}
+

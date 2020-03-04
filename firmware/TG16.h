@@ -7,6 +7,7 @@ class TG16Spy : public ControllerSpy {
     public:
         void loop();
         void writeSerial();
+        void debugSerial();
         void updateState();
 
     private:
@@ -15,6 +16,7 @@ class TG16Spy : public ControllerSpy {
         word lastButtons = 0;
         bool highButtons = true;
         bool seenHighButtons = false;
+        word currentState;
 };
 
 #endif

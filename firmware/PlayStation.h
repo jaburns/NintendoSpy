@@ -7,13 +7,12 @@ class PlayStationSpy : public ControllerSpy {
     public:
         void loop();
         void writeSerial();
+        void debugSerial();
         void updateState();
 
     private:
         unsigned char rawData[152]; // 8 + 16 + 128
-#if not defined(DEBUG)
         unsigned char playstationCommand[8];
-#endif
 };
 
 #endif

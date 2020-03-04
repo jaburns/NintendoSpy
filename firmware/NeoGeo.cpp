@@ -4,7 +4,11 @@ void NeoGeoSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void NeoGeoSpy::updateState() {
@@ -21,15 +25,15 @@ void NeoGeoSpy::updateState() {
 }
 
 void NeoGeoSpy::writeSerial() {
-#ifndef DEBUG
     for (unsigned char i = 0; i < 10; ++i) {
         Serial.write(rawData[i] ? ZERO : ONE);
     }
     Serial.write(SPLIT);
-#else
+}
+
+void NeoGeoSpy::debugSerial() {
     for(int i = 0; i < 10; ++i) {
         Serial.print(rawData[i] ? "0" : "1");
     }
     Serial.print("\n");
-#endif
 }

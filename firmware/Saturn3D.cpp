@@ -4,7 +4,11 @@ void Saturn3DSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void Saturn3DSpy::updateState() {
@@ -74,13 +78,14 @@ void Saturn3DSpy::updateState() {
 }
 
 void Saturn3DSpy::writeSerial() {
-#ifndef DEBUG
     for (unsigned char i = 0; i < 56; ++i)
     {
         Serial.write( rawData[i] ? ONE : ZERO );
     }
     Serial.write( SPLIT );
-#else
+}
+
+void Saturn3DSpy::debugSerial() {
     for(int i = 0; i < 56; ++i)
     {
         if (i % 8 == 0) {
@@ -89,5 +94,4 @@ void Saturn3DSpy::writeSerial() {
         Serial.print(rawData[i] ? "1" : "0");
     }
     Serial.print("\n");
-#endif
 }

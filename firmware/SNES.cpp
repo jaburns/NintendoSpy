@@ -2,20 +2,27 @@
 
 void SNESSpy::loop() {
     noInterrupts();
-#ifdef MODE_2WIRE_SNES
-    read_shiftRegister_2wire(SNES_LATCH, SNES_DATA, false, SNES_BITCOUNT);
-#else
     updateState();
-#endif
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void SNESSpy::writeSerial() {
     sendRawData(rawData, 0, bytesToReturn);
 }
 
+void SNESSpy::debugSerial() {
+    sendRawDataDebug(rawData, 0, bytesToReturn);
+}
+
 void SNESSpy::updateState() {
+#ifdef MODE_2WIRE_SNES
+    read_shiftRegister_2wire(rawData, SNES_LATCH, SNES_DATA, false, SNES_BITCOUNT);
+#else
     unsigned char position = 0;
     unsigned char bits = 0;
 
@@ -40,4 +47,5 @@ void SNESSpy::updateState() {
 
         bytesToReturn = SNES_BITCOUNT_EXT;
     }
+#endif
 }

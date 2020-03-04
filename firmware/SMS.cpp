@@ -63,7 +63,11 @@ void SMSSpy::setup() {
 
 void SMSSpy::loop() {
     updateState();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void SMSSpy::updateState() {
@@ -96,30 +100,13 @@ void SMSSpy::updateState() {
 void SMSSpy::writeSerial() {
     switch(outputType) {
     case OUTPUT_SMS:
-#ifndef DEBUG
         for (unsigned char i = 0; i < 6; ++i)
         {
             Serial.write (currentState & (1 << i) ? ONE : ZERO );
         }
         Serial.write( SPLIT );
-#else
-        if (currentState == lastState)
-        {
-            return;
-        }
-
-        Serial.print((currentState & CC_BTN_UP)    ? "U" : "0");
-        Serial.print((currentState & CC_BTN_DOWN)  ? "D" : "0");
-        Serial.print((currentState & CC_BTN_LEFT)  ? "L" : "0");
-        Serial.print((currentState & CC_BTN_RIGHT) ? "R" : "0");
-        Serial.print((currentState & CC_BTN_1)     ? "1" : "0");
-        Serial.print((currentState & CC_BTN_2)     ? "2" : "0");
-        Serial.print("\n");
-        lastState = currentState;
-#endif
         break;
     case OUTPUT_GENESIS:
-#ifndef DEBUG
         Serial.write(ZERO);
         Serial.write((currentState & CC_BTN_UP)    ? 1 : 0);
         Serial.write((currentState & CC_BTN_DOWN)  ? 1 : 0);
@@ -134,28 +121,48 @@ void SMSSpy::writeSerial() {
         Serial.write(ZERO);
         Serial.write(ZERO);
         Serial.write(SPLIT);
-#else
+        break;
+    }
+}
+
+void SMSSpy::debugSerial() {
+    switch(outputType) {
+    case OUTPUT_SMS:
+        if (currentState == lastState)
+        {
+            return;
+        }
+
+        Serial.print((currentState & CC_BTN_UP)    ? "U" : "0");
+        Serial.print((currentState & CC_BTN_DOWN)  ? "D" : "0");
+        Serial.print((currentState & CC_BTN_LEFT)  ? "L" : "0");
+        Serial.print((currentState & CC_BTN_RIGHT) ? "R" : "0");
+        Serial.print((currentState & CC_BTN_1)     ? "1" : "0");
+        Serial.print((currentState & CC_BTN_2)     ? "2" : "0");
+        Serial.print("\n");
+        lastState = currentState;
+        break;
+    case OUTPUT_GENESIS:
         if (currentState == lastState)
         {
             return;
         }
 
         Serial.print("-");
-        Serial.print((currentState & CS_BTN_UP)    ? "U" : "0");
-        Serial.print((currentState & CS_BTN_DOWN)  ? "D" : "0");
-        Serial.print((currentState & CS_BTN_LEFT)  ? "L" : "0");
-        Serial.print((currentState & CS_BTN_RIGHT) ? "R" : "0");
+        Serial.print((currentState & CC_BTN_UP)    ? "U" : "0");
+        Serial.print((currentState & CC_BTN_DOWN)  ? "D" : "0");
+        Serial.print((currentState & CC_BTN_LEFT)  ? "L" : "0");
+        Serial.print((currentState & CC_BTN_RIGHT) ? "R" : "0");
         Serial.print("0");
         Serial.print("0");
-        Serial.print((currentState & CS_BTN_1)     ? "1" : "0");
-        Serial.print((currentState & CS_BTN_2)     ? "2" : "0");
+        Serial.print((currentState & CC_BTN_1)     ? "1" : "0");
+        Serial.print((currentState & CC_BTN_2)     ? "2" : "0");
         Serial.print("0");
         Serial.print("0");
         Serial.print("0");
         Serial.print("0");
         Serial.print("\n");
         lastState = currentState;
-#endif
         break;
     }
 }

@@ -4,7 +4,11 @@ void ThreeDOSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void ThreeDOSpy::updateState() {
@@ -29,4 +33,8 @@ void ThreeDOSpy::updateState() {
 
 void ThreeDOSpy::writeSerial() {
     sendRawData(rawData, 0, bytesToReturn);
+}
+
+void ThreeDOSpy::debugSerial() {
+    sendRawDataDebug(rawData, 0, bytesToReturn);
 }

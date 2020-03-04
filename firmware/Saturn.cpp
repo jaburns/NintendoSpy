@@ -4,7 +4,11 @@ void SaturnSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void SaturnSpy::updateState() {
@@ -43,7 +47,6 @@ void SaturnSpy::updateState() {
 }
 
 void SaturnSpy::writeSerial() {
-#ifndef DEBUG
     for(int i = 0; i < 8; ++i) {
         Serial.write(i == 6 ? ONE : ZERO);
     }
@@ -72,7 +75,9 @@ void SaturnSpy::writeSerial() {
     }
 
     Serial.write( SPLIT );
-#else
+}
+
+void SaturnSpy::debugSerial() {
     Serial.print((ssState1 & 0b00000100)    ? "Z" : "0");
     Serial.print((ssState1 & 0b00001000)    ? "Y" : "0");
     Serial.print((ssState1 & 0b00010000)    ? "X" : "0");
@@ -91,5 +96,4 @@ void SaturnSpy::writeSerial() {
     Serial.print((ssState4 & 0b00100000)    ? "L" : "0");
 
     Serial.print("\n");
-#endif
 }

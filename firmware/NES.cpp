@@ -2,20 +2,27 @@
 
 void NESSpy::loop() {
     noInterrupts();
-#ifdef MODE_2WIRE_NES
-    read_shiftRegister_2wire(NES_LATCH, NES_DATA, true, NES_BITCOUNT);
-#else
     updateState();
-#endif
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void NESSpy::writeSerial() {
     sendRawData(rawData, 0, NES_BITCOUNT * 3);
 }
 
+void NESSpy::debugSerial() {
+    sendRawDataDebug(rawData, 0, NES_BITCOUNT * 3);
+}
+
 void NESSpy::updateState() {
+#ifdef MODE_2WIRE_NES
+    read_shiftRegister_2wire(rawData, NES_LATCH, NES_DATA, true, NES_BITCOUNT);
+#else
     unsigned char bits = NES_BITCOUNT;
     unsigned char *rawDataPtr = rawData;
 
@@ -29,4 +36,5 @@ void NESSpy::updateState() {
         ++rawDataPtr;
     }
     while(--bits > 0);
+#endif
 }

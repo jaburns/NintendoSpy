@@ -4,7 +4,11 @@ void PlayStationSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void PlayStationSpy::updateState() {
@@ -23,9 +27,7 @@ void PlayStationSpy::updateState() {
         byte pins = PIND;
 
         rawData[numBits] = pins & 0b01000000;
-#if defined(DEBUG)
         playstationCommand[numBits] = pins & 0b00100000;
-#endif
         numBits++;
     }
     while( ++bits < 8 );
@@ -79,7 +81,6 @@ void PlayStationSpy::updateState() {
 }
 
 void PlayStationSpy::writeSerial() {
-#ifndef DEBUG
     if (playstationCommand[0] == 0 && playstationCommand[1] != 0 && playstationCommand[2] == 0 && playstationCommand[3] == 0 && playstationCommand[4] == 0 && playstationCommand[5] == 0  && playstationCommand[6] != 0 && playstationCommand[7] == 0) {
         // playstationCommand=0x42 (Controller Poll)
         for (unsigned char i = 0; i < 152; ++i) {
@@ -87,7 +88,9 @@ void PlayStationSpy::writeSerial() {
         }
         Serial.write( SPLIT );
     }
-#else
+}
+
+void PlayStationSpy::debugSerial() {
     for(int i = 0; i < 152; ++i) {
         if (i % 8 == 0) {
             Serial.print("|");
@@ -95,5 +98,4 @@ void PlayStationSpy::writeSerial() {
         Serial.print(rawData[i] ? "1" : "0");
     }
     Serial.print("\n");
-#endif
 }

@@ -9,7 +9,11 @@ void GCSpy::loop() {
         if (checkPrefixGC()) {
             sendRawData(rawData, GC_PREFIX, GC_BITCOUNT);
         } else if (checkPrefixGBA()) {
+#if !defined(DEBUG)
             writeSerial();
+#else
+            debugSerial();
+#endif
         } else if (checkBothGCPrefixOnRaphnet()) {
            // Sets seenGC2N64RaphnetAdapter to true
         }
@@ -19,11 +23,15 @@ void GCSpy::loop() {
         updateState();
         interrupts();
         if (checkBothGCPrefixOnRaphnet()) {
-          sendRawData(rawData, 34 + GC_PREFIX, GC_BITCOUNT);
+            sendRawData(rawData, 34 + GC_PREFIX, GC_BITCOUNT);
         } else if (checkPrefixGC()) {
-          sendRawData(rawData, GC_PREFIX, GC_BITCOUNT);
+            sendRawData(rawData, GC_PREFIX, GC_BITCOUNT);
         } else if (checkPrefixGBA()) {
-          writeSerial();
+#if !defined(DEBUG)
+            writeSerial();
+#else
+            debugSerial();
+#endif
         }
     }
 }
@@ -50,65 +58,65 @@ read_loop:
 }
 
 void GCSpy::writeSerial() {
-#ifndef DEBUG
-  Serial.write(ZERO);
-  Serial.write(ZERO);
-  Serial.write(ZERO);
-  Serial.write(rawData[21] ? ONE : ZERO);
-  Serial.write(ZERO);
-  Serial.write(ZERO);
-  Serial.write(rawData[23] ? ONE : ZERO);
-  Serial.write(rawData[24] ? ONE : ZERO);
-  Serial.write(ZERO);
-  Serial.write(rawData[31] ? ONE : ZERO);
-  Serial.write(rawData[32] ? ONE : ZERO);
-  Serial.write(rawData[22] ? ONE : ZERO);
-  Serial.write(rawData[18] ? ONE : ZERO);
-  Serial.write(rawData[17] ? ONE : ZERO);
-  Serial.write(rawData[20] ? ONE : ZERO);
-  Serial.write(rawData[19] ? ONE : ZERO);
-  Serial.write(ONE);
-  for(int i = 0; i < 7; ++i)
     Serial.write(ZERO);
-  Serial.write(ONE);
-  for(int i = 0; i < 7; ++i)
     Serial.write(ZERO);
-  Serial.write(ONE);
-  for(int i = 0; i < 7; ++i)
     Serial.write(ZERO);
-  Serial.write(ONE);
-  for(int i = 0; i < 7; ++i)
+    Serial.write(rawData[21] ? ONE : ZERO);
     Serial.write(ZERO);
-  for(int i = 0; i < 8; ++i)
     Serial.write(ZERO);
-  for(int i = 0; i < 8; ++i)
+    Serial.write(rawData[23] ? ONE : ZERO);
+    Serial.write(rawData[24] ? ONE : ZERO);
     Serial.write(ZERO);
-  Serial.write(SPLIT);
-#else
-  Serial.print("0");
-  Serial.print("0");
-  Serial.print("0");
-  Serial.print(rawData[21] ? "t" : "0");
-  Serial.print("0");
-  Serial.print("0");
-  Serial.print(rawData[23] ? "b" : "0");
-  Serial.print(rawData[24] ? "a" : "0");
-  Serial.print("0");
-  Serial.print(rawData[31] ? "L" : "0");
-  Serial.print(rawData[32] ? "R" : "0");
-  Serial.print(rawData[22] ? "s" : "0");
-  Serial.print(rawData[18] ? "u" : "0");
-  Serial.print(rawData[17] ? "d" : "0");
-  Serial.print(rawData[20] ? "l" : "0");
-  Serial.print(rawData[19] ? "r" : "0");
-  Serial.print(128);
-  Serial.print(128);
-  Serial.print(128);
-  Serial.print(128);
-  Serial.print(0);
-  Serial.print(0);
-  Serial.print("\n");
-#endif
+    Serial.write(rawData[31] ? ONE : ZERO);
+    Serial.write(rawData[32] ? ONE : ZERO);
+    Serial.write(rawData[22] ? ONE : ZERO);
+    Serial.write(rawData[18] ? ONE : ZERO);
+    Serial.write(rawData[17] ? ONE : ZERO);
+    Serial.write(rawData[20] ? ONE : ZERO);
+    Serial.write(rawData[19] ? ONE : ZERO);
+    Serial.write(ONE);
+    for(int i = 0; i < 7; ++i)
+        Serial.write(ZERO);
+    Serial.write(ONE);
+    for(int i = 0; i < 7; ++i)
+        Serial.write(ZERO);
+    Serial.write(ONE);
+    for(int i = 0; i < 7; ++i)
+        Serial.write(ZERO);
+    Serial.write(ONE);
+    for(int i = 0; i < 7; ++i)
+        Serial.write(ZERO);
+    for(int i = 0; i < 8; ++i)
+        Serial.write(ZERO);
+    for(int i = 0; i < 8; ++i)
+        Serial.write(ZERO);
+    Serial.write(SPLIT);
+}
+
+void GCSpy::debugSerial() {
+    Serial.print("0");
+    Serial.print("0");
+    Serial.print("0");
+    Serial.print(rawData[21] ? "t" : "0");
+    Serial.print("0");
+    Serial.print("0");
+    Serial.print(rawData[23] ? "b" : "0");
+    Serial.print(rawData[24] ? "a" : "0");
+    Serial.print("0");
+    Serial.print(rawData[31] ? "L" : "0");
+    Serial.print(rawData[32] ? "R" : "0");
+    Serial.print(rawData[22] ? "s" : "0");
+    Serial.print(rawData[18] ? "u" : "0");
+    Serial.print(rawData[17] ? "d" : "0");
+    Serial.print(rawData[20] ? "l" : "0");
+    Serial.print(rawData[19] ? "r" : "0");
+    Serial.print(128);
+    Serial.print(128);
+    Serial.print(128);
+    Serial.print(128);
+    Serial.print(0);
+    Serial.print(0);
+    Serial.print("\n");
 }
 
 inline bool GCSpy::checkPrefixGBA()

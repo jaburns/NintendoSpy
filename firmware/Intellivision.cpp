@@ -12,7 +12,11 @@ void IntellivisionSpy::loop() {
     noInterrupts();
     updateState();
     interrupts();
+#if !defined(DEBUG)
     writeSerial();
+#else
+    debugSerial();
+#endif
 }
 
 void IntellivisionSpy::updateState() {
@@ -104,12 +108,13 @@ void IntellivisionSpy::updateState() {
 }
 
 void IntellivisionSpy::writeSerial() {
-#ifndef DEBUG
     for (unsigned char i = 0; i < 32; ++i) {
         Serial.write(rawData[i]);
     }
     Serial.write(SPLIT);
-#else
+}
+
+void IntellivisionSpy::debugSerial() {
     Serial.print(intRawData);
     Serial.print("|");
     for(int i = 0; i < 16; ++i) {
@@ -124,5 +129,4 @@ void IntellivisionSpy::writeSerial() {
         Serial.print(rawData[i + 28]);
     }
     Serial.print("\n");
-#endif
 }
