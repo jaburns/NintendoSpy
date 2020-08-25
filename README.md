@@ -1,6 +1,10 @@
 NintendoSpy
 ======
+Clydes Fork Release
+#### #### [Download the latest NintendoSpy release here.](https://github.com/ClydePowers/NintendoSpy/releases/tag/DTR) (experimental x86 DtrEnable Windows binary)
 
+
+Official Release by Jaburns
 #### [Download the latest NintendoSpy release here.](https://github.com/jaburns/NintendoSpy/releases/latest) (x64 and experimental x86 Windows binary)
 
 This project provides a general solution for live-streaming your controller inputs while speedrunning, or recording inputs for tutorials on how to perform tricks.  It supports tying in to NES, SNES, Nintendo 64, and GameCube controller signals to get a live view of them, as well as any gamepad connected to your PC for use with emulators.  XBox 360 controllers are supported with a skin out of the box, but other gamepads will require creating a skin.
