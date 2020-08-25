@@ -26,6 +26,7 @@ namespace NintendoSpy
             _localBuffer = new List <byte> ();
             _datPort = new SerialPort (portName, BAUD_RATE);
             _datPort.Handshake = Handshake.RequestToSend;
+            _datPort.DtrEnable = true; // to support Atmega 32u4 Boards like the Leonardo
         }
 
         public void Start ()
