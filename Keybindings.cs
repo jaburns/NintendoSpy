@@ -109,7 +109,6 @@ namespace NintendoSpy
         static readonly IReadOnlyDictionary <string, ushort> VK_KEYWORDS = new Dictionary <string, ushort> {
             { "ENTER", vkConvert (Key.Enter) },
             { "TAB", vkConvert (Key.Tab) },
-            { "TAB", vkConvert (Key.Tab) },
             { "ESC", vkConvert (Key.Escape) },
             { "ESCAPE", vkConvert (Key.Escape) },
             { "HOME", vkConvert (Key.Home) },
