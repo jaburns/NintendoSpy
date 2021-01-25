@@ -167,6 +167,7 @@ namespace NintendoSpy
             { "-", vkConvert (Key.Subtract) },
             { "DIVIDE", vkConvert (Key.Divide) },
             { "/", vkConvert (Key.Divide) },
+            { "SPACE", vkConvert (Key.Space) },
             { "LEFTSHIFT", vkConvert (Key.LeftShift) },
             { "RIGHTSHIFT", vkConvert (Key.RightShift) },
             { "LEFTCTRL", vkConvert (Key.LeftCtrl) },
