@@ -173,11 +173,7 @@ namespace NintendoSpy
             { "LEFTCTRL", vkConvert (Key.LeftCtrl) },
             { "RIGHTCTRL", vkConvert (Key.RightCtrl) },
             { "LEFTALT", vkConvert (Key.LeftAlt) },
-            { "RIGHTALT", vkConvert (Key.RightAlt) },
-            { "UP", vkConvert (Key.Up) },
-            { "DOWN", vkConvert (Key.Down) },
-            { "LEFT", vkConvert (Key.Left) },
-            { "RIGHT", vkConvert (Key.Right) }
+            { "RIGHTALT", vkConvert (Key.RightAlt) }
         };
     }
 }
